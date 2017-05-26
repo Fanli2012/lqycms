@@ -1,0 +1,30 @@
+
+Laravel GithubµØÖ·
+https://github.com/laravel/laravel.git
+
+°²×°
+php composer.phar install
+php artisan key:generate
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
