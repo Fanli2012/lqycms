@@ -1,14 +1,10 @@
 <?php
+namespace App\Http\Model;
 
-namespace App;
+use Illuminate\Database\Eloquent\Model;
 
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-
-class User extends Authenticatable
+class User extends Model
 {
-    use Notifiable;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -26,4 +22,11 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+	
+	/**
+     * 不能被批量赋值的属性
+     *
+     * @var array
+     */
+    protected $guarded = [];
 }

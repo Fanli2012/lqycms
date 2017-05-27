@@ -1,11 +1,20 @@
 <?php
+// 公共函数文件
+
 //定义常量
-define('FLADMIN', 'Fladmin'); // 后台模块，首字母最好大写
-define('FLLOGIN', 'fllogin'); // 后台登录
+define('FLADMIN', '/fladmin');  // 后台模块，首字母最好大写
+define('CMS_VERSION', '1.1.0'); // 版本号
+
+function dataList($modelname, $map = '', $orderby = '', $field = '*', $listRows = 15)
+{
+	return db($modelname)->where($map)->field($field)->order($orderby)->limit($limit)->select();
+}
 
 //pc前台栏目、标签、内容页面地址生成
-function url(array $param)
+function get_front_url($param='')
 {
+	$url = '';
+	
     if($param['type'] == 'list')
     {
         //列表页
@@ -33,6 +42,8 @@ function url(array $param)
 //wap前台栏目、标签、内容页面地址生成
 function murl(array $param)
 {
+    $url = '';
+    
     if($param['type'] == 'list')
     {
         //列表页
@@ -69,19 +80,21 @@ function murl(array $param)
  */
 function arclist(array $param)
 {
-	if(!empty($param['tuijian'])){$map['tuijian']=$param['tuijian'];}
-	if(!empty($param['typeid'])){$map['typeid']=$param['typeid'];}
-	if(!empty($param['image'])){$map['litpic']=array('NEQ','');}
-	if(!empty($param['limit'])){$limit=$param['limit'];}else{if(!empty($param['row'])){$limit="0,".$param['row'];}else{$limit='0,'.cms_pagesize;}}
-	if(!empty($param['orderby'])){$orderby=$param['orderby'];}else{$orderby='id desc';}
+    $map=array();
+    
+	if(isset($param['tuijian'])){$map['tuijian']=$param['tuijian'];}
+	if(isset($param['typeid'])){$map['typeid']=$param['typeid'];}
+	if(isset($param['image'])){$map['litpic']=array('NEQ','');}
+	if(isset($param['limit'])){$limit=$param['limit'];}else{if(isset($param['row'])){$limit="0,".$param['row'];}else{$limit='0,'.cms_pagesize;}}
+	if(isset($param['orderby'])){$orderby=$param['orderby'];}else{$orderby='id desc';}
 	
-	if(!empty($param['sql']))
+	if(isset($param['sql']))
 	{
-		$Artlist = M("Article")->field('body',true)->where($param['sql'])->order($orderby)->limit($limit)->select();
+		$Artlist = db("article")->field('body',true)->where($param['sql'])->order($orderby)->limit($limit)->select();
 	}
 	else
 	{
-		$Artlist = M("Article")->field('body',true)->where($map)->order($orderby)->limit($limit)->select();
+		$Artlist = db("article")->field('body',true)->where($map)->order($orderby)->limit($limit)->select();
 	}
 	
 	return $Artlist;
@@ -94,14 +107,13 @@ function arclist(array $param)
  * @param string $limit='0,10'
  * @return string
  */
-function tagslist(array $param)
+function tagslist($param="")
 {
-	if(!empty($param['limit'])){$limit=$param['limit'];}else{if(!empty($param['row'])){$limit=$param['row'];}}
-	if(!empty($param['orderby'])){$orderby=$param['orderby'];}else{$orderby='id desc';}
+    $orderby=$limit="";
+	if(isset($param['limit'])){$limit=$param['limit'];}else{if(isset($param['row'])){$limit=$param['row'];}}
+	if(isset($param['orderby'])){$orderby=$param['orderby'];}else{$orderby='id desc';}
 	
-	$Taglist = M("Tagindex")->field('content',true)->where($map)->order($orderby)->limit($limit)->select();
-	
-	return $Taglist;
+	return db("tagindex")->field('content',true)->select();
 }
 
 /**
@@ -110,14 +122,12 @@ function tagslist(array $param)
  * @param int||string $limit='0,10'
  * @return string
  */
-function flinklist(array $param)
+function flinklist($param="")
 {
-	if(!empty($param['row'])){$limit=$param['row'];}else{$limit="";}
-	if(!empty($param['orderby'])){$orderby=$param['orderby'];}else{$orderby='id desc';}
+	if(isset($param['row'])){$limit=$param['row'];}else{$limit="";}
+	if(isset($param['orderby'])){$orderby=$param['orderby'];}else{$orderby='id desc';}
 	
-	$Friendlink = M("Friendlink")->where()->order($orderby)->limit($limit)->select();
-	
-	return $Friendlink;
+	return db("friendlink")->order($orderby)->limit($limit)->select();
 }
 
 /**
@@ -139,19 +149,19 @@ function get_article_prenext(array $param)
     }
     else
     {
-        $Article = M("Article")->field('typeid')->where($sql)->find();
+        $Article = db("article")->field('typeid')->where($sql)->find();
         $typeid = $Article["typeid"];
     }
     
     if($param["type"]=='pre')
     {
         $sql='id<'.$param['aid'].' and typeid='.$typeid;
-        $res = M("Article")->field('id,typeid,title')->where($sql)->order('id desc')->find();
+        $res = db("article")->field('id,typeid,title')->where($sql)->order('id desc')->find();
     }
     else if($param["type"]=='next')
     {
         $sql='id>'.$param['aid'].' and typeid='.$typeid;
-        $res = M("Article")->field('id,typeid,title')->where($sql)->order('id asc')->find();
+        $res = db("article")->field('id,typeid,title')->where($sql)->order('id asc')->find();
     }
     
     return $res;
@@ -185,7 +195,7 @@ function get_listnav(array $param)
 	{
 		return "<li><span class=\"pageinfo\">共0页/".$counts."条记录</span></li>";
 	}
-	$maininfo = "<li><span class=\"pageinfo\">共$totalpage页".$counts."条</span></li>";
+	$maininfo = "<li><span class=\"pageinfo\">共".$totalpage."页".$counts."条</span></li>";
     
 	if(!empty($param["urltype"]))
     {
@@ -338,15 +348,13 @@ function pagenav(array $param)
 	if(!empty($param['row'])){$limit="0,".$param['row'];}else{if(!empty($param['limit'])){$limit=$param['limit'];}else{$limit='0,8';}}
 	if(!empty($param['orderby'])){$orderby=$param['orderby'];}else{$orderby='id desc';}
 	
-	$Artlist = M("Article")->field('body',true)->where($map)->order($orderby)->limit($limit)->select();
-	
-    return $Artlist;
+    return db("article")->field('body',true)->where($map)->order($orderby)->limit($limit)->select();
 }
 
 //根据总数与每页条数，获取总页数
 function get_totalpage(array $param)
 {
-	if(!empty($param['pagesize'] || $param['pagesize']==0)){$pagesize=$param["pagesize"];}else{$pagesize=cms_pagesize;}
+	if(!empty($param['pagesize'] || $param['pagesize']==0)){$pagesize=$param["pagesize"];}else{$pagesize=CMS_PAGESIZE;}
 	$counts=$param["counts"];
 	
 	//取总数据量除以每页数的余数
@@ -389,14 +397,12 @@ function GetCurUrl()
  * @param string $limit='0,8' 如果存在$row，$limit就无效
  * @return string
  */
-function pagelist(array $param)
+function pagelist($param="")
 {
 	if(!empty($param['row'])){$limit="0,".$param['row'];}else{if(!empty($param['limit'])){$limit=$param['limit'];}else{$limit='0,8';}}
 	if(!empty($param['orderby'])){$orderby=$param['orderby'];}else{$orderby='id desc';}
 	
-	$Pagelist = M("Page")->field('body',true)->where($map)->order($orderby)->limit($limit)->select();
-	
-    return $Pagelist;
+    return db("page")->field('body',true)->order($orderby)->limit($limit)->select();
 }
 
 /**
@@ -420,7 +426,8 @@ function cut_str($string, $sublen=250, $omitted = '', $start=0, $code='UTF-8')
 //PhpAnalysis获取中文分词
 function get_keywords($keyword)
 {
-	import("Vendor.PhpAnalysis.PhpAnalysis");
+	Vendor('phpAnalysis.phpAnalysis');
+	//import("Vendor.phpAnalysis.phpAnalysis");
 	//初始化类
 	PhpAnalysis::$loadInit = false;
     $pa = new PhpAnalysis('utf-8', 'utf-8', false);
@@ -434,26 +441,36 @@ function get_keywords($keyword)
     return ltrim($keywords, ",");
 }
 
+//获取二维码
+function get_erweima($url="")
+{
+	Vendor('phpqrcode.qrlib');
+	
+	$url = str_replace("%26","&",$url);
+	$url = str_replace("%3F","?",$url);
+	$url = str_replace("%3D","=",$url);
+	
+	return QRcode::png($url, false, "H", 6);
+}
+
 //根据栏目id获取栏目信息
 function typeinfo($typeid)
 {
-    return M("Arctype")->where("id=$typeid")->find();
+    return db("arctype")->where("id=$typeid")->find();
 }
 
 //根据栏目id获取该栏目下文章/商品的数量
-function catarcnum($typeid,$modelname='Article')
+function catarcnum($typeid,$modelname='article')
 {
     $map['typeid']=$typeid;
-    return M($modelname)->field('id')->where($map)->count();
+    return db($modelname)->where($map)->count('id');
 }
 
 //根据Tag id获取该Tag标签下文章的数量
 function tagarcnum($tagid)
 {
     if(!empty($tagid)){$map['tid']=$tagid;}
-    $Taglist = M("Taglist")->where($map);
-    $counts = $Taglist->count();
-    return $counts;
+    return db("taglist")->where($map)->count();
 }
 
 //判断是否是图片格式，是返回true
@@ -478,8 +495,7 @@ function get_category($modelname,$parent_id=0,$pad=0)
 {
     $arr=array();
     
-    $Arctype = M($modelname);
-    $cats = $Arctype->where("reid=$parent_id")->order('id asc')->select();
+    $cats = db($modelname)->where("reid=$parent_id")->order('id asc')->select();
     
     if($cats)
     {
@@ -519,7 +535,7 @@ function get_cat_path($cat)
 {
     global $temp;
     
-    $row = M("Arctype")->field('typename,reid,id')->where("id=$cat")->find();
+    $row = db("arctype")->field('typename,reid,id')->where("id=$cat")->find();
     
     $temp = '<a href="'.cms_basehost.'/cat'.$row["id"].'.html">'.$row["typename"]."</a> > ".$temp;
     
@@ -537,11 +553,11 @@ function taglist($id,$tagid=0)
     $tags="";
     if($tagid!=0)
     {
-        $Taglist = M("Taglist")->where("aid=$id and tid<>$tagid")->select();
+        $Taglist = db("taglist")->where("aid=$id and tid<>$tagid")->select();
     }
     else
     {
-        $Taglist = M("Taglist")->where("aid=$id")->select();
+        $Taglist = db("taglist")->where("aid=$id")->select();
     }
     
     foreach($Taglist as $row)
@@ -549,7 +565,7 @@ function taglist($id,$tagid=0)
         if($tags==""){$tags='id='.$row['tid'];}else{$tags=$tags.' or id='.$row['tid'];}
     }
 	
-    if($tags!=""){return M("Tagindex")->where($tags)->select();}
+    if($tags!=""){return db("tagindex")->where($tags)->select();}
 }
 
 //获取https的get请求结果
@@ -585,7 +601,7 @@ function get_curl_data($c_url,$data='')
 	return $tmpInfo; // 返回数据
 }
 
-//通过file_get_content()获取远程数据
+//通过file_get_content获取远程数据
 function http_request_post($url,$data,$type='POST')
 {
 	$content = http_build_query($data);
@@ -605,6 +621,30 @@ function http_request_post($url,$data,$type='POST')
 	return $result;
 }
 
+function imageResize($url, $width, $height)
+{
+	header('Content-type: image/jpeg');
+	
+	list($width_orig, $height_orig) = getimagesize($url);
+	$ratio_orig = $width_orig/$height_orig;
+	
+	if($width/$height > $ratio_orig)
+	{
+		$width = $height*$ratio_orig;
+	}
+	else
+	{
+		$height = $width/$ratio_orig;
+	}
+	
+	// This resamples the image
+	$image_p = imagecreatetruecolor($width, $height);
+	$image = imagecreatefromjpeg($url);
+	imagecopyresampled($image_p, $image, 0, 0, 0, 0, $width, $height, $width_orig, $height_orig);
+	// Output the image
+	imagejpeg($image_p, null, 100);
+}
+
 /**
  * 为文章内容添加内敛, 排除alt title <a></a>直接的字符替换
  *
@@ -618,7 +658,7 @@ function ReplaceKeyword($body)
 	//暂时屏蔽超链接
 	$body = preg_replace("#(<a(.*))(>)(.*)(<)(\/a>)#isU", '\\1-]-\\4-[-\\6', $body);
 	
-	if(S("keywordlist")){$posts=S("keywordlist");}else{$posts = M("Keyword")->cache("keywordlist",2592000)->select();}
+	if(cache("keywordlist")){$posts=cache("keywordlist");}else{$posts = db("Keyword")->select();cache("keywordlist",$posts,2592000);}
     
 	foreach($posts as $row)
 	{
@@ -717,16 +757,16 @@ function updateconfig()
     $str_end="?>"; //php结束符
     $str_tmp.="//全站配置文件\r\n";
     
-	$param = M("Sysconfig")->select();
+	$param = db("sysconfig")->select();
     foreach($param as $row)
     {
-        $str_tmp.='define("'.$row['varname'].'","'.$row['value'].'"); // '.$row['info']."\r\n";
+        $str_tmp .= 'define("'.$row['varname'].'","'.$row['value'].'"); // '.$row['info']."\r\n";
     }
 	
-    $str_tmp.=$str_end; //加入结束符
+    $str_tmp .= $str_end; //加入结束符
     //保存文件
-    $sf="./Flhome/Common/Conf/common.inc.php"; //文件名
-    $fp=fopen($sf,"w"); //写方式打开文件
+    $sf = APP_PATH."common.inc.php"; //文件名
+    $fp = fopen($sf,"w"); //写方式打开文件
     fwrite($fp,$str_tmp); //存入内容
     fclose($fp); //关闭文件
 }
@@ -748,34 +788,3 @@ function dir_delete($dir)
     closedir($handle);
     return @rmdir($dir);
 }
-
-//从HTML文档中获得全部图片
-//如果你曾经希望去获得某个网页上的全部图片，这段代码就是你需要的，你可以轻松的建立一个图片下载机器人
-//$images = array();
-//preg_match_all('/(img|src)=("|')[^"'>]+/i', $data, $media);
-//unset($data);
-//$data=preg_replace('/(img|src)("|'|="|=')(.*)/i',"$3",$media[0]);
-//foreach($data as $url)
-//{
-    //$info = pathinfo($url);
-    //if (isset($info['extension']))
-    //{
-        //if (($info['extension'] == 'jpg') || ($info['extension'] == 'jpeg') || ($info['extension'] == 'gif') || ($info['extension'] == 'png'))  
-        //array_push($images, $url);  
-    //}  
-//}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
