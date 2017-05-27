@@ -12,7 +12,7 @@
 */
 
 //wap路由，要放到最前面，否则解析不到
-Route::group(['domain' => 'm.lqycms.com', 'namespace' => 'Wap'], function () {
+Route::group(['domain' => env('APP_SUBDOMAIN'), 'namespace' => 'Wap'], function () {
 	Route::get('/', 'IndexController@index');
 	Route::get('/tags', 'IndexController@tags');
 	Route::get('/search', 'IndexController@search');
