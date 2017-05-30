@@ -1,13 +1,17 @@
 <?php
 // 公共函数文件
 
-//定义常量
-define('FLADMIN', '/fladmin');  // 后台模块，首字母最好大写
-define('CMS_VERSION', '1.1.0'); // 版本号
-
-function dataList($modelname, $map = '', $orderby = '', $field = '*', $listRows = 15)
+//获取数据
+function dataList($modelname, $where = '', $orderby = '', $field = '*', $size = 15, $page = 1)
 {
-	return db($modelname)->where($map)->field($field)->order($orderby)->limit($limit)->select();
+	$model = \DB::table($modelname);
+	if($where!=''){$model = $model->where($where);}
+	if($orderby!=''){$model = $model->orderBy($orderby[0], $orderby[1]);}
+	if($field!='*'){$model = $model->select(\DB::raw($field));}
+	
+	$skip = ($page-1)*$size;
+	
+	return object_to_array($model->skip($skip)->take($size)->get());
 }
 
 //pc前台栏目、标签、内容页面地址生成
@@ -18,17 +22,17 @@ function get_front_url($param='')
     if($param['type'] == 'list')
     {
         //列表页
-        $url .= '/cat'.$param['catid'].'.html';
+        $url .= '/cat'.$param['catid'];
     }
     else if($param['type'] == 'content')
     {
         //内容页
-        $url .= '/cat'.$param['catid'].'/id'.$param['id'].'.html';
+        $url .= '/p/'.$param['id'];
     }
     else if($param['type'] == 'tags')
     {
         //tags页面
-        $url .= '/tag'.$param['tagid'].'.html';
+        $url .= '/tag'.$param['tagid'];
     }
     else if($param['type'] == 'page')
     {
@@ -40,24 +44,24 @@ function get_front_url($param='')
 }
 
 //wap前台栏目、标签、内容页面地址生成
-function murl(array $param)
+function get_wap_front_url(array $param)
 {
     $url = '';
     
     if($param['type'] == 'list')
     {
         //列表页
-        $url .= '/cat'.$param['catid'].'.html';
+        $url .= '/cat'.$param['catid'];
     }
     else if($param['type'] == 'content')
     {
         //内容页
-        $url .= '/cat'.$param['catid'].'/id'.$param['id'].'.html';
+        $url .= '/p/'.$param['id'];
     }
     else if($param['type'] == 'tags')
     {
         //tags页面
-        $url .= '/tag'.$param['tagid'].'.html';
+        $url .= '/tag'.$param['tagid'];
     }
     else if($param['type'] == 'page')
     {
@@ -460,10 +464,10 @@ function typeinfo($typeid)
 }
 
 //根据栏目id获取该栏目下文章/商品的数量
-function catarcnum($typeid,$modelname='article')
+function catarcnum($typeid, $modelname='article')
 {
     $map['typeid']=$typeid;
-    return db($modelname)->where($map)->count('id');
+    return \DB::table($modelname)->where($map)->count('id');
 }
 
 //根据Tag id获取该Tag标签下文章的数量
@@ -491,12 +495,13 @@ function imgmatch($url)
 }
 
 //将栏目列表生成数组
-function get_category($modelname,$parent_id=0,$pad=0)
+function get_category($modelname, $parent_id=0, $pad=0)
 {
     $arr=array();
     
-    $cats = db($modelname)->where("reid=$parent_id")->order('id asc')->select();
-    
+    $temp = \DB::table($modelname)->where('reid', $parent_id)->orderBy('id', 'asc')->get();
+    $cats = object_to_array($temp);
+	
     if($cats)
     {
         foreach($cats as $row)//循环数组
@@ -512,9 +517,10 @@ function get_category($modelname,$parent_id=0,$pad=0)
     }
 }
 
-function tree($list,$pid=0)
+function category_tree($list,$pid=0)
 {
     global $temp;
+	
     if(!empty($list))
     {
         foreach($list as $v)
@@ -523,10 +529,11 @@ function tree($list,$pid=0)
             //echo $v['id'];
             if(array_key_exists("child",$v))
             {
-                tree($v['child'],$v['reid']);
+                category_tree($v['child'],$v['reid']);
             }
         }
     }
+	
     return $temp;
 }
 
@@ -566,6 +573,39 @@ function taglist($id,$tagid=0)
     }
 	
     if($tags!=""){return db("tagindex")->where($tags)->select();}
+}
+
+//读取动态配置
+function sysconfig($varname='')
+{
+	$sysconfig = cache('sysconfig');
+	$res = '';
+	
+	if(empty($sysconfig))
+	{
+		cache()->forget('sysconfig');
+		
+		$sysconfig = \App\Http\Model\Sysconfig::orderBy('id')->select('varname', 'value')->get()->toArray();
+		
+		cache(['sysconfig' => $sysconfig], \Carbon\Carbon::now()->addMinutes(86400));
+	}
+	
+	if($varname != '')
+	{
+		foreach($sysconfig as $row)
+		{
+			if($varname == $row['varname'])
+			{
+				$res = $row['value'];
+			}
+		}
+	}
+	else
+	{
+		$res = $sysconfig;
+	}
+	
+	return $res;
 }
 
 //获取https的get请求结果
@@ -788,3 +828,85 @@ function dir_delete($dir)
     closedir($handle);
     return @rmdir($dir);
 }
+
+//对象转数组
+function object_to_array($object, $get=0)
+{
+	$res = '';
+	if($get==0)
+	{
+		foreach($object as $key=>$value)
+		{
+			$res[$key] = (array)$value;
+		}
+	}
+	else
+	{
+		$res = (array)$object;
+	}
+	
+    return $res;
+}
+
+/**
+ * 操作错误跳转的快捷方法
+ * @access protected
+ * @param string $msg 错误信息
+ * @param string $url 页面跳转地址
+ * @param mixed $time 当数字时指定跳转时间
+ * @return void
+ */
+function error_jump($msg='', $url='', $time=3)
+{
+	if ($url=='' && isset($_SERVER["HTTP_REFERER"]))
+	{
+		$url = $_SERVER["HTTP_REFERER"];
+	}
+	
+	if(!headers_sent())
+    {
+        header("Location:".route('admin_jump')."?error=$msg&url=$url&time=$time");
+        exit();
+    }
+    else
+    {
+        $str = "<meta http-equiv='Refresh' content='URL=".route('admin_jump')."?error=$msg&url=$url&time=$time"."'>";
+        exit($str);
+    }
+}
+
+/**
+ * 操作成功跳转的快捷方法
+ * @access protected
+ * @param string $msg 提示信息
+ * @param string $url 页面跳转地址
+ * @param mixed $time 当数字时指定跳转时间
+ * @return void
+ */
+function success_jump($msg='', $url='', $time=1)
+{
+	if ($url=='' && isset($_SERVER["HTTP_REFERER"]))
+	{
+		$url = $_SERVER["HTTP_REFERER"];
+	}
+	
+	if(!headers_sent())
+    {
+		header("Location:".route('admin_jump')."?message=$msg&url=$url&time=$time");
+        exit();
+    }
+    else
+    {
+        $str = "<meta http-equiv='Refresh' content='URL=".route('admin_jump')."?message=$msg&url=$url&time=$time"."'>";
+        exit($str);
+    }
+}
+
+
+
+
+
+
+
+
+

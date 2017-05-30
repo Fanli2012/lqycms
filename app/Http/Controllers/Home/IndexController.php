@@ -1,23 +1,36 @@
 <?php
-
 namespace App\Http\Controllers\Home;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Home\CommonController;
+use App\Http\Model\Article;
+use App\Http\Model\Arctype;
+use Illuminate\Support\Facades\DB;
 
-class IndexController extends Controller
+class IndexController extends CommonController
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
-        //$this->middleware('guest')->except('logout');
+        parent::__construct();
     }
 	
 	public function index()
 	{
-		dd('home/index');
+		$user = DB::table('article')->where('id', '1')->first();
+		echo $user->title;
+		
+		//$Article = Article::find(1)->arctype;
+		//$Article = Article::find(1);
+		//$Article = Arctype::find(1)->article()->get()->toArray();
+		
+		//$comment = Article::find(1)->arctype()->first()->toArray();
+		//echo $comment->arctype->typename;
+		//print_r($comment);
+		
+		//dd($comment);
+	}
+	
+	public function page404()
+	{
+		return view('home.404');
 	}
 }

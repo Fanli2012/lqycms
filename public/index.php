@@ -19,6 +19,8 @@
 |
 */
 
+session_start(); //开启session
+
 require __DIR__.'/../bootstrap/autoload.php';
 
 /*

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Wap;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\CommonController;
 
-class IndexController extends Controller
+class IndexController extends CommonController
 {
     /**
      * Create a new controller instance.
