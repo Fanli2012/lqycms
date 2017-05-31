@@ -56,9 +56,14 @@ function get_front_url($param='')
     else if($param['type'] == 'page')
     {
         //单页面
-        $url .= '/'.$param['pagename'].'.html';
+        $url .= '/page/'.$param['pagename'];
     }
-    
+    else if($param['type'] == 'search')
+    {
+        //tags页面
+        $url .= '/s'.$param['searchid'];
+    }
+	
     return $url;
 }
 
@@ -85,7 +90,12 @@ function get_wap_front_url(array $param)
     else if($param['type'] == 'page')
     {
         //单页面
-        $url .= '/'.$param['pagename'].'.html';
+        $url .= '/page/'.$param['pagename'];
+    }
+    else if($param['type'] == 'search')
+    {
+        //tags页面
+        $url .= '/s'.$param['searchid'];
     }
     
     return $url;
@@ -862,7 +872,7 @@ function object_to_array($object, $get=0)
 				$res[$key] = (array)$value;
 			}
 		}
-		else
+		elseif($get==1)
 		{
 			$res = (array)$object;
 		}
