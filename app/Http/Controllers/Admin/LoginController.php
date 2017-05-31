@@ -9,6 +9,12 @@ use Log;
 
 class LoginController extends BaseController
 {
+	//页面跳转
+    public function jump()
+	{
+		return view('admin.index.jump');
+    }
+	
     /**
      * 登录页面
      */

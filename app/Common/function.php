@@ -5,8 +5,27 @@
 function dataList($modelname, $where = '', $orderby = '', $field = '*', $size = 15, $page = 1)
 {
 	$model = \DB::table($modelname);
+
+	//查询条件
 	if($where!=''){$model = $model->where($where);}
-	if($orderby!=''){$model = $model->orderBy($orderby[0], $orderby[1]);}
+	
+	//排序
+	if($orderby!='')
+	{
+		if(count($orderby) == count($orderby, 1))
+		{
+			$model = $model->orderBy($orderby[0], $orderby[1]);
+		}
+		else
+		{
+			foreach($orderby as $row)
+			{
+				$model = $model->orderBy($row[0], $row[1]);
+			}
+		}
+	}
+
+	//要返回的字段
 	if($field!='*'){$model = $model->select(\DB::raw($field));}
 	
 	$skip = ($page-1)*$size;
@@ -473,8 +492,9 @@ function catarcnum($typeid, $modelname='article')
 //根据Tag id获取该Tag标签下文章的数量
 function tagarcnum($tagid)
 {
-    if(!empty($tagid)){$map['tid']=$tagid;}
-    return db("taglist")->where($map)->count();
+	$taglist = \DB::table("taglist");
+    if(!empty($tagid)){$map['tid']=$tagid; $taglist = $taglist->where($map);}
+    return $taglist->count();
 }
 
 //判断是否是图片格式，是返回true
@@ -833,16 +853,19 @@ function dir_delete($dir)
 function object_to_array($object, $get=0)
 {
 	$res = '';
-	if($get==0)
+	if(!empty($object))
 	{
-		foreach($object as $key=>$value)
+		if($get==0)
 		{
-			$res[$key] = (array)$value;
+			foreach($object as $key=>$value)
+			{
+				$res[$key] = (array)$value;
+			}
 		}
-	}
-	else
-	{
-		$res = (array)$object;
+		else
+		{
+			$res = (array)$object;
+		}
 	}
 	
     return $res;

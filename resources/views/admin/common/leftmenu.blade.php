@@ -11,7 +11,7 @@
 <dd><a href="<?php echo route('admin'); ?>/productType"><span class="glyphicon glyphicon-th-list"></span> 商品分类</a></dd>
 <dt>批量维护</dt>
 <dd><a href="<?php echo route('admin'); ?>/tag"><span class="glyphicon glyphicon-tag"></span> TAG标签管理</a></dd>
-<dd><a href="<?php echo route('admin'); ?>/search"><span class="glyphicon glyphicon-fire"></span> 关键词管理</a></dd>
+<dd><a href="<?php echo route('admin'); ?>/searchword"><span class="glyphicon glyphicon-fire"></span> 关键词管理</a></dd>
 <dd><a href="<?php echo route('admin'); ?>/keyword"><span class="glyphicon glyphicon-fire"></span> 內链关键词维护</a></dd>
 <dd><a href="<?php echo route('admin'); ?>/friendlink"><span class="glyphicon glyphicon-leaf"></span> 友情链接</a></dd>
 <dd><a href="<?php echo route('admin'); ?>/slide"><span class="glyphicon glyphicon-leaf"></span> 轮播图</a></dd>

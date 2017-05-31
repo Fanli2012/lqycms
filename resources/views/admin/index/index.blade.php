@@ -9,7 +9,6 @@
 · LQYCMS采用PHP+Mysql架构，符合企业网站SEO优化理念、功能全面、安全稳定。</p>
 <h3>网站基本信息</h3>
 域名/IP：<?php echo $_SERVER["SERVER_NAME"]; ?> | <?php echo $_SERVER["REMOTE_ADDR"]; ?><br>
-运行环境：<?php echo @apache_get_version().' Mysql/'.@mysql_get_server_info(); ?>
 <h3>开发人员</h3>
  FLi、当代范蠡<br><br>
 我们的联系方式：374861669@qq.com<br><br>

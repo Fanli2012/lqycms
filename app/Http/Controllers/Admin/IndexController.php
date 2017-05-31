@@ -18,18 +18,14 @@ class IndexController extends CommonController
 	//更新配置
 	public function upconfig()
 	{
-        updateconfig();
+        cache()->forget('sysconfig'); //删除缓存
+		success_jump('更新成功！', route('admin_sysconfig'));
     }
     
 	//更新缓存
     public function upcache()
 	{
-		
-    }
-	
-	//页面跳转
-    public function jump()
-	{
-		return view('admin.index.jump');
+		cache()->forget('sysconfig'); //删除缓存
+		success_jump('更新成功！', route('admin_sysconfig'));
     }
 }
