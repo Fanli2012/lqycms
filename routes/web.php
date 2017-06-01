@@ -16,12 +16,13 @@ Route::group(['domain' => env('APP_SUBDOMAIN'), 'namespace' => 'Wap'], function 
 	Route::get('/', 'IndexController@index')->name('wap_home');
 	Route::get('/tags', 'IndexController@tags');
 	Route::get('/search', 'IndexController@search');
-	Route::get('/cat{cat}/id{id}', 'IndexController@detail');                   //详情页
+	Route::get('/p/{id}', 'IndexController@detail');                            //详情页
 	Route::get('/cat{cat}/{page}', 'IndexController@category');                 //分类页，分页
 	Route::get('/cat{cat}', 'IndexController@category');                        //分类页
 	Route::get('/tag{tag}/{page}', 'IndexController@tag');                      //标签页，分页
 	Route::get('/tag{tag}', 'IndexController@tag');                             //标签页
 	Route::get('/page/{id}', 'IndexController@singlepage')->name('wap_singlepage'); //单页
+	Route::get('/sitemap.xml', 'IndexController@sitemap')->name('wap_sitemap');         //sitemap
 	Route::get('/aaa', function () {
 		dd('wap');
 	});
@@ -34,12 +35,13 @@ Route::group(['namespace' => 'Home'], function () {
 	Route::get('/page404', 'IndexController@page404')->name('page404');         //404页面
 	Route::get('/tags', 'IndexController@tags')->name('tags');
 	Route::get('/search', 'IndexController@search');
-	Route::get('/cat{cat}/id{id}', 'IndexController@detail');                   //详情页
+	Route::get('/p/{id}', 'IndexController@detail');                            //详情页
 	Route::get('/cat{cat}/{page}', 'IndexController@category');                 //分类页，分页
 	Route::get('/cat{cat}', 'IndexController@category');                        //分类页
 	Route::get('/tag{tag}/{page}', 'IndexController@tag');                      //标签页，分页
 	Route::get('/tag{tag}', 'IndexController@tag');                             //标签页
 	Route::get('/page/{id}', 'IndexController@page')->name('page');             //单页
+	Route::get('/sitemap.xml', 'IndexController@sitemap')->name('sitemap');         //sitemap
 	
 	Route::get('/aaa', function () {
 		dd('wap');

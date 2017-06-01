@@ -1,5 +1,5 @@
 <!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8" /><meta http-equiv="Cache-Control" content="no-siteapp" /><meta http-equiv="Cache-Control" content="no-transform" /><meta name="mobile-agent" content="format=xhtml;url=http://m.bnbni.com<?php echo GetCurUrl(); ?>">
-<title><?php if(!empty($post['seotitle'])){echo $post['seotitle'];}elseif(!empty($post['writer'])){echo $post['writertitle'].'_'.CMS_WEBNAME;}else{echo $post['title'].'_'.CMS_WEBNAME;} ?></title><meta name="keywords" content="<?php echo $post["keywords"]; ?>" /><meta name="description" content="<?php echo $post["description"]; ?>" /><link rel="stylesheet" href="<?php echo CMS_BASEHOST; ?>/images/style.css" media="all"><script type="text/javascript" src="<?php echo CMS_BASEHOST; ?>/js/jquery.min.js"></script><script type="text/javascript" src="<?php echo CMS_BASEHOST; ?>/js/ad.js"></script><script>uaredirect("http://m.bnbni.com/cat{dede:type}[field:id/]{/dede:type}/id{dede:field name='aid' /}");</script></head><body><script>site();</script>
+<title><?php if(!empty($post['seotitle'])){echo $post['seotitle'];}elseif(!empty($post['writer'])){echo $post['writertitle'].'_'.sysconfig('CMS_WEBNAME');}else{echo $post['title'].'_'.sysconfig('CMS_WEBNAME');} ?></title><meta name="keywords" content="<?php echo $post["keywords"]; ?>" /><meta name="description" content="<?php echo $post["description"]; ?>" /><link rel="stylesheet" href="<?php echo sysconfig('CMS_BASEHOST'); ?>/css/style.css" media="all"><script type="text/javascript" src="<?php echo sysconfig('CMS_BASEHOST'); ?>/js/jquery.min.js"></script><script type="text/javascript" src="<?php echo sysconfig('CMS_BASEHOST'); ?>/js/ad.js"></script><script>uaredirect("http://m.bnbni.com/cat{dede:type}[field:id/]{/dede:type}/id{dede:field name='aid' /}");</script></head><body><script>site();</script>
 @include('home.common.header')<div id="tad"><script>tjs();</script></div>
 
 <div class="box mt10"><div class="fl_640">
@@ -10,7 +10,7 @@
 
 <div class="fr_300"><div id="rad1"><script>rjs1();</script></div>
 <div class="side"><div class="stit"><h3>近期文章</h3><a href="javascript:getmore({PageSize:5,typeid:<?php echo $post['typeid']; ?>,mode:1,orderby:'rand()'});" class="more">换一换</a><div class="cl"></div></div>	
-<ul class="uli chs" id="xglist"><?php $posts=arclist(array("row"=>5,"typeid"=>$post['typeid'],"where"=>array("id"=>array('lt',$pre['id']))));foreach($posts as $row){ ?><li><a target="_blank" href="<?php echo get_front_url(array("id"=>$row['id'],"catid"=>$row['typeid'],"type"=>'content')); ?>"><?php echo $row['title']; ?></a></li><?php } ?></ul><div class="cl"></div></div>
+<ul class="uli chs" id="xglist"><?php $posts=arclist(array("row"=>5,"typeid"=>$post['typeid'],"expression"=>[['id', '<', $pre?$pre['id']:$post["id"]]]));if($posts){foreach($posts as $row){ ?><li><a target="_blank" href="<?php echo get_front_url(array("id"=>$row['id'],"catid"=>$row['typeid'],"type"=>'content')); ?>"><?php echo $row['title']; ?></a></li><?php }} ?></ul><div class="cl"></div></div>
 
 <div id="rad3"><script>rjs3();</script></div>
 <div class="side"><div class="stit"><h3>猜你喜欢</h3><a href="javascript:getmore({PageSize:5,typeid:<?php echo $post['typeid']; ?>,mode:2,orderby:'rand()'});" class="more">换一换</a><div class="cl"></div></div>
@@ -20,7 +20,7 @@
 <script>
 function getmore(condition)
 {
-    var url = "<?php echo CMS_BASEHOST; ?>/api/listarc";
+    var url = "<?php echo sysconfig('CMS_BASEHOST'); ?>/api/listarc";
     //var typeid = "";
     $.post(url,condition,function(res){
         if(res.code==0)

@@ -12,15 +12,22 @@ function dataList($modelname, $where = '', $orderby = '', $field = '*', $size = 
 	//排序
 	if($orderby!='')
 	{
-		if(count($orderby) == count($orderby, 1))
+		if($orderby == 'rand()')
 		{
-			$model = $model->orderBy($orderby[0], $orderby[1]);
+			$model = $model->orderBy(\DB::raw('rand()'));
 		}
 		else
 		{
-			foreach($orderby as $row)
+			if(count($orderby) == count($orderby, 1))
 			{
-				$model = $model->orderBy($row[0], $row[1]);
+				$model = $model->orderBy($orderby[0], $orderby[1]);
+			}
+			else
+			{
+				foreach($orderby as $row)
+				{
+					$model = $model->orderBy($row[0], $row[1]);
+				}
 			}
 		}
 	}
@@ -125,8 +132,22 @@ function arclist(array $param)
 	$where = function ($query) use ($param) {
 		if(isset($param['tuijian']))
 		{
-			$query->where('tuijian', $param['tuijian']);
-			//$query->where('title', 'like', '%'.$_REQUEST['keyword'].'%');
+			if(is_array($param['tuijian']))
+			{
+				$query->where('tuijian', $param['tuijian'][0], $param['tuijian'][1]);
+			}
+			else
+			{
+				$query->where('tuijian', $param['tuijian']);
+			}
+		}
+		
+		if(isset($param['expression']))
+		{
+			foreach($param['expression'] as $row)
+			{
+				$query->where($row[0], $row[1], $row[2]);
+			}
 		}
 		
 		if(isset($param['typeid']))
@@ -146,20 +167,31 @@ function arclist(array $param)
 	if(isset($param['orderby']))
 	{
 		$orderby = $param['orderby'];
-
-		if(count($orderby) == count($orderby, 1))
+		
+		if($orderby == 'rand()')
 		{
-			$model = $model->orderBy($orderby[0], $orderby[1]);
+			$model = $model->orderBy(\DB::raw('rand()'));
 		}
 		else
 		{
-			foreach($orderby as $row)
+			if(count($orderby) == count($orderby, 1))
 			{
-				$model = $model->orderBy($row[0], $row[1]);
+				$model = $model->orderBy($orderby[0], $orderby[1]);
+			}
+			else
+			{
+				foreach($orderby as $row)
+				{
+					$model = $model->orderBy($row[0], $row[1]);
+				}
 			}
 		}
 	}
-
+	else
+	{
+		$model = $model->orderBy('id', 'desc');
+	}
+	
 	//要返回的字段
 	if(isset($param['field'])){$model = $model->select(\DB::raw($param['field']));}
 
@@ -208,8 +240,7 @@ function flinklist($param="")
  */
 function get_article_prenext(array $param)
 {
-    $sql = $typeid = $res = '';
-    $sql='id='.$param["aid"];
+    $typeid = $res = '';
     
     if(!empty($param["typeid"]))
     {
@@ -217,22 +248,21 @@ function get_article_prenext(array $param)
     }
     else
     {
-        $Article = db("article")->field('typeid')->where($sql)->find();
+        $Article = DB::table("article")->select('typeid')->where('id', $param["aid"])->first();
         $typeid = $Article["typeid"];
     }
     
+	$res = DB::table("article")->select('id','typeid','title')->where('typeid', $typeid);
     if($param["type"]=='pre')
     {
-        $sql='id<'.$param['aid'].' and typeid='.$typeid;
-        $res = db("article")->field('id,typeid,title')->where($sql)->order('id desc')->find();
+        $res = $res->where('id', '<', $param["aid"])->orderBy('id', 'desc');
     }
-    else if($param["type"]=='next')
+    elseif($param["type"]=='next')
     {
-        $sql='id>'.$param['aid'].' and typeid='.$typeid;
-        $res = db("article")->field('id,typeid,title')->where($sql)->order('id asc')->find();
+        $res = $res->where('id', '>', $param["aid"])->orderBy('id', 'asc');
     }
     
-    return $res;
+    return object_to_array($res->first(), 1);
 }
 
 /**
@@ -763,7 +793,7 @@ function ReplaceKeyword($body)
 	//暂时屏蔽超链接
 	$body = preg_replace("#(<a(.*))(>)(.*)(<)(\/a>)#isU", '\\1-]-\\4-[-\\6', $body);
 	
-	if(cache("keywordlist")){$posts=cache("keywordlist");}else{$posts = db("Keyword")->select();cache("keywordlist",$posts,2592000);}
+	if(cache("keywordlist")){$posts=cache("keywordlist");}else{$posts = object_to_array(DB::table("keyword")->get());cache(["keywordlist"=>$posts], \Carbon\Carbon::now()->addMinutes(2592000));}
     
 	foreach($posts as $row)
 	{

@@ -52,17 +52,24 @@ class CommonController extends Controller
 		//排序
         if($orderby!='')
 		{
-			if(count($orderby) == count($orderby, 1))
-			{
-				$model = $model->orderBy($orderby[0], $orderby[1]);
-			}
-			else
-			{
-				foreach($orderby as $row)
-				{
-					$model = $model->orderBy($row[0], $row[1]);
-				}
-			}
+            if($orderby == 'rand()')
+            {
+                $model = $model->orderBy(\DB::raw('rand()'));
+            }
+            else
+            {
+    			if(count($orderby) == count($orderby, 1))
+    			{
+    				$model = $model->orderBy($orderby[0], $orderby[1]);
+    			}
+    			else
+    			{
+    				foreach($orderby as $row)
+    				{
+    					$model = $model->orderBy($row[0], $row[1]);
+    				}
+    			}
+            }
 		}
         else
         {

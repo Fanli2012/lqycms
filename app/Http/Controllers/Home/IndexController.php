@@ -5,6 +5,7 @@ use App\Http\Controllers\Home\CommonController;
 use App\Http\Model\Article;
 use App\Http\Model\Arctype;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 class IndexController extends CommonController
 {
@@ -20,14 +21,13 @@ class IndexController extends CommonController
     }
 	
     //列表页
-    public function category()
+    public function category($cat, $page)
 	{
-        $cat=input('cat');
-        $pagenow=input('page');
+        $pagenow=page;
         
-		if(empty($cat) || !preg_match('/[0-9]+/',$cat)){$this->error('您访问的页面不存在或已被删除！', '/' , 3);exit;}
+		if(empty($cat) || !preg_match('/[0-9]+/',$cat)){error_jump('您访问的页面不存在或已被删除！', route('page404'));}
         
-		if(cache("catid$cat")){$post=cache("catid$cat");}else{$post = db('arctype')->where("id=$cat")->find();if(empty($post)){$this->error('您访问的页面不存在或已被删除！', '/' , 3);exit;}cache("catid$cat",$post,2592000);}
+		if(cache("catid$cat")){$post=cache("catid$cat");}else{$post = db('arctype')->where("id=$cat")->find();if(empty($post)){error_jump('您访问的页面不存在或已被删除！', route('page404'));}cache("catid$cat",$post,2592000);}
         $this->assign('post',$post);
         
 		$subcat="";$sql="";
@@ -43,7 +43,7 @@ class IndexController extends CommonController
 		if($counts % $pagesize){//取总数据量除以每页数的余数
 		$pages = intval($counts/$pagesize) + 1; //如果有余数，则页数等于总数据量除以每页数的结果取整再加一,如果没有余数，则页数等于总数据量除以每页数的结果
 		}else{$pages = $counts/$pagesize;}
-		if(!empty($pagenow)){if($pagenow==1 || $pagenow>$pages){header("HTTP/1.0 404 Not Found");$this->error('您访问的页面不存在或已被删除！');exit;}$page = $pagenow-1;$nextpage=$pagenow+1;$previouspage=$pagenow-1;}else{$page = 0;$nextpage=2;$previouspage=0;}
+		if(!empty($pagenow)){if($pagenow==1 || $pagenow>$pages){header("HTTP/1.0 404 Not Found");error_jump('您访问的页面不存在或已被删除！', route('page404'));}$page = $pagenow-1;$nextpage=$pagenow+1;$previouspage=$pagenow-1;}else{$page = 0;$nextpage=2;$previouspage=0;}
 		$this->assign('page',$page);
 		$this->assign('pages',$pages);
 		$this->assign('counts',$counts);
@@ -52,44 +52,42 @@ class IndexController extends CommonController
 		$this->assign('posts',arclist(array("sql"=>$sql,"limit"=>"$start,$pagesize"))); //获取列表
 		$this->assign('pagenav',get_listnav(array("counts"=>$counts,"pagesize"=>$pagesize,"pagenow"=>$page+1,"catid"=>$cat))); //获取分页列表
         
-        if($post['templist']=='category2'){if(!empty($pagenow)){$this->error('您访问的页面不存在或已被删除！', '/' , 3);exit;}}
+        if($post['templist']=='category2'){if(!empty($pagenow)){error_jump('您访问的页面不存在或已被删除！', route('page404'));}}
         return $this->fetch($post['templist']);
 		return view('home.index.index');
 	}
     
     //文章详情页
-    public function detail()
+    public function detail($id)
 	{
-        $id=input('id');
-        if(empty($id) || !preg_match('/[0-9]+/',$id)){$this->error('您访问的页面不存在或已被删除！', '/' , 3);exit;}
+        if(empty($id) || !preg_match('/[0-9]+/',$id)){error_jump('您访问的页面不存在或已被删除！', route('page404'));}
 		
-		if(cache("detailid$id")){$post=cache("detailid$id");}else{$post = db('article')->where("id=$id")->find();if(empty($post)){$this->error('您访问的页面不存在或已被删除！', '/' , 3);exit;}$post['typename'] = db('arctype')->where("id=".$post['typeid'])->value('typename');cache("detailid$id",$post,2592000);}
+		if(cache("detailid$id")){$post = cache("detailid$id");}else{$post = object_to_array(DB::table('article')->where('id', $id)->first(), 1);if(empty($post)){error_jump('您访问的页面不存在或已被删除！', route('page404'));}$post['typename'] = DB::table('arctype')->where('id', $post['typeid'])->value('typename');cache(["detailid$id"=>$post], \Carbon\Carbon::now()->addMinutes(2592000));}
 		if($post)
         {
-			$cat=$post['typeid'];
-            $post['body']=ReplaceKeyword($post['body']);
+			$cat = $post['typeid'];
+            $post['body'] = ReplaceKeyword($post['body']);
             if(!empty($post['writer'])){$post['writertitle']=$post['title'].' '.$post['writer'];}
             
-			$this->assign('post',$post);
-            $this->assign('pre',get_article_prenext(array('aid'=>$post["id"],'typeid'=>$post["typeid"],'type'=>"pre")));
+			$data['post'] = $post;
+            $data['pre'] = get_article_prenext(array('aid'=>$post["id"],'typeid'=>$post["typeid"],'type'=>"pre"));
         }
         else
         {
-            $this->error('您访问的页面不存在或已被删除！', '/' , 3);exit;
+            error_jump('您访问的页面不存在或已被删除！', route('page404'));
         }
         
-		if(cache("catid$cat")){$post=cache("catid$cat");}else{$post = db('arctype')->where("id=$cat")->find();cache("catid$cat",$post,2592000);}
+		if(cache("catid$cat")){$post=cache("catid$cat");}else{$post = object_to_array(DB::table('arctype')->where('id', $cat)->first(), 1);cache(["catid$cat"=>$post], \Carbon\Carbon::now()->addMinutes(2592000));}
         
-        return $this->fetch($post['temparticle']);return view('home.index.index');
+        return view('home.index.'.$post['temparticle'], $data);
     }
 	
     //标签详情页，共有3种显示方式，1正常列表，2列表显示文章，3显示描述
-	public function tag()
+	public function tag($tag, $page)
 	{
-        $tag=input('tag');
-        $pagenow=input('page');
+        $pagenow = $page;
         
-		if(empty($tag) || !preg_match('/[0-9]+/',$tag)){$this->error('您访问的页面不存在或已被删除！', '/' , 3);exit;}
+		if(empty($tag) || !preg_match('/[0-9]+/',$tag)){error_jump('您访问的页面不存在或已被删除！', route('page404'));}
         
 		if(cache("tagid$tag")){$post=cache("tagid$tag");}else{$post = db('tagindex')->where("id=$tag")->find();cache("tagid$tag",$post,2592000);}
         $this->assign('post',$post);
@@ -100,7 +98,7 @@ class IndexController extends CommonController
 		if($counts % $pagesize){//取总数据量除以每页数的余数
 		$pages = intval($counts/$pagesize) + 1; //如果有余数，则页数等于总数据量除以每页数的结果取整再加一,如果没有余数，则页数等于总数据量除以每页数的结果
 		}else{$pages = $counts/$pagesize;}
-		if(!empty($pagenow)){if($pagenow==1 || $pagenow>$pages){header("HTTP/1.0 404 Not Found");$this->error('您访问的页面不存在或已被删除！');exit;}$page = $pagenow-1;$nextpage=$pagenow+1;$previouspage=$pagenow-1;}else{$page = 0;$nextpage=2;$previouspage=0;}
+		if(!empty($pagenow)){if($pagenow==1 || $pagenow>$pages){header("HTTP/1.0 404 Not Found");error_jump('您访问的页面不存在或已被删除！', route('page404'));}$page = $pagenow-1;$nextpage=$pagenow+1;$previouspage=$pagenow-1;}else{$page = 0;$nextpage=2;$previouspage=0;}
 		$this->assign('page',$page);
 		$this->assign('pages',$pages);
 		$this->assign('counts',$counts);
@@ -131,7 +129,7 @@ class IndexController extends CommonController
         
 		$this->assign('pagenav',get_listnav(array("counts"=>$counts,"pagesize"=>$pagesize,"pagenow"=>$page+1,"catid"=>$tag,"urltype"=>"tag"))); //获取分页列表
 		
-        if($post['template']=='tag2' || $post['template']=='tag3'){if(!empty($pagenow)){$this->error('您访问的页面不存在或已被删除！', '/' , 3);exit;}}
+        if($post['template']=='tag2' || $post['template']=='tag3'){if(!empty($pagenow)){error_jump('您访问的页面不存在或已被删除！', route('page404'));}}
 		return $this->fetch($post['template']);
 		return view('home.index.index');
     }
@@ -164,10 +162,8 @@ class IndexController extends CommonController
     }
     
     //单页面
-    public function page()
+    public function page($id)
 	{
-        $id=input('id');
-        
         if(!empty($id) && preg_match('/[a-z0-9]+/',$id))
         {
             $map['filename']=$id;
@@ -179,13 +175,13 @@ class IndexController extends CommonController
             }
             else
             {
-                $this->error('您访问的页面不存在或已被删除！', '/' , 3);exit;
+                error_jump('您访问的页面不存在或已被删除！', route('page404'));
             }
 			
         }
         else
         {
-            $this->error('您访问的页面不存在或已被删除！', '/' , 3);exit;
+            error_jump('您访问的页面不存在或已被删除！', route('page404'));
         }
 		
 		return view('home.index.'.$post['template']);
@@ -194,7 +190,7 @@ class IndexController extends CommonController
 	//sitemap页面
     public function sitemap()
     {
-		return $this->fetch();
+		return view('home.index.sitemap');
     }
 	
 	//404页面
