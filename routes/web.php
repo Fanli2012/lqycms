@@ -21,7 +21,7 @@ Route::group(['domain' => env('APP_SUBDOMAIN'), 'namespace' => 'Wap'], function 
 	Route::get('/cat{cat}', 'IndexController@category');                        //分类页
 	Route::get('/tag{tag}/{page}', 'IndexController@tag');                      //标签页，分页
 	Route::get('/tag{tag}', 'IndexController@tag');                             //标签页
-	Route::get('/page/{id}', 'IndexController@singlepage')->name('wap_singlepage');                                //单页
+	Route::get('/page/{id}', 'IndexController@singlepage')->name('wap_singlepage'); //单页
 	Route::get('/aaa', function () {
 		dd('wap');
 	});
@@ -31,7 +31,7 @@ Route::group(['domain' => env('APP_SUBDOMAIN'), 'namespace' => 'Wap'], function 
 //前台路由
 Route::group(['namespace' => 'Home'], function () {
 	Route::get('/', 'IndexController@index')->name('home');
-	Route::get('/page404', 'IndexController@page404')->name('page404');                     //404页面
+	Route::get('/page404', 'IndexController@page404')->name('page404');         //404页面
 	Route::get('/tags', 'IndexController@tags')->name('tags');
 	Route::get('/search', 'IndexController@search');
 	Route::get('/cat{cat}/id{id}', 'IndexController@detail');                   //详情页
@@ -39,7 +39,7 @@ Route::group(['namespace' => 'Home'], function () {
 	Route::get('/cat{cat}', 'IndexController@category');                        //分类页
 	Route::get('/tag{tag}/{page}', 'IndexController@tag');                      //标签页，分页
 	Route::get('/tag{tag}', 'IndexController@tag');                             //标签页
-	Route::get('/page/{id}', 'IndexController@page')->name('page');                                //单页
+	Route::get('/page/{id}', 'IndexController@page')->name('page');             //单页
 	
 	Route::get('/aaa', function () {
 		dd('wap');
@@ -69,6 +69,13 @@ Route::group(['prefix' => 'fladmin', 'namespace' => 'Admin', 'middleware' => ['w
 	Route::get('/category/edit', 'CategoryController@edit')->name('admin_category_edit');
 	Route::post('/category/doedit', 'CategoryController@doedit')->name('admin_category_doedit');
 	Route::get('/category/del', 'CategoryController@del')->name('admin_category_del');
+	//标签
+	Route::get('/tag', 'TagController@index')->name('admin_tag');
+	Route::get('/tag/add', 'TagController@add')->name('admin_tag_add');
+	Route::post('/tag/doadd', 'TagController@doadd')->name('admin_tag_doadd');
+	Route::get('/tag/edit', 'TagController@edit')->name('admin_tag_edit');
+	Route::post('/tag/doedit', 'TagController@doedit')->name('admin_tag_doedit');
+	Route::get('/tag/del', 'TagController@del')->name('admin_tag_del');
 	//单页
 	Route::get('/page', 'PageController@index')->name('admin_page');
 	Route::get('/page/add', 'PageController@add')->name('admin_page_add');
@@ -76,23 +83,6 @@ Route::group(['prefix' => 'fladmin', 'namespace' => 'Admin', 'middleware' => ['w
 	Route::get('/page/edit', 'PageController@edit')->name('admin_page_edit');
 	Route::post('/page/doedit', 'PageController@doedit')->name('admin_page_doedit');
 	Route::get('/page/del', 'PageController@del')->name('admin_page_del');
-	//友情链接
-	Route::get('/friendlink', 'FriendlinkController@index')->name('admin_friendlink');
-	Route::get('/friendlink/add', 'FriendlinkController@add')->name('admin_friendlink_add');
-	Route::post('/friendlink/doadd', 'FriendlinkController@doadd')->name('admin_friendlink_doadd');
-	Route::get('/friendlink/edit', 'FriendlinkController@edit')->name('admin_friendlink_edit');
-	Route::post('/friendlink/doedit', 'FriendlinkController@doedit')->name('admin_friendlink_doedit');
-	Route::get('/friendlink/del', 'FriendlinkController@del')->name('admin_friendlink_del');
-	//在线留言管理
-	Route::get('/guestbook', 'GuestbookController@index')->name('admin_guestbook');
-	Route::get('/guestbook/del', 'GuestbookController@del')->name('admin_guestbook_del');
-	//关键词管理
-	Route::get('/keyword', 'KeywordController@index')->name('admin_keyword');
-	Route::get('/keyword/add', 'KeywordController@add')->name('admin_keyword_add');
-	Route::post('/keyword/doadd', 'KeywordController@doadd')->name('admin_keyword_doadd');
-	Route::get('/keyword/edit', 'KeywordController@edit')->name('admin_keyword_edit');
-	Route::post('/keyword/doedit', 'KeywordController@doedit')->name('admin_keyword_doedit');
-	Route::get('/keyword/del', 'KeywordController@del')->name('admin_keyword_del');
 	//产品
 	Route::get('/product', 'ProductController@index')->name('admin_product');
 	Route::get('/product/add', 'ProductController@add')->name('admin_product_add');
@@ -100,6 +90,29 @@ Route::group(['prefix' => 'fladmin', 'namespace' => 'Admin', 'middleware' => ['w
 	Route::get('/product/edit', 'ProductController@edit')->name('admin_product_edit');
 	Route::post('/product/doedit', 'ProductController@doedit')->name('admin_product_doedit');
 	Route::get('/product/del', 'ProductController@del')->name('admin_product_del');
+	Route::get('/product/recommendarc', 'ProductController@recommendarc')->name('admin_product_recommendarc');
+	Route::get('/product/articleexists', 'ProductController@productexists')->name('admin_product_productexists');
+	//产品分类
+	Route::get('/producttype', 'ProductTypeController@index')->name('admin_producttype');
+	Route::get('/producttype/add', 'ProductTypeController@add')->name('admin_producttype_add');
+	Route::post('/producttype/doadd', 'ProductTypeController@doadd')->name('admin_producttype_doadd');
+	Route::get('/producttype/edit', 'ProductTypeController@edit')->name('admin_producttype_edit');
+	Route::post('/producttype/doedit', 'ProductTypeController@doedit')->name('admin_producttype_doedit');
+	Route::get('/producttype/del', 'ProductTypeController@del')->name('admin_producttype_del');
+	//友情链接
+	Route::get('/friendlink', 'FriendlinkController@index')->name('admin_friendlink');
+	Route::get('/friendlink/add', 'FriendlinkController@add')->name('admin_friendlink_add');
+	Route::post('/friendlink/doadd', 'FriendlinkController@doadd')->name('admin_friendlink_doadd');
+	Route::get('/friendlink/edit', 'FriendlinkController@edit')->name('admin_friendlink_edit');
+	Route::post('/friendlink/doedit', 'FriendlinkController@doedit')->name('admin_friendlink_doedit');
+	Route::get('/friendlink/del', 'FriendlinkController@del')->name('admin_friendlink_del');
+	//关键词管理
+	Route::get('/keyword', 'KeywordController@index')->name('admin_keyword');
+	Route::get('/keyword/add', 'KeywordController@add')->name('admin_keyword_add');
+	Route::post('/keyword/doadd', 'KeywordController@doadd')->name('admin_keyword_doadd');
+	Route::get('/keyword/edit', 'KeywordController@edit')->name('admin_keyword_edit');
+	Route::post('/keyword/doedit', 'KeywordController@doedit')->name('admin_keyword_doedit');
+	Route::get('/keyword/del', 'KeywordController@del')->name('admin_keyword_del');
 	//搜索关键词
 	Route::get('/searchword', 'SearchwordController@index')->name('admin_searchword');
 	Route::get('/searchword/add', 'SearchwordController@add')->name('admin_searchword_add');
@@ -114,13 +127,9 @@ Route::group(['prefix' => 'fladmin', 'namespace' => 'Admin', 'middleware' => ['w
 	Route::get('/slide/edit', 'SlideController@edit')->name('admin_slide_edit');
 	Route::post('/slide/doedit', 'SlideController@doedit')->name('admin_slide_doedit');
 	Route::get('/slide/del', 'SlideController@del')->name('admin_slide_del');
-	//标签
-	Route::get('/tag', 'TagController@index')->name('admin_tag');
-	Route::get('/tag/add', 'TagController@add')->name('admin_tag_add');
-	Route::post('/tag/doadd', 'TagController@doadd')->name('admin_tag_doadd');
-	Route::get('/tag/edit', 'TagController@edit')->name('admin_tag_edit');
-	Route::post('/tag/doedit', 'TagController@doedit')->name('admin_tag_doedit');
-	Route::get('/tag/del', 'TagController@del')->name('admin_tag_del');
+	//在线留言管理
+	Route::get('/guestbook', 'GuestbookController@index')->name('admin_guestbook');
+	Route::get('/guestbook/del', 'GuestbookController@del')->name('admin_guestbook_del');
 	//系统参数配置
 	Route::get('/sysconfig', 'SysconfigController@index')->name('admin_sysconfig');
 	Route::get('/sysconfig/add', 'SysconfigController@add')->name('admin_sysconfig_add');

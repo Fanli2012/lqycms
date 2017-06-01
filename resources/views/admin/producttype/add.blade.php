@@ -1,12 +1,12 @@
-<!DOCTYPE html><html><head><title>添加分类_后台管理</title>{include file="common/header"/}
+<!DOCTYPE html><html><head><title>添加分类_后台管理</title>@include('admin.common.header')
 <div class="container-fluid">
 <div class="row">
-<!-- 左边开始 --><div class="col-sm-3 col-md-2 sidebar">{include file="common/leftmenu"/}</div><!-- 左边结束 -->
+<!-- 左边开始 --><div class="col-sm-3 col-md-2 sidebar">@include('admin.common.leftmenu')</div><!-- 左边结束 -->
 
 <!-- 右边开始 --><div class="col-sm-9 col-md-10 rightbox"><div id="mainbox">
-<h5 class="sub-header"><a href="/fladmin/Producttype">商品分类管理</a> > 添加分类</h5>
+<h5 class="sub-header"><a href="/fladmin/producttype">商品分类管理</a> > 添加分类</h5>
 
-<form method="post" action="/fladmin/Producttype/doadd" role="form" id="addcat" class="table-responsive">
+<form method="post" action="/fladmin/producttype/doadd" role="form" id="addcat" class="table-responsive">{{ csrf_field() }}
 <table class="table table-striped table-bordered">
   <tbody>
     <tr>
@@ -23,41 +23,44 @@
     </tr>
     <tr>
       <td align="right">列表模板：</td>
-      <td><input name="templist" id="templist" type="text" value="productcategory.html" class="required" size="20"></td>
+      <td><input name="templist" id="templist" type="text" value="productcategory" class="required" size="20"></td>
     </tr>
     <tr>
       <td align="right">文章模板：</td>
-      <td><input name="temparticle" id="temparticle" type="text" value="productdetail.html" class="required" size="20"></td>
+      <td><input name="temparticle" id="temparticle" type="text" value="productdetail" class="required" size="20"></td>
     </tr>
     <tr>
         <td align="right" style="vertical-align:middle;">缩略图：</td>
-        <td style="vertical-align:middle;"><input id="file_upload" value="选择文件" name="file_upload" type="file" multiple="true"> <input name="litpic" type="text" id="litpic" value="" style="width:40%"> <img style="margin-left:20px;display:none;" src="" width="120" height="80" id="picview"></td>
+        <td style="vertical-align:middle;"><button type="button" onclick="upImage();">选择图片</button> <input name="litpic" type="text" id="litpic" value="" style="width:40%"> <img style="margin-left:20px;display:none;" src="" width="120" height="80" id="picview"></td>
     </tr>
-<style>.uploadify{display:inline-block;}.uploadify-queue{display:none;}</style>
 <script type="text/javascript">
-    <?php $timestamp = time();?>
-    bidtype="选择文件";
-    $(function() {
-        $('#file_upload').uploadify({
-            'buttonText': bidtype,//按钮文字
-            'auto':true,//选择完图片以后是否自动上传
-            'multi': false,//是否开启一次性上传多个文件
-            'fileTypeExts': "*.jpg;*.png;*.gif;*.jpeg;",//允许的文件类型
-            'width': 60,//buttonImg的大小
-            'height': 26,
-            'formData'     : {
-                'timestamp' : '<?php echo $timestamp;?>',
-                'token'     : '<?php echo md5('unique_salt' . $timestamp);?>'
-            },
-            'swf'      : '/other/uploadify/uploadify.swf',//路径要正确
-            'uploader' : '/uploadImage.php',//路径要正确
-            'onUploadSuccess': function (file, data, response) {  //一个文件上传成功后的响应事件处理
-                $('#litpic').val(data);
-                $('#picview').attr("src",data).css("display","inline-block");
-            }
-        });
+var _editor;
+$(function() {
+    //重新实例化一个编辑器，防止在上面的editor编辑器中显示上传的图片或者文件
+    _editor = UE.getEditor('ueditorimg');
+    _editor.ready(function () {
+        //设置编辑器不可用
+        _editor.setDisabled('insertimage');
+        //隐藏编辑器，因为不会用到这个编辑器实例，所以要隐藏
+        _editor.hide();
+        //侦听图片上传
+        _editor.addListener('beforeInsertImage', function (t, arg) {
+            //将地址赋值给相应的input,只取第一张图片的路径
+			$('#litpic').val(arg[0].src);
+            //图片预览
+            $('#picview').attr("src",arg[0].src).css("display","inline-block");
+        })
     });
+});
+//弹出图片上传的对话框
+function upImage()
+{
+    var myImage = _editor.getDialog("insertimage");
+	myImage.render();
+    myImage.open();
+}
 </script>
+<script type="text/plain" id="ueditorimg"></script>
     <tr>
       <td align="right">SEO标题：</td>
       <td><input name="seotitle" type="text" style="width:70%" id="seotitle" class="alltxt" value=""></td>
@@ -137,40 +140,6 @@ $('#addcat input[type="submit"]').click(function(){
     if(numError){
         return false;
     }
-
-    //$("#contents").val = ue.getContent();
-    //var datas = $('#addcat').serialize();//#form要在form里面
-
-    //var content = ue.getContent();
-    /* $.ajax({
-        url: "/fladmin/Producttype/doedit",
-        type: "POST",
-        dataType: "json",
-        data: {
-            "id":$("#id").val(),
-            "typename":$("#typename").val(),
-            "typedir":$("#typedir").val(),
-            "templist":$("#templist").val(),
-            "temparticle":$("#temparticle").val(),
-            "litpic":$("#litpic").val(),
-            "seotitle":$("#seotitle").val(),
-            "keywords":$("#keywords").val(),
-            "seokeyword":$("#seokeyword").val(),
-            "description":$("#description").val(),
-            "content":content
-            //"seotitle":seotitle.replace("'", "&#039;"),
-            //"keywords":keywords.replace("'", "&#039;"),
-            //"description":description.replace("'", "&#039;"),
-            //"contents":content.replace("'", "&#039;")
-        },
-        success: function(data){
-            if(data.code==200)
-            {
-                //alert(data.info);
-                window.location.replace("/fladmin/Producttype");
-            }
-        }
-    }); */
 });
 </script>
 </body></html>

@@ -8,7 +8,7 @@
 <dt>商品管理</dt>
 <dd><a href="<?php echo route('admin'); ?>/product"><span class="glyphicon glyphicon-pencil"></span> 商品列表</a></dd>
 <dd><a href="<?php echo route('admin'); ?>/product/add"><span class="glyphicon glyphicon-file"></span> 添加商品</a></dd>
-<dd><a href="<?php echo route('admin'); ?>/productType"><span class="glyphicon glyphicon-th-list"></span> 商品分类</a></dd>
+<dd><a href="<?php echo route('admin'); ?>/producttype"><span class="glyphicon glyphicon-th-list"></span> 商品分类</a></dd>
 <dt>批量维护</dt>
 <dd><a href="<?php echo route('admin'); ?>/tag"><span class="glyphicon glyphicon-tag"></span> TAG标签管理</a></dd>
 <dd><a href="<?php echo route('admin'); ?>/searchword"><span class="glyphicon glyphicon-fire"></span> 关键词管理</a></dd>

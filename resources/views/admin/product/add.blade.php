@@ -1,12 +1,12 @@
-<!DOCTYPE html><html><head><title>添加商品信息_后台管理</title>{include file="common/header"/}
+<!DOCTYPE html><html><head><title>添加商品信息_后台管理</title>@include('admin.common.header')
 <div class="container-fluid">
 <div class="row">
-<!-- 左边开始 --><div class="col-sm-3 col-md-2 sidebar">{include file="common/leftmenu"/}</div><!-- 左边结束 -->
+<!-- 左边开始 --><div class="col-sm-3 col-md-2 sidebar">@include('admin.common.leftmenu')</div><!-- 左边结束 -->
 
 <!-- 右边开始 --><div class="col-sm-9 col-md-10 rightbox"><div id="mainbox">
-<h5 class="sub-header"><a href="/fladmin/Product">商品列表</a> > 添加商品</h5>
+<h5 class="sub-header"><a href="/fladmin/product">商品列表</a> > 添加商品</h5>
 
-<form id="addarc" method="post" action="/fladmin/Product/doadd" role="form" enctype="multipart/form-data" class="table-responsive">
+<form id="addarc" method="post" action="/fladmin/product/doadd" role="form" enctype="multipart/form-data" class="table-responsive">{{ csrf_field() }}
 <table class="table table-striped table-bordered">
 <tbody>
     <tr>
@@ -32,7 +32,7 @@
         <td align="right">推荐：</td>
         <td>
             <select name="tuijian" id="tuijian">
-                <?php $tuijian = config('tuijian');
+                <?php $tuijian = config('custom.tuijian');
                 for($i=0;$i<count($tuijian);$i++){ ?><option value="<?php echo $i; ?>"><?php echo $tuijian[$i]; ?></option><?php } ?>
             </select>
         </td>
@@ -77,7 +77,7 @@ function upImage()
         <td align="right">商品类目：</td>
         <td>
             <select name="typeid" id="typeid">
-                <?php $catlist = tree(get_category('product_type',0));foreach($catlist as $row){
+                <?php $catlist = category_tree(get_category('product_type',0));foreach($catlist as $row){
                     if($row["id"]==$catid){ ?>
                 <option selected="selected" value="<?php echo $row["id"]; ?>"><?php for($i=0;$i<$row["deep"];$i++){echo "—";}echo $row["typename"]; ?></option>
                     <?php }else{ ?>
@@ -146,7 +146,7 @@ $(function(){
         //var description = $("#description").val();
         
         /*$.ajax({
-            url: "/fladmin/Product/doedit",
+            url: "/fladmin/product/doedit",
             type: "POST",
             dataType: "json",
             cache: false,
@@ -173,7 +173,7 @@ $(function(){
                 if(data.code==200)
                 {
                     //alert(data.info);
-                    window.location.replace("/fladmin/Product");
+                    window.location.replace("/fladmin/product");
                 }
             }
         }); */

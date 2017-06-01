@@ -1,38 +1,38 @@
-<!DOCTYPE html><html><head><title>修改商品信息_后台管理</title>{include file="common/header"/}
+<!DOCTYPE html><html><head><title>修改商品信息_后台管理</title>@include('admin.common.header')
 <div class="container-fluid">
 <div class="row">
-<!-- 左边开始 --><div class="col-sm-3 col-md-2 sidebar">{include file="common/leftmenu"/}</div><!-- 左边结束 -->
+<!-- 左边开始 --><div class="col-sm-3 col-md-2 sidebar">@include('admin.common.leftmenu')</div><!-- 左边结束 -->
 
 <!-- 右边开始 --><div class="col-sm-9 col-md-10 rightbox"><div id="mainbox">
-<h5 class="sub-header"><a href="/fladmin/Product">商品列表</a> > 修改商品</h5>
+<h5 class="sub-header"><a href="/fladmin/product">商品列表</a> > 修改商品</h5>
 
-<form id="addarc" method="post" action="/fladmin/Product/doedit" role="form" enctype="multipart/form-data" class="table-responsive">
+<form id="addarc" method="post" action="/fladmin/product/doedit" role="form" enctype="multipart/form-data" class="table-responsive">{{ csrf_field() }}
 <table class="table table-striped table-bordered">
 <tbody>
     <tr>
         <td align="right">商品标题：</td>
-        <td><input name="title" type="text" id="title" value="{$post["title"]}" class="required" style="width:60%" placeholder="在此输入标题"><input style="display:none;" type="text" name="id" id="id" value="{$id}"></td>
+        <td><input name="title" type="text" id="title" value="<?php echo $post["title"]; ?>" class="required" style="width:60%" placeholder="在此输入标题"><input style="display:none;" type="text" name="id" id="id" value="<?php echo $id; ?>"></td>
     </tr>
 	<tr>
         <td align="right">货号：</td>
-        <td colspan="2"><input name="serial_no" type="text" id="serial_no" style="width:180px" value="{$post["serial_no"]}">&nbsp;&nbsp; 运费：<input name="delivery_fee" type="text" id="delivery_fee" style="width:100px" value="{$post["delivery_fee"]}">&nbsp;&nbsp; 销量：<input name="sales" type="text" id="sales" style="width:60px" value="{$post["sales"]}"></td>
+        <td colspan="2"><input name="serial_no" type="text" id="serial_no" style="width:180px" value="<?php echo $post["serial_no"]; ?>">&nbsp;&nbsp; 运费：<input name="delivery_fee" type="text" id="delivery_fee" style="width:100px" value="<?php echo $post["delivery_fee"]; ?>">&nbsp;&nbsp; 销量：<input name="sales" type="text" id="sales" style="width:60px" value="<?php echo $post["sales"]; ?>"></td>
     </tr>
     <tr>
         <td align="right">商品价格：</td>
-        <td colspan="2"><input name="price" type="text" id="price" style="width:100px" value="{$post["price"]}">&nbsp;&nbsp; 原价：<input name="origin_price" type="text" id="origin_price" style="width:100px" value="{$post["origin_price"]}">&nbsp;&nbsp; 库存：<input name="inventory" type="text" id="inventory" style="width:60px" value="{$post["inventory"]}">&nbsp;&nbsp; 浏览次数：<input type="text" name="click" id="click" value="{$post["click"]}" style="width:60px;"></td>
+        <td colspan="2"><input name="price" type="text" id="price" style="width:100px" value="<?php echo $post["price"]; ?>">&nbsp;&nbsp; 原价：<input name="origin_price" type="text" id="origin_price" style="width:100px" value="<?php echo $post["origin_price"]; ?>">&nbsp;&nbsp; 库存：<input name="inventory" type="text" id="inventory" style="width:60px" value="<?php echo $post["inventory"]; ?>">&nbsp;&nbsp; 浏览次数：<input type="text" name="click" id="click" value="<?php echo $post["click"]; ?>" style="width:60px;"></td>
     </tr>
 	<tr>
         <td align="right">上架：</td>
         <td>
-			<input type="radio" value='0' name="status" {if condition="$post['status']==0"}checked{/if} />&nbsp;是&nbsp;&nbsp;
-			<input type="radio" value='1' name="status" {if condition="$post['status']==1"}checked{/if} />&nbsp;否
+			<input type="radio" value='0' name="status" <?php echo $post["title"]; ?>{if condition="$post['status']==0"}checked{/if} />&nbsp;是&nbsp;&nbsp;
+			<input type="radio" value='1' name="status" <?php echo $post["title"]; ?>{if condition="$post['status']==1"}checked{/if} />&nbsp;否
 		</td>
     </tr>
     <tr>
         <td align="right">推荐：</td>
         <td>
             <select name="tuijian" id="tuijian">
-                <?php $tuijian = config('tuijian');
+                <?php $tuijian = config('custom.tuijian');
                 for($i=0;$i<count($tuijian);$i++){if($i==$post["tuijian"]){?><option selected="selected" value="<?php echo $i; ?>"><?php echo $tuijian[$i]; ?></option>
                 <?php }else{?><option value="<?php echo $i; ?>"><?php echo $tuijian[$i]; ?></option><?php }} ?>
             </select>
@@ -40,11 +40,11 @@
     </tr>
     <tr>
         <td align="right">seoTitle：</td>
-        <td><input name="seotitle" type="text" id="seotitle" value="{$post["seotitle"]}" style="width:60%"></td>
+        <td><input name="seotitle" type="text" id="seotitle" value="<?php echo $post["seotitle"]; ?>" style="width:60%"></td>
     </tr>
     <tr>
         <td align="right" style="vertical-align:middle;">缩略图：</td>
-        <td style="vertical-align:middle;"><button type="button" onclick="upImage();">选择图片</button> <input name="litpic" type="text" id="litpic" value="{$post["litpic"]}" style="width:40%"> <img style="margin-left:20px;<?php if(empty($post["litpic"]) || !imgmatch($post["litpic"])){ echo "display:none;"; } ?>" src="<?php if(imgmatch($post["litpic"])){echo $post["litpic"];} ?>" width="120" height="80" id="picview" name="picview"></td>
+        <td style="vertical-align:middle;"><button type="button" onclick="upImage();">选择图片</button> <input name="litpic" type="text" id="litpic" value="<?php echo $post["litpic"]; ?>" style="width:40%"> <img style="margin-left:20px;<?php if(empty($post["litpic"]) || !imgmatch($post["litpic"])){ echo "display:none;"; } ?>" src="<?php if(imgmatch($post["litpic"])){echo $post["litpic"];} ?>" width="120" height="80" id="picview" name="picview"></td>
     </tr>
 <script type="text/javascript">
 var _editor;
@@ -78,7 +78,7 @@ function upImage()
         <td align="right">商品类目：</td>
         <td>
             <select name="typeid" id="typeid">
-                <?php $catlist = tree(get_category('product_type',0));foreach($catlist as $row){
+                <?php $catlist = category_tree(get_category('product_type',0));foreach($catlist as $row){
                     if($row["id"]==$post["typeid"]){ ?>
                 <option selected="selected" value="<?php echo $row["id"]; ?>"><?php for($i=0;$i<$row["deep"];$i++){echo "—";}echo $row["typename"]; ?></option>
                     <?php }else{ ?>
@@ -89,18 +89,18 @@ function upImage()
     </tr>
     <tr>
         <td align="right">关键词：</td>
-        <td><input type="text" name="keywords" id="keywords" style="width:50%" value="{$post["keywords"]}"> (多个用","分开)</td>
+        <td><input type="text" name="keywords" id="keywords" style="width:50%" value="<?php echo $post["keywords"]; ?>"> (多个用","分开)</td>
     </tr>
     <tr>
         <td align="right" style="vertical-align:middle;">内容摘要：</td>
-        <td><textarea name="description" rows="5" id="description" style="width:60%;height:70px;vertical-align:middle;">{$post["description"]}</textarea></td>
+        <td><textarea name="description" rows="5" id="description" style="width:60%;height:70px;vertical-align:middle;"><?php echo $post["description"]; ?></textarea></td>
     </tr>
     <tr>
         <td colspan="2"><strong>图文描述：</strong></td>
     </tr>
     <tr>
         <td colspan="2">
-<!-- 加载编辑器的容器 --><script id="container" name="body" type="text/plain">{$post["body"]}</script>
+<!-- 加载编辑器的容器 --><script id="container" name="body" type="text/plain"><?php echo $post["body"]; ?></script>
 <!-- 配置文件 --><script type="text/javascript" src="/other/flueditor/ueditor.config.js"></script>
 <!-- 编辑器源码文件 --><script type="text/javascript" src="/other/flueditor/ueditor.all.js"></script>
 <!-- 实例化编辑器 --><script type="text/javascript">var ue = UE.getEditor('container',{maximumWords:100000,initialFrameHeight:320,enableAutoSave:false});</script></td>
@@ -147,7 +147,7 @@ $(function(){
         //var description = $("#description").val();
         
         /*$.ajax({
-            url: "/fladmin/Product/doedit",
+            url: "/fladmin/product/doedit",
             type: "POST",
             dataType: "json",
             cache: false,
@@ -174,7 +174,7 @@ $(function(){
                 if(data.code==200)
                 {
                     //alert(data.info);
-                    window.location.replace("/fladmin/Product");
+                    window.location.replace("/fladmin/product");
                 }
             }
         }); */

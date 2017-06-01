@@ -113,24 +113,59 @@ function get_wap_front_url(array $param)
  */
 function arclist(array $param)
 {
-    $map=array();
-    
-	if(isset($param['tuijian'])){$map['tuijian']=$param['tuijian'];}
-	if(isset($param['typeid'])){$map['typeid']=$param['typeid'];}
-	if(isset($param['image'])){$map['litpic']=array('NEQ','');}
-	if(isset($param['limit'])){$limit=$param['limit'];}else{if(isset($param['row'])){$limit="0,".$param['row'];}else{$limit='0,'.cms_pagesize;}}
-	if(isset($param['orderby'])){$orderby=$param['orderby'];}else{$orderby='id desc';}
+	$modelname = 'article';
+	if(isset($param['table'])){$modelname = $param['table'];}
+
+	$model = \DB::table($modelname);
 	
-	if(isset($param['sql']))
+	$size = sysconfig('CMS_PAGESIZE');$page = 1;$skip = 0;
+	if(isset($param['limit'])){$limit=explode(',',$param['limit']); $skip = $limit[0]; $size = $limit[1];}else{if(isset($param['row'])){$size = $param['row'];}} // 参数格式：$param['limit'] = '2,10';$param['row'] = 10;
+
+	//查询条件
+	$where = function ($query) use ($param) {
+		if(isset($param['tuijian']))
+		{
+			$query->where('tuijian', $param['tuijian']);
+			//$query->where('title', 'like', '%'.$_REQUEST['keyword'].'%');
+		}
+		
+		if(isset($param['typeid']))
+		{
+			$query->where('typeid', $param["typeid"]);
+		}
+		
+		if(isset($param['image']))
+		{
+			$query->where('litpic', '<>', '');
+		}
+    };
+
+    if(!empty($where)){$model = $model->where($where);}
+
+    //排序
+	if(isset($param['orderby']))
 	{
-		$Artlist = db("article")->field('body',true)->where($param['sql'])->order($orderby)->limit($limit)->select();
+		$orderby = $param['orderby'];
+
+		if(count($orderby) == count($orderby, 1))
+		{
+			$model = $model->orderBy($orderby[0], $orderby[1]);
+		}
+		else
+		{
+			foreach($orderby as $row)
+			{
+				$model = $model->orderBy($row[0], $row[1]);
+			}
+		}
 	}
-	else
-	{
-		$Artlist = db("article")->field('body',true)->where($map)->order($orderby)->limit($limit)->select();
-	}
+
+	//要返回的字段
+	if(isset($param['field'])){$model = $model->select(\DB::raw($param['field']));}
+
+	if($skip==0){$skip = ($page-1)*$size;}
 	
-	return $Artlist;
+	return object_to_array($model->skip($skip)->take($size)->get());
 }
 
 /**

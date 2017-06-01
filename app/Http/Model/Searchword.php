@@ -3,16 +3,16 @@ namespace App\Http\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Arctype extends Model
+class Searchword extends Model
 {
-	//文章分类模型
+	//搜索关键词模型
 	
     /**
      * 关联到模型的数据表
      *
      * @var string
      */
-	protected $table = 'arctype';
+	protected $table = 'searchword';
 	
 	/**
      * 表明模型是否应该被打上时间戳
@@ -22,19 +22,14 @@ class Arctype extends Model
      */
     public $timestamps = false;
 	
+	//protected $guarded = []; //$guarded包含你不想被赋值的字段数组。
+	//protected $fillable = ['name']; //定义哪些字段是可以进行赋值的,与$guarded相反
+	
 	/**
      * The connection name for the model.
      * 默认情况下，所有的 Eloquent 模型使用应用配置中的默认数据库连接，如果你想要为模型指定不同的连接，可以通过 $connection 属性来设置
      * @var string
      */
     //protected $connection = 'connection-name';
-	
-	/**
-	 * 获取分类对应的文章
-	 */
-	public function article()
-	{
-		return $this->hasMany(Article::class, 'typeid', 'id');
-	}
 	
 }

@@ -5,6 +5,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Sysconfig extends Model
 {
+	//系统参数配置
+	
     protected $table = 'sysconfig';
 	public $timestamps = false;
 	

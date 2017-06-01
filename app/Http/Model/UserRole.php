@@ -5,6 +5,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserRole extends Model
 {
+	//用户角色
+	
 	protected $table = 'user_role';
 	public $timestamps = false;
 	
