@@ -19,13 +19,14 @@ class IndexController extends CommonController
 	public function upconfig()
 	{
         cache()->forget('sysconfig'); //删除缓存
-		success_jump('更新成功！', route('admin_sysconfig'));
+		success_jump('更新成功！');
     }
     
 	//更新缓存
     public function upcache()
 	{
 		cache()->forget('sysconfig'); //删除缓存
-		success_jump('更新成功！', route('admin_sysconfig'));
+		dir_delete(storage_path().'/framework/cache/data/');
+		success_jump('更新成功！');
     }
 }

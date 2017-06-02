@@ -164,6 +164,12 @@ function arclist(array $param)
     if(!empty($where)){$model = $model->where($where);}
 
     //排序
+	if(isset($param['sql']))
+	{
+		$model = $model->whereRaw($param['sql']);
+	}
+
+    //排序
 	if(isset($param['orderby']))
 	{
 		$orderby = $param['orderby'];
@@ -276,10 +282,10 @@ function get_article_prenext(array $param)
  */
 function get_listnav(array $param)
 {
-	$catid=$param["catid"];
-	$pagenow=$param["pagenow"];
-	$prepage = $nextpage = '';
-    $prepagenum = $pagenow-1;
+	$catid       = $param["catid"];
+	$pagenow     = $param["pagenow"];
+	$prepage     = $nextpage = '';
+    $prepagenum  = $pagenow-1;
     $nextpagenum = $pagenow+1;
 	
 	$counts=$param["counts"];
@@ -309,14 +315,14 @@ function get_listnav(array $param)
 	{
 		if($pagenow == 2)
 		{
-			$prepage.="<li><a href='/".$urltype.$catid.".html'>上一页</a></li>";
+			$prepage.="<li><a href='/".$urltype.$catid."'>上一页</a></li>";
 		}
 		else
 		{
-			$prepage.="<li><a href='/".$urltype.$catid."/$prepagenum.html'>上一页</a></li>";
+			$prepage.="<li><a href='/".$urltype.$catid."/$prepagenum'>上一页</a></li>";
 		}
 		
-		$indexpage="<li><a href='/".$urltype.$catid.".html'>首页</a></li>";
+		$indexpage="<li><a href='/".$urltype.$catid."'>首页</a></li>";
 	}
 	else
 	{
@@ -324,8 +330,8 @@ function get_listnav(array $param)
 	}
 	if($pagenow!=$totalpage && $totalpage>1)
 	{
-		$nextpage.="<li><a href='/".$urltype.$catid."/$nextpagenum.html'>下一页</a></li>";
-		$endpage="<li><a href='/".$urltype.$catid."/$totalpage.html'>末页</a></li>";
+		$nextpage.="<li><a href='/".$urltype.$catid."/$nextpagenum'>下一页</a></li>";
+		$endpage="<li><a href='/".$urltype.$catid."/$totalpage'>末页</a></li>";
 	}
 	else
 	{
@@ -352,11 +358,11 @@ function get_listnav(array $param)
 		{
 			if($minnum==1)
 			{
-				$listdd.="<li><a href='/".$urltype.$catid.".html'>$minnum</a></li>";
+				$listdd.="<li><a href='/".$urltype.$catid."'>$minnum</a></li>";
 			}
 			else
 			{
-				$listdd.="<li><a href='/".$urltype.$catid."/$minnum.html'>$minnum</a></li>";
+				$listdd.="<li><a href='/".$urltype.$catid."/$minnum'>$minnum</a></li>";
 			}
 		}
 	}
@@ -407,17 +413,17 @@ function get_prenext(array $param)
 	}
 	elseif($pagenow==2)
 	{
-		$prepage='<a class="prep" href="/'.$urltype.$cat.'.html">上一页</a> &nbsp; ';
+		$prepage='<a class="prep" href="/'.$urltype.$cat.'">上一页</a> &nbsp; ';
 	}
 	else
 	{
-		$prepage='<a class="prep" href="/'.$urltype.$cat.'/'.$prepagenum.'.html">上一页</a> &nbsp; ';
+		$prepage='<a class="prep" href="/'.$urltype.$cat.'/'.$prepagenum.'">上一页</a> &nbsp; ';
 	}
 	
 	//获取下一页
 	if($pagenow<$totalpage && $totalpage>1)
 	{
-		$nextpage='<a class="nextp" href="/'.$urltype.$cat.'/'.$nextpagenum.'.html">下一页</a>';
+		$nextpage='<a class="nextp" href="/'.$urltype.$cat.'/'.$nextpagenum.'">下一页</a>';
 	}
 	
 	$plist = '';
@@ -427,6 +433,7 @@ function get_prenext(array $param)
 	
 	return $plist;
 }
+
 /**
  * 获取分页列表
  * @access    public

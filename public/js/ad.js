@@ -1,4 +1,4 @@
-function count_js(){document.writeln("              <div class=\"tm\"><img src=\"http://www.lqycms.com/images/2weima.gif\" width=\"115px\" height=\"150px\"><\/div>                  ");}
+function count_js(){document.writeln("");}
 function itopjs(){document.writeln("<img width=960px height=90px src=\"http://www.lqycms.com/images/banner.gif\">");}
 function tjs(){document.writeln("<img width=960px height=90px src=\"http://www.lqycms.com/images/banner.gif\">");}
 function navjs(){document.writeln("");}

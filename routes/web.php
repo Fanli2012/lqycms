@@ -52,8 +52,8 @@ Route::group(['namespace' => 'Home'], function () {
 //后台路由
 Route::group(['prefix' => 'fladmin', 'namespace' => 'Admin', 'middleware' => ['web']], function () {
 	Route::get('/', 'IndexController@index')->name('admin');
-	Route::get('/index/upconfig', 'IndexController@upconfig')->name('admin_index_upconfig');
-	
+	Route::get('/index/upconfig', 'IndexController@upconfig')->name('admin_index_upconfig'); //更新系统参数配置
+	Route::get('/index/upcache', 'IndexController@upcache')->name('admin_index_upcache'); //更新缓存
 	//文章
 	Route::get('/article', 'ArticleController@index')->name('admin_article');
 	Route::get('/article/add', 'ArticleController@add')->name('admin_article_add');
@@ -153,7 +153,8 @@ Route::group(['prefix' => 'fladmin', 'namespace' => 'Admin', 'middleware' => ['w
 });
 
 //接口路由
-Route::group(['prefix' => 'Api'], function () {
+Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => ['web']], function () {
+	Route::get('/listarc', 'IndexController@listarc')->name('api_listarc');
     Route::get('/ccc', function () {
         // 匹配 "/api/users" URL
     });

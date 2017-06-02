@@ -2,10 +2,7 @@
 namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\Home\CommonController;
-use App\Http\Model\Article;
-use App\Http\Model\Arctype;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;
 
 class IndexController extends CommonController
 {
@@ -21,40 +18,40 @@ class IndexController extends CommonController
     }
 	
     //列表页
-    public function category($cat, $page)
+    public function category($cat, $page=0)
 	{
-        $pagenow=page;
+        $pagenow = $page;
         
 		if(empty($cat) || !preg_match('/[0-9]+/',$cat)){error_jump('您访问的页面不存在或已被删除！', route('page404'));}
         
-		if(cache("catid$cat")){$post=cache("catid$cat");}else{$post = db('arctype')->where("id=$cat")->find();if(empty($post)){error_jump('您访问的页面不存在或已被删除！', route('page404'));}cache("catid$cat",$post,2592000);}
-        $this->assign('post',$post);
+		if(cache("catid$cat")){$post = cache("catid$cat");}else{$post = object_to_array(DB::table('arctype')->where('id', $cat)->first(), 1);if(empty($post)){error_jump('您访问的页面不存在或已被删除！', route('page404'));} cache(["catid$cat"=>$post], \Carbon\Carbon::now()->addMinutes(2592000));}
+        $data['post'] = $post;
         
 		$subcat="";$sql="";
-		$post2=db('arctype')->field('id')->where("reid=$cat")->select();
+		$post2 = object_to_array(DB::table('arctype')->select('id')->where('reid', $cat)->get());
 		if(!empty($post2)){foreach($post2 as $row){$subcat=$subcat."typeid=".$row["id"]." or ";}}
 		$subcat=$subcat."typeid=".$cat;
 		$sql=$subcat." or typeid2 in (".$cat.")";//echo $subcat2;exit;
-		$this->assign('sql',$sql);
+		$data['sql'] = $sql;
 		
-		$counts=db("article")->where($sql)->count('id');
-		if($counts>CMS_MAXARC){$counts=CMS_MAXARC;}
-		$pagesize=CMS_PAGESIZE;$page=0;
+		$counts = DB::table("article")->whereRaw($sql)->count();
+		if($counts>sysconfig('CMS_MAXARC')){$counts=sysconfig('CMS_MAXARC');dd($counts);}
+		$pagesize = sysconfig('CMS_PAGESIZE');$page=0;
 		if($counts % $pagesize){//取总数据量除以每页数的余数
 		$pages = intval($counts/$pagesize) + 1; //如果有余数，则页数等于总数据量除以每页数的结果取整再加一,如果没有余数，则页数等于总数据量除以每页数的结果
 		}else{$pages = $counts/$pagesize;}
-		if(!empty($pagenow)){if($pagenow==1 || $pagenow>$pages){header("HTTP/1.0 404 Not Found");error_jump('您访问的页面不存在或已被删除！', route('page404'));}$page = $pagenow-1;$nextpage=$pagenow+1;$previouspage=$pagenow-1;}else{$page = 0;$nextpage=2;$previouspage=0;}
-		$this->assign('page',$page);
-		$this->assign('pages',$pages);
-		$this->assign('counts',$counts);
-		$start=$page*$pagesize;
+		if(!empty($pagenow)){if($pagenow==1 || $pagenow>$pages){error_jump('您访问的页面不存在或已被删除！', route('page404'));}$page = $pagenow-1;$nextpage=$pagenow+1;$previouspage=$pagenow-1;}else{$page = 0;$nextpage=2;$previouspage=0;}
+		$data['page'] = $page;
+		$data['pages'] = $pages;
+		$data['counts'] = $counts;
+		$start = $page*$pagesize;
 		
-		$this->assign('posts',arclist(array("sql"=>$sql,"limit"=>"$start,$pagesize"))); //获取列表
-		$this->assign('pagenav',get_listnav(array("counts"=>$counts,"pagesize"=>$pagesize,"pagenow"=>$page+1,"catid"=>$cat))); //获取分页列表
+		$data['posts'] = arclist(array("sql"=>$sql, "limit"=>"$start,$pagesize")); //获取列表
+		$data['pagenav'] = get_listnav(array("counts"=>$counts,"pagesize"=>$pagesize,"pagenow"=>$page+1,"catid"=>$cat)); //获取分页列表
         
         if($post['templist']=='category2'){if(!empty($pagenow)){error_jump('您访问的页面不存在或已被删除！', route('page404'));}}
-        return $this->fetch($post['templist']);
-		return view('home.index.index');
+        
+		return view('home.index.'.$post['templist'], $data);
 	}
     
     //文章详情页
@@ -89,10 +86,10 @@ class IndexController extends CommonController
         
 		if(empty($tag) || !preg_match('/[0-9]+/',$tag)){error_jump('您访问的页面不存在或已被删除！', route('page404'));}
         
-		if(cache("tagid$tag")){$post=cache("tagid$tag");}else{$post = db('tagindex')->where("id=$tag")->find();cache("tagid$tag",$post,2592000);}
+		if(cache("tagid$tag")){$post=cache("tagid$tag");}else{$post = DB::table('tagindex')->where("id=$tag")->first();cache("tagid$tag",$post,2592000);}
         $this->assign('post',$post);
 		
-		$counts=db("taglist")->where("tid=$tag")->count('aid');
+		$counts=DB::table("taglist")->where("tid=$tag")->count('aid');
 		if($counts>CMS_MAXARC){$counts=CMS_MAXARC;}
 		$pagesize=CMS_PAGESIZE;$page=0;
 		if($counts % $pagesize){//取总数据量除以每页数的余数
@@ -104,7 +101,7 @@ class IndexController extends CommonController
 		$this->assign('counts',$counts);
 		$start=$page*$pagesize;
 		
-		$posts=db("taglist")->where("tid=$tag")->order('aid desc')->limit("$start,$pagesize")->select();
+		$posts=DB::table("taglist")->where("tid=$tag")->order('aid desc')->limit("$start,$pagesize")->select();
 		foreach($posts as $row)
 		{
 			$aid[] = $row["aid"];
@@ -150,7 +147,7 @@ class IndexController extends CommonController
 			
 			$map['title'] = array('LIKE',"%$keyword%");
 			
-            $this->assign('posts',db("article")->field('body',true)->where($map)->order('id desc')->limit(30)->select());
+            $this->assign('posts',DB::table("article")->field('body',true)->where($map)->order('id desc')->limit(30)->select());
 			$this->assign('keyword',$keyword);
 		}
 		else
@@ -164,14 +161,16 @@ class IndexController extends CommonController
     //单页面
     public function page($id)
 	{
+		$data = [];
+		
         if(!empty($id) && preg_match('/[a-z0-9]+/',$id))
         {
             $map['filename']=$id;
-            if(cache("pageid$id")){$post=cache("pageid$id");}else{$post = db('page')->where($map)->find();cache("pageid$id",$post,2592000);}
+            if(cache("pageid$id")){$post=cache("pageid$id");}else{$post = object_to_array(DB::table('page')->where($map)->first(), 1);cache("pageid$id", $post, 2592000);cache(["pageid$id"=>$post], \Carbon\Carbon::now()->addMinutes(2592000));}
             
             if($post)
             {
-                $this->assign('post',$post);
+                $data['post'] = $post;
             }
             else
             {
@@ -184,7 +183,7 @@ class IndexController extends CommonController
             error_jump('您访问的页面不存在或已被删除！', route('page404'));
         }
 		
-		return view('home.index.'.$post['template']);
+		return view('home.index.'.$post['template'], $data);
     }
     
 	//sitemap页面
