@@ -9,11 +9,11 @@
 </div><div class="dad3"><script>djs3(<?php echo $post["id"]; ?>);</script></div></div><!-- fl_640 end -->
 
 <div class="fr_300"><div id="rad1"><script>rjs1();</script></div>
-<div class="side"><div class="stit"><h3>近期文章</h3><a href="javascript:getmore({PageSize:5,typeid:<?php echo $post['typeid']; ?>,mode:1,orderby:'rand()'});" class="more">换一换</a><div class="cl"></div></div>	
+<div class="side"><div class="stit"><h3>近期文章</h3><a href="javascript:getmore({PageSize:5,_token:'{{ csrf_token() }}',typeid:<?php echo $post['typeid']; ?>,mode:1,orderby:'rand()'});" class="more">换一换</a><div class="cl"></div></div>	
 <ul class="uli chs" id="xglist"><?php $posts=arclist(array("row"=>5,"typeid"=>$post['typeid'],"expression"=>[['id', '<', $pre?$pre['id']:$post["id"]]]));if($posts){foreach($posts as $row){ ?><li><a target="_blank" href="<?php echo get_front_url(array("id"=>$row['id'],"catid"=>$row['typeid'],"type"=>'content')); ?>"><?php echo $row['title']; ?></a></li><?php }} ?></ul><div class="cl"></div></div>
 
 <div id="rad3"><script>rjs3();</script></div>
-<div class="side"><div class="stit"><h3>猜你喜欢</h3><a href="javascript:getmore({PageSize:5,typeid:<?php echo $post['typeid']; ?>,mode:2,orderby:'rand()'});" class="more">换一换</a><div class="cl"></div></div>
+<div class="side"><div class="stit"><h3>猜你喜欢</h3><a href="javascript:getmore({PageSize:5,_token:'{{ csrf_token() }}',typeid:<?php echo $post['typeid']; ?>,mode:2,orderby:'rand()'});" class="more">换一换</a><div class="cl"></div></div>
 <div class="uli2" id="xglike"><?php $posts=arclist(array("row"=>5,"typeid"=>$post['typeid'],"orderby"=>'rand()'));foreach($posts as $row){ ?><div class="suli"><?php if(!empty($row['litpic'])){ ?><a class="limg" href="<?php echo get_front_url(array("id"=>$row['id'],"catid"=>$row['typeid'],"type"=>'content')); ?>"><img alt="<?php echo $row['title']; ?>" src="<?php echo $row['litpic']; ?>"></a><?php } ?><a target="_blank" href="<?php echo get_front_url(array("id"=>$row['id'],"catid"=>$row['typeid'],"type"=>'content')); ?>"><?php echo $row['title']; ?></a><div class="sulii"><?php if(!empty($row['writer'])){echo '<span class="time">'.$row['writer'].'</span>';}elseif(!empty($row['source'])){echo '<span class="time">'.$row['source'].'</span>';} ?> 阅读(<?php echo $row['click']; ?>)</div><div class="cl"></div></div><?php } ?><div class="cl"></div></div></div>
 
 <div id="rad2"><script>rjs2();</script></div></div><!-- fr_300 end --></div><!-- box end -->

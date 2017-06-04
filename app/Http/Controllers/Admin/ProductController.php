@@ -78,7 +78,7 @@ class ProductController extends CommonController
 		unset($_POST["_token"]);
 		if(isset($_POST['editorValue'])){unset($_POST['editorValue']);}
 		
-		if(DB::table('product')->insert($_POST))
+		if(DB::table('product')->insert(array_filter($_POST)))
         {
             success_jump('添加成功！', route('admin_product'));
         }

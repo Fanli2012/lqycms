@@ -77,12 +77,12 @@ function upImage()
         <td align="right">商品类目：</td>
         <td>
             <select name="typeid" id="typeid">
-                <?php $catlist = category_tree(get_category('product_type',0));foreach($catlist as $row){
+                <?php $catlist = category_tree(get_category('product_type',0));if($catlist){foreach($catlist as $row){
                     if($row["id"]==$catid){ ?>
                 <option selected="selected" value="<?php echo $row["id"]; ?>"><?php for($i=0;$i<$row["deep"];$i++){echo "—";}echo $row["typename"]; ?></option>
                     <?php }else{ ?>
                 <option value="<?php echo $row["id"]; ?>"><?php for($i=0;$i<$row["deep"];$i++){echo "—";}echo $row["typename"]; ?></option>
-                <?php }} ?>
+                <?php }}} ?>
             </select>
         </td>
     </tr>

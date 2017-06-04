@@ -35,13 +35,16 @@ Route::group(['namespace' => 'Home'], function () {
 	Route::get('/page404', 'IndexController@page404')->name('page404');         //404页面
 	Route::get('/tags', 'IndexController@tags')->name('tags');
 	Route::get('/search', 'IndexController@search');
-	Route::get('/p/{id}', 'IndexController@detail');                            //详情页
+	Route::get('/p/{id}', 'IndexController@detail')->name('home_detail');                            //详情页
 	Route::get('/cat{cat}/{page}', 'IndexController@category');                 //分类页，分页
-	Route::get('/cat{cat}', 'IndexController@category');                        //分类页
+	Route::get('/cat{cat}', 'IndexController@category')->name('home_category');                        //分类页
 	Route::get('/tag{tag}/{page}', 'IndexController@tag');                      //标签页，分页
 	Route::get('/tag{tag}', 'IndexController@tag');                             //标签页
-	Route::get('/page/{id}', 'IndexController@page')->name('page');             //单页
-	Route::get('/sitemap.xml', 'IndexController@sitemap')->name('sitemap');         //sitemap
+	Route::get('/page/{id}', 'IndexController@page')->name('singlepage');       //单页
+	Route::get('/product/{id}', 'IndexController@product')->name('product');                         //详情页
+	Route::get('/productcat{cat}/{page}', 'IndexController@productcat');            //产品分类页，分页
+	Route::get('/productcat{cat}', 'IndexController@productcat')->name('productcat');                   //产品分类页
+	Route::get('/sitemap.xml', 'IndexController@sitemap')->name('sitemap');     //sitemap
 	
 	Route::get('/aaa', function () {
 		dd('wap');
@@ -154,7 +157,7 @@ Route::group(['prefix' => 'fladmin', 'namespace' => 'Admin', 'middleware' => ['w
 
 //接口路由
 Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => ['web']], function () {
-	Route::get('/listarc', 'IndexController@listarc')->name('api_listarc');
+	Route::post('/listarc', 'IndexController@listarc')->name('api_listarc');
     Route::get('/ccc', function () {
         // 匹配 "/api/users" URL
     });

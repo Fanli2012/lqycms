@@ -2,16 +2,24 @@
 // 公共函数文件
 
 //获取数据
-function dataList($modelname, $where = '', $orderby = '', $field = '*', $size = 15, $page = 1)
+function dataList($modelname, $where = [], $size = 15, $page = 1)
 {
 	$model = \DB::table($modelname);
-
-	//查询条件
-	if($where!=''){$model = $model->where($where);}
 	
-	//排序
-	if($orderby!='')
+	$page = 1;$skip = 0;
+	if(isset($where['limit'])){$limit=explode(',',$where['limit']); $skip = $limit[0]; $size = $limit[1];}else{if(isset($where['row'])){$size = $where['row'];}} // 参数格式：$where['limit'] = '2,10';$where['row'] = 10;
+
+    //原生sql
+	if(isset($where['sql']))
 	{
+		$model = $model->whereRaw($where['sql']);
+	}
+
+    //排序
+	if(isset($where['orderby']))
+	{
+		$orderby = $where['orderby'];
+		
 		if($orderby == 'rand()')
 		{
 			$model = $model->orderBy(\DB::raw('rand()'));
@@ -31,11 +39,28 @@ function dataList($modelname, $where = '', $orderby = '', $field = '*', $size = 
 			}
 		}
 	}
-
-	//要返回的字段
-	if($field!='*'){$model = $model->select(\DB::raw($field));}
+	else
+	{
+		$model = $model->orderBy('id', 'desc');
+	}
 	
-	$skip = ($page-1)*$size;
+	//要返回的字段
+	if(isset($where['field'])){$model = $model->select(\DB::raw($where['field']));}
+
+	//查询条件
+	$where = function ($query) use ($where) {
+		if(isset($where['expression']))
+		{
+			foreach($where['expression'] as $row)
+			{
+				$query->where($row[0], $row[1], $row[2]);
+			}
+		}
+    };
+
+    if(!empty($where)){$model = $model->where($where);}
+    
+	if($skip==0){$skip = ($page-1)*$size;}
 	
 	return object_to_array($model->skip($skip)->take($size)->get());
 }
@@ -163,7 +188,7 @@ function arclist(array $param)
 
     if(!empty($where)){$model = $model->where($where);}
 
-    //排序
+    //原生sql
 	if(isset($param['sql']))
 	{
 		$model = $model->whereRaw($param['sql']);
@@ -219,7 +244,7 @@ function tagslist($param="")
 	if(isset($param['limit'])){$limit=$param['limit'];}else{if(isset($param['row'])){$limit=$param['row'];}}
 	if(isset($param['orderby'])){$orderby=$param['orderby'];}else{$orderby='id desc';}
 	
-	return db("tagindex")->field('content',true)->select();
+	return \DB::table("tagindex")->get();
 }
 
 /**
@@ -230,10 +255,7 @@ function tagslist($param="")
  */
 function flinklist($param="")
 {
-	if(isset($param['row'])){$limit=$param['row'];}else{$limit="";}
-	if(isset($param['orderby'])){$orderby=$param['orderby'];}else{$orderby='id desc';}
-	
-	return db("friendlink")->order($orderby)->limit($limit)->select();
+	return \DB::table("friendlink")->orderBy('rank','desc')->take($param['row'])->get();
 }
 
 /**
@@ -531,7 +553,7 @@ function cut_str($string, $sublen=250, $omitted = '', $start=0, $code='UTF-8')
 //PhpAnalysis获取中文分词
 function get_keywords($keyword)
 {
-	Vendor('phpAnalysis.phpAnalysis');
+	require_once(resource_path('org/phpAnalysis/phpAnalysis.php'));
 	//import("Vendor.phpAnalysis.phpAnalysis");
 	//初始化类
 	PhpAnalysis::$loadInit = false;

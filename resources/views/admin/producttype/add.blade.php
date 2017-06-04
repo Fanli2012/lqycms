@@ -23,11 +23,11 @@
     </tr>
     <tr>
       <td align="right">列表模板：</td>
-      <td><input name="templist" id="templist" type="text" value="productcategory" class="required" size="20"></td>
+      <td><input name="templist" id="templist" type="text" value="productcat" class="required" size="20"></td>
     </tr>
     <tr>
       <td align="right">文章模板：</td>
-      <td><input name="temparticle" id="temparticle" type="text" value="productdetail" class="required" size="20"></td>
+      <td><input name="temparticle" id="temparticle" type="text" value="product" class="required" size="20"></td>
     </tr>
     <tr>
         <td align="right" style="vertical-align:middle;">缩略图：</td>

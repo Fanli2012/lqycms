@@ -1,0 +1,218 @@
+/* 代码整理：懒人之家 www.lanrenzhijia.com */
+body {
+	 font-family:"microsoft Yahei";
+	color:#666;
+	margin:0;
+}
+table, td {
+	font:12px/180% Arial, Helvetica, sans-serif, Verdana;
+	color:#666;
+}
+table {
+	border-collapse2:collapse2;
+	border-spacing:0;
+	empty-cells:show;
+}
+th, td {
+	border-collapse2:collapse2;
+}
+A:link {
+	text-decoration:none;
+
+}
+A:visited {
+	text-decoration:none;
+
+}
+A:hover {
+	text-decoration:none;
+
+}
+img {
+	border:0;
+}
+div, p, img, ul, li, form, input, label, span, dl, dt, dd {
+	margin:0;
+	padding:0;
+	font-family:microsoft yahei, Helvetica, sans-serif;
+}
+ol, ul, li {
+	list-style-type:none;
+}
+.overh {
+	overflow:auto;
+	zoom:1;
+	overflow-x:hidden;
+	overflow-y:hidden;
+}
+html {
+	-webkit-text-size-adjust:none;
+}
+input[type="submit"]::-moz-focus-inner {
+border:none;
+padding:0;
+}
+a {
+blr:expression(this.onFocus=this.blur())
+} /*for IE*/
+a {
+	outline:none;
+} /*for Firefox*/
+h2 {
+	font-family:'Microsoft yahei';
+	font-weight:normal;
+}
+.overz {
+	font-size:12px;
+	overflow:auto;
+	zoom:1;
+	overflow-x:hidden;
+	overflow-y:hidden;
+}
+.overz A{ color:#666666;}
+.overz h2{margin:0;
+	padding:0;
+	font-family:microsoft yahei, Helvetica, sans-serif;}
+.mn_12 {
+	margin-bottom:12px;
+}
+/* 代码整理：懒人之家 www.lanrenzhijia.com */
+.online_icon {
+	width:36px;
+	height:156px;
+	overflow:hidden;
+	font-family:'宋体';
+}
+.online_icon a {
+	display:block;
+	width:36px;
+	height:156px;
+	background:url(../images/online_bg.png) no-repeat;
+	_background:url(../images/online_bg_ie6.png) no-repeat;
+}
+.online_windows {
+	width:144px;
+}
+.online_w_top {
+	background:url(../images/online_bg.png) no-repeat -36px 0;
+	height:10px;
+	_background:url(../images/online_bg_ie6.png) no-repeat -36px 0;
+	_margin-bottom:-7px;
+}
+.online_w_c {
+	background:url(../images/online_bg.png) repeat-y 0 -185px;
+	padding:0 5px;
+	_background:url(../images/online_bg_ie6.png) repeat-y 0 -185px
+}
+.online_w_bottom {
+	background:url(../images/online_bg.png) repeat-y -36px -35px;
+	height:29px;
+	_background:url(../images/online_bg_ie6.png) repeat-y -36px -35px;
+}
+.online_content {
+	background:url(../images/online_bg.png) no-repeat -147px -185px;
+	padding-top:11px;
+	_background:url(../images/online_bg_ie6.png) no-repeat -147px -185px;
+}
+.online_content a.qq_icon {
+	background:url(../images/online_bg.png) no-repeat -37px -130px;
+	width:121px;
+	height:25px;
+	display:block;
+	margin:0 auto;
+	text-indent:30px;
+	line-height:23px;
+	cursor:pointer;
+	_background:url(../images/online_bg_ie6.png) no-repeat -37px -130px;
+}
+.online_content a.qq_icon:hover {
+	background-position:-159px -130px;
+	color:#FFF;
+}
+.online_content a.ww_icon {
+	background:url(../images/w1.png) no-repeat;
+	width:121px;
+	height:25px;
+	display:block;
+	margin:0 auto;
+	text-indent:30px;
+	line-height:23px;
+	cursor:pointer;
+	_background:url(../images/w1.png) no-repeat;
+}
+.online_content a.ww_icon:hover {
+	background:url(../images/w2.png) no-repeat;
+	color:#FFF;
+}
+.online_bar h2 {
+	background:url(../images/online_bg.png) repeat-x 0 -156px;
+	height:29px;
+	line-height:27px;
+	font-size:12px;
+	color:#666;
+	text-align:left;
+	_background:url(../images/online_bg_ie6.png) repeat-x 0 -156px;
+}
+.online_bar h2 a {
+	display:block;
+	padding-left:14px;
+	margin-left:6px;
+	cursor:pointer;
+}
+.expand h2 a {
+	background:url(../images/online_bg.png) no-repeat -36px -69px;
+	_background:url(../images/online_bg_ie6.png) no-repeat -36px -69px;
+}
+.collapse2 h2 a {
+color:#666666;
+	background:url(../images/online_bg.png) no-repeat -36px -96px;
+	_background:url(../images/online_bg_ie6.png) no-repeat -36px -96px;
+}
+.expand h2 a:hover, .collapse2 h2 a:hover {
+	text-decoration:none;
+	color:#c81d04;
+}
+.online_content {
+	text-align:center;
+	border-bottom:1px solid #d0d0d0;
+	margin-bottom:1px;
+}
+.online_content ul li {
+	height:24px;
+	line-height:24px;
+	margin-bottom:4px;
+	font-family:'宋体';
+}
+.online_content ul li a:hover {
+	color:#c81d04;
+}
+/* 代码整理：懒人之家 www.lanrenzhijia.com */
+#online_qq_layer {
+	position:fixed;
+	right:0px;
+	top:150px;
+	_position:absolute;
+}
+* html, * html body {
+	_background-attachment:fixed;
+}
+* html #online_qq_layer {
+	_bottom:auto;
+_top:expression(eval(document.documentElement.scrollTop + 150));
+}
+#online_qq_tab {
+	float:left;
+	margin-top: 50px;
+}
+#onlineService {
+	float:left;
+	margin-left:-3px;
+	display:none;
+}
+#onlineType1, #onlineType2, #onlineType3, #onlineType4, #onlineType5, #onlineType6 {
+	display:none;
+}
+#onlineType1 {
+	display:block;
+}
+/* 代码整理：懒人之家 www.lanrenzhijia.com */

@@ -32,10 +32,11 @@ class IndexController extends CommonController
         $mname = request('mname','article');
         
 		$model = DB::table($mname);
-		if($where){$model->where($where);}
+		if($where){$model = $model->where($where);}
+		if($orderby == 'rand()'){$model = $model->orderBy(\DB::raw('rand()'));}else{$model = $model->orderBy($orderby[0], $orderby[1]);}
 		
 		$count = $model->count();
-        $list = object_to_array($model->orderBy($orderby[0], $orderby[1])->skip($skip)->take($PageSize)->get());
+        $list = object_to_array($model->skip($skip)->take($PageSize)->get());
         
 		if(!empty($list) && $PageIndex<=10)
 		{

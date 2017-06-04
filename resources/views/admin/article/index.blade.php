@@ -17,7 +17,7 @@
 	</tr>
   </thead>
   <tbody>
-  <?php foreach($posts as $row){ ?>
+  <?php if($posts){foreach($posts as $row){ ?>
 	<tr>
 	  <td><?php echo $row->id; ?></td>
 	  <td><input name="arcID" type="checkbox" value="<?php echo $row->id; ?>" class="np"></td>
@@ -25,7 +25,7 @@
 	  <td><?php echo date('Y-m-d',$row->pubdate); ?></td>
 	  <td><a href="/fladmin/article?id=<?php echo $row->typeid; ?>"><?php echo $row->typename; ?></a></td><td><?php echo $row->click; ?></td><td><a target="_blank" href="<?php echo get_front_url(array("type"=>"content","catid"=>$row->typeid,"id"=>$row->id)); ?>">预览</a>&nbsp;<a href="/fladmin/article/edit?id=<?php echo $row->id; ?>">修改</a>&nbsp;<a onclick="delconfirm('/fladmin/article/del?id=<?php echo $row->id; ?>')" href="javascript:;">删除</a></td>
 	</tr>
-	<?php } ?>
+	<?php }} ?>
 	<tr>
 		<td colspan="8">
 		<a href="javascript:selAll('arcID')" class="coolbg">反选</a>&nbsp;
