@@ -22,7 +22,7 @@ Route::group(['domain' => env('APP_SUBDOMAIN'), 'namespace' => 'Wap'], function 
 	Route::get('/tag{tag}/{page}', 'IndexController@tag');                      //标签页，分页
 	Route::get('/tag{tag}', 'IndexController@tag');                             //标签页
 	Route::get('/page/{id}', 'IndexController@singlepage')->name('wap_singlepage'); //单页
-	Route::get('/sitemap.xml', 'IndexController@sitemap')->name('wap_sitemap');         //sitemap
+	Route::get('/sitemap.xml', 'IndexController@sitemap')->name('wap_sitemap'); //sitemap
 	Route::get('/aaa', function () {
 		dd('wap');
 	});
@@ -35,15 +35,15 @@ Route::group(['namespace' => 'Home'], function () {
 	Route::get('/page404', 'IndexController@page404')->name('page404');         //404页面
 	Route::get('/tags', 'IndexController@tags')->name('tags');
 	Route::get('/search', 'IndexController@search');
-	Route::get('/p/{id}', 'IndexController@detail')->name('home_detail');                            //详情页
+	Route::get('/p/{id}', 'IndexController@detail')->name('home_detail');       //详情页
 	Route::get('/cat{cat}/{page}', 'IndexController@category');                 //分类页，分页
-	Route::get('/cat{cat}', 'IndexController@category')->name('home_category');                        //分类页
+	Route::get('/cat{cat}', 'IndexController@category')->name('home_category'); //分类页
 	Route::get('/tag{tag}/{page}', 'IndexController@tag');                      //标签页，分页
-	Route::get('/tag{tag}', 'IndexController@tag');                             //标签页
+	Route::get('/tag{tag}', 'IndexController@tag')->name('tag');                //标签页
 	Route::get('/page/{id}', 'IndexController@page')->name('singlepage');       //单页
-	Route::get('/product/{id}', 'IndexController@product')->name('product');                         //详情页
-	Route::get('/productcat{cat}/{page}', 'IndexController@productcat');            //产品分类页，分页
-	Route::get('/productcat{cat}', 'IndexController@productcat')->name('productcat');                   //产品分类页
+	Route::get('/product/{id}', 'IndexController@product')->name('product');    //详情页
+	Route::get('/productcat{cat}/{page}', 'IndexController@productcat');        //产品分类页，分页
+	Route::get('/productcat{cat}', 'IndexController@productcat')->name('productcat'); //产品分类页
 	Route::get('/sitemap.xml', 'IndexController@sitemap')->name('sitemap');     //sitemap
 	
 	Route::get('/aaa', function () {
@@ -142,16 +142,33 @@ Route::group(['prefix' => 'fladmin', 'namespace' => 'Admin', 'middleware' => ['w
 	Route::get('/sysconfig/edit', 'SysconfigController@edit')->name('admin_sysconfig_edit');
 	Route::post('/sysconfig/doedit', 'SysconfigController@doedit')->name('admin_sysconfig_doedit');
 	Route::get('/sysconfig/del', 'SysconfigController@del')->name('admin_sysconfig_del');
-	//用户
+	//用户管理
 	Route::get('/user', 'UserController@index')->name('admin_user');
+	Route::get('/user/add', 'UserController@add')->name('admin_user_add');
+	Route::post('/user/doadd', 'UserController@doadd')->name('admin_user_doadd');
 	Route::get('/user/edit', 'UserController@edit')->name('admin_user_edit');
 	Route::post('/user/doedit', 'UserController@doedit')->name('admin_user_doedit');
+	Route::get('/user/del', 'UserController@del')->name('admin_user_del');
+	//角色管理
+	Route::get('/userrole', 'UserRoleController@index')->name('admin_userrole');
+	Route::get('/userrole/add', 'UserRoleController@add')->name('admin_userrole_add');
+	Route::post('/userrole/doadd', 'UserRoleController@doadd')->name('admin_userrole_doadd');
+	Route::get('/userrole/edit', 'UserRoleController@edit')->name('admin_userrole_edit');
+	Route::post('/userrole/doedit', 'UserRoleController@doedit')->name('admin_userrole_doedit');
+	Route::get('/userrole/del', 'UserRoleController@del')->name('admin_userrole_del');
+	//菜单管理
+	Route::get('/menu', 'MenuController@index')->name('admin_menu');
+	Route::get('/menu/add', 'MenuController@add')->name('admin_menu_add');
+	Route::post('/menu/doadd', 'MenuController@doadd')->name('admin_menu_doadd');
+	Route::get('/menu/edit', 'MenuController@edit')->name('admin_menu_edit');
+	Route::post('/menu/doedit', 'MenuController@doedit')->name('admin_menu_doedit');
+	Route::get('/menu/del', 'MenuController@del')->name('admin_menu_del');
 	//后台登录注销
 	Route::get('/login', 'LoginController@login')->name('admin_login');
-	Route::post('/dologin', 'LoginController@dologin');
+	Route::post('/dologin', 'LoginController@dologin')->name('admin_dologin');
 	Route::get('/logout', 'LoginController@logout')->name('admin_logout');
 	Route::get('/recoverpwd', 'LoginController@recoverpwd')->name('admin_recoverpwd');
-	
+	//页面跳转
 	Route::get('/jump', 'LoginController@jump')->name('admin_jump');
 });
 

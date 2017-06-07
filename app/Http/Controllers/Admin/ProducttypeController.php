@@ -13,8 +13,20 @@ class ProductTypeController extends CommonController
     
     public function index()
     {
-		$data['catlist'] = category_tree(get_category('product_type',0));
-        return view('admin.producttype.index', $data);
+		$catlist = category_tree(get_category('product_type',0));
+
+		if($catlist)
+		{
+			foreach($catlist as $k=>$v)
+			{
+				$arctype = DB::table("arctype")->where('id', $v['id'])->first();
+				$catlist[$k]['typedir'] = $arctype->typedir;
+				$catlist[$k]['addtime'] = $arctype->addtime;
+			}
+		}
+
+		$data['catlist'] = $catlist;
+		return view('admin.producttype.index', $data);
     }
     
     public function add()
@@ -41,7 +53,7 @@ class ProductTypeController extends CommonController
     
     public function doadd()
     {
-        if(isset($_POST["prid"])){if($_POST["prid"]=="top"){$_POST['reid']=0;}else{$_POST['reid'] = $_POST["prid"];}unset($_POST["prid"]);}//父级栏目id
+        if(isset($_POST["prid"])){if($_POST["prid"]=="top"){$_POST['pid']=0;}else{$_POST['pid'] = $_POST["prid"];}unset($_POST["prid"]);}//父级栏目id
         $_POST['addtime'] = time();//添加时间
         
 		unset($_POST["_token"]);
@@ -92,7 +104,7 @@ class ProductTypeController extends CommonController
     {
 		if(!empty($_GET["id"])){$id = $_GET["id"];}else{error_jump('删除失败！请重新提交');}
 		
-		if(DB::table("product_type")->where('reid', $id)->first())
+		if(DB::table("product_type")->where('pid', $id)->first())
 		{
 			error_jump('删除失败！请先删除子分类');
 		}

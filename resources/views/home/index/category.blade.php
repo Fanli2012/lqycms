@@ -2,7 +2,7 @@
 <title><?php echo $post['seotitle'];if($page!=0){echo ' '.($page+1);} ?></title><meta name="keywords" content="<?php echo $post["keywords"]; ?>" /><meta name="description" content="<?php echo $post["description"]; ?>" /><link rel="stylesheet" href="<?php echo sysconfig('CMS_BASEHOST'); ?>/css/style.css" media="all"><script type="text/javascript" src="<?php echo sysconfig('CMS_BASEHOST'); ?>/js/jquery.min.js"></script><script type="text/javascript" src="<?php echo sysconfig('CMS_BASEHOST'); ?>/js/ad.js"></script><script>uaredirect("http://m.bnbni.com/cat{dede:type}[field:ID /]{/dede:type}");</script></head><body><script>site();</script>
 @include('home.common.header')<div id="tad"><script>tjs();</script></div>
 
-<div class="box mt10"><div class="fl_640"><div class="zinfo"><h1><?php echo $post['typename']; ?></h1><?php if(!empty($post['content'])){echo '<div class="zdes">'.$post['content'].'</div>';} ?></div><div id="lad1"><script>ljs1();</script></div>
+<div class="box mt10"><div class="fl_640"><div class="zinfo"><h1><?php echo $post['name']; ?></h1><?php if(!empty($post['content'])){echo '<div class="zdes">'.$post['content'].'</div>';} ?></div><div id="lad1"><script>ljs1();</script></div>
 
 <?php if(!empty($posts)){foreach($posts as $row){ ?><div class="list"><?php if(!empty($row['litpic'])){ ?><a class="limg" href="<?php echo get_front_url(array("id"=>$row['id'],"catid"=>$row['typeid'],"type"=>'content')); ?>"><img alt="<?php echo $row['title']; ?>" src="<?php echo $row['litpic']; ?>"></a><?php } ?>
 <strong class="tit"><a href="<?php echo get_front_url(array("id"=>$row['id'],"catid"=>$row['typeid'],"type"=>'content')); ?>" target="_blank"><?php echo $row['title']; ?></a></strong><p><?php echo mb_strcut($row['description'],0,150,'UTF-8'); ?>..</p>

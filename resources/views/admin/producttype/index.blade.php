@@ -13,7 +13,7 @@
 <?php if($catlist){foreach($catlist as $row){ ?>
 <tr id="cat-<?php echo $row["id"]; ?>">
 <td><?php echo $row["id"]; ?></td>
-<td><a href="/fladmin/product?id=<?php echo $row["id"]; ?>"><?php for($i=0;$i<$row["deep"];$i++){echo "— ";}echo $row["typename"]; ?></a></td>
+<td><a href="/fladmin/product?id=<?php echo $row["id"]; ?>"><?php for($i=0;$i<$row["deep"];$i++){echo "— ";}echo $row["name"]; ?></a></td>
 <td><?php echo catarcnum($row["id"].'product'); ?></td>
 <td><?php echo $row["typedir"]; ?></td>
 <td><?php echo date('Y-m-d',$row["addtime"]); ?></td>

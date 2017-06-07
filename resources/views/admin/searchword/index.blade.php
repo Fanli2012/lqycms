@@ -27,7 +27,7 @@
 </tbody>
 </table></div><!-- 表格结束 --></form><!-- 表单结束 -->
 
-<div class="backpages">{{ $posts->links() }}</div>
+<nav aria-label="Page navigation">{{ $posts->links() }}</nav>
 
 </div></div><!-- 右边结束 --></div></div>
 </body></html>

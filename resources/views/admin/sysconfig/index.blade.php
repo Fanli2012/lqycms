@@ -24,5 +24,7 @@
 </tr><?php } ?>
 </tbody></table></div><!-- 表格结束 --></form><!-- 表单结束 -->
 
+<nav aria-label="Page navigation">{{ $posts->links() }}</nav>
+
 </div></div><!-- 右边结束 --></div></div>
 </body></html>

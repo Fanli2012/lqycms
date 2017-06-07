@@ -24,8 +24,8 @@
 	<tr>
         <td align="right">上架：</td>
         <td>
-			<input type="radio" value='0' name="status" <?php echo $post["title"]; ?>{if condition="$post['status']==0"}checked{/if} />&nbsp;是&nbsp;&nbsp;
-			<input type="radio" value='1' name="status" <?php echo $post["title"]; ?>{if condition="$post['status']==1"}checked{/if} />&nbsp;否
+			<input type="radio" value='0' name="status" <?php if($post['status']==0){echo 'checked';} ?> />&nbsp;是&nbsp;&nbsp;
+			<input type="radio" value='1' name="status" <?php if($post['status']==1){echo 'checked';} ?> />&nbsp;否
 		</td>
     </tr>
     <tr>
@@ -80,9 +80,9 @@ function upImage()
             <select name="typeid" id="typeid">
                 <?php $catlist = category_tree(get_category('product_type',0));foreach($catlist as $row){
                     if($row["id"]==$post["typeid"]){ ?>
-                <option selected="selected" value="<?php echo $row["id"]; ?>"><?php for($i=0;$i<$row["deep"];$i++){echo "—";}echo $row["typename"]; ?></option>
+                <option selected="selected" value="<?php echo $row["id"]; ?>"><?php for($i=0;$i<$row["deep"];$i++){echo "—";}echo $row["name"]; ?></option>
                     <?php }else{ ?>
-                <option value="<?php echo $row["id"]; ?>"><?php for($i=0;$i<$row["deep"];$i++){echo "—";}echo $row["typename"]; ?></option>
+                <option value="<?php echo $row["id"]; ?>"><?php for($i=0;$i<$row["deep"];$i++){echo "—";}echo $row["name"]; ?></option>
                 <?php }} ?>
             </select>
         </td>

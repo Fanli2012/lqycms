@@ -13,7 +13,20 @@ class CategoryController extends CommonController
 	
 	public function index()
 	{
-		return view('admin.category.index');
+		$catlist = category_tree(get_category('arctype',0));
+		
+		if($catlist)
+		{
+			foreach($catlist as $k=>$v)
+			{
+				$arctype = DB::table("arctype")->where('id', $v['id'])->first();
+				$catlist[$k]['typedir'] = $arctype->typedir;
+				$catlist[$k]['addtime'] = $arctype->addtime;
+			}
+		}
+
+		$data['catlist'] = $catlist;
+		return view('admin.category.index', $data);
 	}
 	
     public function add()
@@ -39,7 +52,7 @@ class CategoryController extends CommonController
     
     public function doadd()
     {
-        if(!empty($_POST["prid"])){if($_POST["prid"]=="top"){$_POST['reid']=0;}else{$_POST['reid'] = $_POST["prid"];}}//父级栏目id
+        if(!empty($_POST["prid"])){if($_POST["prid"]=="top"){$_POST['pid']=0;}else{$_POST['pid'] = $_POST["prid"];}}//父级栏目id
         $_POST['addtime'] = time();//添加时间
 		unset($_POST["prid"]);
 		unset($_POST["_token"]);
@@ -90,7 +103,7 @@ class CategoryController extends CommonController
     {
 		if(!empty($_REQUEST["id"])){$id = $_REQUEST["id"];}else{error_jump('删除失败！请重新提交');} //if(preg_match('/[0-9]*/',$id)){}else{exit;}
 		
-		if(DB::table('arctype')->where('reid', $id)->first())
+		if(DB::table('arctype')->where('pid', $id)->first())
 		{
 			error_jump('删除失败！请先删除子栏目');
 		}

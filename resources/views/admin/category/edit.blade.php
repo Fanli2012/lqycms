@@ -11,7 +11,7 @@
   <tbody>
     <tr>
       <td align="right">栏目名称：</td>
-      <td><input name="typename" type="text" value="<?php echo $post["typename"]; ?>" id="typename" size="30" class="required"><input style="display:none;" type="text" name="id" id="id" value="<?php echo $id; ?>"></td>
+      <td><input name="name" type="text" value="<?php echo $post["name"]; ?>" id="name" size="30" class="required"><input style="display:none;" type="text" name="id" id="id" value="<?php echo $id; ?>"></td>
     </tr>
     <tr>
     <td align="right">别名：</td>

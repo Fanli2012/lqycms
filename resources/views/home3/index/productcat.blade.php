@@ -60,7 +60,7 @@ $('.bxslider').bxSlider({
   <div class="row">
     <div class="col-xs-12 col-sm-8 col-md-9" style="float:right">
       <div class="list_box">
-        <h1 class="left_h1"><?php echo $post['typename']; ?></h1>
+        <h1 class="left_h1"><?php echo $post['name']; ?></h1>
         <ul class="list_news">
 <?php if(!empty($posts)){foreach($posts as $row){ ?>
 <li><a href="<?php echo route('home_detail',['id'=>$row->id]); ?>"><?php echo $row->title; ?></a><span class="news_time"><?php echo date('Y-m-d',$row->pubdate); ?></span></li>
@@ -73,8 +73,8 @@ $('.bxslider').bxSlider({
       <div class="left_nav" id="categories">
         <h3 class="left_h1">栏目导航</h3>
         <ul class="left_nav_ul" id="firstpane">
-		<?php $posts=dataList('arctype', ['expression'=>[['reid','=',0]], 'orderby'=>['sortrank', 'desc']]);if($posts){foreach($posts as $row){ ?>
-		<li><a class="biglink" href="<?php echo route('home_category',['cat'=>$row['id']]); ?>"><?php echo $row['typename']; ?></a><ul class="left_snav_ul menu_body"></ul></li>
+		<?php $posts=dataList('arctype', ['expression'=>[['pid','=',0]], 'orderby'=>['sortrank', 'desc']]);if($posts){foreach($posts as $row){ ?>
+		<li><a class="biglink" href="<?php echo route('home_category',['cat'=>$row['id']]); ?>"><?php echo $row['name']; ?></a><ul class="left_snav_ul menu_body"></ul></li>
 		<?php }} ?>
         </ul>
       </div>
