@@ -15,12 +15,15 @@
 <dd><a href="<?php echo route('admin'); ?>/keyword"><span class="glyphicon glyphicon-fire"></span> 內链关键词维护</a></dd>
 <dd><a href="<?php echo route('admin'); ?>/friendlink"><span class="glyphicon glyphicon-leaf"></span> 友情链接</a></dd>
 <dd><a href="<?php echo route('admin'); ?>/slide"><span class="glyphicon glyphicon-leaf"></span> 轮播图</a></dd>
-<dd><a href="<?php echo route('admin'); ?>/user"><span class="glyphicon glyphicon-user"></span> 用户管理</a></dd>
 <dd><a href="<?php echo route('admin'); ?>/article/repetarc"><span class="glyphicon glyphicon-cog"></span> 重复文档检测</a></dd>
+<dd><a href="<?php echo route('admin'); ?>/menu"><span class="glyphicon glyphicon-fire"></span> 菜单管理</a></dd>
+<dt>用户管理</dt>
+<dd><a href="<?php echo route('admin'); ?>/userrole"><span class="glyphicon glyphicon-pencil"></span> 角色管理</a></dd>
+<dd><a href="<?php echo route('admin'); ?>/user"><span class="glyphicon glyphicon-user"></span> 管理员</a></dd>
 <dt>系统设置</dt>
 <dd><a href="<?php echo route('admin'); ?>/sysconfig"><span class="glyphicon glyphicon-wrench"></span> 系统基本参数</a></dd>
 <dd><a href="<?php echo route('admin'); ?>/index/upcache"><span class="glyphicon glyphicon-refresh"></span> 更新缓存</a></dd>
-<dd><a href="<?php echo route('admin'); ?>/guestbook"><span class="glyphicon glyphicon-wrench"></span> 在线留言</a></dd>
+<dd><a href="<?php echo route('admin'); ?>/guestbook"><span class="glyphicon glyphicon-wrench"></span> 所有留言</a></dd>
 <dd><a href="<?php echo route('admin'); ?>/sysconfig" target="_blank"><span class="glyphicon glyphicon-book"></span> 参考文档</a></dd>
 <dd><a href="<?php echo route('admin'); ?>/sysconfig" target="_blank"><span class="glyphicon glyphicon-envelope"></span> 意见反馈/官方交流</a></dd>
 </dl>

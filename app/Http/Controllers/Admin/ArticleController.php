@@ -39,8 +39,8 @@ class ArticleController extends CommonController
         $posts = parent::pageList('article', $where);
 		foreach($posts as $key=>$value)
         {
-            $info = DB::table('arctype')->select('typename')->where("id", $value->typeid)->first();
-			$posts[$key]->typename = $info->typename;
+            $info = DB::table('arctype')->select('name')->where("id", $value->typeid)->first();
+			$posts[$key]->name = $info->name;
 			$posts[$key]->body = '';
         }
 		

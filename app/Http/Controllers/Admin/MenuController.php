@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Admin\CommonController;
 use DB;
 
-class FriendlinkController extends CommonController
+class MenuController extends CommonController
 {
     public function __construct()
     {
@@ -13,24 +13,26 @@ class FriendlinkController extends CommonController
 	
     public function index()
     {
-		$posts = parent::pageList('friendlink');
+		$posts = parent::pageList('menu');
 		
         $data['posts'] = $posts;
         
-        return view('admin.friendlink.index', $data);
+        return view('admin.menu.index', $data);
     }
     
     public function add()
     {
-        return view('admin.friendlink.add');
+        $data['menu'] = category_tree(get_category('menu',0));
+		
+        return view('admin.menu.add', $data);
     }
     
     public function doadd()
     {
 		unset($_POST["_token"]);
-		if(DB::table('friendlink')->insert($_POST))
+		if(DB::table('menu')->insert($_POST))
         {
-            success_jump('添加成功！', route('admin_friendlink'));
+            success_jump('添加成功！', route('admin_menu'));
         }
 		else
 		{
@@ -44,9 +46,10 @@ class FriendlinkController extends CommonController
         if(preg_match('/[0-9]*/',$id)){}else{exit;}
         
         $data['id'] = $id;
-		$data['post'] = object_to_array(DB::table('friendlink')->where('id', $id)->first(), 1);
+		$data['post'] = object_to_array(DB::table('menu')->where('id', $id)->first(), 1);
+        $data['menu'] = category_tree(get_category('menu',0));
         
-        return view('admin.friendlink.edit', $data);
+        return view('admin.menu.edit', $data);
     }
     
     public function doedit()
@@ -54,9 +57,9 @@ class FriendlinkController extends CommonController
         if(!empty($_POST["id"])){$id = $_POST["id"];unset($_POST["id"]);}else {$id="";exit;}
         
 		unset($_POST["_token"]);
-		if(DB::table('friendlink')->where('id', $id)->update($_POST))
+		if(DB::table('menu')->where('id', $id)->update($_POST))
         {
-            success_jump('修改成功！', route('admin_friendlink'));
+            success_jump('修改成功！', route('admin_menu'));
         }
 		else
 		{
@@ -68,7 +71,7 @@ class FriendlinkController extends CommonController
     {
 		if(!empty($_GET["id"])){$id = $_GET["id"];}else{error_jump('删除失败！请重新提交');}
 		
-		if(DB::table('friendlink')->whereIn("id", explode(',', $id))->delete())
+		if(DB::table('menu')->whereIn("id", explode(',', $id))->delete())
         {
             success_jump('删除成功');
         }

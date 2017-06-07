@@ -623,7 +623,7 @@ function get_category($modelname, $parent_id=0, $pad=0)
 {
     $arr=array();
     
-    $temp = \DB::table($modelname)->where('reid', $parent_id)->orderBy('id', 'asc')->get();
+    $temp = \DB::table($modelname)->where('pid', $parent_id)->orderBy('id', 'asc')->get();
     $cats = object_to_array($temp);
 	
     if($cats)
@@ -649,11 +649,11 @@ function category_tree($list,$pid=0)
     {
         foreach($list as $v)
         {
-            $temp[] = array("id"=>$v['id'],"deep"=>$v['deep'],"typename"=>$v['typename'],"reid"=>$v['reid'],"typedir"=>$v['typedir'],"addtime"=>$v['addtime']);
+            $temp[] = array("id"=>$v['id'],"deep"=>$v['deep'],"name"=>$v['name'],"pid"=>$v['pid']);
             //echo $v['id'];
             if(array_key_exists("child",$v))
             {
-                category_tree($v['child'],$v['reid']);
+                category_tree($v['child'],$v['pid']);
             }
         }
     }

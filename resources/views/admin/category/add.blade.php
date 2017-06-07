@@ -11,11 +11,11 @@
   <tbody>
     <tr>
       <td align="right">栏目名称：</td>
-      <td><input name="typename" type="text" id="typename" size="30" class="required"></td>
+      <td><input name="name" type="text" id="name" size="30" class="required"></td>
     </tr>
     <tr>
       <td align="right">上级目录：</td>
-      <td><?php if($id==0){echo "顶级栏目";}else{echo $postone["typename"];} ?><input style="display:none;" type="text" name="prid" id="prid" value="<?php if($id==0){echo "top";}else{echo $id;} ?>"></td>
+      <td><?php if($id==0){echo "顶级栏目";}else{echo $postone["name"];} ?><input style="display:none;" type="text" name="prid" id="prid" value="<?php if($id==0){echo "top";}else{echo $id;} ?>"></td>
     </tr>
     <tr>
     <td align="right">别名：</td>

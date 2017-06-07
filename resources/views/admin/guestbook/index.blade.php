@@ -32,7 +32,7 @@
 </table>
 </div><!-- 表格结束 -->
 
-<div class="backpages">{{ $posts->links() }}</div>
+<nav aria-label="Page navigation">{{ $posts->links() }}</nav>
 
 <script>
 $(function(){

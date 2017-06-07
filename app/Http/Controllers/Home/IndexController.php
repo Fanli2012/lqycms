@@ -28,7 +28,7 @@ class IndexController extends CommonController
         $data['post'] = $post;
         
 		$subcat="";$sql="";
-		$post2 = object_to_array(DB::table('arctype')->select('id')->where('reid', $cat)->get());
+		$post2 = object_to_array(DB::table('arctype')->select('id')->where('pid', $cat)->get());
 		if(!empty($post2)){foreach($post2 as $row){$subcat=$subcat."typeid=".$row["id"]." or ";}}
 		$subcat=$subcat."typeid=".$cat;
 		$sql=$subcat." or typeid2 in (".$cat.")";//echo $subcat2;exit;
@@ -59,7 +59,7 @@ class IndexController extends CommonController
 	{
         if(empty($id) || !preg_match('/[0-9]+/',$id)){error_jump('您访问的页面不存在或已被删除！', route('page404'));}
 		
-		if(cache("detailid$id")){$post = cache("detailid$id");}else{$post = object_to_array(DB::table('article')->where('id', $id)->first(), 1);if(empty($post)){error_jump('您访问的页面不存在或已被删除！', route('page404'));}$post['typename'] = DB::table('arctype')->where('id', $post['typeid'])->value('typename');cache(["detailid$id"=>$post], \Carbon\Carbon::now()->addMinutes(2592000));}
+		if(cache("detailid$id")){$post = cache("detailid$id");}else{$post = object_to_array(DB::table('article')->where('id', $id)->first(), 1);if(empty($post)){error_jump('您访问的页面不存在或已被删除！', route('page404'));}$post['name'] = DB::table('arctype')->where('id', $post['typeid'])->value('name');cache(["detailid$id"=>$post], \Carbon\Carbon::now()->addMinutes(2592000));}
 		if($post)
         {
 			$cat = $post['typeid'];
@@ -197,7 +197,7 @@ class IndexController extends CommonController
         $data['post'] = $post;
         
 		$subcat="";$sql="";
-		$post2 = object_to_array(DB::table('product_type')->select('id')->where('reid', $cat)->get());
+		$post2 = object_to_array(DB::table('product_type')->select('id')->where('pid', $cat)->get());
 		if(!empty($post2)){foreach($post2 as $row){$subcat=$subcat."typeid=".$row["id"]." or ";}}
 		$subcat=$subcat."typeid=".$cat;
 		$data['sql'] = $subcat;
@@ -226,7 +226,7 @@ class IndexController extends CommonController
 	{
         if(empty($id) || !preg_match('/[0-9]+/',$id)){error_jump('您访问的页面不存在或已被删除！', route('page404'));}
 		
-		$post = object_to_array(DB::table('product')->where('id', $id)->first(), 1);if(empty($post)){error_jump('您访问的页面不存在或已被删除！', route('page404'));}$post['typename'] = DB::table('arctype')->where('id', $post['typeid'])->value('typename');
+		$post = object_to_array(DB::table('product')->where('id', $id)->first(), 1);if(empty($post)){error_jump('您访问的页面不存在或已被删除！', route('page404'));}$post['name'] = DB::table('arctype')->where('id', $post['typeid'])->value('name');
 		if($post)
         {
 			$cat = $post['typeid'];

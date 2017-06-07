@@ -76,9 +76,9 @@ function upImage()
             <select name="typeid" id="typeid">
                 <?php $catlist = category_tree(get_category('arctype',0));foreach($catlist as $row){
                     if($row["id"]==$post["typeid"]){ ?>
-                <option selected="selected" value="<?php echo $row["id"]; ?>"><?php for($i=0;$i<$row["deep"];$i++){echo "—";}echo $row["typename"]; ?></option>
+                <option selected="selected" value="<?php echo $row["id"]; ?>"><?php for($i=0;$i<$row["deep"];$i++){echo "—";}echo $row["name"]; ?></option>
                     <?php }else{ ?>
-                <option value="<?php echo $row["id"]; ?>"><?php for($i=0;$i<$row["deep"];$i++){echo "—";}echo $row["typename"]; ?></option>
+                <option value="<?php echo $row["id"]; ?>"><?php for($i=0;$i<$row["deep"];$i++){echo "—";}echo $row["name"]; ?></option>
                 <?php }} ?>
             </select>
         </td>

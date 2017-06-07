@@ -34,8 +34,8 @@ class ProductController extends CommonController
 		$posts = parent::pageList('product', $where);
 		foreach($posts as $key=>$value)
         {
-            $info = DB::table('product_type')->select('typename')->where("id", $value->typeid)->first();
-			$posts[$key]->typename = $info->typename;
+            $info = DB::table('product_type')->select('name')->where("id", $value->typeid)->first();
+			$posts[$key]->name = $info->name;
 			$posts[$key]->body = '';
         }
 		

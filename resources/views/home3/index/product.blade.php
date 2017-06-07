@@ -62,7 +62,7 @@ $('.bxslider').bxSlider({
   <div class="row">
     <div class="col-xs-12 col-sm-8 col-md-9" style="float:right">
           <div class="list_box">
-        <h2 class="left_h1"><?php echo $post["typename"]; ?></h2>
+        <h2 class="left_h1"><?php echo $post["name"]; ?></h2>
         
         
         <div class="col-sm-12 col-md-6 showpic_box">
@@ -129,7 +129,7 @@ document.getElementById('price').innerHTML=(3000+sp0+sp1+sp2).toFixed(2);documen
         <h3 class="left_h1">栏目导航</h3>
         <ul class="left_nav_ul" id="firstpane">
 		<?php $posts=dataList('arctype', ['expression'=>[['reid','=',0]], 'orderby'=>['sortrank', 'desc']]);if($posts){foreach($posts as $row){ ?>
-		<li><a class="biglink" href="<?php echo route('home_category',['cat'=>$row['id']]); ?>"><?php echo $row['typename']; ?></a><ul class="left_snav_ul menu_body"></ul></li>
+		<li><a class="biglink" href="<?php echo route('home_category',['cat'=>$row['id']]); ?>"><?php echo $row['name']; ?></a><ul class="left_snav_ul menu_body"></ul></li>
 		<?php }} ?>
         </ul>
       </div>
