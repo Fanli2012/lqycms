@@ -34,9 +34,9 @@ DROP TABLE IF EXISTS `fl_arctype`;
 
 CREATE TABLE `fl_arctype` (
   `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
-  `reid` smallint(5) DEFAULT '0' COMMENT '父级栏目id',
+  `pid` smallint(5) DEFAULT '0' COMMENT '父级栏目id',
   `addtime` int(11) DEFAULT '0' COMMENT '添加时间',
-  `typename` varchar(30) NOT NULL DEFAULT '' COMMENT '栏目名称',
+  `name` varchar(30) NOT NULL DEFAULT '' COMMENT '栏目名称',
   `seotitle` varchar(150) DEFAULT '' COMMENT 'seo标题',
   `keywords` varchar(60) DEFAULT '' COMMENT '关键词',
   `description` varchar(255) DEFAULT '' COMMENT '描述',
@@ -49,13 +49,13 @@ CREATE TABLE `fl_arctype` (
   `seokeyword` varchar(60) DEFAULT '' COMMENT '判断相关,可不填',
   `model` int(4) DEFAULT '0' COMMENT '栏目所属的模型',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `typename` (`typename`),
+  UNIQUE KEY `typename` (`name`),
   UNIQUE KEY `typedir` (`typedir`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 /*Data for the table `fl_arctype` */
 
-insert  into `fl_arctype`(`id`,`reid`,`addtime`,`typename`,`seotitle`,`keywords`,`description`,`content`,`sortrank`,`typedir`,`templist`,`temparticle`,`litpic`,`seokeyword`,`model`) values (1,0,1483345707,'新闻中心','','新闻中心','新闻中心','<p>新闻中心</p>',50,'news','category','detail','','新闻中心',0),(2,0,1476063429,'案例中心','','案例中心','案例中心','<p>案例中心</p>',50,'case','category','detail','','案例中心',0),(3,1,1476063419,'行业新闻','','行业新闻','行业新闻','<p>行业新闻</p>',50,'hangye','category','detail','','行业新闻',0),(4,1,1476068069,'企业新闻','','企业新闻','企业新闻','<p>企业新闻</p>',50,'qiye','category','detail','','企业新闻',0);
+insert  into `fl_arctype`(`id`,`pid`,`addtime`,`name`,`seotitle`,`keywords`,`description`,`content`,`sortrank`,`typedir`,`templist`,`temparticle`,`litpic`,`seokeyword`,`model`) values (1,0,1483345707,'新闻中心','','新闻中心','新闻中心','<p>新闻中心</p>',50,'news','category','detail','','新闻中心',0),(2,0,1476063429,'案例中心','','案例中心','案例中心','<p>案例中心</p>',50,'case','category','detail','','案例中心',0),(3,1,1476063419,'行业新闻','','行业新闻','行业新闻','<p>行业新闻</p>',50,'hangye','category','detail','','行业新闻',0),(4,1,1476068069,'企业新闻','','企业新闻','企业新闻','<p>企业新闻</p>',50,'qiye','category','detail','','企业新闻',0);
 
 /*Table structure for table `fl_article` */
 
@@ -163,22 +163,24 @@ insert  into `fl_keyword`(`id`,`keyword`,`rpurl`) values (1,'优化','http://www
 DROP TABLE IF EXISTS `fl_menu`;
 
 CREATE TABLE `fl_menu` (
-  `id` mediumint(8) NOT NULL AUTO_INCREMENT,
-  `programid` varchar(20) NOT NULL DEFAULT '',
-  `level` varchar(20) NOT NULL DEFAULT '',
-  `model` char(20) NOT NULL DEFAULT '' COMMENT '模块',
-  `action` char(20) NOT NULL DEFAULT '' COMMENT '操作',
-  `with` varchar(10) NOT NULL COMMENT '单页模型用到',
-  `is_show` tinyint(1) NOT NULL COMMENT '后台菜单是否显示',
-  `status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '状态',
-  `name` varchar(50) NOT NULL DEFAULT '' COMMENT '操作名',
-  `listorder` smallint(6) unsigned NOT NULL DEFAULT '0' COMMENT '排序',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=356 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+  `id` smallint(6) unsigned NOT NULL AUTO_INCREMENT,
+  `pid` smallint(6) unsigned NOT NULL DEFAULT '0' COMMENT '父级id',
+  `action` varchar(50) NOT NULL DEFAULT '' COMMENT '操作名称',
+  `data` varchar(50) NOT NULL DEFAULT '' COMMENT '额外参数',
+  `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '菜单类型  1：权限认证+菜单；0：只作为菜单',
+  `status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '状态，1显示，0不显示',
+  `name` varchar(50) NOT NULL COMMENT '菜单名称',
+  `icon` varchar(50) DEFAULT NULL COMMENT '菜单图标',
+  `des` varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
+  `listorder` smallint(6) unsigned NOT NULL DEFAULT '0' COMMENT '排序ID',
+  PRIMARY KEY (`id`),
+  KEY `status` (`status`),
+  KEY `parentid` (`pid`)
+) ENGINE=MyISAM AUTO_INCREMENT=188 DEFAULT CHARSET=utf8 COMMENT='后台菜单表';
 
 /*Data for the table `fl_menu` */
 
-insert  into `fl_menu`(`id`,`programid`,`level`,`model`,`action`,`with`,`is_show`,`status`,`name`,`listorder`) values (1,'Home','Top','Index','welcome','',1,1,'网站信息',5),(2,'Article','Top','Article','index','',1,1,'文章管理',30),(3,'Member','Top','User','index','',1,1,'会员管理',40),(4,'Userindex','MUser','User','index','',1,1,'会员资料管理',1),(5,'Product','Top','Product','index','',1,1,'商品管理',10),(6,'Order','Top','Order','index','',1,1,'订单管理',50),(9,'Useradd','Userindex','User','add','',0,1,'添加会员',0),(11,'Roleadd','Roleindex','Role','add','',0,1,'添加会员组',0),(47,'Roleindex','MUser','Role','index','',1,1,'会员组管理',3),(58,'Accessindex','Roleindex','Access','index','',0,1,'授权查询',0),(59,'Accessupdate','Roleindex','Access','update','',0,1,'更新权限',0),(84,'Accessinsert','Roleindex','Access','insert','',0,1,'插入权限',0),(125,'Useredit','Userindex','User','edit','',0,1,'会员资料编辑',0),(126,'Userupdate','Userindex','User','update','',0,1,'会员资料提交',0),(127,'Userinsert','Userindex','User','insert','',0,1,'会员插入',0),(128,'Userdeleteall','Userindex','User','deleteall','',0,1,'会员批量删除',0),(129,'Userdelete','Userindex','User','delete','',0,1,'会员删除',0),(130,'Roleinsert','Roleindex','Role','insert','',0,1,'会员组插入',0),(131,'Roleupdate','Roleindex','Role','update','',0,1,'会员组更新',0),(132,'Roleedit','Roleindex','Role','edit','',0,1,'会员组编辑',0),(133,'Roledelete','Roleindex','Role','delete','',0,1,'删除会员组',0),(158,'Indexwelcome','Home','Index','welcome','',1,1,'后台首页',1),(163,'Userinfo','Home','User','info','',1,1,'个人信息',10),(173,'Wbindaccount','Weixin','Weixin','bindaccount','',0,1,'绑定公众账号',0),(181,'Wright','Weixin','Weixin','right','',1,1,'授权设置',0),(182,'Windex','Weixin','Weixin','index','',1,1,'自定义菜单',0),(183,'Wmenuadd','Windex','Weixin','menuadd','',1,1,'添加菜单',0),(191,'Menuindex','Top','Menu','index','',1,1,'菜单管理',100),(192,'Menuadd','Menuindex','Menu','add','',1,1,'新增菜单',1),(193,'Menulistmenu','Menuindex','Menu','list_tree','',1,1,'菜单列表',0),(212,'Userimport','MUser','User','import','',0,1,'会员资料导入',20),(213,'Articlecat','Article','Articlecate','index','',1,1,'文章分类',10),(214,'Articleindex','Article','Article','index','',1,1,'文章列表',20),(215,'Productcategory','Product','Productcate','index','',1,1,'商品分类',10),(216,'Productindex','Product','Product','index','',1,1,'商品列表',20),(217,'Productadd','Product','Product','add','',0,1,'添加新商品',30),(218,'Orderindex','Order','Order','index','',1,1,'订单列表',1),(220,'Articleadd','Articleindex','Article','add','',0,1,'添加文章',20),(222,'Articleadd_category','Articlecat','Articlecate','add_category','',0,1,'添加分类',0),(223,'Productadd_category','Productcategory','Product','add_category','',0,1,'添加分类',0),(224,'Homeadd_ad','bannerList','Home','add','',0,1,'添加广告',21),(226,'Member_classadd','Member_classindex','Member_class','add','',0,1,'添加等级',0),(230,'Orderdelivery','Order','Order','delivery','',1,1,'发货单列表',30),(231,'Orderbacklist','Order','Order','backlist','',1,1,'退货单列表',40),(238,'Brandadd','Brandindex','Brand','add','',1,1,'添加品牌',1),(239,'Hongindex','Extend','Hong','index','',0,1,'优惠券管理',99),(240,'Hongadd','Hongindex','Hong','add','',0,1,'添加优惠券',0),(241,'Drawals','Extend','Drawals','index','',0,1,'提现规则',20),(242,'Drawalsadd','Drawals','Drawals','add','',0,1,'添加规则',0),(243,'Drawalsedit','Drawals','Drawals','edit','',0,1,'编辑规则',0),(244,'Drawalsdelete','Drawals','Drawals','delete','',0,1,'删除规则',0),(249,'Pictureadd','Pictureguide','Picture','add','',1,1,'添加图片',0),(253,'Attributetype','Product','GoodAttribute','index','',1,1,'属性类型',100),(254,'GoodAttributeadd','Attributetype','GoodAttribute','add','',0,1,'添加类型',0),(256,'bannerList','Home','Banner','index','',1,1,'baner列表',0),(257,'bannerCate','banner','Bannercate','index','',0,1,'baner类别',0),(259,'RUser','Member','Member','index','',1,1,'用户组',0),(260,'MUser','Member','User','index','',1,1,'管理组',0),(261,'Extend','Top','Extend','index','',0,1,'扩展功能',70),(262,'RaisePart','Extend','Raise','default','',0,1,'团购优惠',0),(263,'RaiseIndex','RaisePart','Raise','index','',1,1,'活动列表',0),(264,'Raiseadd','RaiseIndex','Raise','add','',0,1,'添加众筹',0),(265,'RaiseRule','RaisePart','RaiseRule','index','',1,1,'优惠规则',0),(266,'RaiseRuleadd','RaiseRule','RaiseRule','add','',0,1,'添加规则',0),(267,'RaiseApply','RaisePart','Raiseapply','index','',1,1,'报名列表',0),(273,'Fundsadd','Fundsindex','Funds','add','',1,1,'发起项目',0),(303,'changepass','Userinfo','User','changePassword','',0,1,'修改密码',0),(318,'advertisecate','Advertise','Advertise','category','',1,1,'广告类别',0),(319,'advertiselist','Advertise','Advertise','indexList','',1,1,'广告列表',0),(329,'Option','Home','Option','index','',0,1,'意见反馈',0),(330,'Jpush','Home','Jpush','index','',0,1,'信息推送',0),(334,'ShopOwner','Member','Shop','index','',0,1,'店铺列表',0),(335,'Parmeter','Extend','Parmeter','Index','',0,1,'参数类型',0),(336,'ProductArticle','Product','ProductArticle','index','',0,1,'产品文案',0),(337,'ProductArticleAdd','ProductArticle','ProductArticle','add','',0,1,'添加文案',0),(339,'InviteCode','Member','InviteCode','index','',0,1,'邀请码',0),(341,'Server','Home','Information','server','',0,1,'服务平台',0),(342,'AboutUs','Home','Information','aboutus','',0,1,'关于我们',0),(343,'Productcomment','Product','Product','comment','',1,1,'评价列表',0),(344,'Orderticket','Order','Order','ticket','',0,1,'取餐码',12),(345,'Orderout','Order','Order','out','',0,1,'堂食订单列表',2),(346,'Logoindex','Home','Logo','index','',1,1,'首页LOGO',12),(347,'Foods','Top','Foods','index','',1,1,'菜谱管理',5),(348,'Foodsindex','Foods','Foods','index','',1,1,'菜谱列表',1),(349,'Foodscategory','Foods','Foods','category','',1,1,'菜谱分类',2),(350,'FoodsProportion','Foods','Foods','Proportion','',1,1,'食材管理',3),(351,'Healthmsg','Top','Healthmsg','index','',1,1,'留言管理',0),(352,'Healthmsgindex','Healthmsg','Healthmsg','index','',1,1,'留言列表',0),(353,'Yuyue','Top','Yuyue','index','',1,1,'预约管理',0),(354,'Yuyueindex','Yuyue','Yuyue','index','',1,1,'预约列表',0),(355,'Yuyuecommentlist','Yuyue','Yuyue','commentlist','',1,1,'预约评论',0);
+insert  into `fl_menu`(`id`,`pid`,`action`,`data`,`type`,`status`,`name`,`icon`,`des`,`listorder`) values (1,0,'default','',0,1,'内容管理','th','',30),(2,1,'index','',1,1,'所有留言','','',0),(3,2,'delete','',1,0,'删除网站留言','','',0),(4,1,'index','',1,1,'评论管理','','',0),(5,4,'delete','',1,0,'删除评论','','',0),(6,4,'check','',1,0,'评论审核','','',0),(7,1,'index','',1,1,'文章管理','','',1),(8,7,'listorders','',1,0,'文章排序','','',0),(9,7,'top','',1,0,'文章置顶','','',0),(10,7,'recommend','',1,0,'文章推荐','','',0),(11,7,'move','',1,0,'批量移动','','',1000),(12,7,'check','',1,0,'文章审核','','',1000),(13,7,'delete','',1,0,'删除文章','','',1000),(14,7,'edit','',1,0,'编辑文章','','',1000),(15,14,'edit_post','',1,0,'提交编辑','','',0),(16,7,'add','',1,0,'添加文章','','',1000),(17,16,'add_post','',1,0,'提交添加','','',0),(18,1,'index','',0,1,'分类管理','','',2),(19,18,'listorders','',1,0,'文章分类排序','','',0),(20,18,'delete','',1,0,'删除分类','','',1000),(21,18,'edit','',1,0,'编辑分类','','',1000),(22,21,'edit_post','',1,0,'提交编辑','','',0),(23,18,'add','',1,0,'添加分类','','',1000),(24,23,'add_post','',1,0,'提交添加','','',0),(25,1,'index','',1,1,'页面管理','','',3),(26,25,'listorders','',1,0,'页面排序','','',0),(27,25,'delete','',1,0,'删除页面','','',1000),(28,25,'edit','',1,0,'编辑页面','','',1000),(29,28,'edit_post','',1,0,'提交编辑','','',0),(30,25,'add','',1,0,'添加页面','','',1000),(31,30,'add_post','',1,0,'提交添加','','',0),(32,1,'default','',1,1,'回收站','','',4),(33,32,'recyclebin','',1,1,'文章回收','','',0),(34,33,'restore','',1,0,'文章还原','','',1000),(35,33,'clean','',1,0,'彻底删除','','',1000),(36,32,'recyclebin','',1,1,'页面回收','','',1),(37,36,'clean','',1,0,'彻底删除','','',1000),(38,36,'restore','',1,0,'页面还原','','',1000),(39,0,'default','',0,1,'扩展工具','cloud','',40),(40,39,'default','',1,0,'备份管理','','',0),(41,40,'restore','',1,1,'数据还原','','',0),(42,40,'index','',1,1,'数据备份','','',0),(43,42,'index_post','',1,0,'提交数据备份','','',0),(44,40,'download','',1,0,'下载备份','','',1000),(45,40,'del_backup','',1,0,'删除备份','','',1000),(46,40,'import','',1,0,'数据备份导入','','',1000),(47,39,'index','',1,1,'插件管理','','',0),(48,47,'toggle','',1,0,'插件启用切换','','',0),(49,47,'setting','',1,0,'插件设置','','',0),(50,49,'setting_post','',1,0,'插件设置提交','','',0),(51,47,'install','',1,0,'插件安装','','',0),(52,47,'uninstall','',1,0,'插件卸载','','',0),(53,39,'default','',1,1,'幻灯片','','',1),(54,53,'index','',1,1,'幻灯片管理','','',0),(55,54,'listorders','',1,0,'幻灯片排序','','',0),(56,54,'toggle','',1,0,'幻灯片显示切换','','',0),(57,54,'delete','',1,0,'删除幻灯片','','',1000),(58,54,'edit','',1,0,'编辑幻灯片','','',1000),(59,58,'edit_post','',1,0,'提交编辑','','',0),(60,54,'add','',1,0,'添加幻灯片','','',1000),(61,60,'add_post','',1,0,'提交添加','','',0),(62,53,'index','',1,1,'幻灯片分类','','',0),(63,62,'delete','',1,0,'删除分类','','',1000),(64,62,'edit','',1,0,'编辑分类','','',1000),(65,64,'edit_post','',1,0,'提交编辑','','',0),(66,62,'add','',1,0,'添加分类','','',1000),(67,66,'add_post','',1,0,'提交添加','','',0),(68,39,'index','',1,1,'网站广告','','',2),(69,68,'toggle','',1,0,'广告显示切换','','',0),(70,68,'delete','',1,0,'删除广告','','',1000),(71,68,'edit','',1,0,'编辑广告','','',1000),(72,71,'edit_post','',1,0,'提交编辑','','',0),(73,68,'add','',1,0,'添加广告','','',1000),(74,73,'add_post','',1,0,'提交添加','','',0),(75,39,'index','',0,1,'友情链接','','',3),(76,75,'listorders','',1,0,'友情链接排序','','',0),(77,75,'toggle','',1,0,'友链显示切换','','',0),(78,75,'delete','',1,0,'删除友情链接','','',1000),(79,75,'edit','',1,0,'编辑友情链接','','',1000),(80,79,'edit_post','',1,0,'提交编辑','','',0),(81,75,'add','',1,0,'添加友情链接','','',1000),(82,81,'add_post','',1,0,'提交添加','','',0),(83,39,'setting','',1,1,'第三方登陆','leaf','',4),(84,83,'setting_post','',1,0,'提交设置','','',0),(85,0,'default','',1,1,'菜单管理','list','',20),(86,85,'default1','',1,1,'前台菜单','','',0),(87,86,'index','',1,1,'菜单管理','','',0),(88,87,'listorders','',1,0,'前台导航排序','','',0),(89,87,'delete','',1,0,'删除菜单','','',1000),(90,87,'edit','',1,0,'编辑菜单','','',1000),(91,90,'edit_post','',1,0,'提交编辑','','',0),(92,87,'add','',1,0,'添加菜单','','',1000),(93,92,'add_post','',1,0,'提交添加','','',0),(94,86,'index','',1,1,'菜单分类','','',0),(95,94,'delete','',1,0,'删除分类','','',1000),(96,94,'edit','',1,0,'编辑分类','','',1000),(97,96,'edit_post','',1,0,'提交编辑','','',0),(98,94,'add','',1,0,'添加分类','','',1000),(99,98,'add_post','',1,0,'提交添加','','',0),(100,85,'index','',1,1,'后台菜单','','',0),(101,100,'add','',1,0,'添加菜单','','',0),(102,101,'add_post','',1,0,'提交添加','','',0),(103,100,'listorders','',1,0,'后台菜单排序','','',0),(104,100,'export_menu','',1,0,'菜单备份','','',1000),(105,100,'edit','',1,0,'编辑菜单','','',1000),(106,105,'edit_post','',1,0,'提交编辑','','',0),(107,100,'delete','',1,0,'删除菜单','','',1000),(108,100,'lists','',1,0,'所有菜单','','',1000),(109,0,'default','',0,1,'设置','cogs','',0),(110,109,'userdefault','',0,1,'个人信息','','',0),(111,110,'userinfo','',1,1,'修改信息','','',0),(112,111,'userinfo_post','',1,0,'修改信息提交','','',0),(113,110,'password','',1,1,'修改密码','','',0),(114,113,'password_post','',1,0,'提交修改','','',0),(115,109,'site','',1,1,'网站信息','','',0),(116,115,'site_post','',1,0,'提交修改','','',0),(117,115,'index','',1,0,'路由列表','','',0),(118,115,'add','',1,0,'路由添加','','',0),(119,118,'add_post','',1,0,'路由添加提交','','',0),(120,115,'edit','',1,0,'路由编辑','','',0),(121,120,'edit_post','',1,0,'路由编辑提交','','',0),(122,115,'delete','',1,0,'路由删除','','',0),(123,115,'ban','',1,0,'路由禁止','','',0),(124,115,'open','',1,0,'路由启用','','',0),(125,115,'listorders','',1,0,'路由排序','','',0),(126,109,'default','',1,1,'邮箱配置','','',0),(127,126,'index','',1,1,'SMTP配置','','',0),(128,127,'index_post','',1,0,'提交配置','','',0),(129,126,'active','',1,1,'注册邮件模板','','',0),(130,129,'active_post','',1,0,'提交模板','','',0),(131,109,'clearcache','',1,1,'清除缓存','','',1),(132,0,'default','',1,1,'用户管理','group','',10),(133,132,'default1','',1,1,'用户组','','',0),(134,133,'index','',1,1,'本站用户','leaf','',0),(135,134,'ban','',1,0,'拉黑会员','','',0),(136,134,'cancelban','',1,0,'启用会员','','',0),(137,133,'index','',1,1,'第三方用户','leaf','',0),(138,137,'delete','',1,0,'第三方用户解绑','','',0),(139,132,'default3','',1,1,'管理组','','',0),(140,139,'index','',1,1,'角色管理','','',0),(141,140,'member','',1,0,'成员管理','','',1000),(142,140,'authorize','',1,0,'权限设置','','',1000),(143,142,'authorize_post','',1,0,'提交设置','','',0),(144,140,'roleedit','',1,0,'编辑角色','','',1000),(145,144,'roleedit_post','',1,0,'提交编辑','','',0),(146,140,'roledelete','',1,1,'删除角色','','',1000),(147,140,'roleadd','',1,1,'添加角色','','',1000),(148,147,'roleadd_post','',1,0,'提交添加','','',0),(149,139,'index','',1,1,'管理员','','',0),(150,149,'delete','',1,0,'删除管理员','','',1000),(151,149,'edit','',1,0,'管理员编辑','','',1000),(152,151,'edit_post','',1,0,'编辑提交','','',0),(153,149,'add','',1,0,'管理员添加','','',1000),(154,153,'add_post','',1,0,'添加提交','','',0),(155,47,'update','',1,0,'插件更新','','',0),(156,109,'index','',1,1,'文件存储','','',0),(157,156,'setting_post','',1,0,'文件存储设置提交','','',0),(158,54,'ban','',1,0,'禁用幻灯片','','',0),(159,54,'cancelban','',1,0,'启用幻灯片','','',0),(160,149,'ban','',1,0,'禁用管理员','','',0),(161,149,'cancelban','',1,0,'启用管理员','','',0),(166,127,'test','',1,0,'测试邮件','','',0),(167,109,'upload','',1,1,'上传设置','','',0),(168,167,'upload_post','',1,0,'上传设置提交','','',0),(169,7,'copy','',1,0,'文章批量复制','','',0),(174,100,'backup_menu','',1,0,'备份菜单','','',0),(175,100,'export_menu_lang','',1,0,'导出后台菜单多语言包','','',0),(176,100,'restore_menu','',1,0,'还原菜单','','',0),(177,100,'getactions','',1,0,'导入新菜单','','',0),(187,1,'sdfsadf2','sadfsa2',0,1,'sda2','sadf2','sdf2',0);
 
 /*Table structure for table `fl_order` */
 
@@ -335,9 +337,9 @@ DROP TABLE IF EXISTS `fl_product_type`;
 
 CREATE TABLE `fl_product_type` (
   `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
-  `reid` smallint(5) DEFAULT '0' COMMENT '父级栏目id',
+  `pid` smallint(5) DEFAULT '0' COMMENT '父级栏目id',
   `addtime` int(11) DEFAULT '0' COMMENT '添加时间',
-  `typename` varchar(30) NOT NULL DEFAULT '' COMMENT '栏目名称',
+  `name` varchar(30) NOT NULL DEFAULT '' COMMENT '栏目名称',
   `seotitle` varchar(150) DEFAULT '' COMMENT 'seo标题',
   `keywords` varchar(60) DEFAULT '' COMMENT '关键词',
   `description` varchar(255) DEFAULT '' COMMENT '描述',
@@ -350,13 +352,13 @@ CREATE TABLE `fl_product_type` (
   `seokeyword` varchar(60) DEFAULT '' COMMENT '判断相关,可不填',
   `status` smallint(1) DEFAULT '1' COMMENT '是否显示',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `typename` (`typename`),
+  UNIQUE KEY `typename` (`name`),
   UNIQUE KEY `typedir` (`typedir`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 /*Data for the table `fl_product_type` */
 
-insert  into `fl_product_type`(`id`,`reid`,`addtime`,`typename`,`seotitle`,`keywords`,`description`,`content`,`sortrank`,`typedir`,`templist`,`temparticle`,`litpic`,`seokeyword`,`status`) values (1,0,1496576972,'书籍','','','','<p>书籍</p>',50,'book','productcat','product','','',1),(2,0,1496576993,'数码','','','',NULL,50,'shuma','productcat','product','','',1);
+insert  into `fl_product_type`(`id`,`pid`,`addtime`,`name`,`seotitle`,`keywords`,`description`,`content`,`sortrank`,`typedir`,`templist`,`temparticle`,`litpic`,`seokeyword`,`status`) values (1,0,1496576972,'书籍','','','','<p>书籍</p>',50,'book','productcat','product','','',1),(2,0,1496576993,'数码','','','',NULL,50,'shuma','productcat','product','','',1);
 
 /*Table structure for table `fl_search` */
 
@@ -491,12 +493,16 @@ CREATE TABLE `fl_user` (
   `logintime` int(10) DEFAULT '0' COMMENT '登录时间',
   `pwd` char(32) NOT NULL DEFAULT '' COMMENT 'admin',
   `role_id` smallint(4) DEFAULT '0' COMMENT '角色id',
+  `status` tinyint(2) DEFAULT '0' COMMENT '用户状态 0：正常； 1：禁用 ；2：未验证',
+  `mobile` varchar(20) DEFAULT '' COMMENT '手机号',
+  `avatar` varchar(150) DEFAULT '' COMMENT '头像',
+  `create_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '注册时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 /*Data for the table `fl_user` */
 
-insert  into `fl_user`(`id`,`username`,`email`,`logintime`,`pwd`,`role_id`) values (1,'admin888','admin@qq.com',1496230840,'21232f297a57a5a743894a0e4a801fc3',1);
+insert  into `fl_user`(`id`,`username`,`email`,`logintime`,`pwd`,`role_id`,`status`,`mobile`,`avatar`,`create_at`) values (1,'admin888','admin@qq.com',1496230840,'21232f297a57a5a743894a0e4a801fc3',1,0,'','','2012-12-12 00:00:00'),(2,'沃尔夫','a@qq.com',0,'e10adc3949ba59abbe56e057f20f883e',1,0,'','','2017-06-07 15:10:18');
 
 /*Table structure for table `fl_user_role` */
 
@@ -504,17 +510,72 @@ DROP TABLE IF EXISTS `fl_user_role`;
 
 CREATE TABLE `fl_user_role` (
   `id` smallint(4) unsigned NOT NULL AUTO_INCREMENT,
-  `rolename` varchar(30) NOT NULL COMMENT '角色名',
-  `description` varchar(150) NOT NULL DEFAULT '' COMMENT '描述',
-  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '状态',
+  `name` varchar(30) NOT NULL COMMENT '角色名',
+  `des` varchar(150) NOT NULL DEFAULT '' COMMENT '描述',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '状态，0启用，1禁用',
   `pid` smallint(4) NOT NULL DEFAULT '0' COMMENT '父角色id',
+  `listorder` tinyint(4) DEFAULT '0' COMMENT '排序',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `rolename` (`rolename`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='角色表';
+  UNIQUE KEY `rolename` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='角色表';
 
 /*Data for the table `fl_user_role` */
 
-insert  into `fl_user_role`(`id`,`rolename`,`description`,`status`,`pid`) values (1,'超级管理员','',1,0);
+insert  into `fl_user_role`(`id`,`name`,`des`,`status`,`pid`,`listorder`) values (1,'超级管理员','拥有网站最高管理员权限！',0,0,0),(3,'撒地方','双方的股份富商大贾',0,0,0);
+
+/*Table structure for table `think_access` */
+
+DROP TABLE IF EXISTS `think_access`;
+
+CREATE TABLE `think_access` (
+  `role_id` smallint(6) unsigned NOT NULL,
+  `node_id` smallint(6) unsigned NOT NULL,
+  `level` tinyint(1) NOT NULL,
+  `module` varchar(50) DEFAULT NULL,
+  KEY `groupId` (`role_id`),
+  KEY `nodeId` (`node_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+/*Data for the table `think_access` */
+
+/*Table structure for table `think_node` */
+
+DROP TABLE IF EXISTS `think_node`;
+
+CREATE TABLE `think_node` (
+  `id` smallint(6) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) NOT NULL,
+  `title` varchar(50) DEFAULT NULL,
+  `status` tinyint(1) DEFAULT '0',
+  `remark` varchar(255) DEFAULT NULL,
+  `sort` smallint(6) unsigned DEFAULT NULL,
+  `pid` smallint(6) unsigned NOT NULL,
+  `level` tinyint(1) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `level` (`level`),
+  KEY `pid` (`pid`),
+  KEY `status` (`status`),
+  KEY `name` (`name`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+/*Data for the table `think_node` */
+
+/*Table structure for table `think_role` */
+
+DROP TABLE IF EXISTS `think_role`;
+
+CREATE TABLE `think_role` (
+  `id` smallint(6) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) NOT NULL,
+  `pid` smallint(6) DEFAULT NULL,
+  `status` tinyint(1) unsigned DEFAULT NULL,
+  `remark` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `pid` (`pid`),
+  KEY `status` (`status`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+/*Data for the table `think_role` */
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
