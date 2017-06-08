@@ -13,7 +13,7 @@ class IndexController extends CommonController
 	
 	//首页
     public function index()
-	{dd(\Route::currentRouteAction());
+	{
         return view('home.index.index');
     }
 	

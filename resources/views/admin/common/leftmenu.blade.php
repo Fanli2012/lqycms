@@ -20,17 +20,17 @@ $(document).ready(function() {
 </script>
 <style type="text/css">
 .list ul{padding:0;}
-.list ul li{background-color:#467ca2; border:solid 1px #316a91; border-bottom:0;}
-.list ul li a{padding-left:20px;color:#fff;display:block;height:40px;line-height:40px;position:relative;}
+.list ul li{background-color:#f2f2f2; border:solid 1px #E5E5E5; border-bottom:0;}
+.list ul li a{padding-left:20px;color:#444;display:block;height:40px;line-height:40px;position:relative;}
 .list ul li .inactive{background:url(/images/off.png) no-repeat 90% center;}
 .list ul li .inactives{background:url(/images/on.png) no-repeat 90% center;} 
 .list ul li ul{display:none;padding:0;}
-.list ul li ul li {border-left:0; border-right:0; background-color:#6196bb; border-color:#467ca2;}
+.list ul li ul li{border-left:0; border-right:0; background-color:#fafafa; border-color:#eee;}
 .list ul li ul li ul{display:none;padding:0;}
 .list ul li ul li a{padding-left:40px;}
-.list ul li ul li ul li {background-color:#d6e6f1; border-color:#6196bb; }
-.last{background-color:#d6e6f1; border-color:#6196bb; }
-.list ul li ul li ul li a{color:#316a91; padding-left:60px;}
+.list ul li ul li ul li {background-color:#fff;border-color:#f2f2f2;}
+.last{background-color:#fff;border-color:#eee;}
+.list ul li ul li ul li a{color:#616161;padding-left:60px;}
 </style>
 
 <div class="list">
