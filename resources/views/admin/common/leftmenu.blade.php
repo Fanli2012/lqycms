@@ -1,21 +1,29 @@
 <script type="text/javascript">
-$(document).ready(function() {
+$(document).ready(function(){
 	$('.inactive').click(function(){
 		var className=$(this).parents('li').parents().attr('class');
-		if($(this).siblings('ul').css('display')=='none'){
-			if(className=="yiji"){
-				$(this).parents('li').siblings('li').children('ul').parent('li').children('a').removeClass('inactives');
+		
+		if($(this).siblings('ul').css('display')=='none')
+		{
+			if(className=="leftmenu")
+			{
+				$(this).parents('li').siblings('li').children('ul').parent('li').children('a').removeClass('active');
 				$(this).parents('li').siblings('li').children('ul').slideUp(100);
-				$(this).parents('li').children('ul').children('li').children('ul').parent('li').children('a').removeClass('inactives');
+				$(this).parents('li').children('ul').children('li').children('ul').parent('li').children('a').removeClass('active');
 				$(this).parents('li').children('ul').children('li').children('ul').slideUp(100);
 			}
-			$(this).addClass('inactives');
+			
+			$(this).addClass('active');
 			$(this).siblings('ul').slideDown(100);
-		}else{
-			$(this).removeClass('inactives');
+		}
+		else
+		{
+			$(this).removeClass('active');
 			$(this).siblings('ul').slideUp(100);
 		}
-	})
+	});
+	
+	$('.active').trigger("click");
 });
 </script>
 <style type="text/css">
@@ -23,7 +31,7 @@ $(document).ready(function() {
 .list ul li{background-color:#f2f2f2; border:solid 1px #E5E5E5; border-bottom:0;}
 .list ul li a{padding-left:20px;color:#444;display:block;height:40px;line-height:40px;position:relative;}
 .list ul li .inactive{background:url(/images/off.png) no-repeat 90% center;}
-.list ul li .inactives{background:url(/images/on.png) no-repeat 90% center;} 
+.list ul li .active{background:url(/images/on.png) no-repeat 90% center;} 
 .list ul li ul{display:none;padding:0;}
 .list ul li ul li{border-left:0; border-right:0; background-color:#fafafa; border-color:#eee;}
 .list ul li ul li ul{display:none;padding:0;}
@@ -34,77 +42,77 @@ $(document).ready(function() {
 </style>
 
 <div class="list">
-        <ul class="yiji">
-            <li><a href="#">中国美协章程</a></li>
-            <li><a href="#" class="inactive active">常用操作</a>
-                <ul>
-                    <li><a href="#"><small class="glyphicon glyphicon-triangle-right"></small> 网站栏目管理</a></li>
-                    <li><a href="#"><small class="glyphicon glyphicon-triangle-right"></small> 文章列表</a></li>
-                    <li><a href="#"><small class="glyphicon glyphicon-triangle-right"></small> 未审核的文章</a></li>
-                    <li><a href="#"><small class="glyphicon glyphicon-triangle-right"></small> 发布文章</a></li>
-                    <li><a href="#"><small class="glyphicon glyphicon-triangle-right"></small> 单页文档管理</a></li>
-                </ul>
-            </li>
-			<li><a href="#" class="inactive active">商品管理</a>
-                <ul>
-                    <li><a href="#">商品列表</a></li>
-                    <li><a href="#">添加商品</a></li>
-                    <li><a href="#">商品分类</a></li>
-                </ul>
-            </li>
-            <li><a href="#" class="inactive">组织机构</a>
-                <ul style="display: none">
-                    <li><a href="#" class="inactive active"><small class="glyphicon glyphicon-triangle-right"></small> 美协机关</a>
-                        <ul>
-                            <li><a href="#"><small class="glyphicon glyphicon-menu-right"></small> 办公室</a></li>
-                            <li><a href="#"><small class="glyphicon glyphicon-menu-right"></small> 人事处</a></li>
-                            <li><a href="#"><small class="glyphicon glyphicon-menu-right"></small> 组联部</a></li>
-                            <li><a href="#"><small class="glyphicon glyphicon-menu-right"></small> 外联部</a></li>
-                            <li><a href="#"><small class="glyphicon glyphicon-menu-right"></small> 研究部</a></li>
-                            <li><a href="#"><small class="glyphicon glyphicon-menu-right"></small> 维权办</a></li>
-                        </ul>
-                    </li> 
-                    <li><a href="#" class="inactive active"><small class="glyphicon glyphicon-triangle-right"></small> 中国文联美术艺术中心</a>   
-                        <ul>
-                            <li><a href="#">综合部</a></li>
-                            <li><a href="#">大型活动部</a></li>
-                            <li><a href="#">展览部</a></li>
-                            <li><a href="#">艺委会工作部</a></li>
-                            <li><a href="#">信息资源部</a></li>
-                            <li><a href="#">双年展办公室</a></li>
-                        </ul>
-                    </li>
-                    <li class="last"><a href="#"><small class="glyphicon glyphicon-triangle-right"></small> 《美术》杂志社</a></li>
-                </ul>
-            </li>
+<ul class="leftmenu">
+	<li><a href="#">中国美协章程</a></li>
+	<li><a href="#" class="inactive active">常用操作</a>
+		<ul>
+			<li><a href="#"><small class="glyphicon glyphicon-triangle-right"></small> 网站栏目管理</a></li>
+			<li><a href="#"><small class="glyphicon glyphicon-triangle-right"></small> 文章列表</a></li>
+			<li><a href="#"><small class="glyphicon glyphicon-triangle-right"></small> 未审核的文章</a></li>
+			<li><a href="#"><small class="glyphicon glyphicon-triangle-right"></small> 发布文章</a></li>
+			<li><a href="#"><small class="glyphicon glyphicon-triangle-right"></small> 单页文档管理</a></li>
+		</ul>
+	</li>
+	<li><a href="#" class="inactive">商品管理</a>
+		<ul>
+			<li><a href="#">商品列表</a></li>
+			<li><a href="#">添加商品</a></li>
+			<li><a href="#">商品分类</a></li>
+		</ul>
+	</li>
+	<li><a href="#" class="inactive">组织机构</a>
+		<ul style="display: none">
+			<li><a href="#" class="inactive"><small class="glyphicon glyphicon-triangle-right"></small> 美协机关</a>
+				<ul>
+					<li><a href="#"><small class="glyphicon glyphicon-menu-right"></small> 办公室</a></li>
+					<li><a href="#"><small class="glyphicon glyphicon-menu-right"></small> 人事处</a></li>
+					<li><a href="#"><small class="glyphicon glyphicon-menu-right"></small> 组联部</a></li>
+					<li><a href="#"><small class="glyphicon glyphicon-menu-right"></small> 外联部</a></li>
+					<li><a href="#"><small class="glyphicon glyphicon-menu-right"></small> 研究部</a></li>
+					<li><a href="#"><small class="glyphicon glyphicon-menu-right"></small> 维权办</a></li>
+				</ul>
+			</li> 
+			<li><a href="#" class="inactive"><small class="glyphicon glyphicon-triangle-right"></small> 中国文联美术艺术中心</a>   
+				<ul>
+					<li><a href="#">综合部</a></li>
+					<li><a href="#">大型活动部</a></li>
+					<li><a href="#">展览部</a></li>
+					<li><a href="#">艺委会工作部</a></li>
+					<li><a href="#">信息资源部</a></li>
+					<li><a href="#">双年展办公室</a></li>
+				</ul>
+			</li>
+			<li class="last"><a href="#"><small class="glyphicon glyphicon-triangle-right"></small> 《美术》杂志社</a></li>
+		</ul>
+	</li>
 
 
-            <li><a href="#" class="inactive">组织机构</a>
-                <ul style="display: none">
-                    <li><a href="#" class="inactive active">美协机关</a>
-                        <ul>
-                            <li><a href="#">办公室</a></li>
-                            <li><a href="#">人事处</a></li>
-                            <li><a href="#">组联部</a></li>
-                            <li><a href="#">外联部</a></li>
-                            <li><a href="#">研究部</a></li>
-                            <li><a href="#">维权办</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="#" class="inactive active">中国文联美术艺术中心</a>
-                        <ul>
-                            <li><a href="#">综合部</a></li>
-                            <li><a href="#">大型活动部</a></li>
-                            <li><a href="#">展览部</a></li>
-                            <li><a href="#">艺委会工作部</a></li>
-                            <li><a href="#">信息资源部</a></li>
-                            <li><a href="#">双年展办公室</a></li>
-                        </ul>
-                    </li>
-                    <li class="last"><a href="#">《美术》杂志社</a></li>
-                </ul>
-            </li>
-        </ul>
+	<li><a href="#" class="inactive">组织机构</a>
+		<ul style="display: none">
+			<li><a href="#" class="inactive">美协机关</a>
+				<ul>
+					<li><a href="#">办公室</a></li>
+					<li><a href="#">人事处</a></li>
+					<li><a href="#">组联部</a></li>
+					<li><a href="#">外联部</a></li>
+					<li><a href="#">研究部</a></li>
+					<li><a href="#">维权办</a></li>
+				</ul>
+			</li>
+			<li><a href="#" class="inactive">中国文联美术艺术中心</a>
+				<ul>
+					<li><a href="#">综合部</a></li>
+					<li><a href="#">大型活动部</a></li>
+					<li><a href="#">展览部</a></li>
+					<li><a href="#">艺委会工作部</a></li>
+					<li><a href="#">信息资源部</a></li>
+					<li><a href="#">双年展办公室</a></li>
+				</ul>
+			</li>
+			<li class="last"><a href="#">《美术》杂志社</a></li>
+		</ul>
+	</li>
+</ul>
 </div>
 <dl class="lnav">
 <dt>常用操作</dt>
