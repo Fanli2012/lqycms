@@ -15,8 +15,11 @@
             <select name="pid" id="pid">
                 <option value="0">顶级菜单</option>
                 <?php if($menu){foreach($menu as $row){ ?>
+                <?php if($pid<>0 && $row["id"]==$pid){ ?>
+                <option selected value="<?php echo $row["id"]; ?>"><?php for($i=0;$i<$row["deep"];$i++){echo "—";}echo $row["name"]; ?></option>
+                <?php }else{ ?>
                 <option value="<?php echo $row["id"]; ?>"><?php for($i=0;$i<$row["deep"];$i++){echo "—";}echo $row["name"]; ?></option>
-                <?php }} ?>
+                <?php }}} ?>
             </select>
         </td>
     </tr>

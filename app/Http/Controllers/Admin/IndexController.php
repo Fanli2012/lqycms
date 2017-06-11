@@ -12,7 +12,18 @@ class IndexController extends CommonController
 	
 	public function index()
 	{
-		return view('admin.index.index');
+		$data['menus'] = category_tree(get_category('menu',0));
+		
+		if($_SESSION['admin_user_info']['role_id']==1)
+		{
+			
+		}
+		else
+		{
+			
+		}
+		
+		return view('admin.index.index', $data);
 	}
 	
 	//更新配置

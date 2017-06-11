@@ -77,4 +77,66 @@ class UserRoleController extends CommonController
 			error_jump('删除失败！请重新提交');
 		}
     }
+	
+	//角色权限设置视图
+	public function permissions()
+    {
+		if(!empty($_GET["id"])){$data['role_id'] = $_GET["id"];}else{error_jump('您访问的页面不存在或已被删除！');}
+		
+		$menu = [];
+		$access = DB::table('access')->where('role_id', $data['role_id'])->get();
+		if($access)
+		{
+			foreach($access as $k=>$v)
+			{
+				$menu[] = $v->menu_id;
+			}
+		}
+		
+		$data['menus'] = category_tree(get_category('menu',0));
+		foreach($data['menus'] as $k=>$v)
+		{
+			$data['menus'][$k]['is_access'] = 0;
+			
+			if(!empty($menu) && in_array($v['id'], $menu))
+			{
+				$data['menus'][$k]['is_access'] = 1;
+			}
+		}
+		
+		return view('admin.userrole.permissions', $data);
+    }
+	
+	//角色权限设置
+	public function dopermissions()
+    {
+		$menus = [];
+		if($_POST['menuid'] && $_POST['role_id'])
+		{
+			foreach($_POST['menuid'] as $row)
+			{
+				$menus[] = [
+					'role_id' => $_POST['role_id'],
+					'menu_id' => $row
+				];
+			}
+		}
+		else
+		{
+			error_jump('操作失败！');
+		}
+		DB::beginTransaction();
+		DB::table('access')->where('role_id', '=', $_POST['role_id'])->delete();
+		
+		if(DB::table('access')->insert($menus))
+        {
+			DB::commit();
+            success_jump('操作成功！');
+        }
+		else
+		{
+			DB::rollBack();
+			error_jump('操作失败！');
+		}
+    }
 }

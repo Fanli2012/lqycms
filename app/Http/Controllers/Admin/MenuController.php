@@ -22,6 +22,9 @@ class MenuController extends CommonController
     
     public function add()
     {
+		if(!empty($_GET["pid"])){$pid = $_GET["pid"];}else{$pid=0;}
+        
+        $data['pid'] = $pid;
         $data['menu'] = category_tree(get_category('menu',0));
 		
         return view('admin.menu.add', $data);

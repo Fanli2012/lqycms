@@ -20,7 +20,7 @@
 <td><?php echo $row->name; ?></td>
 <td><?php echo $row->action; ?></td>
 <td><?php if($row->status==1){echo '显示';}else{echo '隐藏';} ?></td>
-<td><a href="/fladmin/menu/edit?id=<?php echo $row->id; ?>">修改</a> | <a onclick="delconfirm('/fladmin/menu/del?id=<?php echo $row->id; ?>')" href="javascript:;">删除</a></td>
+<td><a href="<?php echo route('admin_menu_add',['pid' => $row->id]); ?>">添加子菜单</a> | <a href="/fladmin/menu/edit?id=<?php echo $row->id; ?>">修改</a> | <a onclick="delconfirm('/fladmin/menu/del?id=<?php echo $row->id; ?>')" href="javascript:;">删除</a></td>
 </tr><?php } ?>
 </tbody></table></div><!-- 表格结束 --></form><!-- 表单结束 -->
 

@@ -156,6 +156,8 @@ Route::group(['prefix' => 'fladmin', 'namespace' => 'Admin', 'middleware' => ['w
 	Route::get('/userrole/edit', 'UserRoleController@edit')->name('admin_userrole_edit');
 	Route::post('/userrole/doedit', 'UserRoleController@doedit')->name('admin_userrole_doedit');
 	Route::get('/userrole/del', 'UserRoleController@del')->name('admin_userrole_del');
+	Route::get('/userrole/permissions', 'UserRoleController@permissions')->name('admin_userrole_permissions'); //权限设置
+	Route::post('/userrole/dopermissions', 'UserRoleController@dopermissions')->name('admin_userrole_dopermissions');
 	//菜单管理
 	Route::get('/menu', 'MenuController@index')->name('admin_menu');
 	Route::get('/menu/add', 'MenuController@add')->name('admin_menu_add');
