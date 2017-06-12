@@ -1,11 +1,7 @@
-<!DOCTYPE html><html><head><title>留言列表_<?php echo sysconfig('CMS_WEBNAME'); ?>后台管理</title>@include('admin.common.header')
-<div class="container-fluid">
-<div class="row">
-<!-- 左边开始 --><div class="col-sm-3 col-md-2 sidebar">@include('admin.common.leftmenu')</div><!-- 左边结束 -->
+@extends('admin.layouts.app')
+@section('title', '留言列表')
 
-<!-- 右边开始 --><div class="col-sm-9 col-md-10 rightbox"><div id="mainbox">
-
-<form id="searcharc" class="navbar-form" action="/fladmin/guestbook" method="get">
+@section('content')<form id="searcharc" class="navbar-form" action="/fladmin/guestbook" method="get">
 <div class="form-group"><input type="text" name="keyword" id="keyword" class="form-control required" placeholder="搜索关键词..."></div>
 <button type="submit" class="btn btn-info" value="Submit">搜索一下</button></form>
 
@@ -55,6 +51,4 @@ $(function(){
     });
 });
 </script>
-
-</div></div><!-- 右边结束 --></div></div>
-</body></html>
+@endsection

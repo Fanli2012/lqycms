@@ -12,18 +12,15 @@ class IndexController extends CommonController
 	
 	public function index()
 	{
-		$data['menus'] = category_tree(get_category('menu',0));
-		
-		if($_SESSION['admin_user_info']['role_id']==1)
-		{
-			
-		}
-		else
-		{
-			
-		}
+		$leftmenu = new \App\Http\Model\Menu();
+		$data['menus'] = $leftmenu::getPermissionsMenu($_SESSION['admin_user_info']['role_id']);
 		
 		return view('admin.index.index', $data);
+	}
+	
+	public function welcome()
+	{
+		return view('admin.index.welcome');
 	}
 	
 	//更新配置

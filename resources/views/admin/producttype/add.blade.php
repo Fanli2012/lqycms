@@ -1,9 +1,7 @@
-<!DOCTYPE html><html><head><title>添加分类_后台管理</title>@include('admin.common.header')
-<div class="container-fluid">
-<div class="row">
-<!-- 左边开始 --><div class="col-sm-3 col-md-2 sidebar">@include('admin.common.leftmenu')</div><!-- 左边结束 -->
+@extends('admin.layouts.app')
+@section('title', '商品分类添加')
 
-<!-- 右边开始 --><div class="col-sm-9 col-md-10 rightbox"><div id="mainbox">
+@section('content')
 <h5 class="sub-header"><a href="/fladmin/producttype">商品分类管理</a> > 添加分类</h5>
 
 <form method="post" action="/fladmin/producttype/doadd" role="form" id="addcat" class="table-responsive">{{ csrf_field() }}
@@ -95,8 +93,6 @@ function upImage()
   </tbody>
 </table>
 </form><!-- 表单结束 -->
-</div></div><!-- 右边结束 --></div></div>
-
 <script>
 $(function(){
     $(".required").blur(function(){
@@ -142,4 +138,4 @@ $('#addcat input[type="submit"]').click(function(){
     }
 });
 </script>
-</body></html>
+@endsection

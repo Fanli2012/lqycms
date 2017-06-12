@@ -55,6 +55,7 @@ Route::group(['namespace' => 'Home'], function () {
 //后台路由
 Route::group(['prefix' => 'fladmin', 'namespace' => 'Admin', 'middleware' => ['web']], function () {
 	Route::get('/', 'IndexController@index')->name('admin');
+	Route::get('/welcome', 'IndexController@welcome')->name('admin_welcome');
 	Route::get('/index/upconfig', 'IndexController@upconfig')->name('admin_index_upconfig'); //更新系统参数配置
 	Route::get('/index/upcache', 'IndexController@upcache')->name('admin_index_upcache'); //更新缓存
 	//文章
@@ -172,6 +173,8 @@ Route::group(['prefix' => 'fladmin', 'namespace' => 'Admin', 'middleware' => ['w
 	Route::get('/recoverpwd', 'LoginController@recoverpwd')->name('admin_recoverpwd');
 	//页面跳转
 	Route::get('/jump', 'LoginController@jump')->name('admin_jump');
+	//测试
+	Route::get('/test', 'LoginController@test')->name('admin_test');
 });
 
 //接口路由

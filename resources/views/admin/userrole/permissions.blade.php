@@ -1,9 +1,7 @@
-<!DOCTYPE html><html><head><title>角色权限设置_后台管理</title>@include('admin.common.header')
-<div class="container-fluid">
-<div class="row">
-<!-- 左边开始 --><div class="col-sm-3 col-md-2 sidebar">@include('admin.common.leftmenu')</div><!-- 左边结束 -->
+@extends('admin.layouts.app')
+@section('title', '角色权限设置')
 
-<!-- 右边开始 --><div class="col-sm-9 col-md-10 rightbox"><div id="mainbox">
+@section('content')
 <h2 class="sub-header">角色权限设置</h2>[ <a href="<?php echo route('admin_userrole'); ?>">角色列表</a> ]<br><br>
 
 <form method="post" action="<?php echo route('admin_userrole_dopermissions'); ?>" role="form" enctype="multipart/form-data" class="table-responsive"><div class="table-responsive">{{ csrf_field() }}
@@ -63,5 +61,4 @@ function checknode(obj)
 	}
 }
 </script>
-</div></div><!-- 右边结束 --></div></div>
-</body></html>
+@endsection

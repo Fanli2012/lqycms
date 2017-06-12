@@ -1,9 +1,7 @@
-<!DOCTYPE html><html><head><title>栏目列表_后台管理</title>@include('admin.common.header')
-<div class="container-fluid">
-<div class="row">
-<!-- 左边开始 --><div class="col-sm-3 col-md-2 sidebar">@include('admin.common.leftmenu')</div><!-- 左边结束 -->
+@extends('admin.layouts.app')
+@section('title', '栏目列表')
 
-<!-- 右边开始 --><div class="col-sm-9 col-md-10 rightbox"><div id="mainbox">
+@section('content')
 <h2 class="sub-header">网站栏目管理</h2>[ <a href="/fladmin/category/add">增加顶级栏目</a> ] [ <a href="/fladmin/article/add">发布文章</a> ]<br><br>
 
 <form name="listarc"><div class="table-responsive">
@@ -17,5 +15,4 @@
 <td><a href="<?php echo get_front_url(array("type"=>"list","catid"=>$row["id"])); ?>" target="_blank">预览</a> | <a href="/fladmin/article/add?catid=<?php echo $row["id"]; ?>">发布文章</a> | <a href="/fladmin/category/add?reid=<?php echo $row["id"]; ?>">增加子类</a> | <a href="/fladmin/category/edit?id=<?php echo $row["id"]; ?>">更改</a> | <a onclick="delconfirm('/fladmin/category/del?id=<?php echo $row["id"]; ?>')" href="javascript:;">删除</a></td>
 </tr><?php }} ?>
 </tbody></table></div><!-- 表格结束 --></form><!-- 表单结束 -->
-</div></div><!-- 右边结束 --></div></div>
-</body></html>
+@endsection

@@ -98,4 +98,16 @@ class LoginController extends BaseController
         
         return DB::table("user")->where($map)->count();
     }
+	
+	//测试
+	public function test()
+	{
+		//管理员菜单
+		/* for ($x=1; $x<=103; $x++)
+		{
+			DB::table('access')->insert(['role_id' => 1, 'menu_id' => $x]);
+		} */
+		
+		echo '123';
+    }
 }

@@ -1,9 +1,7 @@
-<!DOCTYPE html><html><head><title>管理员添加_后台管理</title>@include('admin.common.header')
-<div class="container-fluid">
-<div class="row">
-<!-- 左边开始 --><div class="col-sm-3 col-md-2 sidebar">@include('admin.common.leftmenu')</div><!-- 左边结束 -->
+@extends('admin.layouts.app')
+@section('title', '管理员添加')
 
-<!-- 右边开始 --><div class="col-sm-9 col-md-10 rightbox"><div id="mainbox">
+@section('content')
 <h5 class="sub-header"><a href="/fladmin/user">管理员列表</a> > 管理员添加</h5>
 
 <form id="addarc" method="post" action="/fladmin/user/doadd" role="form" enctype="multipart/form-data" class="table-responsive">{{ csrf_field() }}
@@ -35,8 +33,6 @@
         <td colspan="2"><button type="submit" class="btn btn-success" value="Submit">保存(Submit)</button>&nbsp;&nbsp;<button type="reset" class="btn btn-default" value="Reset">重置(Reset)</button><input type="hidden"></input></td>
     </tr>
 </tbody></table></form><!-- 表单结束 -->
-</div></div><!-- 右边结束 --></div></div>
-
 <script>
 $(function(){
     $(".required").blur(function(){
@@ -65,4 +61,4 @@ $(function(){
     });
 });
 </script>
-</body></html>
+@endsection

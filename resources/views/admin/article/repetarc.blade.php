@@ -1,9 +1,7 @@
-<!DOCTYPE html><html><head><title>重复文档列表_后台管理</title>@include('admin.common.header')
-<div class="container-fluid">
-<div class="row">
-<!-- 左边开始 --><div class="col-sm-3 col-md-2 sidebar">@include('admin.common.leftmenu')</div><!-- 左边结束 -->
+@extends('admin.layouts.app')
+@section('title', '重复文档列表')
 
-<!-- 右边开始 --><div class="col-sm-9 col-md-10 rightbox"><div id="mainbox">
+@section('content')
 <h2 class="sub-header">重复文档列表</h2>[ <a href="/fladmin/article">文章列表</a> ] [ <a href="/fladmin/article/add">发布文章</a> ]<br><br>
 
 <form name="listarc">
@@ -21,6 +19,4 @@
 <?php }} ?>
 </tbody>
 </table></div><!-- 表格结束 --></form><!-- 表单结束 -->
-
-</div></div><!-- 右边结束 --></div></div>
-</body></html>
+@endsection

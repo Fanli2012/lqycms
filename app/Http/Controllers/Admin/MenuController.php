@@ -33,8 +33,12 @@ class MenuController extends CommonController
     public function doadd()
     {
 		unset($_POST["_token"]);
-		if(DB::table('menu')->insert($_POST))
+		
+		$menuid = DB::table('menu')->insertGetId($_POST);
+		if($menuid)
         {
+			DB::table('access')->insert(['role_id' => 1, 'menu_id' => $menuid]);
+			
             success_jump('添加成功！', route('admin_menu'));
         }
 		else
@@ -76,6 +80,8 @@ class MenuController extends CommonController
 		
 		if(DB::table('menu')->whereIn("id", explode(',', $id))->delete())
         {
+			DB::table('access')->where('role_id', 1)->whereIn("menu_id", explode(',', $id))->delete();
+			
             success_jump('删除成功');
         }
 		else

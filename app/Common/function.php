@@ -621,7 +621,7 @@ function imgmatch($url)
 //将栏目列表生成数组
 function get_category($modelname, $parent_id=0, $pad=0)
 {
-    $arr=array();
+    $arr = array();
     
     $temp = \DB::table($modelname)->where('pid', $parent_id)->orderBy('id', 'asc')->get();
     $cats = object_to_array($temp);
@@ -631,12 +631,15 @@ function get_category($modelname, $parent_id=0, $pad=0)
         foreach($cats as $row)//循环数组
         {
             $row['deep'] = $pad;
-            if(get_category($modelname,$row["id"]))//如果子级不为空
+			
+            if($child = get_category($modelname, $row["id"], $pad+1))//如果子级不为空
             {
-                $row['child'] = get_category($modelname,$row["id"],$pad+1);
+                $row['child'] = $child;
             }
+			
             $arr[] = $row;
         }
+		
         return $arr;
     }
 }

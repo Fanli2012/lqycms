@@ -1,9 +1,8 @@
-<!DOCTYPE html><html><head><title>商品列表_<?php echo sysconfig('CMS_WEBNAME'); ?>后台管理</title>@include('admin.common.header')
-<div class="container-fluid">
-<div class="row">
-<!-- 左边开始 --><div class="col-sm-3 col-md-2 sidebar">@include('admin.common.leftmenu')</div><!-- 左边结束 -->
+@extends('admin.layouts.app')
+@section('title', '商品列表')
 
-<!-- 右边开始 --><div class="col-sm-9 col-md-10 rightbox"><div id="mainbox"><h5 class="sub-header"><a href="/fladmin/producttype">商品分类</a> > <a href="/fladmin/product">商品列表</a> [ <a href="/fladmin/product/add<?php if(!empty($_GET["id"])){echo '?catid='.$_GET["id"];}?>">发布商品</a> ]</h5>
+@section('content')
+<h5 class="sub-header"><a href="/fladmin/producttype">商品分类</a> > <a href="/fladmin/product">商品列表</a> [ <a href="/fladmin/product/add<?php if(!empty($_GET["id"])){echo '?catid='.$_GET["id"];}?>">发布商品</a> ]</h5>
 
 <div class="table-responsive">
 <table class="table table-striped table-hover">
@@ -110,6 +109,4 @@ $(function(){
     });
 });
 </script>
-
-</div></div><!-- 右边结束 --></div></div>
-</body></html>
+@endsection

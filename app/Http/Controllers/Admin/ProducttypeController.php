@@ -75,7 +75,7 @@ class ProductTypeController extends CommonController
         
         $data['id'] = $id;
         $post = object_to_array(DB::table("product_type")->where('id', $id)->first(), 1);
-        $reid = $post['reid'];
+        $reid = $post['pid'];
         if($reid!=0){$data['postone'] = object_to_array(DB::table("product_type")->where('id', $reid)->first(), 1);}
         $data['post'] = $post;
         

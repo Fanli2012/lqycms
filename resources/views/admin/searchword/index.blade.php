@@ -1,9 +1,7 @@
-<!DOCTYPE html><html><head><title>搜索关键词列表_后台管理</title>@include('admin.common.header')
-<div class="container-fluid">
-<div class="row">
-<!-- 左边开始 --><div class="col-sm-3 col-md-2 sidebar">@include('admin.common.leftmenu')</div><!-- 左边结束 -->
+@extends('admin.layouts.app')
+@section('title', '搜索关键词列表')
 
-<!-- 右边开始 --><div class="col-sm-9 col-md-10 rightbox"><div id="mainbox">
+@section('content')
 <h2 class="sub-header">搜索关键词管理</h2>[ <a href="/fladmin/searchword/add">增加关键词</a> ]<br><br>
 
 <form name="listarc"><div class="table-responsive"><table class="table table-striped table-hover">
@@ -28,6 +26,4 @@
 </table></div><!-- 表格结束 --></form><!-- 表单结束 -->
 
 <nav aria-label="Page navigation">{{ $posts->links() }}</nav>
-
-</div></div><!-- 右边结束 --></div></div>
-</body></html>
+@endsection
