@@ -18,7 +18,7 @@
 <td><?php echo $row->name; ?></td>
 <td><?php echo $row->des; ?></td>
 <td><?php if($row->status==0){echo '启用';}else{echo '禁用';} ?></td>
-<td><?php if($row->id<>1){ ?><a href="/fladmin/userrole/permissions?id=<?php echo $row->id; ?>">权限设置</a> | <?php } ?><a href="/fladmin/userrole/edit?id=<?php echo $row->id; ?>">修改</a> | <a onclick="delconfirm('/fladmin/userrole/del?id=<?php echo $row->id; ?>')" href="javascript:;">删除</a></td>
+<td><?php if($row->id<>1){ ?><a href="/fladmin/userrole/permissions?id=<?php echo $row->id; ?>">权限设置</a> | <?php } ?><a href="/fladmin/userrole/edit?id=<?php echo $row->id; ?>">修改</a><?php if($row->id<>1){ ?> | <a onclick="delconfirm('/fladmin/userrole/del?id=<?php echo $row->id; ?>')" href="javascript:;">删除</a><?php } ?></td>
 </tr><?php } ?>
 </tbody></table></div><!-- 表格结束 --></form><!-- 表单结束 -->
 

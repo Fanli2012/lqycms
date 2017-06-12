@@ -35,7 +35,7 @@
     </tr>
     <tr>
         <td align="right">图标：</td>
-        <td><input name="icon" type="text" id="icon" value="" style="width:30%"></td>
+        <td><input name="icon" type="text" id="icon" value="" style="width:30%"> <small style="color:#999">(Glyphicons字体图标，如glyphicon glyphicon-home)</small></td>
     </tr>
     <tr>
         <td align="right">备注：</td>

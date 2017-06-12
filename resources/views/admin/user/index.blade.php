@@ -18,7 +18,7 @@
 <td><?php echo $row->username; ?></td>
 <td><?php echo $row->email; ?></td>
 <td><?php if($row->status==0){echo '正常';}elseif($row->status==1){echo '禁用';}elseif($row->status==2){echo '禁用';} ?></td>
-<td><a href="/fladmin/user/edit?id=<?php echo $row->id; ?>">权限设置</a> | <a href="/fladmin/user/edit?id=<?php echo $row->id; ?>">修改</a> | <a onclick="delconfirm('/fladmin/user/del?id=<?php echo $row->id; ?>')" href="javascript:;">删除</a></td>
+<td><a href="/fladmin/user/edit?id=<?php echo $row->id; ?>">修改</a><?php if($row->id<>1){ ?> | <a onclick="delconfirm('/fladmin/user/del?id=<?php echo $row->id; ?>')" href="javascript:;">删除</a><?php } ?></td>
 </tr><?php } ?>
 </tbody></table></div><!-- 表格结束 --></form><!-- 表单结束 -->
 

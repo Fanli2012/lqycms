@@ -1,7 +1,7 @@
 .mauto{margin-left:auto;margin-right:auto;}
 
 .blog-masthead{background-color:#01aef0;}
-.blog-nav-item{position:relative;display:inline-block;padding:15px 20px;font-weight:500;color:#fff;font-size:16px;}
+.blog-nav-item{position:relative;display:inline-block;padding:12px 20px;font-weight:500;color:#fff;font-size:16px;}
 .blog-nav-item:hover,.blog-nav-item:focus{background-color:#00a9e9;color:#fff;text-decoration:none;}
 .blog-nav .active{background-color:#00a9e9;color:#fff;}
 .blog-nav .active:after{position:absolute;bottom:0;left:50%;width:0;height:0;margin-left:-5px;vertical-align:middle;content:" ";border-right:5px solid transparent;border-bottom:5px solid;border-left:5px solid transparent;}

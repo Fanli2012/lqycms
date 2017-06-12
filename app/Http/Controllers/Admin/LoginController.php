@@ -42,7 +42,7 @@ class LoginController extends BaseController
         if($User)
         {
 			$admin_user_info = $User->toArray();
-			$admin_user_info['rolename'] = $User->userrole->rolename;
+			$admin_user_info['rolename'] = $User->userrole->name;
 			
 			$_SESSION['admin_user_info'] = $admin_user_info;
 			

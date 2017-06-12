@@ -622,8 +622,19 @@ function imgmatch($url)
 function get_category($modelname, $parent_id=0, $pad=0)
 {
     $arr = array();
+	
+	$temp = \DB::table($modelname)->where('pid', $parent_id);
+    if(get_table_columns($modelname, 'listorder'))
+	{
+		$temp = $temp->orderBy('listorder', 'asc');
+	}
+	else
+	{
+		$temp = $temp->orderBy('id', 'asc');
+	}
+	
+	$temp = $temp->get();
     
-    $temp = \DB::table($modelname)->where('pid', $parent_id)->orderBy('id', 'asc')->get();
     $cats = object_to_array($temp);
 	
     if($cats)
@@ -1032,6 +1043,26 @@ function success_jump($msg='', $url='', $time=1)
     }
 }
 
+//获取表所有字段
+function get_table_columns($table, $field='')
+{
+	$res = \Illuminate\Support\Facades\Schema::getColumnListing($table);
+	
+	if($field != '')
+	{
+		//判断字段是否在表里面
+		if(in_array($field, $res))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	return $res;
+}
 
 
 
