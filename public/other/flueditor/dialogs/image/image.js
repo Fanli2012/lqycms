@@ -367,7 +367,8 @@
                 accept: {
                     title: 'Images',
                     extensions: acceptExtensions,
-                    mimeTypes: 'image/*'
+					mimeTypes: 'image/gif,image/jpeg,image/png,image/jpg,image/bmp'
+                    //mimeTypes: 'image/*' //这个是自己注释掉的，用这个调用图片上传的时候会比较卡
                 },
                 swf: '../../third-party/webuploader/Uploader.swf',
                 server: actionUrl,
