@@ -22,7 +22,7 @@
 	  <td><input name="arcID" type="checkbox" value="<?php echo $row->id; ?>" class="np"></td>
 	  <td><a href="/fladmin/product/edit?id=<?php echo $row->id; ?>"><?php echo $row->title; ?></a> <?php if(!empty($row->litpic)){echo "<small style='color:red'>[图]</small>";}if($row->tuijian==1){echo "<small style='color:#22ac38'>[荐]</small>";} ?> </td>
 	  <td><?php echo date('Y-m-d',$row->pubdate); ?></td>
-	  <td><a href="/fladmin/product?id=<?php echo $row->typeid; ?>"><?php echo $row->name; ?></a></td><td><?php echo $row->click; ?></td><td><a target="_blank" href="<?php echo route('product',['id'=>$row->id]); ?>">预览</a>&nbsp;<a href="/fladmin/product/edit?id=<?php echo $row->id; ?>">修改</a>&nbsp;<a onclick="delconfirm('/fladmin/product/del?id=<?php echo $row->id; ?>')" href="javascript:;">删除</a></td>
+	  <td><a href="/fladmin/product?id=<?php echo $row->typeid; ?>"><?php echo $row->name; ?></a></td><td><?php echo $row->click; ?></td><td><a target="_blank" href="<?php echo route('home_product',['id'=>$row->id]); ?>">预览</a>&nbsp;<a href="/fladmin/product/edit?id=<?php echo $row->id; ?>">修改</a>&nbsp;<a onclick="delconfirm('/fladmin/product/del?id=<?php echo $row->id; ?>')" href="javascript:;">删除</a></td>
 	</tr>
 	<?php }} ?>
 	<tr>

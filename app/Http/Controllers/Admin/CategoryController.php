@@ -74,7 +74,7 @@ class CategoryController extends CommonController
         
 		$data['id'] = $id;
         $post = object_to_array(DB::table('arctype')->where('id', $id)->first(), 1);
-        $reid = $post['reid'];
+        $reid = $post['pid'];
         if($reid!=0){$data['postone'] = object_to_array(DB::table('arctype')->where('id', $reid)->first());}
         
         $data['post'] = $post;

@@ -25,7 +25,7 @@ Route::group(['domain' => env('APP_SUBDOMAIN'), 'namespace' => 'Wap'], function 
 	Route::get('/page/{id}', 'IndexController@page')->name('wap_singlepage');  //单页
 	Route::get('/goods/{id}', 'IndexController@product')->name('wap_product'); //商品详情页
 	Route::get('/product{cat}/{page}', 'IndexController@productcat');           //产品分类页，分页
-	Route::get('/product{cat}', 'IndexController@productcat')->name('productcat'); //产品分类页
+	Route::get('/product{cat}', 'IndexController@productcat')->name('wap_productcat'); //产品分类页
 	Route::get('/sitemap.xml', 'IndexController@sitemap')->name('wap_sitemap');//sitemap
 });
 
@@ -44,7 +44,7 @@ Route::group(['namespace' => 'Home'], function () {
 	Route::get('/page/{id}', 'IndexController@page')->name('home_singlepage');  //单页
 	Route::get('/goods/{id}', 'IndexController@product')->name('home_product'); //商品详情页
 	Route::get('/product{cat}/{page}', 'IndexController@productcat');           //产品分类页，分页
-	Route::get('/product{cat}', 'IndexController@productcat')->name('productcat'); //产品分类页
+	Route::get('/product{cat}', 'IndexController@productcat')->name('home_productcat'); //产品分类页
 	Route::get('/sitemap.xml', 'IndexController@sitemap')->name('home_sitemap');//sitemap
 	
 	Route::get('/aaa', function () {
