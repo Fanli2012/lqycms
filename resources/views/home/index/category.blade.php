@@ -1,62 +1,32 @@
-<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8" /><meta http-equiv="Cache-Control" content="no-siteapp" /><meta http-equiv="Cache-Control" content="no-transform" /><meta name="mobile-agent" content="format=xhtml;url=http://m.bnbni.com<?php echo GetCurUrl(); ?>">
-<title><?php echo $post['seotitle'];if($page!=0){echo ' '.($page+1);} ?></title><meta name="keywords" content="<?php echo $post["keywords"]; ?>" /><meta name="description" content="<?php echo $post["description"]; ?>" /><link rel="stylesheet" href="<?php echo sysconfig('CMS_BASEHOST'); ?>/css/style.css" media="all"><script type="text/javascript" src="<?php echo sysconfig('CMS_BASEHOST'); ?>/js/jquery.min.js"></script><script type="text/javascript" src="<?php echo sysconfig('CMS_BASEHOST'); ?>/js/ad.js"></script><script>uaredirect("http://m.bnbni.com/cat{dede:type}[field:ID /]{/dede:type}");</script></head><body><script>site();</script>
-@include('home.common.header')<div id="tad"><script>tjs();</script></div>
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title><?php if(empty($post["seotitle"])){echo $post["name"];}else{echo $post["seotitle"];} ?></title>
+<link rel="stylesheet" href="/css/bootstrap.min.css"><link rel="stylesheet" href="/css/style.css"><script src="/js/jquery.min.js"></script><script src="/js/bootstrap.min.js"></script></head><body>
 
-<div class="box mt10"><div class="fl_640"><div class="zinfo"><h1><?php echo $post['name']; ?></h1><?php if(!empty($post['content'])){echo '<div class="zdes">'.$post['content'].'</div>';} ?></div><div id="lad1"><script>ljs1();</script></div>
+@include('home.common.header')
+<div class="container">
+<div class="row row-offcanvas row-offcanvas-right">
+<div class="col-xs-12 col-sm-9">
+<div class="bread"><a href="/"><?php echo sysconfig('CMS_INDEXNAME'); ?></a> > <?php echo get_cat_path($post["id"]); ?></div>
+<h1 class="page-header"><?php echo $post["name"]; ?></h1>
 
 <?php if(!empty($posts)){foreach($posts as $row){ ?><div class="list"><?php if(!empty($row['litpic'])){ ?><a class="limg" href="<?php echo get_front_url(array("id"=>$row['id'],"catid"=>$row['typeid'],"type"=>'content')); ?>"><img alt="<?php echo $row['title']; ?>" src="<?php echo $row['litpic']; ?>"></a><?php } ?>
-<strong class="tit"><a href="<?php echo get_front_url(array("id"=>$row['id'],"catid"=>$row['typeid'],"type"=>'content')); ?>" target="_blank"><?php echo $row['title']; ?></a></strong><p><?php echo mb_strcut($row['description'],0,150,'UTF-8'); ?>..</p>
-<div class="info"><span class="fl"><em><?php echo date("m-d H:i",$row['pubdate']); ?></em></span><span class="fr"><em><?php echo $row['click']; ?></em>人阅读</span></div><div class="cl"></div></div><?php }} ?><div id="lad2"><script>ljs2();</script></div>
+<strong class="tit"><a href="<?php echo get_front_url(array("id"=>$row['id'],"catid"=>$row['typeid'],"type"=>'content')); ?>"><?php echo $row['title']; ?></a></strong><p><?php echo mb_strcut($row['description'],0,150,'UTF-8'); ?>..</p>
+<div class="info"><span class="fl"><?php $taglist=taglist($row['id']);if($taglist){foreach($taglist as $row){ ?><a href="<?php echo get_front_url(array("tagid"=>$row['id'],"type"=>'tags')); ?>"><?php echo $row['tag']; ?></a><?php }} ?><em><?php echo date("m-d H:i",$row['pubdate']); ?></em></span><span class="fr"><em><?php echo $row['click']; ?></em>人阅读</span></div><div class="cl"></div></div><?php }} ?><div id="lad2"><script>ljs2();</script></div>
 
-<div class="pages"><ul><?php echo $pagenav; ?></ul><div class="cl"></div></div><div id="lad3"><script>ljs3();</script></div></div><!-- fl_640 end -->
+<div class="pages"><ul><?php echo $pagenav; ?></ul><div class="cl"></div></div>
 
-<div class="fr_300"><div id="rad1"><script>rjs1();</script></div>
-<div class="side"><div class="stit"><h3>热门文章</h3><a href="javascript:getmore({PageSize:5,_token:'{{ csrf_token() }}',typeid:<?php echo $post['id']; ?>,tuijian:1,mode:1,orderby:'rand()'});" class="more">换一换</a><div class="cl"></div></div>	
-<ul class="uli chs" id="xglist"><?php $posts=arclist(array("row"=>5,"typeid"=>$post['id'],"tuijian"=>1));if($posts){foreach($posts as $row){ ?><li><a target="_blank" href="<?php echo get_front_url(array("id"=>$row['id'],"catid"=>$row['typeid'],"type"=>'content')); ?>"><?php echo $row['title']; ?></a></li><?php }} ?></ul><div class="cl"></div></div>
+</div><!--/.col-xs-12.col-sm-9-->
 
-<div id="rad3"><script>rjs3();</script></div>
-<div class="side"><div class="stit"><h3>猜你喜欢</h3><a href="javascript:getmore({PageSize:5,_token:'{{ csrf_token() }}',typeid:<?php echo $post['id']; ?>,mode:2,orderby:'rand()'});" class="more">换一换</a><div class="cl"></div></div>
-<div class="uli2" id="xglike"><?php $posts=arclist(array("row"=>5,"typeid"=>$post['id'],"orderby"=>'rand()'));if($posts){foreach($posts as $row){ ?><div class="suli"><?php if(!empty($row['litpic'])){ ?><a class="limg" href="<?php echo get_front_url(array("id"=>$row['id'],"catid"=>$row['typeid'],"type"=>'content')); ?>"><img alt="<?php echo $row['title']; ?>" src="<?php echo $row['litpic']; ?>"></a><?php } ?><a target="_blank" href="<?php echo get_front_url(array("id"=>$row['id'],"catid"=>$row['typeid'],"type"=>'content')); ?>"><?php echo $row['title']; ?></a><div class="sulii"><?php if(!empty($row['writer'])){echo '<span class="time">'.$row['writer'].'</span>';}elseif(!empty($row['source'])){echo '<span class="time">'.$row['source'].'</span>';} ?> 阅读(<?php echo $row['click']; ?>)</div><div class="cl"></div></div><?php }} ?><div class="cl"></div></div></div>
+        <div class="col-xs-12 col-sm-3 sidebar-offcanvas" id="sidebar">
+		
+		<div class="panel panel-info">
+  <div class="panel-heading">热门推荐</div>
+  <div class="list-group"><?php $posts=arclist(array("row"=>5,"typeid"=>$post['id'],"orderby"=>'rand()'));if($posts){foreach($posts as $row){ ?>
+  <a class="list-group-item" href="<?php echo get_front_url(array("id"=>$row['id'],"catid"=>$row['typeid'],"type"=>'content')); ?>"><?php echo $row['title']; ?></a><?php }} ?>
+  </div>
+</div>
+</div><!--/.sidebar-offcanvas--></div><!--/row-->
 
-<div id="rad2"><script>rjs2();</script></div></div><!-- fr_300 end --></div><!-- box end -->
-<script>
-function getmore(condition)
-{
-    var url = "<?php echo sysconfig('CMS_BASEHOST'); ?>/api/listarc";
-    //var typeid = "";
-    $.post(url,condition,function(res){
-        if(res.code==0)
-        {
-            var json = res.data; //数组
-            var str = '';
-            $.each(json, function (index) {
-                //循环获取数据
-                //var title = json[index].title;
-                if(condition.mode==1)
-                {
-                    str = str + '<li><a target="_blank" href="'+json[index].url+'">'+json[index].title+'</a></li>';
-                }
-                else if(condition.mode==2)
-                {
-                    var litpic = '';if(json[index].litpic!==''){litpic = '<a class="limg" href="'+json[index].url+'"><img alt="'+json[index].title+'" src="'+json[index].litpic+'"></a>';}
-                    str = str + '<div class="suli">'+litpic+'<a target="_blank" href="'+json[index].url+'">'+json[index].title+'</a><div class="sulii">阅读('+json[index].click+')</div><div class="cl"></div></div>';
-                }
-            });
-            
-            if(str!='' && str!=null && condition.mode==1)
-            {
-                $('#xglist').html(str);
-            }
-            else if(str!='' && str!=null && condition.mode==2)
-            {
-                $('#xglike').html(str);
-            }
-        }
-        else
-        {
-            
-        }
-    },'json');
-}
-</script>
+</div><!-- /.container -->
 @include('home.common.footer')</body></html>

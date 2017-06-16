@@ -95,6 +95,16 @@ function get_front_url($param='')
         //tags页面
         $url .= '/s'.$param['searchid'];
     }
+	else if($param['type'] == 'productlist')
+    {
+        //商品列表页
+        $url .= '/product'.$param['catid'];
+    }
+    else if($param['type'] == 'productdetail')
+    {
+        //商品内容页
+        $url .= '/goods/'.$param['id'];
+    }
 	
     return $url;
 }
@@ -103,7 +113,7 @@ function get_front_url($param='')
 function get_wap_front_url(array $param)
 {
     $url = '';
-    
+	
     if($param['type'] == 'list')
     {
         //列表页
@@ -129,7 +139,17 @@ function get_wap_front_url(array $param)
         //tags页面
         $url .= '/s'.$param['searchid'];
     }
-    
+	else if($param['type'] == 'productlist')
+    {
+        //商品列表页
+        $url .= '/product'.$param['catid'];
+    }
+    else if($param['type'] == 'productdetail')
+    {
+        //商品内容页
+        $url .= '/goods/'.$param['id'];
+    }
+	
     return $url;
 }
 
@@ -240,11 +260,12 @@ function arclist(array $param)
  */
 function tagslist($param="")
 {
+	$tagindex = \DB::table("tagindex");
     $orderby=$limit="";
-	if(isset($param['limit'])){$limit=$param['limit'];}else{if(isset($param['row'])){$limit=$param['row'];}}
-	if(isset($param['orderby'])){$orderby=$param['orderby'];}else{$orderby='id desc';}
+	if(isset($param['row'])){$tagindex = $tagindex->take($param['row']);}
+	if(isset($param['orderby'])){if($param['orderby']=='rand()'){$tagindex = $tagindex->orderBy(\DB::Raw('rand()'));}else{$tagindex = $tagindex->orderBy($param['orderby'][0],$param['orderby'][1]);}}else{$tagindex = $tagindex->orderBy('id','desc');}
 	
-	return \DB::table("tagindex")->get();
+	return object_to_array($tagindex->get());
 }
 
 /**
@@ -676,17 +697,17 @@ function category_tree($list,$pid=0)
 }
 
 //递归获取面包屑导航
-function get_cat_path($cat)
+function get_cat_path($cat,$table='arctype',$type='list')
 {
     global $temp;
     
-    $row = db("arctype")->field('typename,reid,id')->where("id=$cat")->find();
+    $row = \DB::table($table)->select('name','pid','id')->where('id',$cat)->first();
     
-    $temp = '<a href="'.cms_basehost.'/cat'.$row["id"].'.html">'.$row["typename"]."</a> > ".$temp;
+    $temp = '<a href="'.get_front_url(array("catid"=>$row->id,"type"=>$type)).'">'.$row->name."</a> > ".$temp;
     
-    if($row["reid"]<>0)
+    if($row->pid<>0)
     {
-        get_cat_path($row["reid"]);
+        get_cat_path($row->pid);
     }
     
     return $temp;
@@ -698,19 +719,19 @@ function taglist($id,$tagid=0)
     $tags="";
     if($tagid!=0)
     {
-        $Taglist = db("taglist")->where("aid=$id and tid<>$tagid")->select();
+        $Taglist = \DB::table("taglist")->where('aid',$id)->where('tid', '<>', $tagid)->get();
     }
     else
     {
-        $Taglist = db("taglist")->where("aid=$id")->select();
+        $Taglist = \DB::table("taglist")->where('aid',$id)->get();
     }
     
     foreach($Taglist as $row)
     {
-        if($tags==""){$tags='id='.$row['tid'];}else{$tags=$tags.' or id='.$row['tid'];}
+        if($tags==""){$tags='id='.$row->tid;}else{$tags=$tags.' or id='.$row->tid;}
     }
 	
-    if($tags!=""){return db("tagindex")->where($tags)->select();}
+    if($tags!=""){return object_to_array(\DB::table("tagindex")->whereRaw(\DB::raw($tags))->get());}
 }
 
 //读取动态配置

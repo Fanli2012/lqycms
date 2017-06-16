@@ -14,18 +14,19 @@
 //wap路由，要放到最前面，否则解析不到
 Route::group(['domain' => env('APP_SUBDOMAIN'), 'namespace' => 'Wap'], function () {
 	Route::get('/', 'IndexController@index')->name('wap_home');
-	Route::get('/tags', 'IndexController@tags');
-	Route::get('/search', 'IndexController@search');
-	Route::get('/p/{id}', 'IndexController@detail');                            //详情页
+	Route::get('/page404', 'IndexController@page404')->name('wap_page404');    //404页面
+	Route::get('/tags', 'IndexController@tags')->name('wap_tags');
+	Route::get('/search/{id}', 'IndexController@search')->name('wap_search');  //搜过页面
+	Route::get('/p/{id}', 'IndexController@detail')->name('wap_detail');       //详情页
 	Route::get('/cat{cat}/{page}', 'IndexController@category');                 //分类页，分页
-	Route::get('/cat{cat}', 'IndexController@category');                        //分类页
+	Route::get('/cat{cat}', 'IndexController@category')->name('wap_category'); //分类页
 	Route::get('/tag{tag}/{page}', 'IndexController@tag');                      //标签页，分页
-	Route::get('/tag{tag}', 'IndexController@tag');                             //标签页
-	Route::get('/page/{id}', 'IndexController@singlepage')->name('wap_singlepage'); //单页
-	Route::get('/sitemap.xml', 'IndexController@sitemap')->name('wap_sitemap'); //sitemap
-	Route::get('/aaa', function () {
-		dd('wap');
-	});
+	Route::get('/tag{tag}', 'IndexController@tag')->name('wap_tag');           //标签页
+	Route::get('/page/{id}', 'IndexController@page')->name('wap_singlepage');  //单页
+	Route::get('/goods/{id}', 'IndexController@product')->name('wap_product'); //商品详情页
+	Route::get('/product{cat}/{page}', 'IndexController@productcat');           //产品分类页，分页
+	Route::get('/product{cat}', 'IndexController@productcat')->name('productcat'); //产品分类页
+	Route::get('/sitemap.xml', 'IndexController@sitemap')->name('wap_sitemap');//sitemap
 });
 
 
@@ -33,18 +34,18 @@ Route::group(['domain' => env('APP_SUBDOMAIN'), 'namespace' => 'Wap'], function 
 Route::group(['namespace' => 'Home'], function () {
 	Route::get('/', 'IndexController@index')->name('home');
 	Route::get('/page404', 'IndexController@page404')->name('page404');         //404页面
-	Route::get('/tags', 'IndexController@tags')->name('tags');
-	Route::get('/search', 'IndexController@search');
+	Route::get('/tags', 'IndexController@tags')->name('home_tags');
+	Route::get('/search/{id}', 'IndexController@search')->name('home_search');  //搜过页面
 	Route::get('/p/{id}', 'IndexController@detail')->name('home_detail');       //详情页
 	Route::get('/cat{cat}/{page}', 'IndexController@category');                 //分类页，分页
 	Route::get('/cat{cat}', 'IndexController@category')->name('home_category'); //分类页
 	Route::get('/tag{tag}/{page}', 'IndexController@tag');                      //标签页，分页
-	Route::get('/tag{tag}', 'IndexController@tag')->name('tag');                //标签页
-	Route::get('/page/{id}', 'IndexController@page')->name('singlepage');       //单页
-	Route::get('/product/{id}', 'IndexController@product')->name('product');    //详情页
-	Route::get('/productcat{cat}/{page}', 'IndexController@productcat');        //产品分类页，分页
-	Route::get('/productcat{cat}', 'IndexController@productcat')->name('productcat'); //产品分类页
-	Route::get('/sitemap.xml', 'IndexController@sitemap')->name('sitemap');     //sitemap
+	Route::get('/tag{tag}', 'IndexController@tag')->name('home_tag');           //标签页
+	Route::get('/page/{id}', 'IndexController@page')->name('home_singlepage');  //单页
+	Route::get('/goods/{id}', 'IndexController@product')->name('home_product'); //商品详情页
+	Route::get('/product{cat}/{page}', 'IndexController@productcat');           //产品分类页，分页
+	Route::get('/product{cat}', 'IndexController@productcat')->name('productcat'); //产品分类页
+	Route::get('/sitemap.xml', 'IndexController@sitemap')->name('home_sitemap');//sitemap
 	
 	Route::get('/aaa', function () {
 		dd('wap');

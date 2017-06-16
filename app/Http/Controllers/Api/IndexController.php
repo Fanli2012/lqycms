@@ -67,7 +67,8 @@ class IndexController extends CommonController
 			
             foreach($list as $key=>$row)
 			{
-                $list[$key]["url"] = get_front_url(array("id"=>$row['id'],"catid"=>$row['typeid'],"type"=>'content'));
+                $list[$key]["url"] = get_front_url(array("id"=>$row['id'],"type"=>'content'));
+				$list[$key]["pubdate"] = date("Y-m-d", $list[$key]["pubdate"]);
             }
             
 			$res["data"] = $list;

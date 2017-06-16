@@ -1,0 +1,5 @@
+<div id="header"><div id="navlink" class="box"><a class="webname" href="<?php echo sysconfig('CMS_BASEHOST'); ?>/"><?php echo sysconfig('CMS_WEBNAME'); ?></a><span class="nav">
+<?php $posts = dataList('arctype', ['expression'=>[['pid','=',0]], 'orderby'=>['sortrank', 'desc']]); if($posts){foreach ($posts as $row) { ?>
+	<a href="<?php echo get_front_url(array('catid'=>$row['id'],'type'=>'list')); ?>"><?php echo $row['name']; ?></a>
+<?php }} ?>
+<script>navjs();</script></span><form method="get" target="_blank" class="m-sch fr" name="formsearch" action="<?php echo sysconfig('CMS_BASEHOST'); ?>/plus/search.php"><input class="sch-txt" name="q" type="text" value="搜索 按Enter键" onfocus="if(value=='搜索 按Enter键') {value=''}" onblur="if(value=='') {value='搜索 按Enter键'}"></form><div class="cl"></div></div></div>

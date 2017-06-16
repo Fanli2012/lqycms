@@ -1,8 +1,30 @@
-<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8" /><meta http-equiv="Cache-Control" content="no-siteapp" /><meta http-equiv="Cache-Control" content="no-transform" /><meta name="mobile-agent" content="format=xhtml;url=">
-<title><?php if(empty($post["seotitle"])){echo $post["title"];}else{echo $post["seotitle"];} ?>_<?php echo sysconfig('CMS_WEBNAME'); ?></title><meta name="keywords" content="<?php echo $post["keywords"]; ?>" /><meta name="description" content="<?php echo $post["description"]; ?>" /><link rel="stylesheet" href="<?php echo sysconfig('CMS_BASEHOST'); ?>/css/style.css" media="all"><script type="text/javascript" src="<?php echo sysconfig('CMS_BASEHOST'); ?>/js/ad.js"></script><script>uaredirect("http://m.bnbni.com/cat{dede:type}[field:id/]{/dede:type}/id{dede:field name='aid' /}");</script></head><body><script>site();</script>
-@include('home.common.header')<div id="tad"><script>tjs();</script></div>
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title><?php if(empty($post["seotitle"])){echo $post["title"];}else{echo $post["seotitle"];} ?>_<?php echo sysconfig('CMS_WEBNAME'); ?></title>
+<link rel="stylesheet" href="/css/bootstrap.min.css"><link rel="stylesheet" href="/css/style.css"><script src="/js/jquery.min.js"></script><script src="/js/bootstrap.min.js"></script></head><body>
 
-<div class="box mt10">
-<h1 class="arct" style="text-align:center"><?php echo $post["title"]; ?></h1><div class="dad1"><script>djs1();</script></div>
-<div class="content"><?php echo $post["body"]; ?><div class="dad2"><script>djs2();</script></div></div>
-</div><!-- box end -->@include('home.common.footer')</body></html>
+@include('home.common.header')
+<div class="container">
+<div class="row row-offcanvas row-offcanvas-right">
+<div class="col-xs-12 col-sm-9">
+<div class="bread"><a href="/">首页</a> > <?php echo $post["title"]; ?></div>
+
+<h1 class="page-header"><?php echo $post["title"]; ?></h1>
+<div class="content"><?php echo $post["body"]; ?></div>
+</div><!--/.col-xs-12.col-sm-9-->
+
+<div class="col-xs-12 col-sm-3 sidebar-offcanvas" id="sidebar">
+
+<div class="panel panel-info">
+<div class="panel-heading">相关推荐</div>
+
+<div class="list-group"><?php if($posts){foreach($posts as $row){ ?>
+<a class="list-group-item" href="<?php echo get_front_url(array("pagename"=>$row['filename'],"type"=>'page')); ?>"><?php echo $row['title']; ?></a><?php }} ?>
+</div>
+
+</div>
+</div><!--/.sidebar-offcanvas-->
+</div><!--/row-->
+
+</div><!-- /.container -->
+@include('home.common.footer')</body></html>
