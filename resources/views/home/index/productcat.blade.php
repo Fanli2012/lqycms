@@ -11,9 +11,7 @@
 <a href="<?php echo get_front_url(array("id"=>$row['id'],"type"=>'productdetail')); ?>" target="_blank">
 <img src="<?php echo $row['litpic']; ?>" alt="<?php echo $row['title']; ?>" class="imgzsy">
 <p style="padding-top:10px;"><?php echo $row['title']; ?></p>
-</a>
-</div>
-<?php }} ?>
+</a></div><?php }} ?>
 <br class="cl">
 <div class="pages"><ul><?php echo $pagenav; ?></ul><div class="cl"></div></div>
 </div></div><!-- /.container -->

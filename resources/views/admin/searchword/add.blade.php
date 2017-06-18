@@ -21,7 +21,7 @@
     </tr>
     <tr>
         <td align="right">模板名称：</td>
-        <td><input name="template" type="text" id="template" value="tag" size="20"></td>
+        <td><input name="template" type="text" id="template" value="searchword" size="20"></td>
     </tr>
     <tr>
         <td align="right" style="vertical-align:middle;">缩略图：</td>

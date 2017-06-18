@@ -92,7 +92,7 @@ function get_front_url($param='')
     }
     else if($param['type'] == 'search')
     {
-        //tags页面
+        //搜索关键词页面
         $url .= '/s'.$param['searchid'];
     }
 	else if($param['type'] == 'productlist')
@@ -707,7 +707,7 @@ function get_cat_path($cat,$table='arctype',$type='list')
     
     if($row->pid<>0)
     {
-        get_cat_path($row->pid);
+        get_cat_path($row->pid, $table, $type);
     }
     
     return $temp;

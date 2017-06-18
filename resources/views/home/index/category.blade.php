@@ -18,9 +18,8 @@
 
 </div><!--/.col-xs-12.col-sm-9-->
 
-        <div class="col-xs-12 col-sm-3 sidebar-offcanvas" id="sidebar">
-		
-		<div class="panel panel-info">
+<div class="col-xs-12 col-sm-3 sidebar-offcanvas" id="sidebar">
+<div class="panel panel-info">
   <div class="panel-heading">热门推荐</div>
   <div class="list-group"><?php $posts=arclist(array("row"=>5,"typeid"=>$post['id'],"orderby"=>'rand()'));if($posts){foreach($posts as $row){ ?>
   <a class="list-group-item" href="<?php echo get_front_url(array("id"=>$row['id'],"catid"=>$row['typeid'],"type"=>'content')); ?>"><?php echo $row['title']; ?></a><?php }} ?>
