@@ -1,6 +1,7 @@
 # lqycms
 基于laravel框架的开源cms管理系统，git clone https://github.com/Fanli2012/lqycms.git
 
+![alt text](/public/images/screenshots.png "网站截图")
 
 # 说明
 
