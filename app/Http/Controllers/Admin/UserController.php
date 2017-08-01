@@ -13,7 +13,7 @@ class UserController extends CommonController
 	
     public function index()
     {
-        $posts = parent::pageList('user');
+        $posts = parent::pageList('admin_user');
 		
         $data['posts'] = $posts;
         
@@ -22,7 +22,7 @@ class UserController extends CommonController
     
     public function add()
     {
-		$data['rolelist'] = object_to_array(DB::table('user_role')->orderBy('listorder','desc')->get());
+		$data['rolelist'] = object_to_array(DB::table('admin_user_role')->orderBy('listorder','desc')->get());
 		
         return view('admin.user.add', $data);
     }
@@ -31,7 +31,7 @@ class UserController extends CommonController
     {
 		unset($_POST["_token"]);
 		$_POST['pwd'] = md5($_POST['pwd']);
-		if(DB::table('user')->insert($_POST))
+		if(DB::table('admin_user')->insert($_POST))
         {
             success_jump('添加成功！', route('admin_user'));
         }
@@ -47,8 +47,8 @@ class UserController extends CommonController
         if(preg_match('/[0-9]*/',$id)){}else{exit;}
         
         $data['id'] = $id;
-		$data['post'] = object_to_array(DB::table('user')->where('id', $id)->first(), 1);
-        $data['rolelist'] = object_to_array(DB::table('user_role')->orderBy('listorder','desc')->get());
+		$data['post'] = object_to_array(DB::table('admin_user')->where('id', $id)->first(), 1);
+        $data['rolelist'] = object_to_array(DB::table('admin_user_role')->orderBy('listorder','desc')->get());
 		
         return view('admin.user.edit', $data);
     }
@@ -59,7 +59,7 @@ class UserController extends CommonController
         
 		unset($_POST["_token"]);
 		$_POST['pwd'] = md5($_POST['pwd']);
-		if(DB::table('user')->where('id', $id)->update($_POST))
+		if(DB::table('admin_user')->where('id', $id)->update($_POST))
         {
             success_jump('修改成功！', route('admin_user'));
         }
@@ -101,7 +101,7 @@ class UserController extends CommonController
     {
 		if(!empty($_GET["id"])){$id = $_GET["id"];}else{error_jump('删除失败！请重新提交');}
 		
-		if(DB::table('user')->whereIn("id", explode(',', $id))->delete())
+		if(DB::table('admin_user')->whereIn("id", explode(',', $id))->delete())
         {
             success_jump('删除成功');
         }

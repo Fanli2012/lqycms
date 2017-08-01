@@ -1,31 +1,35 @@
 @extends('admin.layouts.app')
-@section('title', '商品分类修改')
+@section('title', '商品分类添加')
 
 @section('content')
-<h5 class="sub-header"><a href="/fladmin/producttype">商品分类管理</a> > 修改分类</h5>
+<h5 class="sub-header"><a href="/fladmin/goodstype">商品分类管理</a> > 添加分类</h5>
 
-<form method="post" action="/fladmin/producttype/doedit" role="form" id="addcat" class="table-responsive">{{ csrf_field() }}
+<form method="post" action="/fladmin/goodstype/doadd" role="form" id="addcat" class="table-responsive">{{ csrf_field() }}
 <table class="table table-striped table-bordered">
   <tbody>
     <tr>
       <td align="right">分类名称：</td>
-      <td><input name="name" type="text" value="<?php echo $post["name"]; ?>" id="name" size="30" class="required"><input style="display:none;" type="text" name="id" id="id" value="<?php echo $id; ?>"></td>
+      <td><input name="name" type="text" value="" id="name" size="30" class="required"></td>
+    </tr>
+	<tr>
+      <td align="right">上级目录：</td>
+      <td><?php if($id==0){echo "顶级栏目";}else{echo $postone["name"];} ?><input style="display:none;" type="text" name="prid" id="prid" value="<?php if($id==0){echo "top";}else{echo $id;} ?>"></td>
     </tr>
     <tr>
     <td align="right">别名：</td>
-    <td><input name="typedir" type="text" value="<?php echo $post["typedir"]; ?>" id="typedir" class="required" style="width:30%"> <small>(包含字母或数字，字母开头)</small></td>
+    <td><input name="typedir" type="text" value="" id="typedir" class="required" style="width:30%"> <small>(包含字母或数字，字母开头)</small></td>
     </tr>
     <tr>
       <td align="right">列表模板：</td>
-      <td><input name="templist" id="templist" type="text" value="<?php echo $post["templist"]; ?>" class="required" size="20"></td>
+      <td><input name="templist" id="templist" type="text" value="goodscat" class="required" size="20"></td>
     </tr>
     <tr>
       <td align="right">文章模板：</td>
-      <td><input name="temparticle" id="temparticle" type="text" value="<?php echo $post["temparticle"]; ?>" class="required" size="20"></td>
+      <td><input name="temparticle" id="temparticle" type="text" value="goods" class="required" size="20"></td>
     </tr>
     <tr>
         <td align="right" style="vertical-align:middle;">缩略图：</td>
-        <td style="vertical-align:middle;"><button type="button" onclick="upImage();">选择图片</button> <input name="litpic" type="text" id="litpic" value="<?php echo $post["litpic"]; ?>" style="width:40%"> <img style="margin-left:20px;<?php if(empty($post["litpic"]) || !imgmatch($post["litpic"])){ echo "display:none;"; } ?>" src="<?php if(imgmatch($post["litpic"])){echo $post["litpic"];} ?>" width="120" height="80" id="picview" name="picview"></td>
+        <td style="vertical-align:middle;"><button type="button" onclick="upImage();">选择图片</button> <input name="litpic" type="text" id="litpic" value="" style="width:40%"> <img style="margin-left:20px;display:none;" src="" width="120" height="80" id="picview"></td>
     </tr>
 <script type="text/javascript">
 var _editor;
@@ -57,26 +61,26 @@ function upImage()
 <script type="text/plain" id="ueditorimg"></script>
     <tr>
       <td align="right">SEO标题：</td>
-      <td><input name="seotitle" type="text" style="width:70%" id="seotitle" class="alltxt" value="<?php echo $post["seotitle"]; ?>"></td>
+      <td><input name="seotitle" type="text" style="width:70%" id="seotitle" class="alltxt" value=""></td>
     </tr>
     <tr>
       <td align="right">关键字：</td>
-      <td><input name="keywords" type="text" style="width:50%" id="keywords" class="alltxt" value="<?php echo $post["keywords"]; ?>"> (用","分开)</td>
+      <td><input name="keywords" type="text" style="width:50%" id="keywords" class="alltxt" value=""> (用","分开)</td>
     </tr>
     <tr>
       <td align="right">SEO关键字：</td>
-      <td><input name="seokeyword" type="text" style="width:50%" id="seokeyword" class="alltxt" value="<?php echo $post["seokeyword"]; ?>"> (用","分开)</td>
+      <td><input name="seokeyword" type="text" style="width:50%" id="seokeyword" class="alltxt" value=""> (用","分开)</td>
     </tr>
     <tr>
       <td align="right" style="vertical-align:middle;">分类描述：</td>
-      <td><textarea name="description" cols="70" style="height:70px;vertical-align:middle;width:70%" rows="3" id="description" class="alltxt"><?php echo $post["description"]; ?></textarea></td>
+      <td><textarea name="description" cols="70" style="height:70px;vertical-align:middle;width:70%" rows="3" id="description" class="alltxt"></textarea></td>
     </tr>
     <tr>
       <td colspan="2"><strong>分类内容：</strong></td>
     </tr>
     <tr>
       <td colspan="2">
-<!-- 加载编辑器的容器 --><script id="container" name="content" type="text/plain"><?php echo $post["content"]; ?></script>
+<!-- 加载编辑器的容器 --><script id="container" name="content" type="text/plain"></script>
 <!-- 配置文件 --><script type="text/javascript" src="/other/flueditor/ueditor.config.js"></script>
 <!-- 编辑器源码文件 --><script type="text/javascript" src="/other/flueditor/ueditor.all.js"></script>
 <!-- 实例化编辑器 --><script type="text/javascript">var ue = UE.getEditor('container',{maximumWords:100000,initialFrameHeight:320,enableAutoSave:false});</script>

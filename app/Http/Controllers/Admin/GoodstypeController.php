@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Admin\CommonController;
 use DB;
 
-class ProductTypeController extends CommonController
+class GoodsTypeController extends CommonController
 {
     public function __construct()
     {
@@ -13,20 +13,20 @@ class ProductTypeController extends CommonController
     
     public function index()
     {
-		$catlist = category_tree(get_category('product_type',0));
+		$catlist = category_tree(get_category('goods_type',0));
 
 		if($catlist)
 		{
 			foreach($catlist as $k=>$v)
 			{
-				$arctype = DB::table("arctype")->where('id', $v['id'])->first();
+				$arctype = DB::table("goods_type")->where('id', $v['id'])->first();
 				$catlist[$k]['typedir'] = $arctype->typedir;
 				$catlist[$k]['addtime'] = $arctype->addtime;
 			}
 		}
 
 		$data['catlist'] = $catlist;
-		return view('admin.producttype.index', $data);
+		return view('admin.goodstype.index', $data);
     }
     
     public function add()
@@ -38,7 +38,7 @@ class ProductTypeController extends CommonController
 			
             if($id!=0)
             {
-				$data['postone'] = object_to_array(DB::table("product_type")->where('id', $id)->first(), 1);
+				$data['postone'] = object_to_array(DB::table("goods_type")->where('id', $id)->first(), 1);
             }
 			
 			$data['id'] = $id;
@@ -48,7 +48,7 @@ class ProductTypeController extends CommonController
             $data['id'] = 0;
         }
 		
-        return view('admin.producttype.add', $data);
+        return view('admin.goodstype.add', $data);
     }
     
     public function doadd()
@@ -59,9 +59,9 @@ class ProductTypeController extends CommonController
 		unset($_POST["_token"]);
 		if(isset($_POST['editorValue'])){unset($_POST['editorValue']);}
 		
-		if(DB::table("product_type")->insert($_POST))
+		if(DB::table("goods_type")->insert($_POST))
         {
-            success_jump('添加成功！', route('admin_producttype'));
+            success_jump('添加成功！', route('admin_goodstype'));
         }
 		else
 		{
@@ -74,12 +74,12 @@ class ProductTypeController extends CommonController
         $id = $_GET["id"];if(preg_match('/[0-9]*/',$id)){}else{exit;}
         
         $data['id'] = $id;
-        $post = object_to_array(DB::table("product_type")->where('id', $id)->first(), 1);
+        $post = object_to_array(DB::table("goods_type")->where('id', $id)->first(), 1);
         $reid = $post['pid'];
-        if($reid!=0){$data['postone'] = object_to_array(DB::table("product_type")->where('id', $reid)->first(), 1);}
+        if($reid!=0){$data['postone'] = object_to_array(DB::table("goods_type")->where('id', $reid)->first(), 1);}
         $data['post'] = $post;
         
-        return view('admin.producttype.edit', $data);
+        return view('admin.goodstype.edit', $data);
     }
     
     public function doedit()
@@ -90,9 +90,9 @@ class ProductTypeController extends CommonController
 		unset($_POST["_token"]);
 		if(isset($_POST['editorValue'])){unset($_POST['editorValue']);}
 		
-		if(DB::table("product_type")->where('id', $id)->update($_POST))
+		if(DB::table("goods_type")->where('id', $id)->update($_POST))
         {
-            success_jump('修改成功！', route('admin_producttype'));
+            success_jump('修改成功！', route('admin_goodstype'));
         }
 		else
 		{
@@ -104,17 +104,17 @@ class ProductTypeController extends CommonController
     {
 		if(!empty($_GET["id"])){$id = $_GET["id"];}else{error_jump('删除失败！请重新提交');}
 		
-		if(DB::table("product_type")->where('pid', $id)->first())
+		if(DB::table("goods_type")->where('pid', $id)->first())
 		{
 			error_jump('删除失败！请先删除子分类');
 		}
 		else
 		{
-			if(DB::table("product_type")->where('id', $id)->delete())
+			if(DB::table("goods_type")->where('id', $id)->delete())
 			{
-				if(DB::table("product")->where('typeid', $id)->count()>0) //判断该分类下是否有商品，如果有把该分类下的商品也一起删除
+				if(DB::table("goods")->where('typeid', $id)->count()>0) //判断该分类下是否有商品，如果有把该分类下的商品也一起删除
 				{
-					if(DB::table("product")->where('typeid', $id)->delete())
+					if(DB::table("goods")->where('typeid', $id)->delete())
 					{
 						success_jump('删除成功');
 					}

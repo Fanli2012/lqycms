@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Admin\CommonController;
 use DB;
 
-class ProductController extends CommonController
+class GoodsController extends CommonController
 {
     public function __construct()
     {
@@ -31,17 +31,17 @@ class ProductController extends CommonController
 			}
         };
 		
-		$posts = parent::pageList('product', $where);
+		$posts = parent::pageList('goods', $where);
 		foreach($posts as $key=>$value)
         {
-            $info = DB::table('product_type')->select('name')->where("id", $value->typeid)->first();
+            $info = DB::table('goods_type')->select('name')->where("id", $value->typeid)->first();
 			$posts[$key]->name = $info->name;
 			$posts[$key]->body = '';
         }
 		
         $data['posts'] = $posts;
 		
-		return view('admin.product.index', $data);
+		return view('admin.goods.index', $data);
     }
     
     public function add()
@@ -49,7 +49,7 @@ class ProductController extends CommonController
 		$data = [];
 		if(!empty($_GET["catid"])){$data['catid'] = $_GET["catid"];}else{$data['catid'] = 0;}
 		
-        return view('admin.product.add', $data);
+        return view('admin.goods.add', $data);
     }
     
     public function doadd()
@@ -78,9 +78,9 @@ class ProductController extends CommonController
 		unset($_POST["_token"]);
 		if(isset($_POST['editorValue'])){unset($_POST['editorValue']);}
 		
-		if(DB::table('product')->insert(array_filter($_POST)))
+		if(DB::table('goods')->insert(array_filter($_POST)))
         {
-            success_jump('添加成功！', route('admin_product'));
+            success_jump('添加成功！', route('admin_goods'));
         }
 		else
 		{
@@ -93,9 +93,9 @@ class ProductController extends CommonController
         if(!empty($_GET["id"])){$id = $_GET["id"];}else {$id="";}if(preg_match('/[0-9]*/',$id)){}else{exit;}
         
         $data['id'] = $id;
-		$data['post'] = object_to_array(DB::table('product')->where('id', $id)->first(), 1);
+		$data['post'] = object_to_array(DB::table('goods')->where('id', $id)->first(), 1);
         
-        return view('admin.product.edit', $data);
+        return view('admin.goods.edit', $data);
     }
     
     public function doedit()
@@ -126,9 +126,9 @@ class ProductController extends CommonController
 		unset($_POST["_token"]);
         if(isset($_POST['editorValue'])){unset($_POST['editorValue']);}
 		
-        if(DB::table('product')->where('id', $id)->update($_POST))
+        if(DB::table('goods')->where('id', $id)->update($_POST))
         {
-            success_jump('修改成功！', route('admin_product'));
+            success_jump('修改成功！', route('admin_goods'));
         }
 		else
 		{
@@ -140,7 +140,7 @@ class ProductController extends CommonController
     {
 		if(!empty($_GET["id"])){$id = $_GET["id"];}else{error_jump('删除失败！请重新提交');}
 		
-		if(DB::table('product')->whereIn("id", explode(',', $id))->delete())
+		if(DB::table('goods')->whereIn("id", explode(',', $id))->delete())
         {
             success_jump("$id ,删除成功");
         }
@@ -156,7 +156,7 @@ class ProductController extends CommonController
 		if(!empty($_GET["id"])){$id = $_GET["id"];}else{error_jump('删除失败！请重新提交');}
 		
 		$data['tuijian'] = 1;
-        if(DB::table('product')->whereIn("id", explode(',', $id))->update($data))
+        if(DB::table('goods')->whereIn("id", explode(',', $id))->update($data))
         {
             success_jump("$id ,推荐成功");
         }
@@ -167,7 +167,7 @@ class ProductController extends CommonController
     }
     
 	//商品是否存在
-    public function productexists()
+    public function goodsexists()
     {
         $res = '';
 		$where = function ($query) use ($res) {
@@ -182,6 +182,6 @@ class ProductController extends CommonController
 			}
         };
 		
-		return DB::table("product")->where($where)->count();
+		return DB::table("goods")->where($where)->count();
     }
 }

@@ -2,9 +2,9 @@
 @section('title', '商品添加')
 
 @section('content')
-<h5 class="sub-header"><a href="/fladmin/product">商品列表</a> > 添加商品</h5>
+<h5 class="sub-header"><a href="/fladmin/goods">商品列表</a> > 添加商品</h5>
 
-<form id="addarc" method="post" action="/fladmin/product/doadd" role="form" enctype="multipart/form-data" class="table-responsive">{{ csrf_field() }}
+<form id="addarc" method="post" action="/fladmin/goods/doadd" role="form" enctype="multipart/form-data" class="table-responsive">{{ csrf_field() }}
 <table class="table table-striped table-bordered">
 <tbody>
     <tr>
@@ -75,7 +75,7 @@ function upImage()
         <td align="right">商品类目：</td>
         <td>
             <select name="typeid" id="typeid">
-                <?php $catlist = category_tree(get_category('product_type',0));if($catlist){foreach($catlist as $row){
+                <?php $catlist = category_tree(get_category('goods_type',0));if($catlist){foreach($catlist as $row){
                     if($row["id"]==$catid){ ?>
                 <option selected="selected" value="<?php echo $row["id"]; ?>"><?php for($i=0;$i<$row["deep"];$i++){echo "—";}echo $row["name"]; ?></option>
                     <?php }else{ ?>

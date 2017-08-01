@@ -23,9 +23,9 @@ Route::group(['domain' => env('APP_SUBDOMAIN'), 'namespace' => 'Wap'], function 
 	Route::get('/tag{tag}/{page}', 'IndexController@tag');                      //标签页，分页
 	Route::get('/tag{tag}', 'IndexController@tag')->name('wap_tag');           //标签页
 	Route::get('/page/{id}', 'IndexController@page')->name('wap_singlepage');  //单页
-	Route::get('/goods/{id}', 'IndexController@product')->name('wap_product'); //商品详情页
-	Route::get('/product{cat}/{page}', 'IndexController@productcat');           //产品分类页，分页
-	Route::get('/product{cat}', 'IndexController@productcat')->name('wap_productcat'); //产品分类页
+	Route::get('/goods/{id}', 'IndexController@goods')->name('wap_goods'); //商品详情页
+	Route::get('/goodstype{cat}/{page}', 'IndexController@goodstype');           //产品分类页，分页
+	Route::get('/goodstype{cat}', 'IndexController@goodstype')->name('wap_goodstype'); //产品分类页
 	Route::get('/sitemap.xml', 'IndexController@sitemap')->name('wap_sitemap');//sitemap
 });
 
@@ -42,9 +42,9 @@ Route::group(['namespace' => 'Home'], function () {
 	Route::get('/tag{tag}/{page}', 'IndexController@tag');                      //标签页，分页
 	Route::get('/tag{tag}', 'IndexController@tag')->name('home_tag');           //标签页
 	Route::get('/page/{id}', 'IndexController@page')->name('home_singlepage');  //单页
-	Route::get('/goods/{id}', 'IndexController@product')->name('home_product'); //商品详情页
-	Route::get('/product{cat}/{page}', 'IndexController@productcat');           //产品分类页，分页
-	Route::get('/product{cat}', 'IndexController@productcat')->name('home_productcat'); //产品分类页
+	Route::get('/goods/{id}', 'IndexController@goods')->name('home_goods'); //商品详情页
+	Route::get('/goodstype{cat}/{page}', 'IndexController@goodstype');           //产品分类页，分页
+	Route::get('/goodstype{cat}', 'IndexController@goodstype')->name('home_goodstype'); //产品分类页
 	Route::get('/sitemap.xml', 'IndexController@sitemap')->name('home_sitemap');//sitemap
 	
 	Route::get('/aaa', function () {
@@ -91,21 +91,21 @@ Route::group(['prefix' => 'fladmin', 'namespace' => 'Admin', 'middleware' => ['w
 	Route::post('/page/doedit', 'PageController@doedit')->name('admin_page_doedit');
 	Route::get('/page/del', 'PageController@del')->name('admin_page_del');
 	//产品
-	Route::get('/product', 'ProductController@index')->name('admin_product');
-	Route::get('/product/add', 'ProductController@add')->name('admin_product_add');
-	Route::post('/product/doadd', 'ProductController@doadd')->name('admin_product_doadd');
-	Route::get('/product/edit', 'ProductController@edit')->name('admin_product_edit');
-	Route::post('/product/doedit', 'ProductController@doedit')->name('admin_product_doedit');
-	Route::get('/product/del', 'ProductController@del')->name('admin_product_del');
-	Route::get('/product/recommendarc', 'ProductController@recommendarc')->name('admin_product_recommendarc');
-	Route::get('/product/articleexists', 'ProductController@productexists')->name('admin_product_productexists');
+	Route::get('/goods', 'GoodsController@index')->name('admin_goods');
+	Route::get('/goods/add', 'GoodsController@add')->name('admin_goods_add');
+	Route::post('/goods/doadd', 'GoodsController@doadd')->name('admin_goods_doadd');
+	Route::get('/goods/edit', 'GoodsController@edit')->name('admin_goods_edit');
+	Route::post('/goods/doedit', 'GoodsController@doedit')->name('admin_goods_doedit');
+	Route::get('/goods/del', 'GoodsController@del')->name('admin_goods_del');
+	Route::get('/goods/recommendarc', 'GoodsController@recommendarc')->name('admin_goods_recommendarc');
+	Route::get('/goods/articleexists', 'GoodsController@goodsexists')->name('admin_goods_goodsexists');
 	//产品分类
-	Route::get('/producttype', 'ProductTypeController@index')->name('admin_producttype');
-	Route::get('/producttype/add', 'ProductTypeController@add')->name('admin_producttype_add');
-	Route::post('/producttype/doadd', 'ProductTypeController@doadd')->name('admin_producttype_doadd');
-	Route::get('/producttype/edit', 'ProductTypeController@edit')->name('admin_producttype_edit');
-	Route::post('/producttype/doedit', 'ProductTypeController@doedit')->name('admin_producttype_doedit');
-	Route::get('/producttype/del', 'ProductTypeController@del')->name('admin_producttype_del');
+	Route::get('/goodstype', 'GoodsTypeController@index')->name('admin_goodstype');
+	Route::get('/goodstype/add', 'GoodsTypeController@add')->name('admin_goodstype_add');
+	Route::post('/goodstype/doadd', 'GoodsTypeController@doadd')->name('admin_goodstype_doadd');
+	Route::get('/goodstype/edit', 'GoodsTypeController@edit')->name('admin_goodstype_edit');
+	Route::post('/goodstype/doedit', 'GoodsTypeController@doedit')->name('admin_goodstype_doedit');
+	Route::get('/goodstype/del', 'GoodsTypeController@del')->name('admin_goodstype_del');
 	//友情链接
 	Route::get('/friendlink', 'FriendlinkController@index')->name('admin_friendlink');
 	Route::get('/friendlink/add', 'FriendlinkController@add')->name('admin_friendlink_add');
@@ -178,14 +178,15 @@ Route::group(['prefix' => 'fladmin', 'namespace' => 'Admin', 'middleware' => ['w
 	Route::get('/test', 'LoginController@test')->name('admin_test');
 });
 
-//接口路由
+//接口路由，无需token验证
 Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => ['web']], function () {
-	Route::post('/listarc', 'IndexController@listarc')->name('api_listarc');
-    Route::get('/ccc', function () {
-        // 匹配 "/api/users" URL
-    });
+	
 });
 
+//接口路由，需token验证
+Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => ['web','token']], function () {
+	
+});
 
 //中间件
 Route::group(['middleware' => 'auth'], function () {
