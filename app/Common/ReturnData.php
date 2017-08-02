@@ -4,17 +4,18 @@ namespace App\Common;
 class ReturnData
 {
     //通用
-    const SUCCESS            = 0;    //成功
-    const FORBIDDEN          = 8001; //权限不足
-    const SYSTEM_FAIL        = 8002; //系统错误，如数据写入失败之类的
-    const PARAMS_ERROR       = 8003; //参数错误
-    const NOT_FOUND          = 8004; //资源未找到
-    const TOKEN_ERROR        = 8005; //token错误
-    const SIGN_FAIL          = 8006; //签名错误
-    const RECORD_EXIST       = 8007; //记录已存在
-    const RECORD_NOT_EXIST   = 8008; //记录不存在
-    const NOT_MODIFY         = 8009; //没有变动
-	const IMG_TYPE_FALSE     = 8010; //图片格式不正确
+    const SUCCESS               = 0;    //操作成功
+    const FORBIDDEN             = 8001; //权限不足
+    const SYSTEM_FAIL           = 8002; //系统错误，如数据写入失败之类的
+    const PARAMS_ERROR          = 8003; //参数错误
+    const NOT_FOUND             = 8004; //资源未找到
+    const TOKEN_ERROR           = 8005; //token错误
+    const SIGN_FAIL             = 8006; //签名错误
+    const RECORD_EXIST          = 8007; //记录已存在
+    const RECORD_NOT_EXIST      = 8008; //记录不存在
+    const NOT_MODIFY            = 8009; //没有变动
+    const UNKNOWN_ERROR         = 8010; //未知错误
+	const IMG_TYPE_FALSE        = 8011; //图片格式不正确
 	
     //参数相关
     const EMAIL_EXIST           = 8201; //邮箱已存在
@@ -62,7 +63,9 @@ class ReturnData
         8007 => '记录已存在',
         8008 => '记录不存在',
         8009 => '没有变动',
-        8010 => '图片格式不正确',
+        8010 => '未知错误',
+        8011 => '图片格式不正确',
+        
         //参数错误
         8201 => '邮箱已存在',
         8202 => '邮箱格式不对正确',
@@ -122,9 +125,9 @@ class ReturnData
             $msg = self::$codeTexts[$code];
         }
 
-        if ($code == ReturnCode::SUCCESS)
+        if ($code == self::SUCCESS)
 		{
-            $code = ReturnCode::SYSTEM_FAIL;
+            $code = self::SYSTEM_FAIL;
             $msg  = '系统错误';
         }
 		
