@@ -14,19 +14,19 @@
 //wap路由，要放到最前面，否则解析不到
 Route::group(['domain' => env('APP_SUBDOMAIN'), 'namespace' => 'Wap'], function () {
 	Route::get('/', 'IndexController@index')->name('wap_home');
-	Route::get('/page404', 'IndexController@page404')->name('wap_page404');    //404页面
+	Route::get('/page404', 'IndexController@page404')->name('wap_page404');     //404页面
 	Route::get('/tags', 'IndexController@tags')->name('wap_tags');
-	Route::get('/search/{id}', 'IndexController@search')->name('wap_search');  //搜过页面
-	Route::get('/p/{id}', 'IndexController@detail')->name('wap_detail');       //详情页
+	Route::get('/search/{id}', 'IndexController@search')->name('wap_search');   //搜过页面
+	Route::get('/p/{id}', 'IndexController@detail')->name('wap_detail');        //详情页
 	Route::get('/cat{cat}/{page}', 'IndexController@category');                 //分类页，分页
-	Route::get('/cat{cat}', 'IndexController@category')->name('wap_category'); //分类页
+	Route::get('/cat{cat}', 'IndexController@category')->name('wap_category');  //分类页
 	Route::get('/tag{tag}/{page}', 'IndexController@tag');                      //标签页，分页
-	Route::get('/tag{tag}', 'IndexController@tag')->name('wap_tag');           //标签页
-	Route::get('/page/{id}', 'IndexController@page')->name('wap_singlepage');  //单页
-	Route::get('/goods/{id}', 'IndexController@goods')->name('wap_goods'); //商品详情页
-	Route::get('/goodstype{cat}/{page}', 'IndexController@goodstype');           //产品分类页，分页
+	Route::get('/tag{tag}', 'IndexController@tag')->name('wap_tag');            //标签页
+	Route::get('/page/{id}', 'IndexController@page')->name('wap_singlepage');   //单页
+	Route::get('/goods/{id}', 'IndexController@goods')->name('wap_goods');      //商品详情页
+	Route::get('/goodstype{cat}/{page}', 'IndexController@goodstype');          //产品分类页，分页
 	Route::get('/goodstype{cat}', 'IndexController@goodstype')->name('wap_goodstype'); //产品分类页
-	Route::get('/sitemap.xml', 'IndexController@sitemap')->name('wap_sitemap');//sitemap
+	Route::get('/sitemap.xml', 'IndexController@sitemap')->name('wap_sitemap'); //sitemap
 });
 
 
@@ -42,11 +42,12 @@ Route::group(['namespace' => 'Home'], function () {
 	Route::get('/tag{tag}/{page}', 'IndexController@tag');                      //标签页，分页
 	Route::get('/tag{tag}', 'IndexController@tag')->name('home_tag');           //标签页
 	Route::get('/page/{id}', 'IndexController@page')->name('home_singlepage');  //单页
-	Route::get('/goods/{id}', 'IndexController@goods')->name('home_goods'); //商品详情页
-	Route::get('/goodstype{cat}/{page}', 'IndexController@goodstype');           //产品分类页，分页
+	Route::get('/goods/{id}', 'IndexController@goods')->name('home_goods');     //商品详情页
+	Route::get('/goodstype{cat}/{page}', 'IndexController@goodstype');          //产品分类页，分页
 	Route::get('/goodstype{cat}', 'IndexController@goodstype')->name('home_goodstype'); //产品分类页
 	Route::get('/sitemap.xml', 'IndexController@sitemap')->name('home_sitemap');//sitemap
 	
+	Route::get('/test', 'IndexController@test')->name('home_test');             //测试
 	Route::get('/aaa', function () {
 		dd('wap');
 	});

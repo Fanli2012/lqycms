@@ -97,7 +97,7 @@ class Token
             'type'       => $type,
             'uid'        => $uid,
             'data'       => $data ? json_encode($data) : '',
-            'expired_at' => date('Y-m-d H:i:s')
+            'expired_at' => date("Y-m-d H:i:s",(time()+3600*24*30)) //token 30天过期
         ]);
 		
         return $token;

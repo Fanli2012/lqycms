@@ -259,6 +259,8 @@ class IndexController extends CommonController
     //测试页面
 	public function test()
     {
-		return date("Y-m-d H:i:s",strtotime("2017-04"));
+		//set_exception_handler('myException');
+		//return uniqid();
+		//return \App\Common\Helper::formatPrice(1.2346);
     }
 }
