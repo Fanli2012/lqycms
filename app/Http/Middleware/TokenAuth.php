@@ -5,7 +5,7 @@ use Closure;
 use App\Common\ReturnData;
 use App\Common\Token;
 
-class Token
+class TokenAuth
 {
     /**
      * Token验证

@@ -180,13 +180,25 @@ Route::group(['prefix' => 'fladmin', 'namespace' => 'Admin', 'middleware' => ['w
 });
 
 //接口路由，无需token验证
-Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => ['web']], function () {
+Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web']], function () {
 	
 });
 
 //接口路由，需token验证
-Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => ['web','token']], function () {
-	
+Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web','token']], function () {
+    //轮播图
+	Route::get('/slide_list', 'SlideController@slideList');
+    //收货地址
+    Route::get('/user_address_list', 'UserAddressController@userAddressList');
+    Route::get('/user_address_detail', 'UserAddressController@userAddressDetail');
+    Route::post('/user_address_setdefault', 'UserAddressController@userAddressSetDefault');
+    Route::post('/user_address_add', 'UserAddressController@userAddressAdd');
+    Route::post('/user_address_update', 'UserAddressController@userAddressUpdate');
+    Route::post('/user_address_delete', 'UserAddressController@userAddressDelete');
+    
+    //地区，省市区
+	Route::get('/region_list', 'RegionController@regionList');
+    Route::get('/region_detail', 'RegionController@regionDetail');
 });
 
 //中间件

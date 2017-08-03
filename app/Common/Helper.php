@@ -165,4 +165,81 @@ class Helper
         return $result;
     }
 	
+    //获取浏览器信息
+    public static function getBrowser()
+    {
+        $browser = array('name'=>'unknown', 'version'=>'unknown');
+
+        if(empty($_SERVER['HTTP_USER_AGENT'])) return $browser;
+
+        $agent = $_SERVER["HTTP_USER_AGENT"];
+
+        // Chrome should checked before safari
+        if(strpos($agent, 'Firefox') !== false) $browser['name'] = "firefox";
+        if(strpos($agent, 'Opera') !== false)   $browser['name'] = 'opera';
+        if(strpos($agent, 'Safari') !== false)  $browser['name'] = 'safari';
+        if(strpos($agent, 'Chrome') !== false)  $browser['name'] = "chrome";
+
+        // Check the name of browser
+        if(strpos($agent, 'MSIE') !== false || strpos($agent, 'rv:11.0')) $browser['name'] = 'ie';
+        if(strpos($agent, 'Edge') !== false) $browser['name'] = 'edge';
+
+        // Check the version of browser
+        if(preg_match('/MSIE\s(\d+)\..*/i', $agent, $regs))       $browser['version'] = $regs[1];
+        if(preg_match('/FireFox\/(\d+)\..*/i', $agent, $regs))    $browser['version'] = $regs[1];
+        if(preg_match('/Opera[\s|\/](\d+)\..*/i', $agent, $regs)) $browser['version'] = $regs[1];
+        if(preg_match('/Chrome\/(\d+)\..*/i', $agent, $regs))     $browser['version'] = $regs[1];
+
+        if((strpos($agent, 'Chrome') == false) && preg_match('/Safari\/(\d+)\..*$/i', $agent, $regs)) $browser['version'] = $regs[1];
+        if(preg_match('/rv:(\d+)\..*/i', $agent, $regs)) $browser['version'] = $regs[1];
+        if(preg_match('/Edge\/(\d+)\..*/i', $agent, $regs)) $browser['version'] = $regs[1];
+
+        return $browser;
+    }
+    
+    /**
+     * 检查是否是AJAX请求。
+     * Check is ajax request.
+     * 
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function isAjaxRequest()
+    {
+        if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') return true;
+        if(isset($_GET['HTTP_X_REQUESTED_WITH'])    && $_GET['HTTP_X_REQUESTED_WITH']    == 'XMLHttpRequest') return true;
+        return false;
+    }
+    
+    /**
+     * 301跳转。
+     * Header 301 Moved Permanently.
+     * 
+     * @param  string    $locate 
+     * @access public
+     * @return void
+     */
+    public static function header301($locate)
+    {
+        header('HTTP/1.1 301 Moved Permanently');
+        die(header('Location:' . $locate));
+    }
+    
+    /** 
+     * 获取远程IP。
+     * Get remote ip. 
+     * 
+     * @access public
+     * @return string
+     */
+    public static function getRemoteIp()
+    {
+        $ip = '';
+        if(!empty($_SERVER["REMOTE_ADDR"]))          $ip = $_SERVER["REMOTE_ADDR"];
+        if(!empty($_SERVER["HTTP_X_FORWARDED_FOR"])) $ip = $_SERVER["HTTP_X_FORWARDED_FOR"];
+        if(!empty($_SERVER['HTTP_CLIENT_IP']))       $ip = $_SERVER['HTTP_CLIENT_IP'];
+
+        return $ip;
+    }
 }

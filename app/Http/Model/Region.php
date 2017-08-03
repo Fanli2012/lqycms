@@ -3,6 +3,7 @@ namespace App\Http\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Common\Token;
+use Cache;
 
 class Region extends BaseModel
 {
@@ -24,15 +25,7 @@ class Region extends BaseModel
     
     public static function getList($parent_id=86)
     {
-        $key = 'region';
-        
-        if (!$model = Cache::get($key))
-        {
-            $model = self::where('parent_id', $parent_id)->get()->toArray();
-            Cache::put($key, $model, 10);
-        }
-
-        return $model;
+        return self::where('parent_id', $parent_id)->get()->toArray();
     }
     
     public static function getOne($id)

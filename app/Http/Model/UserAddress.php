@@ -21,9 +21,28 @@ class UserAddress extends BaseModel
     protected $guarded = array();
     
     //获取列表
-	public static function getList()
+	public static function getList(array $param)
     {
-        return self::where('user_id', Token::$uid)->get()->toArray();
+        extract($param); //参数：limit，offset
+        
+        $limit  = isset($limit) ? $limit : 10;
+        $offset = isset($offset) ? $offset : 0;
+        
+        $model = self::where('user_id', Token::$uid);
+        
+        $res['count'] = $model->count();
+        $res['list'] = array();
+        
+		if($res['count']>0)
+        {
+            $res['list']  = $model->skip($offset)->take($limit)->get()->toArray();
+        }
+        else
+        {
+            return false;
+        }
+        
+        return $res;
     }
     
     //获取一条记录
@@ -50,8 +69,7 @@ class UserAddress extends BaseModel
     public static function add(array $param)
     {
         extract($param);
-        $arr = Region::getParentId($region);
-
+        
         $model = new UserAddress;
         $model->user_id         = Token::$uid;
         $model->name            = $name;
@@ -84,14 +102,12 @@ class UserAddress extends BaseModel
         return false;
     }
     
-    public static function update(array $param)
+    public static function modify(array $param)
     {
         extract($param);
         
         if ($model = UserAddress::where('id', $id)->where('user_id', Token::$uid)->first())
         {
-            $arr = Region::getParentId($region);
-            
             $model->user_id         = Token::$uid;
             $model->name            = $name;
             $model->email           = isset($email) ? $email : '';
@@ -117,10 +133,8 @@ class UserAddress extends BaseModel
     }
     
     //删除一条记录
-    public static function delete(array $param)
+    public static function remove($id)
     {
-        extract($param);
-        
         if (UserAddress::where('id', $id)->where('user_id', Token::$uid)->delete())
         {
             if ($address = UserAddress::where('user_id', Token::$uid)->first())
@@ -139,10 +153,8 @@ class UserAddress extends BaseModel
     }
     
     //设为默认地址
-    public static function setDefault(array $param)
+    public static function setDefault($id)
     {
-        extract($param);
-        
         if (UserAddress::where('id', $id)->where('user_id', Token::$uid)->first())
         {
             if($user = User::where('id', Token::$uid)->first())

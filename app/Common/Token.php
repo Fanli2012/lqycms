@@ -1,6 +1,7 @@
 <?php
 namespace App\Common;
-use DB;
+
+use Illuminate\Support\Facades\DB;
 
 class Token
 {

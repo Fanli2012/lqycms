@@ -10,7 +10,7 @@ class ReturnData
     const PARAMS_ERROR          = 8003; //参数错误
     const NOT_FOUND             = 8004; //资源未找到
     const TOKEN_ERROR           = 8005; //token错误
-    const SIGN_FAIL             = 8006; //签名错误
+    const SIGN_ERROR            = 8006; //签名错误
     const RECORD_EXIST          = 8007; //记录已存在
     const RECORD_NOT_EXIST      = 8008; //记录不存在
     const NOT_MODIFY            = 8009; //没有变动
