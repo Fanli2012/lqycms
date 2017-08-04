@@ -3,7 +3,6 @@ namespace App\Http\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Common\Token;
-use Cache;
 
 class Region extends BaseModel
 {
@@ -14,13 +13,15 @@ class Region extends BaseModel
     
     public static function getRegionName($id)
     {
+        if(empty($id)){return '';}
+        
         $res = self::where('id', $id)->value('name');
         if (!empty($res))
         {
             return $res;
         }
 
-        return false;
+        return '';
     }
     
     public static function getList($parent_id=86)

@@ -36,6 +36,17 @@ class UserAddress extends BaseModel
 		if($res['count']>0)
         {
             $res['list']  = $model->skip($offset)->take($limit)->get()->toArray();
+            
+            if($res['list'])
+            {
+                foreach($res['list'] as $k=>$v)
+                {
+                    $res['list'][$k]['country_name']  = Region::getRegionName($v['country']);
+                    $res['list'][$k]['province_name'] = Region::getRegionName($v['province']);
+                    $res['list'][$k]['city_name']     = Region::getRegionName($v['city']);
+                    $res['list'][$k]['district_name'] = Region::getRegionName($v['district']);
+                }
+            }
         }
         else
         {
@@ -45,14 +56,24 @@ class UserAddress extends BaseModel
         return $res;
     }
     
-    //获取一条记录
+    //获取一条记录，不传address_id表示获取默认地址
     public static function getOne($address_id)
     {
-        $arr = array();
+        $arr = '';
         
         if ($address_id)
         {
-            return self::where('id',$address_id)->first()->toArray();
+            $arr = self::where('id',$address_id)->first();
+            
+            if($arr)
+            {
+                $arr->country_name  = Region::getRegionName($arr->country);
+                $arr->province_name = Region::getRegionName($arr->province);
+                $arr->city_name     = Region::getRegionName($arr->city);
+                $arr->district_name = Region::getRegionName($arr->district);
+            }
+            
+            return $arr;
         }
         
         if (Token::$uid > 0)
@@ -60,7 +81,15 @@ class UserAddress extends BaseModel
             // 取默认地址
             $arr = self::join('user','user_address.id', '=', 'user.address_id')
                     ->where('user.user_id',Token::$uid)
-                    ->first()->toArray();
+                    ->first();
+                    
+            if($arr)
+            {
+                $arr->country_name  = Region::getRegionName($arr->country);
+                $arr->province_name = Region::getRegionName($arr->province);
+                $arr->city_name     = Region::getRegionName($arr->city);
+                $arr->district_name = Region::getRegionName($arr->district);
+            }
         }
         
         return $arr;
@@ -88,12 +117,11 @@ class UserAddress extends BaseModel
         
         if ($model->save())
         {
-            $user = User::where('user_id', Token::$uid)->first();
+            $user = User::where('id', Token::$uid)->first();
 
-            if (!UserAddress::where('id', $user->address_id)->first())
+            if (!UserAddress::where('id', $user->address_id)->first() || $model->is_default!=0)
             {
-                $user->address_id = $model->id;
-                $user->save();
+                self::setDefault($model->id);
             }
             
             return $model->toArray();
@@ -125,6 +153,11 @@ class UserAddress extends BaseModel
             
             if ($model->save())
             {
+                if ($model->is_default!=0)
+                {
+                    self::setDefault($model->id);
+                }
+                
                 return $model->toArray();
             }
         }
@@ -153,13 +186,18 @@ class UserAddress extends BaseModel
     }
     
     //设为默认地址
-    public static function setDefault($id)
+    public static function setDefault($address_id)
     {
-        if (UserAddress::where('id', $id)->where('user_id', Token::$uid)->first())
+        if ($user_address = UserAddress::where('id', $address_id)->where('user_id', Token::$uid)->first())
         {
+            $user_address->is_default = 1;
+            $user_address->save();
+            
+            UserAddress::where('user_id', Token::$uid)->where('id', '<>', $address_id)->update(['is_default'=>0]);
+            
             if($user = User::where('id', Token::$uid)->first())
             {
-                $user->address_id = $id;
+                $user->address_id = $address_id;
                 $user->save();
                 
                 return true;

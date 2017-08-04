@@ -2,8 +2,9 @@
 namespace App\Http\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Common\Token;
 
-class User extends Model
+class User extends BaseModel
 {
 	//用户模型
 	

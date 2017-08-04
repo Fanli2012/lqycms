@@ -32,7 +32,7 @@ class Kernel extends HttpKernel
             \Illuminate\Session\Middleware\StartSession::class,
             // \Illuminate\Session\Middleware\AuthenticateSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            \App\Http\Middleware\VerifyCsrfToken::class,
+            // \App\Http\Middleware\VerifyCsrfToken::class,                     //禁用VerifyCsrfToken，FLi
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
 
@@ -59,7 +59,7 @@ class Kernel extends HttpKernel
 		
 		'check.login' => \App\Http\Middleware\CheckLogin::class,
         
-        'token' => \App\Http\Middleware\TokenAuth::class,
-        'sign'  => \App\Http\Middleware\Sign::class,
+        'token' => \App\Http\Middleware\TokenAuth::class,                       //Token验证，FLi
+        'sign'  => \App\Http\Middleware\Sign::class,                            //Sign验证，FLi
     ];
 }

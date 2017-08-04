@@ -185,7 +185,7 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
 });
 
 //接口路由，需token验证
-Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web','token']], function () {
+Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['token']], function () {
     //轮播图
 	Route::get('/slide_list', 'SlideController@slideList');
     //收货地址
