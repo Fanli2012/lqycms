@@ -1,7 +1,6 @@
 <?php
 namespace App\Http\Model;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Common\Token;
 
 class UserAddress extends BaseModel

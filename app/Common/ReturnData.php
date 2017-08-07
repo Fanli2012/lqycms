@@ -15,8 +15,8 @@ class ReturnData
     const RECORD_NOT_EXIST      = 8008; //记录不存在
     const NOT_MODIFY            = 8009; //没有变动
     const UNKNOWN_ERROR         = 8010; //未知错误
-	const IMG_TYPE_FALSE        = 8011; //图片格式不正确
-	
+	const INVALID_VERIFYCODE    = 8011; //无效验证码
+    
     //参数相关
     const EMAIL_EXIST           = 8201; //邮箱已存在
     const EMAIL_FORMAT_FAIL     = 8202; //邮箱格式不对正确
@@ -64,7 +64,7 @@ class ReturnData
         8008 => '记录不存在',
         8009 => '没有变动',
         8010 => '未知错误',
-        8011 => '图片格式不正确',
+        8011 => '无效验证码',
         
         //参数错误
         8201 => '邮箱已存在',
