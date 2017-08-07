@@ -104,7 +104,7 @@ class ReturnData
 		{
             $msg = self::$codeTexts[$code];
         }
-
+        
         return array('code' => $code, 'msg' => $msg, 'data' => $data);
     }
 
@@ -131,6 +131,11 @@ class ReturnData
             $msg  = '系统错误';
         }
 		
+        return array('code' => $code, 'msg' => $msg, 'data' => $data);
+    }
+    
+    public static function custom($code, $msg = '', $data = null)
+    {
         return array('code' => $code, 'msg' => $msg, 'data' => $data);
     }
 }

@@ -185,7 +185,30 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
 });
 
 //接口路由，需token验证
-Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['token']], function () {
+Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web','token']], function () {
+    //用户中心
+    //浏览记录
+    //商品
+    //商品评价
+    //商品收藏
+    //订单
+    
+    //购物车
+    
+    //分销
+    
+    //积分
+    
+    //优惠券
+    
+    //微信
+    
+    
+    
+    //其它
+    //图片上传
+    //二维码
+    
     //轮播图
 	Route::get('/slide_list', 'SlideController@slideList');
     //收货地址
@@ -195,7 +218,6 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['tok
     Route::post('/user_address_add', 'UserAddressController@userAddressAdd');
     Route::post('/user_address_update', 'UserAddressController@userAddressUpdate');
     Route::post('/user_address_delete', 'UserAddressController@userAddressDelete');
-    
     //地区，省市区
 	Route::get('/region_list', 'RegionController@regionList');
     Route::get('/region_detail', 'RegionController@regionDetail');

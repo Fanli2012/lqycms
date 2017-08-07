@@ -1,41 +1,44 @@
 <?php
 namespace App\Http\Model;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Common\Token;
 use DB;
 
-class Slide extends Model
+class UserMoney extends BaseModel
 {
-    //轮播图
-    
-	protected $table = 'slide';
-    public $timestamps = false;
-	protected $guarded = []; //$guarded包含你不想被赋值的字段数组。
+	//用户余额明细
 	
-    const UN_SHOW      = 0; // 不显示
-    const IS_SHOW      = 1; // 显示
-    
-    public static function getList(array $param)
+    protected $table = 'user_money';
+	public $timestamps = false;
+	
+	/**
+     * 不能被批量赋值的属性
+     *
+     * @var array
+     */
+    protected $guarded = [];
+	
+    //获取列表
+	public static function getList(array $param)
     {
-        extract($param); //参数：group_id，limit，offset
+        extract($param); //参数：limit，offset
         
+        $where['user_id'] = Token::$uid;
         $limit  = isset($limit) ? $limit : 10;
         $offset = isset($offset) ? $offset : 0;
         
-        $where['is_show'] = self::IS_SHOW;
-        $model = new Slide;
+        $model = new UserMoney;
         
-        if(isset($group_id)){$where['group_id'] = $group_id;}
+        if(isset($type)){$where['type'] = $type;}
         
-        if($where){$model = $model->where($where);}
+        $model = $model->where($where);
         
         $res['count'] = $model->count();
         $res['list'] = array();
         
 		if($res['count']>0)
         {
-            $res['list']  = $model->orderBy('id', 'desc')->skip($offset)->take($limit)->get()->toArray();
+            $res['list']  = $model->skip($offset)->take($limit)->get()->toArray();
         }
         else
         {
@@ -43,11 +46,6 @@ class Slide extends Model
         }
         
         return $res;
-    }
-    
-    public static function getOne($id)
-    {
-        return self::where('id', $id)->first()->toArray();
     }
     
     public static function add(array $data)
