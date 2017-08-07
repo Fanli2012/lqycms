@@ -13,6 +13,65 @@ class UserController extends CommonController
     {
         parent::__construct();
     }
+    
+    //签到
+	public function signin(Request $request)
+	{
+		$user = MallDataManager::userFirst(['id'=>Token::$uid]);
+		if($user){}else{return ReturnCode::create(ReturnCode::PARAMS_ERROR);}
+		
+		$signin_time='';
+		if(!empty($user->signin_time)){$signin_time = date('Ymd',strtotime($user->signin_time));} //签到时间
+		
+		$today = date('Ymd',time()); //今日日期
+		
+		if($signin_time==$today){return ReturnCode::create(101,'已经签到啦，请明天再来！');}
+		
+		$signin_point = (int)DB::table('system')->where(['keyword'=>'signin_point'])->value('value'); //签到积分
+		DB::table('user')->where(['id'=>Token::$uid])->update(['point'=>($user->point+$signin_point),'signin_time'=>date('Y-m-d H:i:s')]); //更新用户积分，及签到时间
+		DB::table('user_point_log')->insert(['type'=>1,'point'=>$signin_point,'des'=>'签到','user_id'=>Token::$uid]); //添加签到积分记录
+		
+		return ReturnCode::create(ReturnCode::SUCCESS,'恭喜您今日签到成功！+'.$signin_point.'积分');
+    }
+    
+    //验证码校验
+    public function verifyCodeCheck(Request $request)
+    {
+        $mobile = $request->input('mobile', null); //手机号码
+        $verificationCode = $request->input('verificationCode', null); //手机验证码
+		$type = $request->input('type', null); //验证码类型
+		
+		if ($mobile==null || $verificationCode==null || $type==null)
+		{
+            return ReturnCode::create(ReturnCode::PARAMS_ERROR);
+        }
+		
+		if (!Helper::isValidMobile($mobile))
+		{
+			return ReturnCode::create(ReturnCode::MOBILE_FORMAT_FAIL);
+		}
+		
+		$verifyCode = VerifyCode::isVerify($mobile, $verificationCode, $type);
+		if(!$verifyCode)
+		{
+			return ReturnCode::create(ReturnCode::INVALID_VERIFY_CODE);
+		}
+		
+		return ReturnCode::create(ReturnCode::SUCCESS);
+    }
+	
+	//积分记录
+    public function getCommunityNoticeList(Request $request)
+    {
+        $where = '';
+		$page = $request->input('page',1);
+		$size = $request->input('size',10);
+		$skip = ($page-1)*$size;
+		
+		$select = ['id','title','des','litpic','type','created_at as time'];
+		$orderBy = ['id','desc'];
+		return ReturnCode::create(ReturnCode::SUCCESS,MallDataManager::getCommunityNoticeList($where,$select,$orderBy,$skip,$size));
+    }
 	
     //用户收货地址列表
     public function userAddressList(Request $request)
