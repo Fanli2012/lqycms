@@ -177,7 +177,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 		
-		'Maatwebsite\Excel\ExcelServiceProvider', //Excel导入导出
+        SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class, //Simple QrCode By FLi
+		'Maatwebsite\Excel\ExcelServiceProvider', //Excel导入导出 By FLi
     ],
 
     /*
@@ -226,7 +227,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 		'Image' => Intervention\Image\Facades\Image::class, //图片处理
-		'Excel' => Maatwebsite\Excel\Facades\Excel::class, //Excel导入导出
+		'Excel' => Maatwebsite\Excel\Facades\Excel::class, //Excel导入导出 By FLi
+        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class, //Simple QrCode By FLi
     ],
 
 ];

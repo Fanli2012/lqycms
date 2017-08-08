@@ -3,11 +3,11 @@ namespace App\Http\Model;
 
 use App\Common\Token;
 
-class UserPoint extends BaseModel
+class FeedBack extends BaseModel
 {
-	//用户积分明细
+	//用户余额明细
 	
-    protected $table = 'user_point';
+    protected $table = 'feedback';
 	public $timestamps = false;
 	
 	/**
@@ -22,22 +22,17 @@ class UserPoint extends BaseModel
     {
         extract($param); //参数：limit，offset
         
-        $where['user_id'] = Token::$uid;
         $limit  = isset($limit) ? $limit : 10;
         $offset = isset($offset) ? $offset : 0;
         
-        $model = new UserPoint;
-        
-        if(isset($type)){$where['type'] = $type;}
-        
-        $model = $model->where($where);
+        $model = new FeedBack;
         
         $res['count'] = $model->count();
         $res['list'] = array();
         
 		if($res['count']>0)
         {
-            $res['list']  = $model->skip($offset)->take($limit)->orderBy('id','desc')->get()->toArray();
+            $res['list']  = $model->select('title','created_at')->skip($offset)->take($limit)->orderBy('id','desc')->get()->toArray();
         }
         else
         {

@@ -43,4 +43,78 @@ class User extends BaseModel
 		
 		return true;
     }
+    
+    //获取列表
+	public static function getList(array $param)
+    {
+        extract($param); //参数：limit，offset
+        
+        $where = '';
+        $limit  = isset($limit) ? $limit : 10;
+        $offset = isset($offset) ? $offset : 0;
+        
+        $model = new User;
+        
+        if(isset($group_id)){$where['group_id'] = $group_id;}
+        
+        if($where != '')
+        {
+            $model = $model->where($where);
+        }
+        
+        $res['count'] = $model->count();
+        $res['list'] = array();
+        
+		if($res['count']>0)
+        {
+            $res['list']  = $model->select('id','user_name','email','sex','money','point','mobile','nickname','add_time')->skip($offset)->take($limit)->orderBy('id','desc')->get()->toArray();
+        }
+        else
+        {
+            return false;
+        }
+        
+        return $res;
+    }
+    
+    //用户信息
+	public static function getOne($id)
+    {
+        $user = self::where('id', $id)->first();
+        if(!$user){return false;}
+        $user['reciever_address'] = UserAddress::getOne($user->address_id);
+        
+		return $user;
+    }
+    
+    public static function add(array $data)
+    {
+        if ($id = self::insertGetId($data))
+        {
+            return $id;
+        }
+
+        return false;
+    }
+    
+    public static function modify($where, array $data)
+    {
+        if (self::where($where)->update($data))
+        {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    //删除一条记录
+    public static function remove($id)
+    {
+        if (!self::whereIn('id', explode(',', $id))->delete())
+        {
+            return false;
+        }
+        
+        return true;
+    }
 }

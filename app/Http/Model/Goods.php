@@ -1,9 +1,9 @@
 <?php
 namespace App\Http\Model;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Common\Token;
 
-class Product extends Model
+class Goods extends BaseModel
 {
 	//产品模型
 	
@@ -12,7 +12,7 @@ class Product extends Model
      *
      * @var string
      */
-	protected $table = 'product';
+	protected $table = 'goods';
 	
 	/**
      * 表明模型是否应该被打上时间戳
@@ -35,9 +35,9 @@ class Product extends Model
 	/**
      * 获取关联到产品的分类
      */
-    public function producttype()
+    public function goodstype()
     {
-        return $this->belongsTo(ProductType::class, 'typeid', 'id');
+        return $this->belongsTo(GoodsType::class, 'typeid', 'id');
     }
 	
 }

@@ -3,11 +3,11 @@ namespace App\Http\Model;
 
 use App\Common\Token;
 
-class UserPoint extends BaseModel
+class CollectGoods extends BaseModel
 {
-	//用户积分明细
+	//商品收藏
 	
-    protected $table = 'user_point';
+    protected $table = 'collect_goods';
 	public $timestamps = false;
 	
 	/**
@@ -26,7 +26,7 @@ class UserPoint extends BaseModel
         $limit  = isset($limit) ? $limit : 10;
         $offset = isset($offset) ? $offset : 0;
         
-        $model = new UserPoint;
+        $model = new CollectGoods;
         
         if(isset($type)){$where['type'] = $type;}
         
@@ -54,9 +54,11 @@ class UserPoint extends BaseModel
     
     public static function add(array $data)
     {
+        if(self::where(array('user_id'=>$data['user_id'],'goods_id'=>$data['goods_id']))->first()){return '亲，您已经收藏啦！';}
+        
         if ($id = self::insertGetId($data))
         {
-            return $id;
+            return true;
         }
 
         return false;
@@ -73,9 +75,11 @@ class UserPoint extends BaseModel
     }
     
     //删除一条记录
-    public static function remove($id)
+    public static function remove(array $data)
     {
-        if (!self::whereIn('id', explode(',', $id))->delete())
+        if(!self::where(array('user_id'=>$data['user_id'],'goods_id'=>$data['goods_id']))->first()){return '商品未收藏';}
+        
+        if (!self::where(array('user_id'=>$data['user_id'],'goods_id'=>$data['goods_id']))->delete())
         {
             return false;
         }

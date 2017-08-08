@@ -6,6 +6,7 @@ use App\Common\Sms;
 use App\Common\Helper;
 use App\Common\ReturnData;
 
+//验证码
 class VerifyCode extends BaseModel
 {
     protected $table = 'verify_code';

@@ -5,23 +5,22 @@ use App\Http\Controllers\Api\CommonController;
 use Illuminate\Http\Request;
 use App\Common\ReturnData;
 use App\Common\Token;
-use App\Http\Model\UserPoint;
+use App\Http\Model\FeedBack;
 
-class UserPointController extends CommonController
+class FeedBackController extends CommonController
 {
     public function __construct()
     {
         parent::__construct();
     }
     
-    public function userPointList(Request $request)
+    public function feedbackList(Request $request)
 	{
         //参数
         $data['limit'] = $request->input('limit', 10);
         $data['offset'] = $request->input('offset', 0);
-        if($request->input('type', null) !== null){$data['type'] = $request->input('type');};
         
-        $res = UserPoint::getList($data);
+        $res = FeedBack::getList($data);
 		if(!$res)
 		{
 			return ReturnData::create(ReturnData::SYSTEM_FAIL);
@@ -30,23 +29,20 @@ class UserPointController extends CommonController
 		return ReturnData::create(ReturnData::SUCCESS,$res);
     }
     
-    //添加积分明细
-    public function userPointAdd(Request $request)
+    //添加意见反馈
+    public function feedbackAdd(Request $request)
 	{
         //参数
-        $data['type'] = $request->input('type',null);
-        $data['point'] = $request->input('point',null);
-        $data['des'] = $request->input('des',null);
-        if($request->input('user_point', null) !== null){$data['user_point'] = $request->input('user_point');}
-        $data['add_time'] = time();
+        $data['content'] = $request->input('content',null);
+        if($request->input('title', null) !== null){$data['title'] = $request->input('title');}
         $data['user_id'] = Token::$uid;
         
-        if($data['type']===null || $data['point']===null || $data['des']===null)
+        if($data['content']===null)
 		{
             return ReturnData::create(ReturnData::PARAMS_ERROR);
         }
         
-        $res = UserPoint::add($data);
+        $res = FeedBack::add($data);
 		if(!$res)
 		{
 			return ReturnData::create(ReturnData::SYSTEM_FAIL);

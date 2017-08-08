@@ -56,7 +56,7 @@ class UserAddress extends BaseModel
     }
     
     //获取一条记录，不传address_id表示获取默认地址
-    public static function getOne($address_id)
+    public static function getOne($address_id='')
     {
         $arr = '';
         
@@ -79,7 +79,7 @@ class UserAddress extends BaseModel
         {
             // 取默认地址
             $arr = self::join('user','user_address.id', '=', 'user.address_id')
-                    ->where('user.user_id',Token::$uid)
+                    ->where('user.id',Token::$uid)->select('user_address.id','user_address.name','country','province','city','district','address','user_address.mobile','zipcode','best_time')
                     ->first();
                     
             if($arr)

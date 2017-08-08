@@ -164,6 +164,12 @@ class Helper
 		
         return $result;
     }
+    
+    //生成二维码
+    public static function qrcode($url,$size=150)
+    {
+        return 'data:image/png;base64,'.base64_encode(\QrCode::format('png')->encoding('UTF-8')->size($size)->margin(0)->errorCorrection('H')->generate($url));
+    }
 	
     //获取浏览器信息
     public static function getBrowser()

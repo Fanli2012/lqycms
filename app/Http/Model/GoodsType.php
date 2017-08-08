@@ -1,9 +1,9 @@
 <?php
 namespace App\Http\Model;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Common\Token;
 
-class ProductType extends Model
+class GoodsType extends BaseModel
 {
 	//产品分类模型
 	
@@ -12,15 +12,15 @@ class ProductType extends Model
      *
      * @var string
      */
-	protected $table = 'product_type';
+	protected $table = 'goods_type';
 	public $timestamps = false;
 	
 	/**
 	 * 获取分类对应的产品
 	 */
-	public function product()
+	public function goods()
 	{
-		return $this->hasMany(ProductType::class, 'typeid', 'id');
+		return $this->hasMany(GoodsType::class, 'typeid', 'id');
 	}
 	
 }

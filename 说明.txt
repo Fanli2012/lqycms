@@ -34,8 +34,11 @@ php artisan key:generate
 
 
 
+Simple QrCode文档：https://www.simplesoftware.io/docs/simple-qrcode/zh
+$qrcode = new \SimpleSoftwareIO\QrCode\BaconQrCodeGenerator;
+return $qrcode->size(500)->generate('Make a qrcode without Laravel!');
 
-
+二进制数据直接显示成二维码图片return '<img src="data:image/png;base64,'.base64_encode(\QrCode::format('png')->encoding('UTF-8')->size(200)->generate('http://www.baidu.com/')).'">';
 
 
 

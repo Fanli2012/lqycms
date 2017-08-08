@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Api\CommonController;
 use Illuminate\Http\Request;
 use App\Common\ReturnData;
-
+use App\Common\Token;
 use App\Http\Model\User;
 
 class UserController extends CommonController
@@ -14,34 +14,373 @@ class UserController extends CommonController
         parent::__construct();
     }
     
+    //用户信息
+    public function userInfo(Request $request)
+    {
+        if ($user = User::getOne(Token::$uid))
+		{
+            return ReturnData::create(ReturnData::SUCCESS, $user);
+        }
+		else
+		{
+            return ReturnData::create(ReturnData::RECORD_NOT_EXIST);
+        }
+    }
+    
+    //修改用户信息
+	public function updateUserInfo(Request $request)
+	{
+		$data = $data2 = '';
+		if($request->input('sex', null)!=null){$data['sex'] = $request->input('sex');}
+		if($request->input('head_img', null)!=null){$data['head_img'] = $request->input('head_img');}
+		if($request->input('name', null)!=null){$data['name'] = $request->input('name');}
+		if($request->input('nickname', null)!=null){$data['nickname'] = $request->input('nickname');}
+		if($request->input('verify_mobile', null)!=null){$data['verify_mobile'] = $request->input('verify_mobile');}
+		if($request->input('community_id', null)!=null){$data['community_id'] = $request->input('community_id');}
+		if($request->input('address', null)!=null){$data['address'] = $request->input('address');}
+		
+        if ($data != '')
+		{
+			MallDataManager::userUpdate(['id'=>Token::$uid],$data);
+        }
+		
+		return ReturnCode::create(ReturnCode::SUCCESS);
+    }
+    
+    //用户列表
+    public function userList(Request $request)
+    {
+        //参数
+        $data['limit'] = $request->input('limit', 10);
+        $data['offset'] = $request->input('offset', 0);
+        
+        $res = User::getList($data);
+		if(!$res)
+		{
+			return ReturnData::create(ReturnData::SYSTEM_FAIL);
+		}
+        
+		return ReturnData::create(ReturnData::SUCCESS,$res);
+    }
+    
     //签到
 	public function signin(Request $request)
 	{
-		$user = MallDataManager::userFirst(['id'=>Token::$uid]);
-		if($user){}else{return ReturnCode::create(ReturnCode::PARAMS_ERROR);}
-		
-		$signin_time='';
-		if(!empty($user->signin_time)){$signin_time = date('Ymd',strtotime($user->signin_time));} //签到时间
-		
-		$today = date('Ymd',time()); //今日日期
-		
-		if($signin_time==$today){return ReturnCode::create(101,'已经签到啦，请明天再来！');}
-		
-		$signin_point = (int)DB::table('system')->where(['keyword'=>'signin_point'])->value('value'); //签到积分
-		DB::table('user')->where(['id'=>Token::$uid])->update(['point'=>($user->point+$signin_point),'signin_time'=>date('Y-m-d H:i:s')]); //更新用户积分，及签到时间
-		DB::table('user_point_log')->insert(['type'=>1,'point'=>$signin_point,'des'=>'签到','user_id'=>Token::$uid]); //添加签到积分记录
-		
-		return ReturnCode::create(ReturnCode::SUCCESS,'恭喜您今日签到成功！+'.$signin_point.'积分');
+		$res = User::signin();
+        
+        if($res !== true)
+        {
+            return ReturnData::create(ReturnData::PARAMS_ERROR,null,$res);
+        }
+        
+		return ReturnData::create(ReturnData::SUCCESS);
     }
     
-    //验证码校验
-    public function verifyCodeCheck(Request $request)
+    //注册
+    public function register(Request $request)
+	{
+        $mobile = $request->input('mobile', null);
+        $password = $request->input('password', null);
+		$community_id = $request->input('community_id', null);
+		$address = $request->input('address', null);
+		$type = $request->input('type', null);
+		$verificationCode = $request->input('verificationCode', null);
+        $verificationType = $request->input('verificationType', null); //7表示验证码登录
+		
+		$yezhu_mobile = $request->input('yezhu_mobile', null);
+		
+        Log::info("注册手机号==========mobile=======".$mobile);
+        
+        if ($mobile==null || $password==null || $verificationCode==null || $verificationType===null || $community_id===null)
+		{
+            return ReturnCode::create(ReturnCode::PARAMS_ERROR);
+        }
+		
+        if (!Helper::isValidMobile($mobile))
+		{
+            return response(ReturnCode::create(ReturnCode::MOBILE_FORMAT_FAIL));
+        }
+		
+		$verifyCode = VerifyCode::isVerify($mobile, $verificationCode, $verificationType);
+		if(!$verifyCode)
+		{
+			return ReturnCode::create(ReturnCode::INVALID_VERIFY_CODE);
+		}
+		
+		if($yezhu_mobile!=null)
+		{
+			$yezhu = MallDataManager::userFirst(['mobile'=>$yezhu_mobile,'community_id'=>$community_id]);
+			if (!$yezhu)
+			{
+				return response(ReturnCode::create(ReturnCode::PARAMS_ERROR,'业主不匹配'));
+			}
+		}
+		
+		//判断是否已经注册
+		$user = MallDataManager::userFirst(['mobile'=>$mobile]);
+		if ($user)
+		{
+			return response(ReturnCode::create(ReturnCode::MOBILE_EXIST));
+		}
+		
+		try
+		{
+			DB::beginTransaction();
+			//创建用户
+			$userdata['mobile'] = $mobile;
+			$userdata['password'] = $password;
+			$userdata['verify_mobile'] = 1;
+			$userdata['name'] = $mobile;
+			$userdata['nickname'] = $mobile;
+			$userdata['community_id'] = $community_id;
+			$userdata['address'] = $address;
+			$userdata['type'] = $type;
+			$userid = DB::table('user')->insertGetId($userdata);
+			
+			//注册环信用户
+			$Easemob = new Easemob();
+			$Easemob->imRegister(['username'=>'cuobian'.$userid,'password'=>md5('cuobian'.$userid)]);
+			
+			//生成token
+			if ($user = MallDataManager::userFirst(['mobile'=>$mobile,'password'=>$password]))
+			{
+				//获取token
+				$expired_at = Carbon::now()->addDay()->toDateTimeString();
+				$token = Token::generate(Token::TYPE_SHOP, $user->id);
+			}
+			
+			DB::commit();
+			$response         = ReturnCode::create(ReturnCode::SUCCESS);
+			$response['data'] = [
+				'id' => $user->id,
+				'mobile' => $user->mobile,
+				'expired_at' => $expired_at,
+				'token' => $token,
+			];
+		}
+		catch (Exception $e)
+		{
+			DB::rollBack();
+			Log::info($e->getMessage());
+			return response(ReturnCode::error($e->getCode(), $e->getMessage()));
+		}
+		
+		return response($response);
+    }
+	
+	//登录
+    public function login(Request $request)
     {
-        $mobile = $request->input('mobile', null); //手机号码
-        $verificationCode = $request->input('verificationCode', null); //手机验证码
+        $mobile = $request->input('mobile');
+        $password = $request->input('password');
+		
+        if (!$mobile || !$password)
+		{
+            return response(ReturnCode::create(ReturnCode::PARAMS_ERROR));
+        }
+        
+        if ($user = MallDataManager::userFirst(['mobile'=>$mobile]))
+		{
+            //判断密码
+            if ($password == $user->password)
+			{
+                //获取token
+                $expired_at = Carbon::now()->addDay()->toDateTimeString();
+                $token = Token::generate(Token::TYPE_SHOP, $user->id);
+                
+                $response = ReturnCode::success();
+                $response['data']=[
+                    'id' => $user->id, 'name' => $user->name, 'nickname' => $user->nickname, 'headimg' => (string)$user->head_img, 'token' => $token, 'expired_at' => $expired_at, 'mobile' => $user->mobile, 'hx_name' => 'cuobian'.$user->id, 'hx_pwd' => md5('cuobian'.$user->id)
+                ];
+				
+                return response($response);
+            }
+			else
+			{
+                return response(ReturnCode::create(ReturnCode::PASSWORD_NOT_MATCH));
+            }
+        }
+		else
+		{
+            return response(ReturnCode::create(ReturnCode::USER_NOT_EXIST));
+        }
+    }
+    
+    //验证码登录
+	public function verificationCodeLogin(Request $request)
+    {
+        $mobile = $request->input('mobile');
+		$code = $request->input('code', null);
+        $type = $request->input('type', null); //7表示验证码登录
+		
+        if (!$mobile || !$code)
+		{
+            return response(ReturnCode::create(ReturnCode::PARAMS_ERROR));
+        }
+		
+		//判断验证码
+        if ($type != VerifyCode::TYPE_LOGIN)
+		{
+            return response(ReturnCode::create(ReturnCode::INVALID_VERIFY_CODE));
+        }
+		
+        $verifyCode = VerifyCode::isVerify($mobile, $code, $type);
+        if (!$verifyCode)
+		{
+            return response(ReturnCode::create(ReturnCode::INVALID_VERIFY_CODE));
+        }
+        
+        if ($user = MallDataManager::userFirst(['mobile'=>$mobile]))
+		{
+			//获取token
+			$expired_at = Carbon::now()->addDay()->toDateTimeString();
+			$token = Token::generate(Token::TYPE_SHOP, $user->id);
+			
+			$response = ReturnCode::success();
+			$response['data']=[
+				'id' => $user->id, 'name' => $user->name, 'nickname' => $user->nickname, 'headimg' => (string)$user->head_img, 'token' => $token, 'expired_at' => $expired_at, 'mobile' => $user->mobile, 'hx_name' => 'cuobian'.$user->id, 'hx_pwd' => md5('cuobian'.$user->id)
+			];
+			
+			return response($response);
+        }
+		else
+		{
+            return response(ReturnCode::create(ReturnCode::USER_NOT_EXIST));
+        }
+    }
+    
+    //修改密码
+    public function changePassword(Request $request)
+    {
+        $mobile = $request->input('mobile', null);
+        $password = $request->input('password', null); //新密码
+		$oldPassword = $request->input('oldPassword', null); //旧密码
+		
+		if (!$mobile || !$password || !$oldPassword)
+		{
+            return ReturnCode::create(ReturnCode::PARAMS_ERROR);
+        }
+		
+		if($password == $oldPassword)
+		{
+			return ReturnCode::create(ReturnCode::PARAMS_ERROR,'新旧密码相同');
+		}
+		
+		if (!Helper::isValidMobile($mobile))
+		{
+			return ReturnCode::create(ReturnCode::MOBILE_FORMAT_FAIL);
+		}
+		
+		$user = MallDataManager::userFirst(['mobile'=>$mobile,'password'=>$oldPassword,'id'=>Token::$uid]);
+		
+		if(!$user)
+		{
+			return ReturnCode::create(ReturnCode::PARAMS_ERROR,'手机或密码错误');
+		}
+		
+		DB::table('user')->where(['mobile'=>$mobile,'password'=>$oldPassword,'id'=>Token::$uid])->update(['password'=>$password]);
+		
+		MallDataManager::tokenDelete(['uid'=>Token::$uid]);
+		
+		return ReturnCode::create(ReturnCode::SUCCESS);
+    }
+	
+	//找回密码，不用输入旧密码
+    public function findPassword(Request $request)
+    {
+        $mobile = $request->input('mobile', null);
+        $password = $request->input('password', null);
+		
+        if ($mobile && $password)
+		{
+            if (!Helper::isValidMobile($mobile))
+			{
+                return response(ReturnCode::create(ReturnCode::MOBILE_FORMAT_FAIL));
+            }
+			
+            //判断验证码是否有效
+            $code = $request->input('code', '');
+            $type = $request->input('type', null);
+            if($type != VerifyCode::TYPE_CHANGE_PASSWORD)
+                return response(ReturnCode::create(ReturnCode::INVALID_VERIFY_CODE,'验证码类型错误'));
+            $verifyCode = VerifyCode::isVerify($mobile, $code, $type);
+			
+            if($verifyCode)
+            {
+                try
+				{
+                    DB::beginTransaction();
+                    $verifyCode->status = VerifyCode::STATUS_USE;
+                    $verifyCode->save();
+					
+                    if ($user = MallDataManager::userFirst(['mobile'=>$mobile]))
+					{
+                        DB::table('user')->where(['mobile'=>$mobile])->update(['password'=>$password]);
+                        
+						MallDataManager::tokenDelete(['uid'=>$user->id]);
+						
+						$response = response(ReturnCode::create(ReturnCode::SUCCESS));
+                    }
+					else
+					{
+                        $response = response(ReturnCode::create(ReturnCode::PARAMS_ERROR));
+                    }
+					
+					DB::commit();
+					
+                    return $response;
+                }
+				catch (Exception $e)
+				{
+                    DB::rollBack();
+                    return response(ReturnCode::error($e->getCode(), $e->getMessage()));
+                }
+            }
+            else
+            {
+                return response(ReturnCode::create(ReturnCode::INVALID_VERIFY_CODE));
+            }
+        }
+		else
+		{
+            return response(ReturnCode::create(ReturnCode::PARAMS_ERROR));
+        }
+    }
+	
+    //用户意见反馈
+    public function feedback(Request $request)
+    {
+        $content = $request->input('content', null);
+        if(!$content)
+            return response(ReturnCode::create(ReturnCode::PARAMS_ERROR));
+        if ($user = MallDataManager::userFirst(['id'=>Token::$uid]))
+		{
+			$id = MallDataManager::mallFeedbackinsertGetId(['content' => $content, 'user_id' => Token::$uid]);
+			
+            return response(ReturnCode::create(ReturnCode::SUCCESS,$id));
+        }
+		else
+		{
+            return response(ReturnCode::create(ReturnCode::AUTHORIZE_FAIL));
+        }
+    }
+	
+	//关于
+    public function about(Request $request)
+    {
+        return response(ReturnCode::create(ReturnCode::SUCCESS,['url'=>'http://www.baidu.com']));
+    }
+	
+	//修改手机号
+    public function changeMobile(Request $request)
+    {
+        $mobile = $request->input('mobile', null); //新手机号码
+        $verificationCode = $request->input('verificationCode', null); //新手机验证码
+		$oldMobile = $request->input('oldMobile', null); //旧手机号码
+		$oldVerificationCode = $request->input('oldVerificationCode', null); //旧手机验证码
 		$type = $request->input('type', null); //验证码类型
 		
-		if ($mobile==null || $verificationCode==null || $type==null)
+		if (!$mobile || !$verificationCode || !$oldMobile || !$oldVerificationCode || !$type)
 		{
             return ReturnCode::create(ReturnCode::PARAMS_ERROR);
         }
@@ -51,72 +390,41 @@ class UserController extends CommonController
 			return ReturnCode::create(ReturnCode::MOBILE_FORMAT_FAIL);
 		}
 		
+		if($mobile == $oldMobile)
+		{
+			return ReturnCode::create(ReturnCode::PARAMS_ERROR,'新旧手机号码相同');
+		}
+		
+		if($type != VerifyCode::TYPE_CHANGE_MOBILE)
+		{
+			return ReturnCode::create(ReturnCode::INVALID_VERIFY_CODE,'验证码类型错误');
+        }
+		
+		$verifyCode = VerifyCode::isVerify($oldMobile, $oldVerificationCode, $type);
+		if(!$verifyCode)
+		{
+			return ReturnCode::create(ReturnCode::INVALID_VERIFY_CODE);
+		}
+		
+		$verifyCode = null;
 		$verifyCode = VerifyCode::isVerify($mobile, $verificationCode, $type);
 		if(!$verifyCode)
 		{
 			return ReturnCode::create(ReturnCode::INVALID_VERIFY_CODE);
 		}
 		
-		return ReturnCode::create(ReturnCode::SUCCESS);
-    }
-	
-	//积分记录
-    public function getCommunityNoticeList(Request $request)
-    {
-        $where = '';
-		$page = $request->input('page',1);
-		$size = $request->input('size',10);
-		$skip = ($page-1)*$size;
+		$user = MallDataManager::userFirst(['mobile'=>$oldMobile,'id'=>Token::$uid]);
 		
-		$select = ['id','title','des','litpic','type','created_at as time'];
-		$orderBy = ['id','desc'];
-		return ReturnCode::create(ReturnCode::SUCCESS,MallDataManager::getCommunityNoticeList($where,$select,$orderBy,$skip,$size));
-    }
-	
-    //用户收货地址列表
-    public function userAddressList(Request $request)
-	{
-        //参数
-        $data['limit'] = $request->input('limit', 10);
-        $data['offset'] = $request->input('offset', 0);
-        
-        $res = UserAddress::getList($data);
-		if(!$res)
+		if(!$user)
 		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
+			return ReturnCode::create(ReturnCode::PARAMS_ERROR,'旧手机号码错误');
 		}
-        
-		return ReturnData::create(ReturnData::SUCCESS,$res);
-    }
-    
-    //用户收货地址详情
-    public function userAddressDetail(Request $request)
-	{
-        //参数
-        $id = $request->input('id',null);
-        
-        $res = UserAddress::getOne($id);
-		if(!$res)
-		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
-		}
-        
-		return ReturnData::create(ReturnData::SUCCESS,$res);
-    }
-    
-    //设为默认地址
-    public function userAddressSetDefault(Request $request)
-	{
-        //参数
-        $id = $request->input('id',null);
-        
-        $res = UserAddress::setDefault($id);
-		if(!$res)
-		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
-		}
-        
-		return ReturnData::create(ReturnData::SUCCESS,$res);
+		
+		DB::table('user')->where(['mobile'=>$oldMobile,'id'=>Token::$uid])->update(['mobile'=>$mobile]);
+		
+		MallDataManager::tokenDelete(['uid'=>Token::$uid]);
+		
+		return ReturnCode::create(ReturnCode::SUCCESS);
     }
     
     //添加收货地址

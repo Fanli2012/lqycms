@@ -38,7 +38,7 @@ class UserMoney extends BaseModel
         
 		if($res['count']>0)
         {
-            $res['list']  = $model->skip($offset)->take($limit)->get()->toArray();
+            $res['list']  = $model->skip($offset)->take($limit)->orderBy('id','desc')->get()->toArray();
         }
         else
         {
@@ -48,9 +48,14 @@ class UserMoney extends BaseModel
         return $res;
     }
     
+    public static function getOne($id)
+    {
+        return self::where('id', $id)->first()->toArray();
+    }
+    
     public static function add(array $data)
     {
-        if ($id = DB::table(self::$table)->insertGetId($data))
+        if ($id = self::insertGetId($data))
         {
             return $id;
         }
@@ -60,8 +65,7 @@ class UserMoney extends BaseModel
     
     public static function modify($where, array $data)
     {
-        $slide = DB::table(self::$table);
-        if ($slide->where($where)->update($data))
+        if (self::where($where)->update($data))
         {
             return true;
         }
