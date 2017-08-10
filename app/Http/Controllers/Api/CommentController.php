@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\CommonController;
 use Illuminate\Http\Request;
 use App\Common\ReturnData;
 use App\Common\Token;
+use App\Common\Helper;
 use App\Http\Model\Comment;
 
 class CommentController extends CommonController
@@ -46,6 +47,7 @@ class CommentController extends CommonController
         if($request->input('parent_id', null) !== null){$data['parent_id'] = $request->input('parent_id');}
         $data['add_time'] = time();
         $data['user_id'] = Token::$uid;
+        $data['ip_address'] = Helper::getRemoteIp();
         
         if($data['comment_type']===null || $data['id_value']===null || $data['content']===null || $data['comment_rank']===null)
 		{
@@ -75,8 +77,9 @@ class CommentController extends CommonController
         if($request->input('parent_id', null) !== null){$data['parent_id'] = $request->input('parent_id');}
         $data['add_time'] = time();
         $data['user_id'] = Token::$uid;
+        $data['ip_address'] = Helper::getRemoteIp();
         
-        if($id===null || $data['comment_type']===null || $data['id_value']===null || $data['content']===null || $data['comment_rank']===null)
+        if($id===null)
 		{
             return ReturnData::create(ReturnData::PARAMS_ERROR);
         }

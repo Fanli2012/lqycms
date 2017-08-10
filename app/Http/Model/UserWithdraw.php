@@ -2,12 +2,13 @@
 namespace App\Http\Model;
 
 use App\Common\Token;
+use DB;
 
-class Comment extends BaseModel
+class UserWithdraw extends BaseModel
 {
-	//评价
+	//用户余额明细
 	
-    protected $table = 'comment';
+    protected $table = 'user_withdraw';
 	public $timestamps = false;
 	
 	/**
@@ -17,23 +18,18 @@ class Comment extends BaseModel
      */
     protected $guarded = [];
 	
-    const SHOW_COMMENT = 1; //评论已审核
-    
     //获取列表
 	public static function getList(array $param)
     {
         extract($param); //参数：limit，offset
         
-        $where['user_id'] = $user_id;
-        $where['comment_type'] = $comment_type; //0商品评价，1文章评价
-        $where['status'] = self::SHOW_COMMENT;
-        
+        $where['user_id'] = Token::$uid;
         $limit  = isset($limit) ? $limit : 10;
         $offset = isset($offset) ? $offset : 0;
         
-        $model = new Comment;
+        $model = new UserWithdraw;
         
-        if(isset($comment_rank)){$where['comment_rank'] = $comment_rank;} //评价分
+        if(isset($type)){$where['type'] = $type;}
         
         $model = $model->where($where);
         
@@ -46,7 +42,7 @@ class Comment extends BaseModel
         }
         else
         {
-            return '暂无记录';
+            return false;
         }
         
         return $res;
@@ -59,11 +55,9 @@ class Comment extends BaseModel
     
     public static function add(array $data)
     {
-        if(self::where(array('user_id'=>$data['user_id'],'id_value'=>$data['id_value'],'comment_type'=>$data['comment_type']))->first()){return '亲，您已经评价啦！';}
-        
         if ($id = self::insertGetId($data))
         {
-            return true;
+            return $id;
         }
 
         return false;
@@ -80,11 +74,9 @@ class Comment extends BaseModel
     }
     
     //删除一条记录
-    public static function remove(array $data)
+    public static function remove($id)
     {
-        if(!self::where(array('user_id'=>$data['user_id'],'comment_type'=>$data['comment_type'],'id_value'=>$data['id_value']))->first()){return '商品尚未评价';}
-        
-        if (!self::where(array('user_id'=>$data['user_id'],'comment_type'=>$data['comment_type'],'id_value'=>$data['id_value']))->delete())
+        if (!self::whereIn('id', explode(',', $id))->delete())
         {
             return false;
         }
