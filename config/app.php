@@ -230,5 +230,4 @@ return [
 		'Excel' => Maatwebsite\Excel\Facades\Excel::class, //Excel导入导出 By FLi
         'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class, //Simple QrCode By FLi
     ],
-
 ];
