@@ -28,5 +28,11 @@ class IndexController extends CommonController
 		return ReturnData::create(ReturnData::SUCCESS, $res);
 	}
     
+	//关于
+    public function about(Request $request)
+    {
+        return ReturnData::create(ReturnData::SUCCESS,array('url'=>'http://www.baidu.com'));
+    }
+	
     
 }

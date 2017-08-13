@@ -28,23 +28,31 @@ class UserController extends CommonController
     }
     
     //修改用户信息
-	public function updateUserInfo(Request $request)
+	public function userInfoUpdate(Request $request)
 	{
-		$data = $data2 = '';
-		if($request->input('sex', null)!=null){$data['sex'] = $request->input('sex');}
-		if($request->input('head_img', null)!=null){$data['head_img'] = $request->input('head_img');}
-		if($request->input('name', null)!=null){$data['name'] = $request->input('name');}
-		if($request->input('nickname', null)!=null){$data['nickname'] = $request->input('nickname');}
-		if($request->input('verify_mobile', null)!=null){$data['verify_mobile'] = $request->input('verify_mobile');}
-		if($request->input('community_id', null)!=null){$data['community_id'] = $request->input('community_id');}
-		if($request->input('address', null)!=null){$data['address'] = $request->input('address');}
-		
+		$data = '';
+		if($request->input('user_name', null)!==null){$data['user_name'] = $request->input('user_name');}
+		if($request->input('email', null)!==null){$data['email'] = $request->input('email');}
+		if($request->input('sex', null)!==null){$data['sex'] = $request->input('sex');}
+        if($request->input('birthday', null)!==null){$data['birthday'] = $request->input('birthday');}
+        if($request->input('money', null)!==null){$data['money'] = $request->input('money');}
+        if($request->input('frozen_money', null)!==null){$data['frozen_money'] = $request->input('frozen_money');}
+        if($request->input('point', null)!==null){$data['point'] = $request->input('point');}
+        if($request->input('address_id', null)!==null){$data['address_id'] = $request->input('address_id');}
+        if($request->input('user_rank', null)!==null){$data['user_rank'] = $request->input('user_rank');}
+        if($request->input('parent_id', null)!==null){$data['parent_id'] = $request->input('parent_id');}
+        if($request->input('nickname', null)!==null){$data['nickname'] = $request->input('nickname');}
+        if($request->input('mobile', null)!==null){$data['mobile'] = $request->input('mobile');}
+        if($request->input('status', null)!==null){$data['status'] = $request->input('status');}
+        if($request->input('group_id', null)!==null){$data['group_id'] = $request->input('group_id');}
+        if($request->input('password', null)!==null){$data['password'] = $request->input('password');}
+        
         if ($data != '')
 		{
-			MallDataManager::userUpdate(['id'=>Token::$uid],$data);
+			User::modify(['id'=>Token::$uid],$data);
         }
 		
-		return ReturnCode::create(ReturnCode::SUCCESS);
+		return ReturnData::create(ReturnData::SUCCESS);
     }
     
     //用户列表
@@ -347,30 +355,6 @@ class UserController extends CommonController
         }
     }
 	
-    //用户意见反馈
-    public function feedback(Request $request)
-    {
-        $content = $request->input('content', null);
-        if(!$content)
-            return response(ReturnCode::create(ReturnCode::PARAMS_ERROR));
-        if ($user = MallDataManager::userFirst(['id'=>Token::$uid]))
-		{
-			$id = MallDataManager::mallFeedbackinsertGetId(['content' => $content, 'user_id' => Token::$uid]);
-			
-            return response(ReturnCode::create(ReturnCode::SUCCESS,$id));
-        }
-		else
-		{
-            return response(ReturnCode::create(ReturnCode::AUTHORIZE_FAIL));
-        }
-    }
-	
-	//关于
-    public function about(Request $request)
-    {
-        return response(ReturnCode::create(ReturnCode::SUCCESS,['url'=>'http://www.baidu.com']));
-    }
-	
 	//修改手机号
     public function changeMobile(Request $request)
     {
@@ -427,81 +411,4 @@ class UserController extends CommonController
 		return ReturnCode::create(ReturnCode::SUCCESS);
     }
     
-    //添加收货地址
-    public function userAddressAdd(Request $request)
-	{
-        //参数
-        $data['name'] = $request->input('name',null);
-        $data['mobile'] = $request->input('mobile',null);
-        $data['country'] = $request->input('country',null);
-        $data['province'] = $request->input('province',null);
-        $data['city'] = $request->input('city',null);
-        $data['district'] = $request->input('district',null);
-        $data['address'] = $request->input('address',null);
-        if($request->input('telphone',null)!==null){$data['telphone'] = $request->input('telphone');}
-        if($request->input('zipcode',null)!==null){$data['zipcode'] = $request->input('zipcode');}
-        if($request->input('email',null)!==null){$data['email'] = $request->input('email');}
-        if($request->input('best_time',null)!==null){$data['best_time'] = $request->input('best_time');}
-        if($request->input('is_default',null)!==null){$data['is_default'] = $request->input('is_default');}
-        
-        if($data['name']===null || $data['mobile']===null || $data['address']===null || $data['country']===null || $data['province']===null || $data['city']===null || $data['district']===null)
-		{
-            return ReturnData::create(ReturnData::PARAMS_ERROR);
-        }
-        
-        $res = UserAddress::add($data);
-		if(!$res)
-		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
-		}
-        
-		return ReturnData::create(ReturnData::SUCCESS,$res);
-    }
-    
-    //修改收货地址
-    public function userAddressUpdate(Request $request)
-	{
-        //参数
-        $data['id'] = $request->input('id',null);
-        $data['name'] = $request->input('name',null);
-        $data['mobile'] = $request->input('mobile',null);
-        $data['country'] = $request->input('country',null);
-        $data['province'] = $request->input('province',null);
-        $data['city'] = $request->input('city',null);
-        $data['district'] = $request->input('district',null);
-        $data['address'] = $request->input('address',null);
-        if($request->input('telphone',null)!==null){$data['telphone'] = $request->input('telphone');}
-        if($request->input('zipcode',null)!==null){$data['zipcode'] = $request->input('zipcode');}
-        if($request->input('email',null)!==null){$data['email'] = $request->input('email');}
-        if($request->input('best_time',null)!==null){$data['best_time'] = $request->input('best_time');}
-        if($request->input('is_default',null)!==null){$data['is_default'] = $request->input('is_default');}
-        
-        if($data['id']===null || $data['name']===null || $data['mobile']===null || $data['address']===null || $data['country']===null || $data['province']===null || $data['city']===null || $data['district']===null)
-		{
-            return ReturnData::create(ReturnData::PARAMS_ERROR);
-        }
-        
-        $res = UserAddress::modify($data);
-		if(!$res)
-		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
-		}
-        
-		return ReturnData::create(ReturnData::SUCCESS,$res);
-    }
-    
-    //删除收货地址
-    public function userAddressDelete(Request $request)
-	{
-        //参数
-        $id = $request->input('id',null);
-        
-        $res = UserAddress::remove($id);
-		if(!$res)
-		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
-		}
-        
-		return ReturnData::create(ReturnData::SUCCESS,$res);
-    }
 }

@@ -1,11 +1,11 @@
 <?php
 namespace App\Http\Model;
 
-class UserPoint extends BaseModel
+class UserBonus extends BaseModel
 {
-	//用户积分明细
+	//用户优惠券
 	
-    protected $table = 'user_point';
+    protected $table = 'user_bonus';
 	public $timestamps = false;
 	
 	/**
@@ -24,9 +24,9 @@ class UserPoint extends BaseModel
         $limit  = isset($limit) ? $limit : 10;
         $offset = isset($offset) ? $offset : 0;
         
-        $model = new UserPoint;
+        $model = new UserBonus;
         
-        if(isset($type)){$where['type'] = $type;}
+        if(isset($used_time)){$where['used_time'] = $used_time;}
         
         $model = $model->where($where);
         
@@ -52,9 +52,11 @@ class UserPoint extends BaseModel
     
     public static function add(array $data)
     {
+        if(self::where($data)->first()){return '亲，您已获取！';}
+        
         if ($id = self::insertGetId($data))
         {
-            return $id;
+            return true;
         }
 
         return false;

@@ -1,9 +1,6 @@
 <?php
 namespace App\Http\Model;
 
-use App\Common\Token;
-use DB;
-
 class UserMoney extends BaseModel
 {
 	//用户余额明细
@@ -23,7 +20,7 @@ class UserMoney extends BaseModel
     {
         extract($param); //参数：limit，offset
         
-        $where['user_id'] = Token::$uid;
+        $where['user_id'] = $user_id;
         $limit  = isset($limit) ? $limit : 10;
         $offset = isset($offset) ? $offset : 0;
         

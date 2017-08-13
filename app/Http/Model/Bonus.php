@@ -1,11 +1,11 @@
 <?php
 namespace App\Http\Model;
 
-class UserPoint extends BaseModel
+class Bonus extends BaseModel
 {
-	//用户积分明细
+	//优惠券
 	
-    protected $table = 'user_point';
+    protected $table = 'bonus';
 	public $timestamps = false;
 	
 	/**
@@ -15,18 +15,18 @@ class UserPoint extends BaseModel
      */
     protected $guarded = [];
 	
+    const STATUS = 0; // 优惠券可以
+    
     //获取列表
 	public static function getList(array $param)
     {
         extract($param); //参数：limit，offset
         
-        $where['user_id'] = $user_id;
         $limit  = isset($limit) ? $limit : 10;
         $offset = isset($offset) ? $offset : 0;
+        $where['status'] = self::STATUS;
         
-        $model = new UserPoint;
-        
-        if(isset($type)){$where['type'] = $type;}
+        $model = new Bonus;
         
         $model = $model->where($where);
         
@@ -54,7 +54,7 @@ class UserPoint extends BaseModel
     {
         if ($id = self::insertGetId($data))
         {
-            return $id;
+            return true;
         }
 
         return false;
@@ -62,7 +62,7 @@ class UserPoint extends BaseModel
     
     public static function modify($where, array $data)
     {
-        if (self::where($where)->update($data))
+        if (self::where($where)->update($data)!==false)
         {
             return true;
         }

@@ -20,6 +20,7 @@ class UserMoneyController extends CommonController
         $data['limit'] = $request->input('limit', 10);
         $data['offset'] = $request->input('offset', 0);
         if($request->input('type', null) !== null){$data['type'] = $request->input('type');}
+        $data['user_id'] = Token::$uid;
         
         $res = UserMoney::getList($data);
 		if(!$res)

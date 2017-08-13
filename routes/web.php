@@ -187,10 +187,12 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
 //接口路由，需token验证
 Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web','token']], function () {
     //用户中心
-    Route::post('/user_signin', 'UserController@signin');
-    Route::get('/user_info', 'UserController@userInfo');
-    Route::get('/user_list', 'UserController@userList');
-    Route::get('/user_money_list', 'UserMoneyController@userMoneyList'); //余额明细
+    Route::post('/user_signin', 'UserController@signin'); //签到
+    Route::get('/user_info', 'UserController@userInfo'); //用户详细信息
+    Route::post('/user_info_update', 'UserController@userInfoUpdate'); //修改用户信息
+    Route::get('/user_list', 'UserController@userList'); //用户列表
+    
+    Route::get('/user_money_list', 'UserMoneyController@userMoneyList'); //用户余额明细
     Route::post('/user_money_add', 'UserMoneyController@userMoneyAdd'); //添加余额明细
     //浏览记录
     //商品
@@ -212,10 +214,15 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     //分销
     
     //积分
-    Route::get('/user_point_list', 'UserPointController@userPointList');
+    Route::get('/user_point_list', 'UserPointController@userPointList'); //用户积分列表
     Route::post('/user_point_add', 'UserPointController@userPointAdd');
     //优惠券
-    
+    Route::get('/user_bonus_list', 'BonusController@userBonusList'); //用户优惠券列表
+    Route::post('/user_get_bonus', 'BonusController@userGetBonus'); //用户获取优惠券
+    Route::get('/bonus_list', 'BonusController@bonusList'); //可用获取的优惠券列表
+    Route::post('/bonus_add', 'BonusController@bonusAdd'); //添加优惠券
+    Route::post('/bonus_update', 'BonusController@bonusUpdate'); //修改优惠券
+    Route::post('/bonus_delete', 'BonusController@bonusDelete'); //删除优惠券
     //微信
     
     //意见反馈
@@ -226,6 +233,7 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     Route::get('/verifycode_check', 'VerifyCodeController@check'); //验证码校验
     Route::get('/andriod_upgrade', 'IndexController@andriodUpgrade'); //安卓升级
     //图片上传
+    Route::post('/image_upload', 'ImageController@imageUpload'); //普通文件/图片上传
     //二维码
     Route::get('/create_simple_qrcode', 'QrcodeController@createSimpleQrcode');
     //轮播图

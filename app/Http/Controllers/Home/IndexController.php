@@ -258,8 +258,8 @@ class IndexController extends CommonController
 	
     //测试页面
 	public function test()
-    {
-        return base_path('resources/org');
+    {return view('home.index.test');
+        //return base_path('resources/org');
         //$qrcode = new \SimpleSoftwareIO\QrCode\BaconQrCodeGenerator;
         //return $qrcode->size(500)->generate('Make a qrcode without Laravel!');
         //return '<img src="data:image/png;base64,'.base64_encode(\QrCode::format('png')->encoding('UTF-8')->size(200)->generate('http://www.72p.org/')).'">';

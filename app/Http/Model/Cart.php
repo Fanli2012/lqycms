@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Model;
 
-class Goods extends BaseModel
+class Cart extends BaseModel
 {
 	//产品模型
 	
@@ -10,7 +10,7 @@ class Goods extends BaseModel
      *
      * @var string
      */
-	protected $table = 'goods';
+	protected $table = 'cart';
 	
 	/**
      * 表明模型是否应该被打上时间戳
@@ -30,81 +30,34 @@ class Goods extends BaseModel
      */
     //protected $connection = 'connection-name';
 	
-    //常用字段
-    protected $common_field = [
-        'id', 'typeid', 'tuijian', 'click', 'title', 'goods_sn', 'price','litpic', 'pubdate', 'addtime', 'market_price', 'goods_number', 'sale', 'comments','promote_start_date','promote_price','promote_end_date','goods_img','spec','point'
-    ];
-    
     const STATUS = 0; //商品是否删除，0未删除
     
-	/**
-     * 获取关联到产品的分类
-     */
-    public function goodstype()
-    {
-        return $this->belongsTo(GoodsType::class, 'typeid', 'id');
-    }
-	
     //获取列表
-	public static function getList(array $param)
+	public static function getList($uid)
     {
-        extract($param); //参数：limit，offset
+        $goods = self::join('goods', 'goods.id', '=', 'cart.goods_id')
+            ->where('cart.user_id', $uid)
+            ->where('goods.status', 0)
+            ->select('cart.*')
+            ->get();
         
-        $where = '';
-        
-        $limit  = isset($limit) ? $limit : 10;
-        $offset = isset($offset) ? $offset : 0;
-        
-        $model = new Goods;
-        
-        if(isset($typeid)){$where['typeid'] = $typeid;}
-        if(isset($tuijian)){$where['tuijian'] = $tuijian;}
-        if(isset($status)){$where['status'] = $status;}else{$where['status'] = self::STATUS;}
-        
-        if($where !== '')
+        if($goods)
         {
-            $model = $model->where($where);
-        }
-        
-        if(isset($keyword)){$model = $model->where("title", "like", "%$keyword%");} //关键词搜索
-        if(isset($goods_sn)){$model = $model->where("goods_sn", "like", "%$goods_sn%");} //货号搜索
-        if(isset($max_price) && isset($min_price)){$model = $model->where("price", ">=", $min_price)->where("price", "<=", $max_price);} //价格区间搜索
-        
-        $res['count'] = $model->count();
-        $res['list'] = array();
-        
-         //排序
-        if(isset($orderby))
-        {
-            switch ($orderby)
+            foreach ($goods as $key => $value) 
             {
-                case 1:
-                    $model = $model->orderBy('sale','desc'); //销量从高到低
-                    break;
-                case 2:
-                    $model = $model->orderBy('comments','desc'); //评论从高到低
-                    break;
-                case 3:
-                    $model = $model->orderBy('price','desc'); //价格从高到低
-                    break;
-                case 4:
-                    $model = $model->orderBy('price','asc'); //价格从低到高
-                    break;
-                default:
-                    $model = $model->orderBy('pubdate','desc'); //价格从低到高
+                //订货数量大于0
+                if ($value->goods_number > 0)
+                {
+                    $goods->goods_price = $goods_price = Goods::get_final_price($value->goods_id);
+
+                    //更新购物车中的商品数量
+                    self::where('id', $value->id)->update(array('goods_price' => $goods_price));
+                    
+                }
             }
         }
         
-		if($res['count']>0)
-        {
-            $res['list']  = $model->select(self::$common_field)->skip($offset)->take($limit)->orderBy('id','desc')->get()->toArray();
-        }
-        else
-        {
-            return false;
-        }
-        
-        return $res;
+        return $goods->toArray();
     }
     
     public static function getOne($id)

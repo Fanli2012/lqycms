@@ -2,7 +2,6 @@
 namespace App\Http\Model;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Common\Token;
 use DB;
 
 class Slide extends Model

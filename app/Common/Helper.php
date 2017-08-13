@@ -248,4 +248,30 @@ class Helper
 
         return $ip;
     }
+    
+    /**
+     * 建立文件夹
+     *
+     * @param string $aimUrl
+     * @return viod
+     */
+    public static function createDir($aimUrl)
+    {
+        $aimUrl = str_replace('', '/', $aimUrl);
+        $aimDir = '';
+        $arr = explode('/', $aimUrl);
+        $result = true;
+        
+        foreach ($arr as $str)
+        {
+            $aimDir .= $str . '/';
+            
+            if (!file_exists($aimDir))
+            {
+                $result = mkdir($aimDir);
+            }
+        }
+        
+        return $result;
+    }
 }
