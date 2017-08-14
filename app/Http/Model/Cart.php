@@ -30,7 +30,12 @@ class Cart extends BaseModel
      */
     //protected $connection = 'connection-name';
 	
-    const STATUS = 0; //商品是否删除，0未删除
+    //购物车商品类型
+    const CART_GENERAL_GOODS        = 0; // 普通商品
+    const CART_GROUP_BUY_GOODS      = 1; // 团购商品
+    const CART_AUCTION_GOODS        = 2; // 拍卖商品
+    const CART_SNATCH_GOODS         = 3; // 夺宝奇兵
+    const CART_EXCHANGE_GOODS       = 4; // 积分商城
     
     //获取列表
 	public static function getList($uid)
@@ -60,14 +65,44 @@ class Cart extends BaseModel
         return $goods->toArray();
     }
     
+    /**
+     * 添加商品到购物车
+     *
+     * @access  public
+     * @param   integer $goods_id   商品编号
+     * @param   integer $num        商品数量
+     * @param   json   $property    规格值对应的id json数组
+     * @return  boolean
+     */
+    public static function cartAdd(array $attributes)
+    {
+        extract($attributes);
+        
+        //获取商品信息
+        $good = Goods::where(['goods_id' => $goods_id, 'status' => 0])->first();
+        
+        if (!$good)
+        {
+            return '商品不存在';
+        }
+        
+        if (isset($property) && json_decode($property,true))
+        {
+            $property = json_decode($property,true);
+        }
+        else
+        {
+            $property = [];
+        }
+        
+        
+    }
+    
     public static function getOne($id)
     {
-        if(isset($status)){$where['status'] = $status;}else{$where['status'] = self::STATUS;}
         $where['id'] = $id;
         
         $goods = self::where($where)->first()->toArray();
-        
-        $goods['price'] = get_final_price($id);
         
         return $goods;
     }
@@ -104,69 +139,34 @@ class Cart extends BaseModel
     }
     
     /**
-     * 取得商品最终使用价格
-     *
-     * @param   string  $goods_id      商品编号
-     * @param   string  $goods_num     购买数量
-     *
-     * @return  商品最终购买价格
+     * 清空购物车
+     * 
+     * @param int $type 类型：默认普通商品
      */
-    public static function get_final_price($goods_id)
+    public static function clearCart($user_id)
     {
-        $final_price   = '0'; //商品最终购买价格
-        $promote_price = '0'; //商品促销价格
-        $user_price    = '0'; //商品会员价格，预留
-        
-        //取得商品促销价格列表
-        $goods = Goods::where('id',$goods_id)->where('status',0)->first(['promote_price','promote_start_date','promote_end_date','price']);
-        $final_price = $goods->price;
-        
-        // 计算商品的促销价格
-        if ($goods->promote_price > 0)
-        {
-            $promote_price = self::bargain_price($goods->promote_price, $goods->promote_start_date, $goods->promote_end_date);
-        }
-        else
-        {
-            $promote_price = 0;
-        }
-        
-        if ($promote_price != 0)
-        {
-            $final_price = $promote_price;
-        }
-        
-        //返回商品最终购买价格
-        return $final_price;
+        self::where('user_id',$user_id)->delete();
+
+        return true;
     }
     
-    /**
-     * 判断某个商品是否正在特价促销期
-     *
-     * @access  public
-     * @param   float   $price      促销价格
-     * @param   string  $start      促销开始日期
-     * @param   string  $end        促销结束日期
-     * @return  float   如果还在促销期则返回促销价，否则返回0
-     */
-    public static function bargain_price($price, $start, $end)
+    //购物车总价格
+    public static function TotalPrice($user_id)
     {
-        if ($price == 0)
+        $goods = self::where('user_id',$user_id)->get();
+        $total = 0;
+        
+        foreach ($goods as $k => $v)
         {
-            return 0;
+            $total += ($v['goods_number'] * $v['goods_price']);
         }
-        else
-        {
-            $time = time();
-            
-            if ($time >= $start && $time <= $end)
-            {
-                return $price;
-            }
-            else
-            {
-                return 0;
-            }
-        }
+        
+        return (float)$total;
+    }
+    
+    //购物车商品总数量
+    public static function TotalGoodsCount($user_id)
+    {
+        return self::where('user_id',$user_id)->sum('goods_number');
     }
 }

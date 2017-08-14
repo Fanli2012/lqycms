@@ -210,7 +210,10 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     //订单
     
     //购物车
-    
+    Route::get('/cart_list', 'CartController@cartList'); //购物车列表
+    Route::post('/cart_clear', 'CartController@cartClear'); //清空购物车
+    Route::post('/cart_add', 'CartController@cartAdd'); //添加购物车
+    Route::post('/cart_update', 'CartController@cartUpdate'); //修改购物车
     //分销
     
     //积分

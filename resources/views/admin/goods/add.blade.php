@@ -2,6 +2,7 @@
 @section('title', '商品添加')
 
 @section('content')
+<script language="javascript" type="text/javascript" src="http://<?php echo env('APP_DOMAIN'); ?>/js/My97DatePicker/WdatePicker.js"></script>
 <h5 class="sub-header"><a href="/fladmin/goods">商品列表</a> > 添加商品</h5>
 
 <form id="addarc" method="post" action="/fladmin/goods/doadd" role="form" enctype="multipart/form-data" class="table-responsive">{{ csrf_field() }}
@@ -25,6 +26,10 @@
 			<input type="radio" value='0' name="status" checked />&nbsp;是&nbsp;&nbsp;
 			<input type="radio" value='1' name="status" />&nbsp;否
 		</td>
+    </tr>
+    <tr>
+        <td align="right">活动价：</td>
+        <td colspan="2"><input name="promote_price" type="text" id="promote_price" style="width:80px" value="">&nbsp;&nbsp; 活动开始日期：<input name="promote_start_date" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})" type="text" id="promote_start_date" style="width:180px" value="">&nbsp;&nbsp; 活动结束日期：<input name="promote_end_date" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})" type="text" id="promote_end_date" style="width:180px" value=""></td>
     </tr>
     <tr>
         <td align="right">推荐：</td>

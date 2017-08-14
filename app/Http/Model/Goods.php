@@ -114,7 +114,7 @@ class Goods extends BaseModel
         
         $goods = self::where($where)->first()->toArray();
         
-        $goods['price'] = get_final_price($id);
+        $goods['price'] = self::get_final_price($id);
         
         return $goods;
     }
