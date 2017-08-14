@@ -14,11 +14,11 @@
     </tr>
 	<tr>
         <td align="right">货号：</td>
-        <td colspan="2"><input name="serial_no" type="text" id="serial_no" style="width:180px" value="">&nbsp;&nbsp; 运费：<input name="delivery_fee" type="text" id="delivery_fee" style="width:100px" value="">&nbsp;&nbsp; 销量：<input name="sales" type="text" id="sales" style="width:60px" value=""></td>
+        <td colspan="2"><input name="sn" type="text" id="sn" style="width:180px" value="">&nbsp;&nbsp; 运费：<input name="shipping_fee" type="text" id="shipping_fee" style="width:100px" value="">&nbsp;&nbsp; 销量：<input name="sale" type="text" id="sale" style="width:60px" value=""></td>
     </tr>
     <tr>
         <td align="right">商品价格：</td>
-        <td colspan="2"><input name="price" type="text" id="price" style="width:100px" value="">&nbsp;&nbsp; 原价：<input name="origin_price" type="text" id="origin_price" style="width:100px" value="">&nbsp;&nbsp; 库存：<input name="inventory" type="text" id="inventory" style="width:60px" value="">&nbsp;&nbsp; 浏览次数：<input type="text" name="click" id="click" value="" style="width:60px;"></td>
+        <td colspan="2"><input name="price" type="text" id="price" style="width:100px" value="">&nbsp;&nbsp; 原价：<input name="market_price" type="text" id="market_price" style="width:100px" value="">&nbsp;&nbsp; 库存：<input name="goods_number" type="text" id="goods_number" style="width:60px" value="">&nbsp;&nbsp; 浏览次数：<input type="text" name="click" id="click" value="" style="width:60px;"></td>
     </tr>
 	<tr>
         <td align="right">上架：</td>
@@ -29,7 +29,7 @@
     </tr>
     <tr>
         <td align="right">活动价：</td>
-        <td colspan="2"><input name="promote_price" type="text" id="promote_price" style="width:80px" value="">&nbsp;&nbsp; 活动开始日期：<input name="promote_start_date" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})" type="text" id="promote_start_date" style="width:180px" value="">&nbsp;&nbsp; 活动结束日期：<input name="promote_end_date" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})" type="text" id="promote_end_date" style="width:180px" value=""></td>
+        <td colspan="2"><input name="promote_price" type="text" id="promote_price" style="width:80px" value="">&nbsp;&nbsp; 活动开始日期：<input name="promote_start_date" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})" type="text" id="promote_start_date" style="width:185px" value="">&nbsp;&nbsp; 活动结束日期：<input name="promote_end_date" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})" type="text" id="promote_end_date" style="width:185px" value=""></td>
     </tr>
     <tr>
         <td align="right">推荐：</td>
@@ -38,6 +38,16 @@
                 <?php $tuijian = config('custom.tuijian');
                 for($i=0;$i<count($tuijian);$i++){ ?><option value="<?php echo $i; ?>"><?php echo $tuijian[$i]; ?></option><?php } ?>
             </select>
+        </td>
+    </tr>
+    <tr>
+        <td align="right">规格：</td>
+        <td id="spec"><button type="button" id="add_spec_button">+添加规格</button>
+        <script>
+        var spec = '<div class="spec_li" style="margin-top:5px;"><input required="required" name="spec_name[]" type="text" value="" style="width:120px" placeholder="颜色"> <input placeholder="黑，白" name="spec_data[]" type="text" value="" style="width:200px" required="required"> <button type="button" onClick="remove_specli(\'spec_li\');">删除</button></div>';
+        $("#add_spec_button").click(function(){var length=$(".spec_li").length+1;var reg=/spec_li/g;spec=spec.replace(reg,'spec_li'+length);$('#spec').append(spec);});
+        function remove_specli(a){$("."+a).remove();}
+        </script>
         </td>
     </tr>
     <tr>

@@ -13,11 +13,11 @@
     </tr>
 	<tr>
         <td align="right">货号：</td>
-        <td colspan="2"><input name="serial_no" type="text" id="serial_no" style="width:180px" value="<?php echo $post["serial_no"]; ?>">&nbsp;&nbsp; 运费：<input name="delivery_fee" type="text" id="delivery_fee" style="width:100px" value="<?php echo $post["delivery_fee"]; ?>">&nbsp;&nbsp; 销量：<input name="sales" type="text" id="sales" style="width:60px" value="<?php echo $post["sales"]; ?>"></td>
+        <td colspan="2"><input name="sn" type="text" id="sn" style="width:180px" value="<?php echo $post["sn"]; ?>">&nbsp;&nbsp; 运费：<input name="shipping_fee" type="text" id="shipping_fee" style="width:100px" value="<?php echo $post["shipping_fee"]; ?>">&nbsp;&nbsp; 销量：<input name="sale" type="text" id="sale" style="width:60px" value="<?php echo $post["sale"]; ?>"></td>
     </tr>
     <tr>
         <td align="right">商品价格：</td>
-        <td colspan="2"><input name="price" type="text" id="price" style="width:100px" value="<?php echo $post["price"]; ?>">&nbsp;&nbsp; 原价：<input name="origin_price" type="text" id="origin_price" style="width:100px" value="<?php echo $post["origin_price"]; ?>">&nbsp;&nbsp; 库存：<input name="inventory" type="text" id="inventory" style="width:60px" value="<?php echo $post["inventory"]; ?>">&nbsp;&nbsp; 浏览次数：<input type="text" name="click" id="click" value="<?php echo $post["click"]; ?>" style="width:60px;"></td>
+        <td colspan="2"><input name="price" type="text" id="price" style="width:100px" value="<?php echo $post["price"]; ?>">&nbsp;&nbsp; 原价：<input name="market_price" type="text" id="market_price" style="width:100px" value="<?php echo $post["market_price"]; ?>">&nbsp;&nbsp; 库存：<input name="goods_number" type="text" id="goods_number" style="width:60px" value="<?php echo $post["goods_number"]; ?>">&nbsp;&nbsp; 浏览次数：<input type="text" name="click" id="click" value="<?php echo $post["click"]; ?>" style="width:60px;"></td>
     </tr>
 	<tr>
         <td align="right">上架：</td>
@@ -25,6 +25,10 @@
 			<input type="radio" value='0' name="status" <?php if($post['status']==0){echo 'checked';} ?> />&nbsp;是&nbsp;&nbsp;
 			<input type="radio" value='1' name="status" <?php if($post['status']==1){echo 'checked';} ?> />&nbsp;否
 		</td>
+    </tr>
+    <tr>
+        <td align="right">活动价：</td>
+        <td colspan="2"><input name="promote_price" type="text" id="promote_price" style="width:80px" value="<?php if($post['promote_price']!=0){echo $post['promote_price'];} ?>">&nbsp;&nbsp; 活动开始日期：<input name="promote_start_date" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})" type="text" id="promote_start_date" style="width:185px" value="<?php if($post['promote_start_date']!=0){echo $post['promote_start_date'];} ?>">&nbsp;&nbsp; 活动结束日期：<input name="promote_end_date" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})" type="text" id="promote_end_date" style="width:185px" value="<?php if($post['promote_end_date']!=0){echo $post['promote_end_date'];} ?>"></td>
     </tr>
     <tr>
         <td align="right">推荐：</td>
