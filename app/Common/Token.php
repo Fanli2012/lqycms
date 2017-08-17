@@ -18,7 +18,7 @@ class Token
     // 验证为sign时的app.id
     public static $app;
     // 已验证的data
-    public static $data = [];
+    public static $data = array();
 	
     /**
      * 验证token
@@ -35,7 +35,7 @@ class Token
 		{
             self::$type = $token->type;
             self::$uid  = $token->uid;
-            self::$data = $token->data ? json_decode($token->data, true) : [];
+            self::$data = $token->data ? json_decode($token->data, true) : array();
         }
 		
         return $token ? true : false;
@@ -80,27 +80,29 @@ class Token
      *
      * @return string
      */
-    public static function getToken($type, $uid, $data = [])
+    public static function getToken($type, $uid, $data = array())
     {
         //支持多账号登录
-        if ($token = DB::table('token')->where(['type' => $type, 'uid' => $uid])->orderBy('id', 'desc')->first())
+        if ($token = DB::table('token')->where(array('type' => $type, 'uid' => $uid))->orderBy('id', 'desc')->first())
 		{
             if($data == $token->data && strtotime($token->expired_at)>time())
 			{
-                return $token->token;
+                return array('token'=>$token->token,'expired_at'=>$token->expired_at);
             }
         }
-
+		
         //生成新token
         $token = md5($type . '-' . $uid . '-' . microtime() . rand(0, 9999));
-        DB::table('token')->insert([
+        $expired_at = date("Y-m-d H:i:s",(time()+3600*24*30)); //token 30天过期
+        
+        DB::table('token')->insert(array(
             'token'      => $token,
             'type'       => $type,
             'uid'        => $uid,
             'data'       => $data ? json_encode($data) : '',
-            'expired_at' => date("Y-m-d H:i:s",(time()+3600*24*30)) //token 30天过期
-        ]);
+            'expired_at' => $expired_at
+        ));
 		
-        return $token;
+        return array('token'=>$token,'expired_at'=>$expired_at);
     }
 }
