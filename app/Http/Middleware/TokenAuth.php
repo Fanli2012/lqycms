@@ -13,9 +13,9 @@ class TokenAuth
      */
     public function handle($request, Closure $next)
     {
-		$token = $request->header('Token') ?: $request->input('token');
+		$token = $request->header('AccessToken','') ?: $request->input('access_token','');
 
-        if (!$token)
+        if ($token == '')
 		{
             return ReturnData::create(ReturnData::FORBIDDEN);
         }

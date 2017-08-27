@@ -19,15 +19,16 @@ class GoodsController extends CommonController
         //参数
         $data['limit'] = $request->input('limit', 10);
         $data['offset'] = $request->input('offset', 0);
-        if($request->input('type', null) !== null){$data['type'] = $request->input('type');}
-        $data['user_id'] = Token::$uid;
+        if($request->input('typeid', '') != ''){$data['typeid'] = $request->input('typeid');}
+        if($request->input('tuijian', '') != ''){$data['tuijian'] = $request->input('tuijian');}
+        if($request->input('status', '') != ''){$data['status'] = $request->input('status');}
+        if($request->input('keyword', '') != ''){$data['keyword'] = $request->input('keyword');}
+        if($request->input('min_price', '') != ''){$data['min_price'] = $request->input('min_price');}
+        if($request->input('max_price', '') != ''){$data['max_price'] = $request->input('max_price');}
+        if($request->input('orderby', '') != ''){$data['orderby'] = $request->input('orderby');}
         
         $res = Goods::getList($data);
-		if($res === false)
-		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
-		}
-        
+		
 		return ReturnData::create(ReturnData::SUCCESS,$res);
     }
     

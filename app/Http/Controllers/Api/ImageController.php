@@ -40,7 +40,7 @@ class ImageController extends CommonController
         }
         
         //文件小于1M
-        if ($file["size"] < 102400)
+        if ($file["size"] < 1024000)
         {
             if ($file["error"] > 0)
             {
@@ -48,9 +48,9 @@ class ImageController extends CommonController
             }
             else
             {
-                if(!file_exists($uploads_path))
+                if(!file_exists(base_path('public').$uploads_path))
                 {
-                    Helper::createDir($uploads_path); //创建文件夹;
+                    Helper::createDir(base_path('public').$uploads_path); //创建文件夹;
                 }
                 
                 move_uploaded_file($file["tmp_name"], base_path('public').$image_path);

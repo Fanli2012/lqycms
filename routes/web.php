@@ -180,8 +180,9 @@ Route::group(['prefix' => 'fladmin', 'namespace' => 'Admin', 'middleware' => ['w
 });
 
 //接口路由，无需token验证
-Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web']], function () {
-	
+Route::group(['middleware' => ['web']], function () {
+    Route::post('/dataapi/customer_login', 'Api\WechatAuthController@customerLogin');
+	Route::post('/dataapi/', 'Api\UserController@signin'); //签到
 });
 
 //接口路由，需token验证

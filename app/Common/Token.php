@@ -87,7 +87,7 @@ class Token
 		{
             if($data == $token->data && strtotime($token->expired_at)>time())
 			{
-                return array('token'=>$token->token,'expired_at'=>$token->expired_at);
+                return array('access_token'=>$token->token,'expired_at'=>$token->expired_at);
             }
         }
 		
@@ -103,6 +103,6 @@ class Token
             'expired_at' => $expired_at
         ));
 		
-        return array('token'=>$token,'expired_at'=>$expired_at);
+        return array('access_token'=>$token,'expired_at'=>$expired_at);
     }
 }

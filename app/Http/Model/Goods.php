@@ -31,8 +31,8 @@ class Goods extends BaseModel
     //protected $connection = 'connection-name';
 	
     //常用字段
-    protected $common_field = [
-        'id', 'typeid', 'tuijian', 'click', 'title', 'goods_sn', 'price','litpic', 'pubdate', 'addtime', 'market_price', 'goods_number', 'sale', 'comments','promote_start_date','promote_price','promote_end_date','goods_img','spec','point'
+    protected static $common_field = [
+        'id', 'typeid', 'tuijian', 'click', 'title', 'sn', 'price','litpic', 'pubdate', 'add_time', 'market_price', 'goods_number', 'sale', 'comments','promote_start_date','promote_price','promote_end_date','goods_img','spec','point'
     ];
     
     const STATUS = 0; //商品是否删除，0未删除
@@ -66,8 +66,7 @@ class Goods extends BaseModel
             $model = $model->where($where);
         }
         
-        if(isset($keyword)){$model = $model->where("title", "like", "%$keyword%");} //关键词搜索
-        if(isset($goods_sn)){$model = $model->where("goods_sn", "like", "%$goods_sn%");} //货号搜索
+        if(isset($keyword)){$model = $model->where("title", "like", "%$keyword%")->orWhere("sn", "like", "%$keyword%");} //关键词搜索
         if(isset($max_price) && isset($min_price)){$model = $model->where("price", ">=", $min_price)->where("price", "<=", $max_price);} //价格区间搜索
         
         $res['count'] = $model->count();
@@ -98,10 +97,6 @@ class Goods extends BaseModel
 		if($res['count']>0)
         {
             $res['list']  = $model->select(self::$common_field)->skip($offset)->take($limit)->orderBy('id','desc')->get()->toArray();
-        }
-        else
-        {
-            return false;
         }
         
         return $res;
