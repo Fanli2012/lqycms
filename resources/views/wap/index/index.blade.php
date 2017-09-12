@@ -8,7 +8,7 @@
 <article class="mbanner-b mb10"><a href=""><img src="/images/banner.jpg"></a></article>
 
 <article class="mbox"><h3 class="tit"><i class="tit_icon"></i>产品中心</h3><div class="mpicshow-b">
-<ul class="mnewpic2"><?php $posts=arclist(array("table"=>"product","row"=>4,"typeid"=>1,"expression"=>[["litpic","<>","''"]]));if($posts){foreach($posts as $row){ ?>
+<ul class="mnewpic2"><?php $posts=arclist(array("table"=>"goods","row"=>4,"typeid"=>1,"expression"=>[["litpic","<>","''"]]));if($posts){foreach($posts as $row){ ?>
 <li><a href="<?php echo get_wap_front_url(array("id"=>$row['id'],"catid"=>$row['typeid'],"type"=>'content')); ?>"><img src="<?php echo sysconfig('CMS_BASEHOST'); echo $row['litpic']; ?>" alt="<?php echo $row['title']; ?>"></a></li><?php }} ?>
 </ul><div class="more"><a href="<?php echo get_wap_front_url(array('catid'=>1,'type'=>'productlist')); ?>">查看更多<i class="mico"></i></a></div>
 </div></article>

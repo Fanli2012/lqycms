@@ -3,7 +3,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Api\CommonController;
 
-//微信auth2.0 受权
+//微信auth2.0授权
 class WechatAuthController extends CommonController
 {
     public $appid = 'wxba09d9f0fed4b84b'; //微信APPID，公众平台获取
