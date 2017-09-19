@@ -3,6 +3,6 @@
 <form action="/dataapi/image_upload" name="form" method="post" enctype="multipart/form-data">{{ csrf_field() }}
   <input type="file" name="file" />
   <input type="submit" name="submit" value="上传" />
-  <input type="text" name="token" value="72d623d26a1a6d61186a97f9ccf752f7" />
+  <input type="text" name="access_token" value="72d623d26a1a6d61186a97f9ccf752f7" />
 </form>
 </body></html>

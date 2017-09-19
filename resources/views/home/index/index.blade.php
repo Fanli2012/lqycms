@@ -77,7 +77,7 @@
 	  
 <div class="bs-docs-featurette">
 <div class="container">
-<h2 class="bs-docs-featurette-title">案例中心/Case Show</h2>
+<h2 class="bs-docs-featurette-title">案例中心 / Case Show</h2>
 <p class="lead">我们在这里展示了许多精美的案例，欢迎欣赏。</p>
 
 <hr class="half-rule">

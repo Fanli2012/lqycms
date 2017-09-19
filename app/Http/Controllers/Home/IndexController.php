@@ -184,22 +184,22 @@ class IndexController extends CommonController
     }
 	
 	//商品列表页
-    public function productcat($cat, $page=0)
+    public function goodstype($cat, $page=0)
 	{
         $pagenow = $page;
         
 		if(empty($cat) || !preg_match('/[0-9]+/',$cat)){return redirect()->route('page404');}
         
-		$post = object_to_array(DB::table('product_type')->where('id', $cat)->first(), 1);if(empty($post)){return redirect()->route('page404');}
+		$post = object_to_array(DB::table('goods_type')->where('id', $cat)->first(), 1);if(empty($post)){return redirect()->route('page404');}
         $data['post'] = $post;
         
 		$subcat="";
-		$post2 = object_to_array(DB::table('product_type')->select('id')->where('pid', $cat)->get());
+		$post2 = object_to_array(DB::table('goods_type')->select('id')->where('pid', $cat)->get());
 		if(!empty($post2)){foreach($post2 as $row){$subcat=$subcat."typeid=".$row["id"]." or ";}}
 		$subcat=$subcat."typeid=".$cat;
 		$data['sql'] = $subcat;
 		
-		$counts = DB::table("product")->whereRaw($subcat)->count();
+		$counts = DB::table("goods")->whereRaw($subcat)->count();
 		if($counts>sysconfig('CMS_MAXARC')){$counts=sysconfig('CMS_MAXARC');dd($counts);}
 		$pagesize = sysconfig('CMS_PAGESIZE');$page=0;
 		if($counts % $pagesize){//取总数据量除以每页数的余数
@@ -211,8 +211,8 @@ class IndexController extends CommonController
 		$data['counts'] = $counts;
 		$start = $page*$pagesize;
 		
-		$data['posts'] = arclist(array("table"=>"product","sql"=>$subcat, "limit"=>"$start,$pagesize")); //获取列表
-		$data['pagenav'] = get_listnav(array("counts"=>$counts,"pagesize"=>$pagesize,"pagenow"=>$page+1,"catid"=>$cat,"urltype"=>"product")); //获取分页列表
+		$data['posts'] = arclist(array("table"=>"goods","sql"=>$subcat, "limit"=>"$start,$pagesize")); //获取列表
+		$data['pagenav'] = get_listnav(array("counts"=>$counts,"pagesize"=>$pagesize,"pagenow"=>$page+1,"catid"=>$cat,"urltype"=>"goods")); //获取分页列表
         
         if($post['templist']=='category2'){if(!empty($pagenow)){return redirect()->route('page404');}}
         
@@ -220,11 +220,11 @@ class IndexController extends CommonController
 	}
     
     //商品详情页
-    public function product($id)
+    public function goods($id)
 	{
         if(empty($id) || !preg_match('/[0-9]+/',$id)){return redirect()->route('page404');}
 		
-		$post = object_to_array(DB::table('product')->where('id', $id)->first(), 1);if(empty($post)){return redirect()->route('page404');}$post['name'] = DB::table('product_type')->where('id', $post['typeid'])->value('name');
+		$post = object_to_array(DB::table('goods')->where('id', $id)->first(), 1);if(empty($post)){return redirect()->route('page404');}$post['name'] = DB::table('goods_type')->where('id', $post['typeid'])->value('name');
 		if($post)
         {
 			$cat = $post['typeid'];
@@ -239,7 +239,7 @@ class IndexController extends CommonController
             return redirect()->route('page404');
         }
         
-		$post = object_to_array(DB::table('product_type')->where('id', $cat)->first(), 1);
+		$post = object_to_array(DB::table('goods_type')->where('id', $cat)->first(), 1);
         
         return view('home.index.'.$post['temparticle'], $data);
     }

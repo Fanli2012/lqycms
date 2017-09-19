@@ -152,12 +152,12 @@ function get_front_url($param='')
         //搜索关键词页面
         $url .= '/s'.$param['searchid'];
     }
-	else if($param['type'] == 'productlist')
+	else if($param['type'] == 'goodslist')
     {
         //商品列表页
         $url .= '/product'.$param['catid'];
     }
-    else if($param['type'] == 'productdetail')
+    else if($param['type'] == 'goodsdetail')
     {
         //商品内容页
         $url .= '/goods/'.$param['id'];
@@ -196,12 +196,12 @@ function get_wap_front_url(array $param)
         //tags页面
         $url .= '/s'.$param['searchid'];
     }
-	else if($param['type'] == 'productlist')
+	else if($param['type'] == 'goodslist')
     {
         //商品列表页
         $url .= '/product'.$param['catid'];
     }
-    else if($param['type'] == 'productdetail')
+    else if($param['type'] == 'goodsdetail')
     {
         //商品内容页
         $url .= '/goods/'.$param['id'];
