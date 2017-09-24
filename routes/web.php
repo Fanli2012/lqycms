@@ -53,6 +53,26 @@ Route::group(['namespace' => 'Home'], function () {
 	});
 });
 
+//微信路由
+Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin'], function () {
+	Route::get('/', 'IndexController@index')->name('weixin');
+	Route::get('/page404', 'IndexController@page404')->name('page404');         //404页面
+	Route::get('/tags', 'IndexController@tags')->name('weixin_tags');
+	Route::get('/search/{id}', 'IndexController@search')->name('weixin_search');  //搜过页面
+	Route::get('/p/{id}', 'IndexController@detail')->name('weixin_detail');       //详情页
+	Route::get('/cat{cat}/{page}', 'IndexController@category');                 //分类页，分页
+	Route::get('/cat{cat}', 'IndexController@category')->name('weixin_category'); //分类页
+	Route::get('/tag{tag}/{page}', 'IndexController@tag');                      //标签页，分页
+	Route::get('/tag{tag}', 'IndexController@tag')->name('weixin_tag');           //标签页
+	Route::get('/page/{id}', 'IndexController@page')->name('weixin_singlepage');  //单页
+	Route::get('/goods/{id}', 'IndexController@goods')->name('weixin_goods');     //商品详情页
+	Route::get('/goodstype{cat}/{page}', 'IndexController@goodstype');          //产品分类页，分页
+	Route::get('/goodstype{cat}', 'IndexController@goodstype')->name('weixin_goodstype'); //产品分类页
+	Route::get('/sitemap.xml', 'IndexController@sitemap')->name('weixin_sitemap');//sitemap
+	
+	Route::get('/test', 'IndexController@test')->name('weixin_test');             //测试
+});
+
 
 //后台路由
 Route::group(['prefix' => 'fladmin', 'namespace' => 'Admin', 'middleware' => ['web']], function () {
@@ -179,14 +199,21 @@ Route::group(['prefix' => 'fladmin', 'namespace' => 'Admin', 'middleware' => ['w
 	Route::get('/test', 'LoginController@test')->name('admin_test');
 });
 
-//接口路由，无需token验证
+//无需token验证，全局
 Route::group(['middleware' => ['web']], function () {
     Route::post('/dataapi/listarc', 'Api\IndexController@listarc')->name('api_listarc');
     Route::post('/dataapi/customer_login', 'Api\WechatAuthController@customerLogin');
 	Route::post('/dataapi/', 'Api\UserController@signin'); //签到
 });
 
-//接口路由，需token验证
+//API接口路由，无需token验证
+Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web']], function () {
+    //轮播图
+	Route::get('/slide_list', 'SlideController@slideList');
+    //文章列表
+	Route::get('/article_list', 'ArticleController@articleList');
+});
+//API接口路由，需token验证
 Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web','token']], function () {
     //用户中心
     Route::post('/user_signin', 'UserController@signin'); //签到
@@ -241,8 +268,6 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     Route::post('/image_upload', 'ImageController@imageUpload'); //普通文件/图片上传
     //二维码
     Route::get('/create_simple_qrcode', 'QrcodeController@createSimpleQrcode');
-    //轮播图
-	Route::get('/slide_list', 'SlideController@slideList');
     //收货地址
     Route::get('/user_address_list', 'UserAddressController@userAddressList');
     Route::get('/user_address_detail', 'UserAddressController@userAddressDetail');

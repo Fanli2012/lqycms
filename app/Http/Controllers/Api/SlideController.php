@@ -19,10 +19,10 @@ class SlideController extends CommonController
         //参数
         $data['limit'] = $request->input('limit', 10);
         $data['offset'] = $request->input('offset', 0);
-        if($request->input('group_id', null) !== null){$data['group_id'] = $request->input('group_id');};
+        if($request->input('group_id', null) !== null){$data['group_id'] = $request->input('group_id');}
         
         $res = Slide::getList($data);
-		if(!$res)
+		if($res == false)
 		{
 			return ReturnData::create(ReturnData::SYSTEM_FAIL);
 		}

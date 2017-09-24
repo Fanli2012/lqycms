@@ -12,8 +12,8 @@ class Slide extends Model
     public $timestamps = false;
 	protected $guarded = []; //$guarded包含你不想被赋值的字段数组。
 	
-    const UN_SHOW      = 0; // 不显示
-    const IS_SHOW      = 1; // 显示
+    const UN_SHOW      = 1; // 不显示
+    const IS_SHOW      = 0; // 显示
     
     public static function getList(array $param)
     {

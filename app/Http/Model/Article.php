@@ -1,9 +1,7 @@
 <?php
 namespace App\Http\Model;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Article extends Model
+class Article extends BaseModel
 {
 	//文章模型
 	
@@ -32,24 +30,14 @@ class Article extends Model
      */
     //protected $connection = 'connection-name';
 	
-	/**
-     * 文件上传
-     * @param $field
-     * @return string
-     */
-    public static function uploadImg($field)
-    {
-        if (Request::hasFile($field)) {
-            $pic = Request::file($field);
-            if ($pic->isValid()) {
-                $newName = md5(rand(1, 1000) . $pic->getClientOriginalName()) . "." . $pic->getClientOriginalExtension();
-                $pic->move('uploads', $newName);
-                return $newName;
-            }
-        }
-        return '';
-    }
-	
+	const IS_CHECK = 0; // 已审核
+	const UN_CHECK = 1; // 未审核
+    
+    //常用字段
+    protected static $common_field = array(
+        'id', 'typeid', 'tuijian', 'click', 'title', 'writer', 'source','litpic', 'pubdate', 'addtime', 'description', 'listorder'
+    );
+    
 	/**
      * 获取关联到文章的分类
      */
@@ -58,4 +46,88 @@ class Article extends Model
         return $this->belongsTo(Arctype::class, 'typeid', 'id');
     }
 	
+    public static function getList(array $param)
+    {
+        extract($param); //参数：group_id，limit，offset
+        
+        $limit  = isset($limit) ? $limit : 10;
+        $offset = isset($offset) ? $offset : 0;
+        
+        $model = new Article;
+        
+        if(isset($typeid)){$where['typeid'] = $typeid;}
+        if(isset($ischeck)){$where['ischeck'] = $ischeck;}
+        if(isset($keyword)){$model = $model->where("title", "like", "%$keyword%");} //关键词搜索
+        
+        if($where){$model = $model->where($where);}
+        
+        $res['count'] = $model->count();
+        $res['list'] = array();
+        
+        //排序
+        if(isset($orderby))
+        {
+            switch ($orderby)
+            {
+                case 1:
+                    $model = $model->orderBy('click','desc'); //点击量从高到低
+                    break;
+                case 2:
+                    $model = $model->orderBy('listorder','desc'); //排序
+                    break;
+                case 3:
+                    $model = $model->orderBy('pubdate','desc'); //更新时间从高到低
+                    break;
+                default:
+                    $model = $model->orderBy('addtime','desc'); //添加时间从高到低
+            }
+        }
+        
+		if($res['count']>0)
+        {
+            $res['list']  = $model->select(self::$common_field)->orderBy('id', 'desc')->skip($offset)->take($limit)->get();
+        }
+        else
+        {
+            return false;
+        }
+        
+        return $res;
+    }
+    
+    public static function getOne($id)
+    {
+        return self::where('id', $id)->first();
+    }
+    
+    public static function add(array $data)
+    {
+        if ($id = self::insertGetId($data))
+        {
+            return $id;
+        }
+
+        return false;
+    }
+    
+    public static function modify($where, array $data)
+    {
+        if (self::where($where)->update($data)!==false)
+        {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    //删除一条记录
+    public static function remove($id)
+    {
+        if (!self::whereIn('id', explode(',', $id))->delete())
+        {
+            return false;
+        }
+        
+        return true;
+    }
 }

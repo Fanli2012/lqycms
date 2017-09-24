@@ -28,7 +28,7 @@ class SlideController extends CommonController
 		if(isset($_POST['editorValue'])){unset($_POST['editorValue']);}
 		unset($_POST["_token"]);
 		
-		if(DB::table('slide')->insert($_POST))
+		if(DB::table('slide')->insert(array_filter($_POST)))
         {
             success_jump('添加成功！', route('admin_slide'));
         }

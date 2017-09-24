@@ -825,7 +825,7 @@ function sysconfig($varname='')
 }
 
 //获取https的get请求结果
-function get_curl_data($c_url,$data='')
+function curl_post($c_url,$data='')
 {
 	$curl = curl_init(); // 启动一个CURL会话
 	curl_setopt($curl, CURLOPT_URL, $c_url); // 要访问的地址
@@ -875,6 +875,11 @@ function http_request_post($url,$data,$type='POST')
 	$result = file_get_contents($url,false,stream_context_create($options));
 	
 	return $result;
+}
+
+function json_to_array($json)
+{
+	return json_decode($json,true);
 }
 
 function imageResize($url, $width, $height)

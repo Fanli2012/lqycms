@@ -72,7 +72,7 @@ class Goods extends BaseModel
         $res['count'] = $model->count();
         $res['list'] = array();
         
-         //排序
+        //排序
         if(isset($orderby))
         {
             switch ($orderby)

@@ -43,7 +43,7 @@
     </tr>
     <tr>
         <td style="vertical-align:middle;" align="right">图片：</td>
-        <td style="vertical-align:middle;"><button type="button" onclick="upImage();">选择图片</button> <input name="pic" type="text" id="pic" value="" style="width:40%"> <img style="margin-left:20px;display:none;" src="" width="120" height="80" id="picview"></td>
+        <td style="vertical-align:middle;"><button type="button" onclick="upImage();">选择图片</button> <input class="required" name="pic" type="text" id="pic" value="" style="width:40%"> <img style="margin-left:20px;display:none;" src="" width="120" height="80" id="picview"></td>
     </tr>
 <!-- 配置文件 --><script type="text/javascript" src="/other/flueditor/ueditor.config.js"></script>
 <!-- 编辑器源码文件 --><script type="text/javascript" src="/other/flueditor/ueditor.all.js"></script>
