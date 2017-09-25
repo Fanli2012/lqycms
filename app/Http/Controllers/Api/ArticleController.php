@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Api\CommonController;
 use Illuminate\Http\Request;
+use Log;
 use App\Common\ReturnData;
 
 use App\Http\Model\Article;

@@ -20,7 +20,7 @@ class IndexController extends CommonController
             'offset' => 0
 		);
         $url = env('APP_API_URL')."/slide_list";
-		$slide_list = json_decode(http_request_post($url,$postdata,'GET'),true);
+		$slide_list = json_decode(curl_request($url,$postdata,'GET'),true);
         $data['slide_list'] = $slide_list['data']['list'];
         
         //最新资讯
@@ -29,7 +29,7 @@ class IndexController extends CommonController
             'offset' => 0
 		);
         $url = env('APP_API_URL')."/article_list";
-		$article_list = json_decode(http_request_post($url,$postdata,'GET'),true);
+		$article_list = json_decode(curl_request($url,$postdata,'GET'),true);
         $data['article_list'] = $article_list['data']['list'];
         
         //商品列表
@@ -38,7 +38,7 @@ class IndexController extends CommonController
             'offset' => 0
 		);
         $url = env('APP_API_URL')."/goods_list";
-		$goods_list = json_decode(http_request_post($url,$postdata,'GET'),true);
+		$goods_list = json_decode(curl_request($url,$postdata,'GET'),true);
         $data['goods_list'] = $goods_list['data']['list'];
         
         return view('weixin.index.index',$data);
@@ -84,15 +84,14 @@ class IndexController extends CommonController
     //文章详情页
     public function detail($id)
 	{
-        //文章详情
+        //最新资讯
         $postdata = array(
-            'id'  => $id,
-            'aa'  => 1
+            'id'  => $id
 		);
         $url = env('APP_API_URL')."/article_detail";
-		$article_detail = json_decode(http_request_post($url,$postdata,'GET'),true);dd(http_request_post($url,$postdata,'GET'));
-        //if(empty($article_detail['data'])){return redirect()->route('weixin_page404');}
-        //$data['article_detail'] = $article_detail['data'];
+		$article_detail = curl_request($url,$postdata,'GET');
+        if(empty($article_detail['data'])){return redirect()->route('weixin_page404');}
+        $data['post'] = $article_detail['data'];
         
         return view('weixin.index.detail', $data);
     }

@@ -103,7 +103,7 @@ class Article extends BaseModel
         return $res;
     }
     
-    public static function getOne($param)
+    public static function getOne(array $param)
     {
         extract($param);
         

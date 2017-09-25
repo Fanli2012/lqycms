@@ -2,7 +2,7 @@
 // 公共函数文件
 if (! function_exists('curl_request'))
 {
-    function curl_request($api, $method = 'GET', $params = array(), $headers = array())
+    function curl_request($api, $params = array(), $method = 'GET', $headers = array())
     {
         $curl = curl_init();
 
@@ -29,7 +29,7 @@ if (! function_exists('curl_request'))
                 curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
                 break;
         }
-
+        
         curl_setopt($curl, CURLOPT_URL, $api);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
@@ -865,9 +865,7 @@ function http_request_post($url,$data,$type='POST')
 	$options = array(
 		'http' => array(
 			'method' => $type,
-			'header' =>
-			"Content-type: application/x-www-form-urlencoded\r\n" .
-			"Content-length: $content_length\r\n",
+			'header' => "Content-type: application/x-www-form-urlencoded\r\n" .	"Content-length: $content_length\r\n",
 			'content' => $content
 		)
 	);

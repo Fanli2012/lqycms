@@ -16,7 +16,7 @@ Route::group(['domain' => env('APP_SUBDOMAIN'), 'namespace' => 'Wap'], function 
 	Route::get('/', 'IndexController@index')->name('wap_home');
 	Route::get('/page404', 'IndexController@page404')->name('wap_page404');     //404页面
 	Route::get('/tags', 'IndexController@tags')->name('wap_tags');
-	Route::get('/search/{id}', 'IndexController@search')->name('wap_search');   //搜过页面
+	Route::get('/search/{id}', 'IndexController@search')->name('wap_search');   //搜索页面
 	Route::get('/p/{id}', 'IndexController@detail')->name('wap_detail');        //详情页
 	Route::get('/cat{cat}/{page}', 'IndexController@category');                 //分类页，分页
 	Route::get('/cat{cat}', 'IndexController@category')->name('wap_category');  //分类页
@@ -35,7 +35,7 @@ Route::group(['namespace' => 'Home'], function () {
 	Route::get('/', 'IndexController@index')->name('home');
 	Route::get('/page404', 'IndexController@page404')->name('page404');         //404页面
 	Route::get('/tags', 'IndexController@tags')->name('home_tags');
-	Route::get('/search/{id}', 'IndexController@search')->name('home_search');  //搜过页面
+	Route::get('/search/{id}', 'IndexController@search')->name('home_search');  //搜索页面
 	Route::get('/p/{id}', 'IndexController@detail')->name('home_detail');       //详情页
 	Route::get('/cat{cat}/{page}', 'IndexController@category');                 //分类页，分页
 	Route::get('/cat{cat}', 'IndexController@category')->name('home_category'); //分类页
@@ -58,7 +58,7 @@ Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin'], function () {
 	Route::get('/', 'IndexController@index')->name('weixin');
 	Route::get('/page404', 'IndexController@page404')->name('weixin_page404');         //404页面
 	Route::get('/tags', 'IndexController@tags')->name('weixin_tags');
-	Route::get('/search/{id}', 'IndexController@search')->name('weixin_search');  //搜过页面
+	Route::get('/search/{id}', 'IndexController@search')->name('weixin_search');  //搜索页面
 	Route::get('/p/{id}', 'IndexController@detail')->name('weixin_article_detail'); //文章详情页
 	Route::get('/cat{cat}', 'IndexController@category')->name('weixin_article_category'); //分类页
 	Route::get('/tag{tag}', 'IndexController@tag')->name('weixin_tag');           //标签页
