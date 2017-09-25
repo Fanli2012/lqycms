@@ -19,7 +19,7 @@ class IndexController extends CommonController
             'limit'  => 5,
             'offset' => 0
 		);
-        $url = env('APP_API')."/slide_list";
+        $url = env('APP_API_URL')."/slide_list";
 		$slide_list = json_decode(http_request_post($url,$postdata,'GET'),true);
         $data['slide_list'] = $slide_list['data']['list'];
         
@@ -28,9 +28,18 @@ class IndexController extends CommonController
             'limit'  => 5,
             'offset' => 0
 		);
-        $url = env('APP_API')."/article_list";
+        $url = env('APP_API_URL')."/article_list";
 		$article_list = json_decode(http_request_post($url,$postdata,'GET'),true);
         $data['article_list'] = $article_list['data']['list'];
+        
+        //商品列表
+        $postdata = array(
+            'limit'  => 10,
+            'offset' => 0
+		);
+        $url = env('APP_API_URL')."/goods_list";
+		$goods_list = json_decode(http_request_post($url,$postdata,'GET'),true);
+        $data['goods_list'] = $goods_list['data']['list'];
         
         return view('weixin.index.index',$data);
     }
@@ -75,26 +84,17 @@ class IndexController extends CommonController
     //文章详情页
     public function detail($id)
 	{
-        if(empty($id) || !preg_match('/[0-9]+/',$id)){return redirect()->route('page404');}
-		
-		if(cache("detailid$id")){$post = cache("detailid$id");}else{$post = object_to_array(DB::table('article')->where('id', $id)->first(), 1);if(empty($post)){return redirect()->route('page404');}$post['name'] = DB::table('arctype')->where('id', $post['typeid'])->value('name');cache(["detailid$id"=>$post], \Carbon\Carbon::now()->addMinutes(2592000));}
-		if($post)
-        {
-			$cat = $post['typeid'];
-            $post['body'] = ReplaceKeyword($post['body']);
-            if(!empty($post['writer'])){$post['writertitle']=$post['title'].' '.$post['writer'];}
-            
-			$data['post'] = $post;
-            $data['pre'] = get_article_prenext(array('aid'=>$post["id"],'typeid'=>$post["typeid"],'type'=>"pre"));
-        }
-        else
-        {
-            return redirect()->route('page404');
-        }
+        //文章详情
+        $postdata = array(
+            'id'  => $id,
+            'aa'  => 1
+		);
+        $url = env('APP_API_URL')."/article_detail";
+		$article_detail = json_decode(http_request_post($url,$postdata,'GET'),true);dd(http_request_post($url,$postdata,'GET'));
+        //if(empty($article_detail['data'])){return redirect()->route('weixin_page404');}
+        //$data['article_detail'] = $article_detail['data'];
         
-		if(cache("catid$cat")){$post=cache("catid$cat");}else{$post = object_to_array(DB::table('arctype')->where('id', $cat)->first(), 1);cache(["catid$cat"=>$post], \Carbon\Carbon::now()->addMinutes(2592000));}
-        
-        return view('home.index.'.$post['temparticle'], $data);
+        return view('weixin.index.detail', $data);
     }
 	
     //标签详情页，共有3种显示方式，1正常列表，2列表显示文章，3显示描述
@@ -271,7 +271,7 @@ class IndexController extends CommonController
 	//404页面
 	public function page404()
 	{
-		return view('home.404');
+		return view('weixin.404');
 	}
 	
     //测试页面

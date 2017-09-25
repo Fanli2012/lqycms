@@ -30,4 +30,19 @@ class ArticleController extends CommonController
         
 		return ReturnData::create(ReturnData::SUCCESS,$res);
     }
+    
+    public function articleDetail(Request $request)
+	{
+        //参数
+        $data['id'] = $request->input('id');
+        $data['ischeck'] = Article::IS_CHECK;
+        
+        $res = Article::getOne($data);
+		if($res === false)
+		{
+			return ReturnData::create(ReturnData::SYSTEM_FAIL);
+		}
+        
+		return ReturnData::create(ReturnData::SUCCESS,$res);
+    }
 }

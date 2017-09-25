@@ -86,6 +86,14 @@ class Article extends BaseModel
 		if($res['count']>0)
         {
             $res['list']  = $model->select(self::$common_field)->orderBy('id', 'desc')->skip($offset)->take($limit)->get();
+            
+            if($res['list'])
+            {
+                foreach($res['list'] as $k=>$v)
+                {
+                    $res['list'][$k]->article_detail_url = route('weixin_article_detail',array('id'=>$v->id));
+                }
+            }
         }
         else
         {
@@ -95,9 +103,14 @@ class Article extends BaseModel
         return $res;
     }
     
-    public static function getOne($id)
+    public static function getOne($param)
     {
-        return self::where('id', $id)->first();
+        extract($param);
+        
+        $where['id'] = $id;
+        if(isset($ischeck)){$where['ischeck'] = $ischeck;}
+        
+        return self::where($where)->first();
     }
     
     public static function add(array $data)

@@ -1,7 +1,7 @@
 <!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html;charset=utf-8"/>
 <title>商城</title><meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport">
 <link href="<?php echo env('APP_URL'); ?>/css/weixin/style.css" type="text/css" rel="stylesheet">
-<script type="text/javascript" src="<?php echo env('APP_WEIXIN'); ?>/js/jquery.min.js"></script>
+<script type="text/javascript" src="<?php echo env('APP_WEIXIN_URL'); ?>/js/jquery.min.js"></script>
 <meta name="keywords" content="关键词"><meta name="description" content="描述"></head><body>
 <!--顶部搜索栏-start-->
 <div id="search-placeholder" class="search">
@@ -127,7 +127,7 @@ var swiper = new Swiper('.swiper-nav', {
     <div class="home_toutiao_box">
         <ul>
           <marquee id="mar1" scrollamount="1" direction="up" height="30" style="height: 30px;">
-          <?php foreach($article_list as $k=>$v){ ?><li><a href="/Weixin/index.php?m=Article&amp;a=arclist&amp;id=38"><?php echo $v['title']; ?></a></li><?php } ?>
+          <?php foreach($article_list as $k=>$v){ ?><li><a href="<?php echo $v['article_detail_url']; ?>"><?php echo $v['title']; ?></a></li><?php } ?>
           </marquee>
         </ul>
     </div>
@@ -140,12 +140,9 @@ var swiper = new Swiper('.swiper-nav', {
     <div class="banner_tit"><img src="images/weixin/ind_52.jpg" alt="猜您喜欢"/></div>
     <div class="likeshop">
         <ul class="goods_list" id="goods_list">
-            <li><a href="detail.html"><img alt="1" src="images/weixin/goods_thumb_400_400.jpeg"><div class="goods_info"><p class="goods_tit">美女真空凸点诱惑</p><div class="goods_price">￥<b>100.00</b></div></div></a></li>
-            <li><a href="detail.html"><img alt="2" src="images/weixin/goods_thumb_400_400.jpeg"><div class="goods_info"><p class="goods_tit">性感小骚货在床上</p><div class="goods_price">￥<b>100.00</b></div></div></a></li>
-            <li><a href="detail.html"><img alt="3" src="images/weixin/goods_thumb_400_400.jpeg"><div class="goods_info"><p class="goods_tit">小野猫嫩模大尺度写真</p><div class="goods_price">￥<b>100.00</b></div></div></a></li>
-            <li><a href="detail.html"><img alt="4" src="images/weixin/goods_thumb_400_400.jpeg"><div class="goods_info"><p class="goods_tit">韩国嫩模的逆天身材</p><div class="goods_price">￥<b>100.00</b></div></div></a></li>
-            <li><a href="detail.html"><img alt="5" src="images/weixin/goods_thumb_400_400.jpeg"><div class="goods_info"><p class="goods_tit">推女郎林夕图片</p><div class="goods_price">￥<b>100.00</b></div></div></a></li>
-            <li><a href="detail.html"><img alt="6" src="images/weixin/goods_thumb_400_400.jpeg"><div class="goods_info"><p class="goods_tit">性感闺蜜艺术照</p><div class="goods_price">￥<b>100.00</b></div></div></a></li>
+        <?php foreach($goods_list as $k=>$v){ ?>
+            <li><a href="<?php echo $v['goods_detail_url']; ?>"><img alt="<?php echo $v['title']; ?>" src="<?php echo $v['litpic']; ?>"><div class="goods_info"><p class="goods_tit"><?php echo $v['title']; ?></p><div class="goods_price">￥<b><?php echo $v['price']; ?></b></div></div></a></li>
+        <?php } ?>
         </ul>
     </div>
 </div>

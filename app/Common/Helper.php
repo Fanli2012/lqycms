@@ -274,4 +274,15 @@ class Helper
         
         return $result;
     }
+    
+    //判断访问终端是否是微信浏览器
+    public static function isWechatBrowser()
+    { 
+        if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false)
+        { 
+            return true; 
+        }
+        
+        return false; 
+    }
 }

@@ -56,21 +56,19 @@ Route::group(['namespace' => 'Home'], function () {
 //微信路由
 Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin'], function () {
 	Route::get('/', 'IndexController@index')->name('weixin');
-	Route::get('/page404', 'IndexController@page404')->name('page404');         //404页面
+	Route::get('/page404', 'IndexController@page404')->name('weixin_page404');         //404页面
 	Route::get('/tags', 'IndexController@tags')->name('weixin_tags');
 	Route::get('/search/{id}', 'IndexController@search')->name('weixin_search');  //搜过页面
-	Route::get('/p/{id}', 'IndexController@detail')->name('weixin_detail');       //详情页
-	Route::get('/cat{cat}/{page}', 'IndexController@category');                 //分类页，分页
-	Route::get('/cat{cat}', 'IndexController@category')->name('weixin_category'); //分类页
-	Route::get('/tag{tag}/{page}', 'IndexController@tag');                      //标签页，分页
+	Route::get('/p/{id}', 'IndexController@detail')->name('weixin_article_detail'); //文章详情页
+	Route::get('/cat{cat}', 'IndexController@category')->name('weixin_article_category'); //分类页
 	Route::get('/tag{tag}', 'IndexController@tag')->name('weixin_tag');           //标签页
 	Route::get('/page/{id}', 'IndexController@page')->name('weixin_singlepage');  //单页
-	Route::get('/goods/{id}', 'IndexController@goods')->name('weixin_goods');     //商品详情页
+	Route::get('/goods/{id}', 'IndexController@goods')->name('weixin_goods_detail'); //商品详情页
 	Route::get('/goodstype{cat}/{page}', 'IndexController@goodstype');          //产品分类页，分页
 	Route::get('/goodstype{cat}', 'IndexController@goodstype')->name('weixin_goodstype'); //产品分类页
 	Route::get('/sitemap.xml', 'IndexController@sitemap')->name('weixin_sitemap');//sitemap
 	
-	Route::get('/test', 'IndexController@test')->name('weixin_test');             //测试
+	Route::get('/test', 'IndexController@test')->name('weixin_test');           //测试
 });
 
 
@@ -210,9 +208,14 @@ Route::group(['middleware' => ['web']], function () {
 Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web']], function () {
     //轮播图
 	Route::get('/slide_list', 'SlideController@slideList');
-    //文章列表
+    //文章
 	Route::get('/article_list', 'ArticleController@articleList');
+    Route::get('/article_detail', 'ArticleController@articleDetail');
+    //商品
+    Route::get('/goods_list', 'GoodsController@goodsList'); //商品列表
+    Route::get('/goodstype_list', 'GoodsTypeController@goodsTypeList'); //商品分类列表
 });
+
 //API接口路由，需token验证
 Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web','token']], function () {
     //用户中心
@@ -224,9 +227,6 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     Route::get('/user_money_list', 'UserMoneyController@userMoneyList'); //用户余额明细
     Route::post('/user_money_add', 'UserMoneyController@userMoneyAdd'); //添加余额明细
     //浏览记录
-    //商品
-    Route::get('/goods_list', 'GoodsController@goodsList'); //商品列表
-    Route::get('/goodstype_list', 'GoodsTypeController@goodsTypeList'); //商品分类列表
     //商品评价
     Route::get('/goods_comment_list', 'CommentController@goodsCommentList'); //商品评价列表
     Route::post('/goods_comment_add', 'CommentController@goodsCommentAdd'); //商品评价添加

@@ -96,7 +96,15 @@ class Goods extends BaseModel
         
 		if($res['count']>0)
         {
-            $res['list']  = $model->select(self::$common_field)->skip($offset)->take($limit)->orderBy('id','desc')->get()->toArray();
+            $res['list']  = $model->select(self::$common_field)->skip($offset)->take($limit)->orderBy('id','desc')->get();
+            
+            if($res['list'])
+            {
+                foreach($res['list'] as $k=>$v)
+                {
+                    $res['list'][$k]->goods_detail_url = route('weixin_goods_detail',array('id'=>$v->id));
+                }
+            }
         }
         
         return $res;
@@ -107,7 +115,7 @@ class Goods extends BaseModel
         if(isset($status)){$where['status'] = $status;}else{$where['status'] = self::STATUS;}
         $where['id'] = $id;
         
-        $goods = self::where($where)->first()->toArray();
+        $goods = self::where($where)->first();
         
         $goods['price'] = self::get_final_price($id);
         
