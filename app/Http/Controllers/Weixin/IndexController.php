@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Weixin;
 
 use App\Http\Controllers\Weixin\CommonController;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 class IndexController extends CommonController
 {
@@ -20,7 +21,7 @@ class IndexController extends CommonController
             'offset' => 0
 		);
         $url = env('APP_API_URL')."/slide_list";
-		$slide_list = json_decode(curl_request($url,$postdata,'GET'),true);
+		$slide_list = curl_request($url,$postdata,'GET');
         $data['slide_list'] = $slide_list['data']['list'];
         
         //最新资讯
@@ -29,7 +30,7 @@ class IndexController extends CommonController
             'offset' => 0
 		);
         $url = env('APP_API_URL')."/article_list";
-		$article_list = json_decode(curl_request($url,$postdata,'GET'),true);
+		$article_list = curl_request($url,$postdata,'GET');
         $data['article_list'] = $article_list['data']['list'];
         
         //商品列表
@@ -38,47 +39,33 @@ class IndexController extends CommonController
             'offset' => 0
 		);
         $url = env('APP_API_URL')."/goods_list";
-		$goods_list = json_decode(curl_request($url,$postdata,'GET'),true);
+		$goods_list = curl_request($url,$postdata,'GET');
         $data['goods_list'] = $goods_list['data']['list'];
         
         return view('weixin.index.index',$data);
     }
 	
     //列表页
-    public function category($cat, $page=0)
+    public function category($cat)
 	{
-        $pagenow = $page;
+        //文章分类
+        $postdata = array(
+            'id'  => $cat
+		);
+        $url = env('APP_API_URL')."/arctype_detail";
+		$arctype_detail = curl_request($url,$postdata,'GET');
+        $data['post'] = $arctype_detail['data'];
         
-		if(empty($cat) || !preg_match('/[0-9]+/',$cat)){return redirect()->route('page404');}
+        //文章列表
+        $postdata = array(
+            'limit'  => 10,
+            'offset' => 0
+		);
+        $url = env('APP_API_URL')."/article_list";
+		$article_list = curl_request($url,$postdata,'GET');
+        $data['article_list'] = $article_list['data']['list'];
         
-		if(cache("catid$cat")){$post = cache("catid$cat");}else{$post = object_to_array(DB::table('arctype')->where('id', $cat)->first(), 1);if(empty($post)){return redirect()->route('page404');} cache(["catid$cat"=>$post], \Carbon\Carbon::now()->addMinutes(2592000));}
-        $data['post'] = $post;
-        
-		$subcat="";$sql="";
-		$post2 = object_to_array(DB::table('arctype')->select('id')->where('pid', $cat)->get());
-		if(!empty($post2)){foreach($post2 as $row){$subcat=$subcat."typeid=".$row["id"]." or ";}}
-		$subcat=$subcat."typeid=".$cat;
-		$sql=$subcat." or typeid2 in (".$cat.")";//echo $subcat2;exit;
-		$data['sql'] = $sql;
-		
-		$counts = DB::table("article")->whereRaw($sql)->count();
-		if($counts>sysconfig('CMS_MAXARC')){$counts=sysconfig('CMS_MAXARC');dd($counts);}
-		$pagesize = sysconfig('CMS_PAGESIZE');$page=0;
-		if($counts % $pagesize){//取总数据量除以每页数的余数
-		$pages = intval($counts/$pagesize) + 1; //如果有余数，则页数等于总数据量除以每页数的结果取整再加一,如果没有余数，则页数等于总数据量除以每页数的结果
-		}else{$pages = $counts/$pagesize;}
-		if(!empty($pagenow)){if($pagenow==1 || $pagenow>$pages){return redirect()->route('page404');}$page = $pagenow-1;$nextpage=$pagenow+1;$previouspage=$pagenow-1;}else{$page = 0;$nextpage=2;$previouspage=0;}
-		$data['page'] = $page;
-		$data['pages'] = $pages;
-		$data['counts'] = $counts;
-		$start = $page*$pagesize;
-		
-		$data['posts'] = arclist(array("sql"=>$sql, "limit"=>"$start,$pagesize")); //获取列表
-		$data['pagenav'] = get_listnav(array("counts"=>$counts,"pagesize"=>$pagesize,"pagenow"=>$page+1,"catid"=>$cat)); //获取分页列表
-        
-        if($post['templist']=='category2'){if(!empty($pagenow)){return redirect()->route('page404');}}
-        
-		return view('home.index.'.$post['templist'], $data);
+		return view('weixin.index.category', $data);
 	}
     
     //文章详情页
@@ -145,29 +132,19 @@ class IndexController extends CommonController
 		
         if($post['template']=='tag2' || $post['template']=='tag3'){if(!empty($pagenow)){return redirect()->route('page404');}}
 		
-		return view('home.index.'.$post['template'], $data);
+		return view('weixin.index.'.$post['template'], $data);
     }
     
 	//标签页
     public function tags()
 	{
-		return view('home.index.tags');
+		return view('weixin.index.tags');
     }
     
     //搜索页
-	public function search($keyword)
+	public function search()
 	{
-		if(empty($keyword))
-		{
-			echo '请输入正确的关键词';exit;
-		}
-		
-		if(strstr($keyword,"&")) exit;
-			
-		$data['posts']= object_to_array(DB::table("article")->where("title", "like", "%$keyword%")->orderBy('id', 'desc')->take(30)->get());
-		$data['keyword']= $keyword;
-		
-		return view('home.index.search', $data);
+		return view('weixin.index.search');
     }
     
     //单页面
@@ -197,43 +174,22 @@ class IndexController extends CommonController
 		
 		$data['posts'] = object_to_array(DB::table('page')->orderBy(\DB::raw('rand()'))->take(5)->get());
 		
-		return view('home.index.'.$post['template'], $data);
+		return view('weixin.index.'.$post['template'], $data);
     }
 	
 	//商品列表页
-    public function goodstype($cat, $page=0)
+    public function goodslist(Request $request)
 	{
-        $pagenow = $page;
+        if($request->input('typeid', '') != ''){$data['typeid'] = $request->input('typeid');}
+        if($request->input('tuijian', '') != ''){$data['tuijian'] = $request->input('tuijian');}
+        if($request->input('keyword', '') != ''){$data['keyword'] = $request->input('keyword');}
+        if($request->input('status', '') != ''){$data['status'] = $request->input('status');}
+        if($request->input('is_promote', '') != ''){$data['is_promote'] = $request->input('is_promote');}
+        if($request->input('orderby', '') != ''){$data['orderby'] = $request->input('orderby');}
+        if($request->input('max_price', '') != ''){$data['max_price'] = $request->input('max_price');}else{$data['max_price'] = 99999;}
+        if($request->input('min_price', '') != ''){$data['min_price'] = $request->input('min_price');}else{$data['min_price'] = 0;}
         
-		if(empty($cat) || !preg_match('/[0-9]+/',$cat)){return redirect()->route('page404');}
-        
-		$post = object_to_array(DB::table('goods_type')->where('id', $cat)->first(), 1);if(empty($post)){return redirect()->route('page404');}
-        $data['post'] = $post;
-        
-		$subcat="";
-		$post2 = object_to_array(DB::table('goods_type')->select('id')->where('pid', $cat)->get());
-		if(!empty($post2)){foreach($post2 as $row){$subcat=$subcat."typeid=".$row["id"]." or ";}}
-		$subcat=$subcat."typeid=".$cat;
-		$data['sql'] = $subcat;
-		
-		$counts = DB::table("goods")->whereRaw($subcat)->count();
-		if($counts>sysconfig('CMS_MAXARC')){$counts=sysconfig('CMS_MAXARC');dd($counts);}
-		$pagesize = sysconfig('CMS_PAGESIZE');$page=0;
-		if($counts % $pagesize){//取总数据量除以每页数的余数
-		$pages = intval($counts/$pagesize) + 1; //如果有余数，则页数等于总数据量除以每页数的结果取整再加一,如果没有余数，则页数等于总数据量除以每页数的结果
-		}else{$pages = $counts/$pagesize;}
-		if(!empty($pagenow)){if($pagenow==1 || $pagenow>$pages){return redirect()->route('page404');}$page = $pagenow-1;$nextpage=$pagenow+1;$previouspage=$pagenow-1;}else{$page = 0;$nextpage=2;$previouspage=0;}
-		$data['page'] = $page;
-		$data['pages'] = $pages;
-		$data['counts'] = $counts;
-		$start = $page*$pagesize;
-		
-		$data['posts'] = arclist(array("table"=>"goods","sql"=>$subcat, "limit"=>"$start,$pagesize")); //获取列表
-		$data['pagenav'] = get_listnav(array("counts"=>$counts,"pagesize"=>$pagesize,"pagenow"=>$page+1,"catid"=>$cat,"urltype"=>"goods")); //获取分页列表
-        
-        if($post['templist']=='category2'){if(!empty($pagenow)){return redirect()->route('page404');}}
-        
-		return view('home.index.'.$post['templist'], $data);
+		return view('weixin.index.goodslist', $data);
 	}
     
     //商品详情页
@@ -258,13 +214,13 @@ class IndexController extends CommonController
         
 		$post = object_to_array(DB::table('goods_type')->where('id', $cat)->first(), 1);
         
-        return view('home.index.'.$post['temparticle'], $data);
+        return view('weixin.index.'.$post['temparticle'], $data);
     }
 	
 	//sitemap页面
     public function sitemap()
     {
-		return view('home.index.sitemap');
+		return view('weixin.index.sitemap');
     }
 	
 	//404页面
@@ -275,7 +231,7 @@ class IndexController extends CommonController
 	
     //测试页面
 	public function test()
-    {return view('home.index.test');
+    {return view('weixin.index.test');
         //return base_path('resources/org');
         //$qrcode = new \SimpleSoftwareIO\QrCode\BaconQrCodeGenerator;
         //return $qrcode->size(500)->generate('Make a qrcode without Laravel!');

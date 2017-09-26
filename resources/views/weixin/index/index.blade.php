@@ -1,12 +1,12 @@
 <!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html;charset=utf-8"/>
 <title>微商城</title><meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport">
 <link href="<?php echo env('APP_URL'); ?>/css/weixin/style.css" type="text/css" rel="stylesheet">
-<script type="text/javascript" src="<?php echo env('APP_WEIXIN_URL'); ?>/js/jquery.min.js"></script>
+<script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/jquery.min.js"></script>
 <meta name="keywords" content="关键词"><meta name="description" content="描述"></head><body>
 <!--顶部搜索栏-start-->
 <div id="search-placeholder" class="search">
     <div class="search_box">
-        <a href="ajaxSearch.html">
+        <a href="<?php echo route('weixin_search'); ?>">
         <span class="search_btn"><img src="<?php echo env('APP_URL'); ?>/images/weixin/search.png"></span>
         <input type="text" name="keyword" value="" placeholder="搜索您想要的商品"></a>
     </div>
@@ -127,7 +127,7 @@ var swiper = new Swiper('.swiper-nav', {
     <div class="home_toutiao_box">
         <ul>
           <marquee id="mar1" scrollamount="1" direction="up" height="30" style="height: 30px;">
-          <?php foreach($article_list as $k=>$v){ ?><li><a href="<?php echo $v['article_detail_url']; ?>"><?php echo $v['title']; ?></a></li><?php } ?>
+          <?php if($article_list){foreach($article_list as $k=>$v){ ?><li><a href="<?php echo $v['article_detail_url']; ?>"><?php echo $v['title']; ?></a></li><?php }} ?>
           </marquee>
         </ul>
     </div>

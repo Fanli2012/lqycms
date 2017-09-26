@@ -780,9 +780,13 @@ margin:5px 0
     border-radius:5px
 }
 
+h1.arc_tit, h2.arc_tit{font-weight: normal;font-size: 1.4em;padding: 10px;}
+.arc_content .ainfo{font-size: 0.875em;color: #999;}
+.arc_content{line-height: 26px;}
 
-
-
+.arclist li{color:#333;border-bottom:1px solid #eee;overflow:hidden;margin-left:10px;margin-right:10px;padding-top:10px;padding-bottom:10px;line-height:24px;}
+.arclist li a{color:#333;display:block;}.arclist li p{color:#999;font-size:14px;}.arclist li:last-child{border-bottom:0}
+.arclist .gpic{width:80px;height:60px;float:left;margin-right:10px;display:block;}.arclist .gpic img{width:80px;height:60px;border:none;}
 
 
 

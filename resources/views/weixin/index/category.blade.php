@@ -1,31 +1,31 @@
-<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title><?php if(empty($post["seotitle"])){echo $post["name"];}else{echo $post["seotitle"];} ?></title>
-<link rel="stylesheet" href="/css/bootstrap.min.css"><link rel="stylesheet" href="/css/style.css"><script src="/js/jquery.min.js"></script><script src="/js/bootstrap.min.js"></script></head><body>
-
-@include('home.common.header')
-<div class="container">
-<div class="row row-offcanvas row-offcanvas-right">
-<div class="col-xs-12 col-sm-9">
-<div class="bread"><a href="/"><?php echo sysconfig('CMS_INDEXNAME'); ?></a> > <?php echo get_cat_path($post["id"]); ?></div>
-<h1 class="page-header"><?php echo $post["name"]; ?></h1>
-
-<?php if(!empty($posts)){foreach($posts as $row){ ?><div class="list"><?php if(!empty($row['litpic'])){ ?><a class="limg" href="<?php echo get_front_url(array("id"=>$row['id'],"catid"=>$row['typeid'],"type"=>'content')); ?>"><img alt="<?php echo $row['title']; ?>" src="<?php echo $row['litpic']; ?>"></a><?php } ?>
-<strong class="tit"><a href="<?php echo get_front_url(array("id"=>$row['id'],"catid"=>$row['typeid'],"type"=>'content')); ?>"><?php echo $row['title']; ?></a></strong><p><?php echo mb_strcut($row['description'],0,150,'UTF-8'); ?>..</p>
-<div class="info"><span class="fl"><?php $taglist=taglist($row['id']);if($taglist){foreach($taglist as $row){ ?><a href="<?php echo get_front_url(array("tagid"=>$row['id'],"type"=>'tags')); ?>"><?php echo $row['tag']; ?></a><?php }} ?><em><?php echo date("m-d H:i",$row['pubdate']); ?></em></span><span class="fr"><em><?php echo $row['click']; ?></em>人阅读</span></div><div class="cl"></div></div><?php }} ?><div id="lad2"><script>ljs2();</script></div>
-
-<div class="pages"><ul><?php echo $pagenav; ?></ul><div class="cl"></div></div>
-
-</div><!--/.col-xs-12.col-sm-9-->
-
-<div class="col-xs-12 col-sm-3 sidebar-offcanvas" id="sidebar">
-<div class="panel panel-info">
-  <div class="panel-heading">热门推荐</div>
-  <div class="list-group"><?php $posts=arclist(array("row"=>5,"typeid"=>$post['id'],"orderby"=>'rand()'));if($posts){foreach($posts as $row){ ?>
-  <a class="list-group-item" href="<?php echo get_front_url(array("id"=>$row['id'],"catid"=>$row['typeid'],"type"=>'content')); ?>"><?php echo $row['title']; ?></a><?php }} ?>
-  </div>
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+<title><?php echo $post['name']; ?> - 微商城</title><meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport">
+<link href="<?php echo env('APP_URL'); ?>/css/weixin/style.css" type="text/css" rel="stylesheet">
+<script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/jquery.min.js"></script><script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/weixin/mobile.js"></script>
+<meta name="keywords" content="<?php echo $post['keywords']; ?>"><meta name="description" content="<?php echo $post['description']; ?>"></head><body>
+<div class="classreturn loginsignup">
+    <div class="ds-in-bl return"><a href="javascript:history.back(-1);"><img src="<?php echo env('APP_URL'); ?>/images/weixin/return.png" alt="返回"></a></div>
+    <div class="ds-in-bl tit center"><span><?php echo $post['name']; ?></span></div>
+    <div class="ds-in-bl nav_menu"><a href="javascript:void(0);"><img src="<?php echo env('APP_URL'); ?>/images/weixin/class1.png" alt="菜单"></a></div>
 </div>
-</div><!--/.sidebar-offcanvas--></div><!--/row-->
+<div class="flool tpnavf cl">
+    <div class="nav_list">
+        <ul>
+        <a href="<?php echo route('weixin'); ?>"><li><img src="<?php echo env('APP_URL'); ?>/images/weixin/home_icon.png"><p>首页</p></li></a>
+        <a href="/Weixin/index.php?m=Store&amp;a=index"><li><img src="<?php echo env('APP_URL'); ?>/images/weixin/brand_icon.png"><p>分类</p></li></a>	
+        <a href="/Weixin/index.php?m=Cart&amp;a=index"><li><img src="<?php echo env('APP_URL'); ?>/images/weixin/car_icon.png"><p>购物车</p></li></a>	
+        <a href="/Weixin/index.php?m=User&amp;a=index"><li><img src="<?php echo env('APP_URL'); ?>/images/weixin/center_icon.png"><p>个人中心</p></li></a></ul>
+        <div class="cl"></div>
+    </div>
+</div>
 
-</div><!-- /.container -->
-@include('home.common.footer')</body></html>
+<div class="arc_list">
+<ul class="arclist cl">
+<?php if($article_list){foreach($article_list as $k=>$v){ ?>
+<li><a href="<?php echo $v['article_detail_url']; ?>"><?php echo $v['title']; ?></a><p><?php echo $v['pubdate']; ?></p></li>
+<?php }} ?>
+</ul>
+</div>
+
+@include('weixin.common.footer')
+</body></html>

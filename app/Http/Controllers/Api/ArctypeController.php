@@ -6,52 +6,50 @@ use Illuminate\Http\Request;
 use Log;
 use App\Common\ReturnData;
 
-use App\Http\Model\Article;
+use App\Http\Model\Arctype;
 
-class ArticleController extends CommonController
+class ArctypeController extends CommonController
 {
     public function __construct()
     {
         parent::__construct();
     }
 	
-    public function articleList(Request $request)
+    public function arctypeList(Request $request)
 	{
         //参数
         $data['limit'] = $request->input('limit', 10);
         $data['offset'] = $request->input('offset', 0);
-        if($request->input('typeid', null) !== null){$data['typeid'] = $request->input('typeid');}
-        $data['ischeck'] = Article::IS_CHECK;
+        if($request->input('pid', null) !== null){$data['pid'] = $request->input('pid');}
+        $data['is_show'] = Arctype::IS_SHOW;
         
-        $res = Article::getList($data);
-		if($res === false)
+        $res = Arctype::getList($data);
+		if($res == false)
 		{
 			return ReturnData::create(ReturnData::SYSTEM_FAIL);
 		}
         
-        foreach($res['list'] as $k=>$v)
+        foreach($res as $k=>$v)
         {
-            $res['list'][$k]->pubdate = date('Y-m-d H:i',$v->pubdate);
             $res['list'][$k]->addtime = date('Y-m-d H:i',$v->addtime);
-            $res['list'][$k]->article_detail_url = route('weixin_article_detail',array('id'=>$v->id));
+            $res['list'][$k]->category_list_url = route('weixin_article_category',array('id'=>$v->id));
         }
         
 		return ReturnData::create(ReturnData::SUCCESS,$res);
     }
     
-    public function articleDetail(Request $request)
+    public function arctypeDetail(Request $request)
 	{
         //参数
         $data['id'] = $request->input('id');
-        $data['ischeck'] = Article::IS_CHECK;
+        $data['is_show'] = Arctype::IS_SHOW;
         
-        $res = Article::getOne($data);
+        $res = Arctype::getOne($data);
 		if($res === false)
 		{
 			return ReturnData::create(ReturnData::SYSTEM_FAIL);
 		}
         
-        $res->pubdate = date('Y-m-d H:i',$res->pubdate);
         $res->addtime = date('Y-m-d H:i',$res->addtime);
         
 		return ReturnData::create(ReturnData::SUCCESS,$res);

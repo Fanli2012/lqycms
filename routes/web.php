@@ -1,5 +1,4 @@
 <?php
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -10,7 +9,6 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 //wap路由，要放到最前面，否则解析不到
 Route::group(['domain' => env('APP_SUBDOMAIN'), 'namespace' => 'Wap'], function () {
 	Route::get('/', 'IndexController@index')->name('wap_home');
@@ -53,18 +51,19 @@ Route::group(['namespace' => 'Home'], function () {
 	});
 });
 
+
 //微信路由
 Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin'], function () {
 	Route::get('/', 'IndexController@index')->name('weixin');
 	Route::get('/page404', 'IndexController@page404')->name('weixin_page404');         //404页面
 	Route::get('/tags', 'IndexController@tags')->name('weixin_tags');
-	Route::get('/search/{id}', 'IndexController@search')->name('weixin_search');  //搜索页面
+	Route::get('/search', 'IndexController@search')->name('weixin_search');  //搜索页面
 	Route::get('/p/{id}', 'IndexController@detail')->name('weixin_article_detail'); //文章详情页
 	Route::get('/cat{cat}', 'IndexController@category')->name('weixin_article_category'); //分类页
 	Route::get('/tag{tag}', 'IndexController@tag')->name('weixin_tag');           //标签页
 	Route::get('/page/{id}', 'IndexController@page')->name('weixin_singlepage');  //单页
 	Route::get('/goods/{id}', 'IndexController@goods')->name('weixin_goods_detail'); //商品详情页
-	Route::get('/goodstype{cat}/{page}', 'IndexController@goodstype');          //产品分类页，分页
+	Route::get('/goodslist', 'IndexController@goodslist')->name('weixin_goods_list'); //产品分类页
 	Route::get('/goodstype{cat}', 'IndexController@goodstype')->name('weixin_goodstype'); //产品分类页
 	Route::get('/sitemap.xml', 'IndexController@sitemap')->name('weixin_sitemap');//sitemap
 	
@@ -211,6 +210,8 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     //文章
 	Route::get('/article_list', 'ArticleController@articleList');
     Route::get('/article_detail', 'ArticleController@articleDetail');
+    Route::get('/arctype_list', 'ArctypeController@arctypeList');
+    Route::get('/arctype_detail', 'ArctypeController@arctypeDetail');
     //商品
     Route::get('/goods_list', 'GoodsController@goodsList'); //商品列表
     Route::get('/goodstype_list', 'GoodsTypeController@goodsTypeList'); //商品分类列表
@@ -279,67 +280,6 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
 	Route::get('/region_list', 'RegionController@regionList');
     Route::get('/region_detail', 'RegionController@regionDetail');
 });
-
-//中间件
-Route::group(['middleware' => 'auth'], function () {
-    Route::get('/qwe', function () {
-        // 使用 Auth 中间件
-    });
-
-    Route::get('user/profile', function () {
-        // 使用 Auth 中间件
-    });
-});
-
-
-
-
-
-
-
-
-
-
-
-//https://github.com/cong5/myPersimmon
-//前台
-/* Route::group(['namespace' => 'App'], function () {
-    Route::get('/', 'HomeController@index')->name('home');
-    Route::get('/post/{flag}', 'HomeController@posts')->name('post');
-    Route::get('/tags/{flag}', 'HomeController@tags')->name('tags');
-    Route::get('/category/{flag}', 'HomeController@category')->name('category');
-    Route::get('/feed', 'HomeController@feed');
-    Route::get('/sitemap.xml', 'HomeController@siteMap');
-    Route::get('/xmlrpc', 'XmlRpcController@errorMessage');
-    Route::post('/xmlrpc', 'XmlRpcController@index')->name('xmlrpc');
-    Route::get('/friends', 'HomeController@friends')->name('friends');
-    Route::resource('/comment', 'CommentController');
-    Route::get('/debug', 'HomeController@debug')->name('debug');
-});
-
-//后台
-Route::group(['prefix' => 'myp', 'namespace' => 'Backend'], function () {
-    Route::get('/', 'DashboardController@dashboard')->name('admin');
-    Route::post('/auth/check', 'AuthController@check')->name('admin.login_check');
-    Route::post('/auth/logout', 'AuthController@logout')->name('admin.logout');
-    Route::post('/auth/login', 'AuthController@authenticate')->name('admin.login');
-});
-Route::group(['prefix' => 'myp', 'middleware' => 'auth', 'namespace' => 'Backend'], function () {
-    Route::get('/dashboard/meta', 'DashboardController@meta');
-    Route::get('/dashboard/shanbay', 'DashboardController@shanbay');
-    Route::resource('/categorys', 'CategorysController');
-    Route::resource('/posts', 'PostsController');
-    Route::resource('/tags', 'TagsController');
-    Route::resource('/links', 'LinksController');
-    Route::resource('/options', 'OptionsController');
-    Route::resource('/settings', 'SettingsController');
-    Route::resource('/navigations', 'NavigationController');
-    Route::resource('/uploads', 'FileController');
-    Route::resource('/util', 'UtilController');
-    Route::resource('/user', 'UserController');
-    Route::resource('/comments', 'CommentController');
-    Route::resource('/trash', 'TrashController');
-}); */
 
 
 

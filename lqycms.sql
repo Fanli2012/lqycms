@@ -166,6 +166,7 @@ CREATE TABLE `fl_arctype` (
   `seokeyword` varchar(60) DEFAULT '' COMMENT '判断相关,可不填',
   `model` int(4) DEFAULT '0' COMMENT '栏目所属的模型',
   `listorder` smallint(5) DEFAULT '50' COMMENT '排序',
+  `is_show` tinyint(1) DEFAULT '0' COMMENT '是否显示，默认0显示',
   PRIMARY KEY (`id`),
   UNIQUE KEY `typename` (`name`),
   UNIQUE KEY `typedir` (`typedir`)
@@ -173,7 +174,7 @@ CREATE TABLE `fl_arctype` (
 
 /*Data for the table `fl_arctype` */
 
-insert  into `fl_arctype`(`id`,`pid`,`addtime`,`name`,`seotitle`,`keywords`,`description`,`content`,`typedir`,`templist`,`temparticle`,`litpic`,`seokeyword`,`model`,`listorder`) values (1,0,1483345707,'新闻中心','','新闻中心','新闻中心','<p>新闻中心</p>','news','category','detail','','新闻中心',0,50),(2,0,1476063429,'案例中心','','案例中心','案例中心','<p>案例中心</p>','case','category','detail','','案例中心',0,50),(3,1,1476063419,'行业新闻','','行业新闻','行业新闻','<p>行业新闻</p>','hangye','category','detail','','行业新闻',0,50),(4,1,1476068069,'企业新闻','','企业新闻','企业新闻','<p>企业新闻</p>','qiye','category','detail','','企业新闻',0,50);
+insert  into `fl_arctype`(`id`,`pid`,`addtime`,`name`,`seotitle`,`keywords`,`description`,`content`,`typedir`,`templist`,`temparticle`,`litpic`,`seokeyword`,`model`,`listorder`,`is_show`) values (1,0,1483345707,'新闻中心','','新闻中心','新闻中心','<p>新闻中心</p>','news','category','detail','','新闻中心',0,50,0),(2,0,1476063429,'案例中心','','案例中心','案例中心','<p>案例中心</p>','case','category','detail','','案例中心',0,50,0),(3,1,1476063419,'行业新闻','','行业新闻','行业新闻','<p>行业新闻</p>','hangye','category','detail','','行业新闻',0,50,0),(4,1,1476068069,'企业新闻','','企业新闻','企业新闻','<p>企业新闻</p>','qiye','category','detail','','企业新闻',0,50,0);
 
 /*Table structure for table `fl_article` */
 
@@ -391,7 +392,7 @@ CREATE TABLE `fl_goods` (
 
 /*Data for the table `fl_goods` */
 
-insert  into `fl_goods`(`id`,`typeid`,`tuijian`,`click`,`title`,`body`,`sn`,`price`,`litpic`,`pubdate`,`add_time`,`keywords`,`seotitle`,`description`,`status`,`shipping_fee`,`market_price`,`goods_number`,`user_id`,`sale`,`cost_price`,`goods_weight`,`point`,`comments`,`promote_start_date`,`promote_price`,`promote_end_date`,`goods_img`,`warn_number`,`spec`,`listorder`) values (1,2,0,5653,'示例产品一',NULL,'sn123456','45000.00','/uploads/2017/06/201706041951031181.jpg',1496577749,1496577749,'示例,产品,一','','',0,'0.00','50000.00',21,1,0,'0.00','0.00',NULL,NULL,NULL,'0.00',NULL,NULL,NULL,NULL,50),(2,1,0,3,'示例产品二',NULL,'sn987','1.00','/uploads/2017/06/201706042011354141.jpg',1496578330,1496578313,'产品,示例,二','','',0,'3.00','2.00',3,1,3,'0.00','0.00',NULL,NULL,NULL,'0.00',NULL,NULL,NULL,NULL,50),(3,1,0,3,'示例产品三',NULL,'sn232143','5.00','/uploads/2017/06/201706042012428057.jpg',1496578380,1496578380,'示例,产品,三','','',0,'3.00','4.00',3,1,1,'0.00','0.00',NULL,NULL,NULL,'0.00',NULL,NULL,NULL,NULL,50),(4,1,0,7,'示例产品四2',NULL,'sn9809702','5.00','/uploads/2017/06/201706042013331349.jpg',1500994245,1496578429,'示例,产品,四','','',0,'3.00','6.00',7,1,4,'0.00','0.00',NULL,NULL,NULL,'0.00',NULL,NULL,NULL,NULL,50);
+insert  into `fl_goods`(`id`,`typeid`,`tuijian`,`click`,`title`,`body`,`sn`,`price`,`litpic`,`pubdate`,`add_time`,`keywords`,`seotitle`,`description`,`status`,`shipping_fee`,`market_price`,`goods_number`,`user_id`,`sale`,`cost_price`,`goods_weight`,`point`,`comments`,`promote_start_date`,`promote_price`,`promote_end_date`,`goods_img`,`warn_number`,`spec`,`listorder`) values (1,2,0,5653,'示例产品一','是的发生','sn123456','45000.00','/uploads/2017/06/201706041951031181.jpg',1496577749,1496577749,'示例,产品,一','','',0,'0.00','50000.00',21,1,0,'0.00','0.00',NULL,NULL,NULL,'0.00',NULL,NULL,NULL,NULL,50),(2,1,0,3,'示例产品二',NULL,'sn987','1.00','/uploads/2017/06/201706042011354141.jpg',1496578330,1496578313,'产品,示例,二','','',0,'3.00','2.00',3,1,3,'0.00','0.00',NULL,NULL,NULL,'0.00',NULL,NULL,NULL,NULL,50),(3,1,0,3,'示例产品三',NULL,'sn232143','5.00','/uploads/2017/06/201706042012428057.jpg',1496578380,1496578380,'示例,产品,三','','',0,'3.00','4.00',3,1,1,'0.00','0.00',NULL,NULL,NULL,'0.00',NULL,NULL,NULL,NULL,50),(4,1,0,7,'示例产品四2',NULL,'sn9809702','5.00','/uploads/2017/06/201706042013331349.jpg',1500994245,1496578429,'示例,产品,四','','',0,'3.00','6.00',7,1,4,'0.00','0.00',NULL,NULL,NULL,'0.00',NULL,NULL,NULL,NULL,50);
 
 /*Table structure for table `fl_goods_photo` */
 
@@ -414,20 +415,21 @@ DROP TABLE IF EXISTS `fl_goods_type`;
 
 CREATE TABLE `fl_goods_type` (
   `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
-  `pid` smallint(5) DEFAULT '0' COMMENT '父级栏目id',
-  `addtime` int(11) DEFAULT '0' COMMENT '添加时间',
+  `pid` smallint(5) NOT NULL DEFAULT '0' COMMENT '父级栏目id',
+  `addtime` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
   `name` varchar(30) NOT NULL DEFAULT '' COMMENT '栏目名称',
-  `seotitle` varchar(150) DEFAULT '' COMMENT 'seo标题',
-  `keywords` varchar(60) DEFAULT '' COMMENT '关键词',
-  `description` varchar(255) DEFAULT '' COMMENT '描述',
+  `seotitle` varchar(150) NOT NULL DEFAULT '' COMMENT 'seo标题',
+  `keywords` varchar(60) NOT NULL DEFAULT '' COMMENT '关键词',
+  `description` varchar(255) NOT NULL DEFAULT '' COMMENT '描述',
   `content` text COMMENT '内容',
   `typedir` varchar(30) NOT NULL DEFAULT '' COMMENT '别名',
-  `templist` varchar(50) DEFAULT '' COMMENT '列表页模板',
-  `temparticle` varchar(50) DEFAULT '' COMMENT '详情页模板',
-  `litpic` varchar(100) DEFAULT '' COMMENT '封面或缩略图',
-  `seokeyword` varchar(60) DEFAULT '' COMMENT '判断相关,可不填',
-  `status` smallint(1) DEFAULT '1' COMMENT '是否显示',
-  `listorder` smallint(5) DEFAULT '50' COMMENT '排序',
+  `templist` varchar(50) NOT NULL DEFAULT '' COMMENT '列表页模板',
+  `temparticle` varchar(50) NOT NULL DEFAULT '' COMMENT '详情页模板',
+  `litpic` varchar(100) NOT NULL DEFAULT '' COMMENT '缩略图',
+  `seokeyword` varchar(60) NOT NULL DEFAULT '' COMMENT '判断相关,可不填',
+  `status` smallint(1) NOT NULL DEFAULT '1' COMMENT '是否显示',
+  `listorder` smallint(5) NOT NULL DEFAULT '50' COMMENT '排序',
+  `cover` varchar(100) NOT NULL DEFAULT '' COMMENT '封面',
   PRIMARY KEY (`id`),
   UNIQUE KEY `typename` (`name`),
   UNIQUE KEY `typedir` (`typedir`)
@@ -435,7 +437,7 @@ CREATE TABLE `fl_goods_type` (
 
 /*Data for the table `fl_goods_type` */
 
-insert  into `fl_goods_type`(`id`,`pid`,`addtime`,`name`,`seotitle`,`keywords`,`description`,`content`,`typedir`,`templist`,`temparticle`,`litpic`,`seokeyword`,`status`,`listorder`) values (1,0,1496576972,'书籍','','','','<p>书籍</p>','book','productcat','product','','',1,50),(2,0,1496576993,'数码','','','',NULL,'shuma','productcat','product','','',1,50),(3,0,1500994389,'qq','qq','qq','','<p>qq</p>','qq','goodscat','goods','','qq',1,50);
+insert  into `fl_goods_type`(`id`,`pid`,`addtime`,`name`,`seotitle`,`keywords`,`description`,`content`,`typedir`,`templist`,`temparticle`,`litpic`,`seokeyword`,`status`,`listorder`,`cover`) values (1,0,1496576972,'书籍','','','','<p>书籍</p>','book','goodscat','goods','','',1,50,''),(2,0,1496576993,'数码','','','',NULL,'shuma','goodscat','goods','','',1,50,''),(3,0,1500994389,'qq','qq','qq','','<p>qq</p>','qq','goodscat','goods','','qq',1,50,'');
 
 /*Table structure for table `fl_guestbook` */
 
@@ -634,7 +636,7 @@ CREATE TABLE `fl_payment` (
 
 /*Data for the table `fl_payment` */
 
-insert  into `fl_payment`(`id`,`pay_code`,`pay_name`,`pay_fee`,`pay_des`,`pay_order`,`pay_config`,`status`) values (1,'balance','余额支付','0','使用帐户余额支付。只有会员才能使用，通过设置信用额度，可以透支。',0,'a:0:{}',1),(2,'alipay','支付宝','0','支付宝',0,'a:0:{}',1),(3,'weixin','微信','0','微信',0,'a:0:{}',1),(4,'bank','银行汇款/转帐','0','银行名称\n收款人信息：全称 ××× ；帐号或地址 ××× ；开户行 ×××。\n注意事项：办理电汇时，请在电汇单“汇款用途”一栏处注明您的订单号。',0,'a:0:{}',0),(5,'cod','货到付款','0','开通城市：×××\n货到付款区域：×××',0,'a:0:{}',0);
+insert  into `fl_payment`(`id`,`pay_code`,`pay_name`,`pay_fee`,`pay_des`,`pay_order`,`pay_config`,`status`) values (1,'balance','余额支付','0','使用帐户余额支付。只有会员才能使用，通过设置信用额度，可以透支。',0,'a:0:{}',1),(2,'weixin','微信','0','微信',0,'a:0:{}',1),(3,'alipay','支付宝','0','支付宝',0,'a:0:{}',1),(4,'cod','货到付款','0','开通城市：×××\r\n货到付款区域：×××',0,'a:0:{}',0),(5,'bank','银行汇款/转帐','0','银行名称\r\n收款人信息：全称 ××× ；帐号或地址 ××× ；开户行 ×××。\r\n注意事项：办理电汇时，请在电汇单“汇款用途”一栏处注明您的订单号。',0,'a:0:{}',0);
 
 /*Table structure for table `fl_refund` */
 
@@ -742,11 +744,11 @@ CREATE TABLE `fl_slide` (
   `rank` int(4) DEFAULT '0' COMMENT '排序',
   `is_show` smallint(1) DEFAULT '0' COMMENT '是否显示，默认0显示',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 /*Data for the table `fl_slide` */
 
-insert  into `fl_slide`(`id`,`title`,`url`,`target`,`group_id`,`pic`,`rank`,`is_show`) values (1,'72PCMS','http://www.72p.org/',0,0,'/uploads/2016/12/201612171800224583.jpg',0,0),(2,'炒股入门知识','http://www.pe7.org/',0,0,'/uploads/2016/12/201612171804239092.jpg',50,1),(4,'将很快就会','http://www.baidu.com/',0,6,'/uploads/2016/12/201612171732241499.jpg',89,0),(5,'sdf2','http://wsdfsa.com',1,66,'/uploads/2017/05/201705311643481302.png',5,1);
+insert  into `fl_slide`(`id`,`title`,`url`,`target`,`group_id`,`pic`,`rank`,`is_show`) values (1,'1','http://www.baidu.com',0,0,'/uploads/2017/09/201709242246099096.jpg',0,0),(2,'2','http://www.sina.com',0,0,'/uploads/2017/09/201709242246091005.jpg',0,0),(3,'3','http://www.163.com',0,0,'/uploads/2017/09/201709242246091160.jpg',0,0);
 
 /*Table structure for table `fl_sms_log` */
 
@@ -824,12 +826,13 @@ CREATE TABLE `fl_sysconfig` (
   `varname` varchar(100) NOT NULL DEFAULT '' COMMENT '变量名',
   `info` varchar(100) NOT NULL DEFAULT '' COMMENT '变量值',
   `value` text NOT NULL COMMENT '变量说明',
+  `is_show` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否显示，默认0显示，让客户看不到',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
 /*Data for the table `fl_sysconfig` */
 
-insert  into `fl_sysconfig`(`id`,`varname`,`info`,`value`) values (1,'CMS_WEBNAME','网站名称','LQYCMS企业建站系统'),(2,'CMS_BASEHOST','站点根网址','http://www.lqycms.com'),(3,'CMS_UPLOADS','图片/上传文件默认路径','/uploads'),(4,'CMS_CSS','css默认存放路径','/css'),(5,'CMS_JS','js默认存放路径','/js'),(6,'CMS_INDEXNAME','主页链接名','首页'),(7,'CMS_POWERBY','网站版权信息','Copyright &copy; LQYCMS 版权所有'),(8,'CMS_IMGWIDTH','缩略图默认宽度','240'),(9,'CMS_IMGHEIGHT','缩略图默认高度','180'),(10,'CMS_SEOTITLE','网站seotitle','lqycms是一套完全免费、开源、无授权限制的网站管理系统'),(11,'CMS_KEYWORDS','网站关键词Keywords','lqycms,无授权限制网站系统cms,免费cms系统,开源网站管理系统,开源cms'),(12,'CMS_DESCRIPTION','网站描述','lqycms完全免费、开源、无授权限制，您可以使用lqycms在任何商业或者非商业网站上使用而不必支付任何费用，系统采用主流的mvc架构开发，更加容易进行二次开发。'),(13,'CMS_ISCACHE','是否开启缓存，1开启，0关闭','1'),(14,'CMS_MAXARC','最大返回列表结果数，默认300','300'),(15,'CMS_PAGESIZE','列表每页显示的数量，默认15','15'),(16,'CMS_SIGN_POINT','签到积分','5');
+insert  into `fl_sysconfig`(`id`,`varname`,`info`,`value`,`is_show`) values (1,'CMS_WEBNAME','网站名称','LQYCMS企业建站系统',0),(2,'CMS_BASEHOST','站点根网址','http://www.lqycms.com',0),(3,'CMS_UPLOADS','图片/上传文件默认路径','/uploads',0),(4,'CMS_CSS','css默认存放路径','/css',0),(5,'CMS_JS','js默认存放路径','/js',0),(6,'CMS_INDEXNAME','主页链接名','首页',0),(7,'CMS_POWERBY','网站版权信息','Copyright &copy; LQYCMS 版权所有',0),(8,'CMS_IMGWIDTH','缩略图默认宽度','240',0),(9,'CMS_IMGHEIGHT','缩略图默认高度','180',0),(10,'CMS_SEOTITLE','网站seotitle','lqycms是一套完全免费、开源、无授权限制的网站管理系统',0),(11,'CMS_KEYWORDS','网站关键词Keywords','lqycms,无授权限制网站系统cms,免费cms系统,开源网站管理系统,开源cms',0),(12,'CMS_DESCRIPTION','网站描述','lqycms完全免费、开源、无授权限制，您可以使用lqycms在任何商业或者非商业网站上使用而不必支付任何费用，系统采用主流的mvc架构开发，更加容易进行二次开发。',0),(13,'CMS_ISCACHE','是否开启缓存，1开启，0关闭','1',0),(14,'CMS_MAXARC','最大返回列表结果数，默认300','300',0),(15,'CMS_PAGESIZE','列表每页显示的数量，默认15','15',0),(16,'CMS_SIGN_POINT','签到积分','5',0);
 
 /*Table structure for table `fl_tagindex` */
 
@@ -896,7 +899,8 @@ CREATE TABLE `fl_user` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `email` varchar(60) NOT NULL DEFAULT '' COMMENT '邮箱',
   `user_name` varchar(60) NOT NULL DEFAULT '' COMMENT '用户名',
-  `password` varchar(32) NOT NULL DEFAULT '' COMMENT '密码',
+  `password` varchar(50) NOT NULL DEFAULT '' COMMENT '密码',
+  `pay_password` varchar(50) NOT NULL DEFAULT '' COMMENT '支付密码',
   `sex` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '性别1男2女',
   `birthday` date NOT NULL DEFAULT '0000-00-00' COMMENT '生日',
   `money` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '用户余额',
@@ -921,7 +925,7 @@ CREATE TABLE `fl_user` (
 
 /*Data for the table `fl_user` */
 
-insert  into `fl_user`(`id`,`email`,`user_name`,`password`,`sex`,`birthday`,`money`,`frozen_money`,`point`,`rank_points`,`address_id`,`add_time`,`user_rank`,`parent_id`,`nickname`,`mobile`,`status`,`group_id`,`updated_at`,`signin_time`) values (1,'ecshop@ecshop.com','ecshop','6526fa13f6c5804fc8aaefa25395aba3',0,'1960-03-03','0.00','0.00',20,0,1,0,0,0,'','',0,NULL,NULL,'2017-08-11 00:24:20'),(2,'vip@ecshop.com','vip','232059cb5361a9336ccf1b8c2ba7657a',0,'1949-01-01','0.00','0.00',0,0,0,0,0,0,'','',0,NULL,NULL,NULL);
+insert  into `fl_user`(`id`,`email`,`user_name`,`password`,`pay_password`,`sex`,`birthday`,`money`,`frozen_money`,`point`,`rank_points`,`address_id`,`add_time`,`user_rank`,`parent_id`,`nickname`,`mobile`,`status`,`group_id`,`updated_at`,`signin_time`) values (1,'ecshop@ecshop.com','ecshop','6526fa13f6c5804fc8aaefa25395aba3','',0,'1960-03-03','0.00','0.00',20,0,1,0,0,0,'','',0,NULL,NULL,'2017-08-11 00:24:20'),(2,'vip@ecshop.com','vip','232059cb5361a9336ccf1b8c2ba7657a','',0,'1949-01-01','0.00','0.00',0,0,0,0,0,0,'','',0,NULL,NULL,NULL);
 
 /*Table structure for table `fl_user_address` */
 
