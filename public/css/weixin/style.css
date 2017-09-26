@@ -4,6 +4,7 @@ ol, ul{list-style:none;}dl,ul{zoom:1;}.mb10{margin-bottom:10px;}.mt10{margin-top
 a{color:#333;text-decoration:none}.cse a,.cses{color:#008000;}.ofh{overflow:hidden}
 .fl,.mfl{float:left;}.fr,.mfr{float:right;}.m-auto{margin:0 auto;}.cl{clear:both;}.bggrey{background-color:#f1f1f1;padding:10px 0;}
 .red{color:#e23435;}
+.table-cell{display:table;width:100%;}
 
 .box{margin-left:10px;margin-right:10px;overflow:hidden;}
 
@@ -270,17 +271,17 @@ margin:5px 0
 .tp-category{padding:10px;overflow:hidden}
 
 .storenav{background-color:#fff;border-bottom:1px solid #f1f1f1;}
-.storenav ul li{float:left;width:20%;padding:0 5px;color:#666;font-size:1rem;position:relative;text-align:center;height:46px;line-height:46px;}
+.storenav ul li{display:table-cell;color:#666;font-size:1rem;position:relative;text-align:center;height:46px;line-height:46px;}
 .storenav ul li>a{color:#666;font-size:1rem;}
 .storenav ul li>a>span{color:#666}
 .storenav ul li span{padding-right:5px;cursor:pointer}
 .storenav ul li i{position:absolute;background-image:url("../../images/weixin/dg.png");background-repeat:no-repeat;background-size:cover;width:12px;height:6px;top:20px;}
 .storenav ul .red span{color:red}
 .storenav ul .red i{background-image:url("../../images/weixin/d.png");background-repeat:no-repeat;background-size:cover;}
-.storenav ul li .pr{background-image:url(../images/weixin/sxjt.png);background-repeat:no-repeat;background-size:cover;background-size:34px;height:15px;top:16px;background-position-x:0;}
+.storenav ul li .pr{background-image:url(../../images/weixin/sxjt.png);background-repeat:no-repeat;background-size:cover;background-size:34px;height:15px;top:16px;background-position-x:0;}
 .storenav ul li .bpr1{background-position-x:-11px;}
 .storenav ul li .bpr2{background-position-x:-22px;}
-.storenav ul li .fitter{background-image:url(../images/weixin/xx.png);background-repeat:no-repeat;background-size:cover;width:14px;height:15px;top:16px;}
+.storenav ul li .fitter{background-image:url(../../images/weixin/xx.png);background-repeat:no-repeat;background-size:cover;width:14px;height:15px;top:16px;}
 
 .nonenothing{width:75%;margin:50px auto 0 auto;text-align:center;}
 .nonenothing img{width:100px;height:150px;}
@@ -305,7 +306,7 @@ margin:5px 0
     height:22px;
     display: block;
     float: left;
-    background-image: url("../images/weixin/check.png");
+    background-image: url("../../images/weixin/check.png");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 0
@@ -508,7 +509,7 @@ margin:5px 0
 }
 
 .myhearder .set a i {
-    background-image: url("../images/weixin/set.png");
+    background-image: url("../../images/weixin/set.png");
     background-repeat: no-repeat;
     background-size: cover;
     width:28px;
@@ -555,7 +556,7 @@ margin:5px 0
 }
 
 .bankhearder {
-    background-image: url(../images/zjgl.jpg);
+    background-image: url(../../images/zjgl.jpg);
     height: 11.73333rem
 }
 
@@ -647,7 +648,7 @@ margin:5px 0
     margin-top:18px;
 }
 .Mright {
-    background-image: url(../images/weixin/yr.png);
+    background-image: url(../../images/weixin/yr.png);
     background-repeat: no-repeat;
     background-size: cover;
     width:8px;
@@ -728,7 +729,7 @@ margin:5px 0
 
 .my .content .floor ul li a p.or:after {
     content: "";
-    background-image: url(../images/weixin/or.png);
+    background-image: url(../../images/weixin/or.png);
     width: .17067rem;
     height: .29867rem;
     background-repeat: no-repeat;
@@ -747,7 +748,7 @@ margin:5px 0
 }
 
 .my .content .action {
-    background-image: url(../images/weixin/rb.png);
+    background-image: url(../../images/weixin/rb.png);
     background-repeat: no-repeat;
     background-position: 0 1.96267rem;
     width: 100%;

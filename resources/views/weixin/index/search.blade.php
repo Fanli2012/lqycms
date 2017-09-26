@@ -2,7 +2,7 @@
 <title>商城</title><meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport">
 <link href="<?php echo env('APP_URL'); ?>/css/weixin/style.css" type="text/css" rel="stylesheet">
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/jquery.min.js"></script>
-<script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/weixin/mobile.js"></script><script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/layer-mobile.js"></script>
+<script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/weixin/mobile.js"></script>
 <meta name="keywords" content="关键词"><meta name="description" content="描述"></head><body>
 <div class="classreturn loginsignup">
     <div class="ds-in-bl return"><a href="javascript:history.back(-1);"><img src="<?php echo env('APP_URL'); ?>/images/weixin/return.png" alt="返回"></a></div>
@@ -12,10 +12,10 @@
 <div class="flool tpnavf cl">
     <div class="nav_list">
         <ul>
-        <a href="index.html"><li><img src="images/weixin/home_icon.png"><p>首页</p></li></a>
-        <a href="/Weixin/index.php?m=Store&amp;a=index"><li><img src="images/weixin/brand_icon.png"><p>分类</p></li></a>	
-        <a href="/Weixin/index.php?m=Cart&amp;a=index"><li><img src="images/weixin/car_icon.png"><p>购物车</p></li></a>	
-        <a href="/Weixin/index.php?m=User&amp;a=index"><li><img src="images/weixin/center_icon.png"><p>个人中心</p></li></a></ul>
+        <a href="<?php echo route('weixin'); ?>"><li><img src="<?php echo env('APP_URL'); ?>/images/weixin/home_icon.png"><p>首页</p></li></a>
+        <a href="/Weixin/index.php?m=Store&amp;a=index"><li><img src="<?php echo env('APP_URL'); ?>/images/weixin/brand_icon.png"><p>分类</p></li></a>	
+        <a href="/Weixin/index.php?m=Cart&amp;a=index"><li><img src="<?php echo env('APP_URL'); ?>/images/weixin/car_icon.png"><p>购物车</p></li></a>	
+        <a href="/Weixin/index.php?m=User&amp;a=index"><li><img src="<?php echo env('APP_URL'); ?>/images/weixin/center_icon.png"><p>个人中心</p></li></a></ul>
         <div class="cl"></div>
     </div>
 </div>
@@ -27,12 +27,15 @@
     </form>
     <div class="cl"></div>
 </div>
+<script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/layer/layer.js"></script>
 <script>
     function ajaxsecrch(){
         if($.trim($('#keyword').val()) != ''){
             $("#sourch_form").submit();
         }else{
-            layer.open({content:'请输入搜索关键字',time:2});
+            layer.msg('请输入搜索关键字', {
+                time: 3000, //3s后自动关闭
+            });
         }
     }
 </script>
