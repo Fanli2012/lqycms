@@ -1,1 +1,0 @@
-<div id="footer" class="box">&copy; <?php echo sysconfig('CMS_WEBNAME'); ?> 部分文章来源于网络，如果侵犯了您的权益，请<a href="<?php echo route('singlepage', ['id'=>'contact']); ?>">联系我们</a>。<a target="_blank" href="<?php echo sysconfig('CMS_BASEHOST'); ?>/sitemap.xml">网站地图</a><div class="m-auto"><script>count_js();</script></div></div>

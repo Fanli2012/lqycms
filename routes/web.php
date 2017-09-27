@@ -56,17 +56,22 @@ Route::group(['namespace' => 'Home'], function () {
 Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin'], function () {
 	Route::get('/', 'IndexController@index')->name('weixin');
 	Route::get('/page404', 'IndexController@page404')->name('weixin_page404');         //404页面
-	Route::get('/tags', 'IndexController@tags')->name('weixin_tags');
 	Route::get('/search', 'IndexController@search')->name('weixin_search');  //搜索页面
 	Route::get('/p/{id}', 'IndexController@detail')->name('weixin_article_detail'); //文章详情页
 	Route::get('/cat{cat}', 'IndexController@category')->name('weixin_article_category'); //分类页
-	Route::get('/tag{tag}', 'IndexController@tag')->name('weixin_tag');           //标签页
 	Route::get('/page/{id}', 'IndexController@page')->name('weixin_singlepage');  //单页
+    
 	Route::get('/goods/{id}', 'IndexController@goods')->name('weixin_goods_detail'); //商品详情页
 	Route::get('/goodslist', 'GoodsController@goodslist')->name('weixin_goods_list'); //产品分类页
-	Route::get('/goodstype{cat}', 'IndexController@goodstype')->name('weixin_goodstype'); //产品分类页
-	Route::get('/sitemap.xml', 'IndexController@sitemap')->name('weixin_sitemap');//sitemap
-	
+    
+	Route::get('/user', 'UserController@index')->name('weixin_user');
+    Route::get('/user_goods_history', 'UserController@userGoodsHistory')->name('weixin_user_goods_history');
+    
+    Route::get('/cart', 'CartController@index')->name('weixin_cart');
+    
+    Route::get('/user_address_list', 'AddressController@index')->name('weixin_user_address_list');
+    
+    
 	Route::get('/test', 'IndexController@test')->name('weixin_test');           //测试
 });
 

@@ -201,5 +201,31 @@ function messageNotice(message)
 </script>
 <!--猜您喜欢-end-->
 
+<!--猜您喜欢-start-->
+<div class="floor guesslike">
+    <div class="banner_tit"><img src="images/weixin/ind_52.jpg" alt="猜您喜欢"/></div>
+    <ul class="goods_list_s cl">
+        <a href="http://www.baidu.com"><li><span class="goods_thumb"><img alt="决定基金业绩的主要因素" src="images/weixin/goods_thumb_400_400.jpeg"></span>
+        <div class="goods_info"><p class="goods_tit">买基金要因素决定基金业绩的主要因素决定基金业绩的主要因素决定基金业绩的主要因素</p>
+        <p class="goods_price">￥<b>100.00</b></p>
+        <p class="goods_des">库存：10</p>
+        </div>
+        </li></a>
+        <a href="http://www.baidu.com"><li><span class="goods_thumb"><img alt="决定基金业绩的主要因素" src="images/weixin/goods_thumb_400_400.jpeg"></span>
+        <div class="goods_info"><p class="goods_tit">买基金的好处</p>
+        <p class="goods_price">￥<b>100.00</b></p>
+        <p class="goods_des">库存：10</p>
+        </div>
+        </li></a>
+        <a href="http://www.baidu.com"><li><span class="goods_thumb"><img alt="决定基金业绩的主要因素" src="images/weixin/goods_thumb_400_400.jpeg"></span>
+        <div class="goods_info"><p class="goods_tit">买基金的好处</p>
+        <p class="goods_price">￥<b>100.00</b></p>
+        <p class="goods_des">库存：10</p>
+        </div>
+        </li></a>
+    </ul>
+</div>
+<!--猜您喜欢-end-->
+
 @include('weixin.common.footer')
 </body></html>
