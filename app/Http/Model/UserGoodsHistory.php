@@ -36,6 +36,16 @@ class UserGoodsHistory extends BaseModel
 		if($res['count']>0)
         {
             $res['list']  = $model->skip($offset)->take($limit)->orderBy('id','desc')->get();
+            
+            if($res['list'])
+            {
+                foreach($res['list'] as $k=>$v)
+                {
+                    $goods = Goods::getOne(array('id'=>$v['goods_id'],'field'=>array('id', 'typeid', 'tuijian', 'click', 'title', 'sn', 'price','litpic', 'pubdate', 'add_time', 'market_price', 'goods_number', 'sale', 'comments','promote_start_date','promote_price','promote_end_date','goods_img','spec','point')));
+                    
+                    $res['list'][$k]['goods'] = $goods;
+                }
+            }
         }
         else
         {
@@ -77,9 +87,9 @@ class UserGoodsHistory extends BaseModel
     }
     
     //删除一条记录
-    public static function remove($id)
+    public static function remove($id,$user_id)
     {
-        if (self::whereIn('id', explode(',', $id))->delete() === false)
+        if (self::whereIn('id', explode(',', $id))->where('user_id',$user_id)->delete() === false)
         {
             return false;
         }

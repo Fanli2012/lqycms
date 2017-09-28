@@ -37,7 +37,7 @@
 	&nbsp;</div>
 <div>
 	3.客户还可以通过交易所的咨询电话进行查询：0755-2288800（深市），021-16893006（沪市）投资者所查到的配号是投资者在一个帐户上申购新股所得配号的起始号，其余配号依次顺延.</div>
-<div class="arcnext cl">下: <a class="red" href="http://m.1104.org/cat60/id4051" rel="prev">网上申购新股如何操作</a></div></div>
+<!-- <div class="arcnext cl">下: <a class="red" href="" rel="prev"></a></div> --></div>
 
 @include('weixin.common.footer')
 </body></html>

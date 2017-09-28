@@ -31,9 +31,9 @@ class Goods extends BaseModel
     //protected $connection = 'connection-name';
 	
     //常用字段
-    protected static $common_field = [
+    protected static $common_field = array(
         'id', 'typeid', 'tuijian', 'click', 'title', 'sn', 'price','litpic', 'pubdate', 'add_time', 'market_price', 'goods_number', 'sale', 'comments','promote_start_date','promote_price','promote_end_date','goods_img','spec','point'
-    ];
+    );
     
     const STATUS = 0; //商品是否删除，0未删除
     
@@ -110,13 +110,20 @@ class Goods extends BaseModel
         return $res;
     }
     
-    public static function getOne($id)
+    public static function getOne(array $param)
     {
-        if(isset($status)){$where['status'] = $status;}else{$where['status'] = self::STATUS;}
+        extract($param);
+        
+        $model = new Goods;
+        
         $where['id'] = $id;
         
-        $goods = self::where($where)->first();
+        if(isset($where)){$model = $model->where($where);}
+        if(isset($field)){$model = $model->select($field);}
         
+        $goods = $model->first();
+        
+        $goods['goods_detail_url'] = route('weixin_goods_detail',array('id'=>$goods->id));
         $goods['price'] = self::get_final_price($id);
         
         return $goods;

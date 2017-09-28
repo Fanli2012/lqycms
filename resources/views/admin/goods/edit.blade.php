@@ -2,6 +2,7 @@
 @section('title', '商品信息修改')
 
 @section('content')
+<script language="javascript" type="text/javascript" src="http://<?php echo env('APP_DOMAIN'); ?>/js/My97DatePicker/WdatePicker.js"></script>
 <h5 class="sub-header"><a href="/fladmin/goods">商品列表</a> > 修改商品</h5>
 
 <form id="addarc" method="post" action="/fladmin/goods/doedit" role="form" enctype="multipart/form-data" class="table-responsive">{{ csrf_field() }}

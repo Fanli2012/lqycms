@@ -140,9 +140,9 @@ var swiper = new Swiper('.swiper-nav', {
     <div class="banner_tit"><img src="images/weixin/ind_52.jpg" alt="猜您喜欢"/></div>
     <div class="likeshop">
         <ul class="goods_list" id="goods_list">
-        <?php foreach($goods_list as $k=>$v){ ?>
+        <?php if($goods_list){foreach($goods_list as $k=>$v){ ?>
             <li><a href="<?php echo $v['goods_detail_url']; ?>"><img alt="<?php echo $v['title']; ?>" src="<?php echo $v['litpic']; ?>"><div class="goods_info"><p class="goods_tit"><?php echo $v['title']; ?></p><div class="goods_price">￥<b><?php echo $v['price']; ?></b></div></div></a></li>
-        <?php } ?>
+        <?php }} ?>
         </ul>
     </div>
 </div>

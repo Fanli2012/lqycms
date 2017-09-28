@@ -11,6 +11,12 @@ class IndexController extends CommonController
     {
         parent::__construct();
     }
+    
+    //页面跳转
+    public function jump()
+	{
+		return view('weixin.index.jump');
+    }
 	
 	//首页
     public function index()
@@ -43,44 +49,6 @@ class IndexController extends CommonController
         $data['goods_list'] = $goods_list['data']['list'];
         
         return view('weixin.index.index',$data);
-    }
-	
-    //列表页
-    public function category($cat)
-	{
-        //文章分类
-        $postdata = array(
-            'id'  => $cat
-		);
-        $url = env('APP_API_URL')."/arctype_detail";
-		$arctype_detail = curl_request($url,$postdata,'GET');
-        $data['post'] = $arctype_detail['data'];
-        
-        //文章列表
-        $postdata = array(
-            'limit'  => 10,
-            'offset' => 0
-		);
-        $url = env('APP_API_URL')."/article_list";
-		$article_list = curl_request($url,$postdata,'GET');
-        $data['article_list'] = $article_list['data']['list'];
-        
-		return view('weixin.index.category', $data);
-	}
-    
-    //文章详情页
-    public function detail($id)
-	{
-        //最新资讯
-        $postdata = array(
-            'id'  => $id
-		);
-        $url = env('APP_API_URL')."/article_detail";
-		$article_detail = curl_request($url,$postdata,'GET');
-        if(empty($article_detail['data'])){return redirect()->route('weixin_page404');}
-        $data['post'] = $article_detail['data'];
-        
-        return view('weixin.index.detail', $data);
     }
 	
     //标签详情页，共有3种显示方式，1正常列表，2列表显示文章，3显示描述

@@ -77,7 +77,10 @@ class GoodsController extends CommonController
 		
 		unset($_POST["_token"]);
 		if(isset($_POST['editorValue'])){unset($_POST['editorValue']);}
-		
+		if(isset($_POST['promote_start_date'])){$_POST['promote_start_date'] = strtotime($_POST['promote_start_date']);}
+        if(isset($_POST['promote_end_date'])){$_POST['promote_end_date'] = strtotime($_POST['promote_end_date']);}
+        if(empty($_POST['promote_price'])){unset($_POST['promote_price']);}
+        
 		if(DB::table('goods')->insert(array_filter($_POST)))
         {
             success_jump('添加成功！', route('admin_goods'));
@@ -93,7 +96,11 @@ class GoodsController extends CommonController
         if(!empty($_GET["id"])){$id = $_GET["id"];}else {$id="";}if(preg_match('/[0-9]*/',$id)){}else{exit;}
         
         $data['id'] = $id;
-		$data['post'] = object_to_array(DB::table('goods')->where('id', $id)->first(), 1);
+        $goods = DB::table('goods')->where('id', $id)->first();
+        if($goods->promote_start_date != 0){$goods->promote_start_date = date('Y-m-d H:i:s',$goods->promote_start_date);}
+        if($goods->promote_end_date != 0){$goods->promote_end_date = date('Y-m-d H:i:s',$goods->promote_end_date);}
+        
+		$data['post'] = object_to_array($goods, 1);
         
         return view('admin.goods.edit', $data);
     }
@@ -125,7 +132,10 @@ class GoodsController extends CommonController
 		
 		unset($_POST["_token"]);
         if(isset($_POST['editorValue'])){unset($_POST['editorValue']);}
-		
+		if(isset($_POST['promote_start_date'])){$_POST['promote_start_date'] = strtotime($_POST['promote_start_date']);}
+        if(isset($_POST['promote_end_date'])){$_POST['promote_end_date'] = strtotime($_POST['promote_end_date']);}
+        if(empty($_POST['promote_price'])){unset($_POST['promote_price']);}
+        
         if(DB::table('goods')->where('id', $id)->update($_POST))
         {
             success_jump('修改成功！', route('admin_goods'));

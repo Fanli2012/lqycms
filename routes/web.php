@@ -57,11 +57,11 @@ Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin'], function () {
 	Route::get('/', 'IndexController@index')->name('weixin');
 	Route::get('/page404', 'IndexController@page404')->name('weixin_page404');         //404页面
 	Route::get('/search', 'IndexController@search')->name('weixin_search');  //搜索页面
-	Route::get('/p/{id}', 'IndexController@detail')->name('weixin_article_detail'); //文章详情页
-	Route::get('/cat{cat}', 'IndexController@category')->name('weixin_article_category'); //分类页
+	Route::get('/p/{id}', 'ArticleController@detail')->name('weixin_article_detail'); //文章详情页
+	Route::get('/cat{cat}', 'ArticleController@category')->name('weixin_article_category'); //分类页
+	Route::get('/tag{tag}', 'IndexController@tag')->name('weixin_tag');           //标签页
 	Route::get('/page/{id}', 'IndexController@page')->name('weixin_singlepage');  //单页
-    
-	Route::get('/goods/{id}', 'IndexController@goods')->name('weixin_goods_detail'); //商品详情页
+	Route::get('/goods/{id}', 'GoodsController@goods')->name('weixin_goods_detail'); //商品详情页
 	Route::get('/goodslist', 'GoodsController@goodslist')->name('weixin_goods_list'); //产品分类页
     
 	Route::get('/user', 'UserController@index')->name('weixin_user');
@@ -71,6 +71,8 @@ Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin'], function () {
     
     Route::get('/user_address_list', 'AddressController@index')->name('weixin_user_address_list');
     
+    //页面跳转
+	Route::get('/jump', 'IndexController@jump')->name('weixin_jump');
     
 	Route::get('/test', 'IndexController@test')->name('weixin_test');           //测试
 });
@@ -233,6 +235,10 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     Route::get('/user_money_list', 'UserMoneyController@userMoneyList'); //用户余额明细
     Route::post('/user_money_add', 'UserMoneyController@userMoneyAdd'); //添加余额明细
     //浏览记录
+    Route::get('/user_goods_history_list', 'UserGoodsHistoryController@userGoodsHistoryList'); //我的足迹列表
+    Route::get('/user_goods_history_delete', 'UserGoodsHistoryController@userGoodsHistoryDelete'); //我的足迹删除一条
+    Route::get('/user_goods_history_clear', 'UserGoodsHistoryController@userGoodsHistoryClear'); //我的足迹清空
+    
     //商品评价
     Route::get('/goods_comment_list', 'CommentController@goodsCommentList'); //商品评价列表
     Route::post('/goods_comment_add', 'CommentController@goodsCommentAdd'); //商品评价添加

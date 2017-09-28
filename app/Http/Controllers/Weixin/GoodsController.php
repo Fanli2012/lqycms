@@ -32,7 +32,6 @@ class GoodsController extends CommonController
 		$goods_list = curl_request($url,$postdata,'GET');
         $data['goods_list'] = $goods_list['data']['list'];
         
-		return view('weixin.index.goodslist', $data);
+		return view('weixin.goods.goodslist', $data);
 	}
-    
 }
