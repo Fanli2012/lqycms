@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Weixin;
 
 use App\Http\Controllers\Weixin\CommonController;
 use Illuminate\Http\Request;
+use App\Common\ReturnCode;
 
 class UserController extends CommonController
 {
@@ -49,5 +50,38 @@ class UserController extends CommonController
         $data['user_goods_history'] = $res['data']['list'];
         
 		return view('weixin.user.userGoodsHistory', $data);
+	}
+    
+    //浏览记录删除
+    public function userGoodsHistoryDelete(Request $request)
+	{
+        $id = $request->input('id','');
+        
+        if($id == ''){$this->error_jump(ReturnData::PARAMS_ERROR);}
+        
+        $postdata = array(
+            'id' => $id,
+            'access_token' => $_SESSION['weixin_user_info']['access_token']
+		);
+        $url = env('APP_API_URL')."/user_goods_history_delete";
+		$res = curl_request($url,$postdata,'POST');
+        
+        if($res['code'] != ReturnCode::SUCCESS_CODE){$this->error_jump(ReturnCode::FAIL);}
+        
+        $this->success_jump(ReturnCode::SUCCESS);
+	}
+    
+    //浏览记录清空
+    public function userGoodsHistoryClear(Request $request)
+	{
+        $postdata = array(
+            'access_token' => $_SESSION['weixin_user_info']['access_token']
+		);
+        $url = env('APP_API_URL')."/user_goods_history_clear";
+		$res = curl_request($url,$postdata,'POST');
+        
+        if($res['code'] != ReturnCode::SUCCESS_CODE){$this->error_jump(ReturnCode::FAIL);}
+        
+        $this->success_jump(ReturnCode::SUCCESS);
 	}
 }

@@ -1,8 +1,6 @@
 <?php
 namespace App\Http\Model;
 
-use App\Common\Token;
-
 class UserAddress extends BaseModel
 {
 	//用户收货地址
@@ -27,7 +25,7 @@ class UserAddress extends BaseModel
         $limit  = isset($limit) ? $limit : 10;
         $offset = isset($offset) ? $offset : 0;
         
-        $model = self::where('user_id', Token::$uid);
+        $model = self::where('user_id', $user_id);
         
         $res['count'] = $model->count();
         $res['list'] = array();
@@ -56,7 +54,7 @@ class UserAddress extends BaseModel
     }
     
     //获取一条记录，不传address_id表示获取默认地址
-    public static function getOne($address_id='')
+    public static function getOne($user_id,$address_id='')
     {
         $arr = '';
         
@@ -75,11 +73,11 @@ class UserAddress extends BaseModel
             return $arr;
         }
         
-        if (Token::$uid > 0)
+        if ($user_id > 0)
         {
             // 取默认地址
             $arr = self::join('user','user_address.id', '=', 'user.address_id')
-                    ->where('user.id',Token::$uid)->select('user_address.id','user_address.name','country','province','city','district','address','user_address.mobile','zipcode','best_time')
+                    ->where('user.id',$user_id)->select('user_address.id','user_address.name','country','province','city','district','address','user_address.mobile','zipcode','best_time')
                     ->first();
                     
             if($arr)
@@ -99,7 +97,7 @@ class UserAddress extends BaseModel
         extract($param);
         
         $model = new UserAddress;
-        $model->user_id         = Token::$uid;
+        $model->user_id         = $user_id;
         $model->name            = $name;
         $model->email           = isset($email) ? $email : '';
         $model->country         = isset($country) ? $country : 0;
@@ -116,7 +114,7 @@ class UserAddress extends BaseModel
         
         if ($model->save())
         {
-            $user = User::where('id', Token::$uid)->first();
+            $user = User::where('id', $user_id)->first();
 
             if (!UserAddress::where('id', $user->address_id)->first() || $model->is_default!=0)
             {
@@ -133,9 +131,9 @@ class UserAddress extends BaseModel
     {
         extract($param);
         
-        if ($model = UserAddress::where('id', $id)->where('user_id', Token::$uid)->first())
+        if ($model = UserAddress::where('id', $id)->where('user_id', $user_id)->first())
         {
-            $model->user_id         = Token::$uid;
+            $model->user_id         = $user_id;
             $model->name            = $name;
             $model->email           = isset($email) ? $email : '';
             $model->country         = isset($country) ? $country : 0;
@@ -165,13 +163,13 @@ class UserAddress extends BaseModel
     }
     
     //删除一条记录
-    public static function remove($id)
+    public static function remove($id,$user_id)
     {
-        if (UserAddress::where('id', $id)->where('user_id', Token::$uid)->delete())
+        if (UserAddress::where('id', $id)->where('user_id', $user_id)->delete())
         {
-            if ($address = UserAddress::where('user_id', Token::$uid)->first())
+            if ($address = UserAddress::where('user_id', $user_id)->first())
             {
-                $user = User::where('id', Token::$uid)->first();
+                $user = User::where('id', $user_id)->first();
                 
                 if($user->address_id == $id)
                 {
@@ -185,16 +183,16 @@ class UserAddress extends BaseModel
     }
     
     //设为默认地址
-    public static function setDefault($address_id)
+    public static function setDefault($address_id,$user_id)
     {
-        if ($user_address = UserAddress::where('id', $address_id)->where('user_id', Token::$uid)->first())
+        if ($user_address = UserAddress::where('id', $address_id)->where('user_id', $user_id)->first())
         {
             $user_address->is_default = 1;
             $user_address->save();
             
-            UserAddress::where('user_id', Token::$uid)->where('id', '<>', $address_id)->update(['is_default'=>0]);
+            UserAddress::where('user_id', $user_id)->where('id', '<>', $address_id)->update(['is_default'=>0]);
             
-            if($user = User::where('id', Token::$uid)->first())
+            if($user = User::where('id', $user_id)->first())
             {
                 $user->address_id = $address_id;
                 $user->save();

@@ -123,8 +123,11 @@ class Goods extends BaseModel
         
         $goods = $model->first();
         
-        $goods['goods_detail_url'] = route('weixin_goods_detail',array('id'=>$goods->id));
-        $goods['price'] = self::get_final_price($id);
+        if($goods)
+        {
+            $goods['goods_detail_url'] = route('weixin_goods_detail',array('id'=>$goods->id));
+            $goods['price'] = self::get_final_price($id);
+        }
         
         return $goods;
     }

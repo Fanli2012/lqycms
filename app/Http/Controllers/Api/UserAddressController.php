@@ -20,6 +20,7 @@ class UserAddressController extends CommonController
         //参数
         $data['limit'] = $request->input('limit', 10);
         $data['offset'] = $request->input('offset', 0);
+        $data['user_id'] = Token::$uid;
         
         $res = UserAddress::getList($data);
 		if(!$res)
@@ -36,7 +37,7 @@ class UserAddressController extends CommonController
         //参数
         $id = $request->input('id',null);
         
-        $res = UserAddress::getOne($id);
+        $res = UserAddress::getOne(Token::$uid,$id);
 		if(!$res)
 		{
 			return ReturnData::create(ReturnData::SYSTEM_FAIL);
@@ -51,7 +52,7 @@ class UserAddressController extends CommonController
         //参数
         $id = $request->input('id',null);
         
-        $res = UserAddress::setDefault($id);
+        $res = UserAddress::setDefault($id,Token::$uid);
 		if(!$res)
 		{
 			return ReturnData::create(ReturnData::SYSTEM_FAIL);
@@ -64,6 +65,7 @@ class UserAddressController extends CommonController
     public function userAddressAdd(Request $request)
 	{
         //参数
+        $data['user_id'] = Token::$uid;
         $data['name'] = $request->input('name',null);
         $data['mobile'] = $request->input('mobile',null);
         $data['country'] = $request->input('country',null);
@@ -95,6 +97,7 @@ class UserAddressController extends CommonController
     public function userAddressUpdate(Request $request)
 	{
         //参数
+        $data['user_id'] = Token::$uid;
         $data['id'] = $request->input('id',null);
         $data['name'] = $request->input('name',null);
         $data['mobile'] = $request->input('mobile',null);
@@ -129,7 +132,7 @@ class UserAddressController extends CommonController
         //参数
         $id = $request->input('id',null);
         
-        $res = UserAddress::remove($id);
+        $res = UserAddress::remove($id,Token::$uid);
 		if(!$res)
 		{
 			return ReturnData::create(ReturnData::SYSTEM_FAIL);

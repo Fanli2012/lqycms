@@ -75,7 +75,7 @@ class UserGoodsHistoryController extends CommonController
         //参数
         $user_id = Token::$uid;
         
-        $res = UserGoodsHistory::remove($user_id);
+        $res = UserGoodsHistory::clear($user_id);
 		if($res === false)
 		{
 			return ReturnData::create(ReturnData::SYSTEM_FAIL);

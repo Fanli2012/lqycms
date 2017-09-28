@@ -66,10 +66,12 @@ Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin'], function () {
     
 	Route::get('/user', 'UserController@index')->name('weixin_user');
     Route::get('/user_goods_history', 'UserController@userGoodsHistory')->name('weixin_user_goods_history');
+    Route::get('/user_goods_history_delete', 'UserController@userGoodsHistoryDelete')->name('weixin_user_goods_history_delete');
+    Route::get('/user_goods_history_clear', 'UserController@userGoodsHistoryClear')->name('weixin_user_goods_history_clear');
     
     Route::get('/cart', 'CartController@index')->name('weixin_cart');
     
-    Route::get('/user_address_list', 'AddressController@index')->name('weixin_user_address_list');
+    Route::get('/user_address', 'AddressController@index')->name('weixin_user_address_list');
     
     //页面跳转
 	Route::get('/jump', 'IndexController@jump')->name('weixin_jump');
@@ -236,8 +238,8 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     Route::post('/user_money_add', 'UserMoneyController@userMoneyAdd'); //添加余额明细
     //浏览记录
     Route::get('/user_goods_history_list', 'UserGoodsHistoryController@userGoodsHistoryList'); //我的足迹列表
-    Route::get('/user_goods_history_delete', 'UserGoodsHistoryController@userGoodsHistoryDelete'); //我的足迹删除一条
-    Route::get('/user_goods_history_clear', 'UserGoodsHistoryController@userGoodsHistoryClear'); //我的足迹清空
+    Route::post('/user_goods_history_delete', 'UserGoodsHistoryController@userGoodsHistoryDelete'); //我的足迹删除一条
+    Route::post('/user_goods_history_clear', 'UserGoodsHistoryController@userGoodsHistoryClear'); //我的足迹清空
     
     //商品评价
     Route::get('/goods_comment_list', 'CommentController@goodsCommentList'); //商品评价列表
