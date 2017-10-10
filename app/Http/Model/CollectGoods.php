@@ -37,7 +37,17 @@ class CollectGoods extends BaseModel
         
 		if($res['count']>0)
         {
-            $res['list']  = $model->skip($offset)->take($limit)->orderBy('id','desc')->get()->toArray();
+            $res['list']  = $model->skip($offset)->take($limit)->orderBy('id','desc')->get();
+            
+            if($res['list'])
+            {
+                foreach($res['list'] as $k=>$v)
+                {
+                    $goods = Goods::getOne(array('id'=>$v['goods_id'],'field'=>array('id', 'typeid', 'tuijian', 'click', 'title', 'sn', 'price','litpic', 'pubdate', 'add_time', 'market_price', 'goods_number', 'sale', 'comments','promote_start_date','promote_price','promote_end_date','goods_img','spec','point')));
+                    
+                    $res['list'][$k]['goods'] = $goods;
+                }
+            }
         }
         else
         {
@@ -47,9 +57,13 @@ class CollectGoods extends BaseModel
         return $res;
     }
     
-    public static function getOne($id)
+    public static function getOne(array $param)
     {
-        return self::where('id', $id)->first()->toArray();
+        extract($param); //参数
+        
+        $where['id'] = $id;
+        
+        return self::where($where)->first();
     }
     
     public static function add(array $data)

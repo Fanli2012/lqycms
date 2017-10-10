@@ -7,11 +7,11 @@
         <!--<a href="">-->
             <div class="fl personicon">
                 <div class="personicon">
-                    <img src="<?php echo env('APP_URL'); ?>/images/weixin/user68.jpg">
+                    <img src="<?php echo $user_info['head_img']; ?>" onerror="this.src='<?php echo env('APP_URL'); ?>/images/weixin/no_user.jpg'">
                 </div>
             </div>
             <div class="fl lors">
-                <span>15280719357</span>
+                <span><?php if($user_info['user_name']){echo $user_info['user_name'];}else{echo $user_info['mobile'];} ?></span>
             </div>
         <!--</a>-->
     </div>

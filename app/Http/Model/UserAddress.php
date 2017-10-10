@@ -25,24 +25,24 @@ class UserAddress extends BaseModel
         $limit  = isset($limit) ? $limit : 10;
         $offset = isset($offset) ? $offset : 0;
         
-        $model = self::where('user_id', $user_id);
+        $model = self::where(array('user_id'=>$user_id));
         
         $res['count'] = $model->count();
         $res['list'] = array();
         
 		if($res['count']>0)
         {
-            $res['list']  = $model->skip($offset)->take($limit)->get()->toArray();
+            $res['list'] = $model->skip($offset)->take($limit)->get();
             
             if($res['list'])
             {
-                foreach($res['list'] as $k=>$v)
+                /* foreach($res['list'] as $k=>$v)
                 {
                     $res['list'][$k]['country_name']  = Region::getRegionName($v['country']);
                     $res['list'][$k]['province_name'] = Region::getRegionName($v['province']);
                     $res['list'][$k]['city_name']     = Region::getRegionName($v['city']);
                     $res['list'][$k]['district_name'] = Region::getRegionName($v['district']);
-                }
+                } */
             }
         }
         else
@@ -62,13 +62,13 @@ class UserAddress extends BaseModel
         {
             $arr = self::where('id',$address_id)->first();
             
-            if($arr)
+            /* if($arr)
             {
                 $arr->country_name  = Region::getRegionName($arr->country);
                 $arr->province_name = Region::getRegionName($arr->province);
                 $arr->city_name     = Region::getRegionName($arr->city);
                 $arr->district_name = Region::getRegionName($arr->district);
-            }
+            } */
             
             return $arr;
         }
@@ -77,16 +77,16 @@ class UserAddress extends BaseModel
         {
             // 取默认地址
             $arr = self::join('user','user_address.id', '=', 'user.address_id')
-                    ->where('user.id',$user_id)->select('user_address.id','user_address.name','country','province','city','district','address','user_address.mobile','zipcode','best_time')
+                    ->where('user.id',$user_id)->select('user_address.id','user_address.name','country','province','city','district','address','user_address.mobile','zipcode')
                     ->first();
                     
-            if($arr)
+            /* if($arr)
             {
                 $arr->country_name  = Region::getRegionName($arr->country);
                 $arr->province_name = Region::getRegionName($arr->province);
                 $arr->city_name     = Region::getRegionName($arr->city);
                 $arr->district_name = Region::getRegionName($arr->district);
-            }
+            } */
         }
         
         return $arr;
@@ -97,20 +97,18 @@ class UserAddress extends BaseModel
         extract($param);
         
         $model = new UserAddress;
-        $model->user_id         = $user_id;
-        $model->name            = $name;
-        $model->email           = isset($email) ? $email : '';
-        $model->country         = isset($country) ? $country : 0;
-        $model->province        = isset($province) ? $province : 0;
-        $model->city            = isset($city) ? $city : 0;
-        $model->district        = isset($district) ? $district : 0;
-        $model->address         = $address;
-        $model->mobile          = isset($mobile) ? $mobile : '';
-        $model->telphone        = isset($telphone) ? $telphone : '';
-        $model->zipcode         = isset($zipcode) ? $zipcode : '';
-        $model->sign_building   = isset($sign_building) ? $sign_building : '';
-        $model->best_time       = isset($best_time) ? $best_time : '';
-        $model->is_default      = isset($is_default) ? $is_default : 0;
+        $model->user_id    = $user_id;
+        $model->name       = $name;
+        $model->address    = $address;
+        $model->mobile     = $mobile;
+        $model->is_default = isset($is_default) ? $is_default : 0;
+        
+        if(isset($country)){$model->country   = isset($country) ? $country : 0;}
+        if(isset($province)){$model->province = isset($province) ? $province : 0;}
+        if(isset($city)){$model->city         = isset($city) ? $city : 0;}
+        if(isset($district)){$model->district = isset($district) ? $district : 0;}
+        if(isset($telphone)){$model->telphone = isset($telphone) ? $telphone : '';}
+        if(isset($zipcode)){$model->zipcode   = isset($zipcode) ? $zipcode : '';}
         
         if ($model->save())
         {
@@ -118,7 +116,7 @@ class UserAddress extends BaseModel
 
             if (!UserAddress::where('id', $user->address_id)->first() || $model->is_default!=0)
             {
-                self::setDefault($model->id);
+                self::setDefault($model->id,$user_id);
             }
             
             return $model->toArray();
@@ -134,25 +132,23 @@ class UserAddress extends BaseModel
         if ($model = UserAddress::where('id', $id)->where('user_id', $user_id)->first())
         {
             $model->user_id         = $user_id;
-            $model->name            = $name;
-            $model->email           = isset($email) ? $email : '';
-            $model->country         = isset($country) ? $country : 0;
-            $model->province        = isset($province) ? $province : 0;
-            $model->city            = isset($city) ? $city : 0;
-            $model->district        = isset($district) ? $district : 0;
-            $model->address         = $address;
-            $model->mobile          = isset($mobile) ? $mobile : '';
-            $model->telphone        = isset($telphone) ? $telphone : '';
-            $model->zipcode         = isset($zipcode) ? $zipcode : '';
-            $model->sign_building   = isset($sign_building) ? $sign_building : '';
-            $model->best_time       = isset($best_time) ? $best_time : '';
-            $model->is_default      = isset($is_default) ? $is_default : 0;
+            $model->is_default = isset($is_default) ? $is_default : 0;
+            
+            if(isset($name)){$model->name = $country;}
+            if(isset($country)){$model->country = $country;}
+            if(isset($province)){$model->province = $province;}
+            if(isset($city)){$model->city = $city;}
+            if(isset($district)){$model->district = $district;}
+            if(isset($address)){$model->address = $address;}
+            if(isset($mobile)){$model->mobile = $mobile;}
+            if(isset($telphone)){$model->telphone = $telphone;}
+            if(isset($zipcode)){$model->zipcode = $zipcode;}
             
             if ($model->save())
             {
                 if ($model->is_default!=0)
                 {
-                    self::setDefault($model->id);
+                    self::setDefault($model->id,$user_id);
                 }
                 
                 return $model->toArray();
@@ -175,6 +171,8 @@ class UserAddress extends BaseModel
                 {
                     $user->address_id = $address->id;
                     $user->save();
+                    
+                    self::where('id',$address->id)->update(array('is_default' => 1));
                 }
             }
         }

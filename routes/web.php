@@ -75,12 +75,104 @@ Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin'], function () {
     
     Route::get('/cart', 'CartController@index')->name('weixin_cart');
     
+    //收货地址
     Route::get('/user_address', 'AddressController@index')->name('weixin_user_address_list');
-    
+    Route::get('/user_address_add', 'AddressController@userAddressAdd')->name('weixin_user_address_add');
+    Route::get('/user_address_update', 'AddressController@userAddressUpdate')->name('weixin_user_address_update');
     //页面跳转
 	Route::get('/jump', 'IndexController@jump')->name('weixin_jump');
     
 	Route::get('/test', 'IndexController@test')->name('weixin_test');           //测试
+});
+
+
+//无需token验证，全局
+Route::group(['middleware' => ['web']], function () {
+    Route::post('/dataapi/listarc', 'Api\IndexController@listarc')->name('api_listarc');
+    Route::post('/dataapi/customer_login', 'Api\WechatAuthController@customerLogin');
+	Route::post('/dataapi/', 'Api\UserController@signin'); //签到
+});
+
+//API接口路由，无需token验证
+Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web']], function () {
+    //轮播图
+	Route::get('/slide_list', 'SlideController@slideList');
+    //文章
+	Route::get('/article_list', 'ArticleController@articleList');
+    Route::get('/article_detail', 'ArticleController@articleDetail');
+    Route::get('/arctype_list', 'ArctypeController@arctypeList');
+    Route::get('/arctype_detail', 'ArctypeController@arctypeDetail');
+    //商品
+    Route::get('/goods_list', 'GoodsController@goodsList'); //商品列表
+    Route::get('/goodstype_list', 'GoodsTypeController@goodsTypeList'); //商品分类列表
+});
+
+//API接口路由，需token验证
+Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web','token']], function () {
+    //用户中心
+    Route::post('/user_signin', 'UserController@signin'); //签到
+    Route::get('/user_info', 'UserController@userInfo'); //用户详细信息
+    Route::post('/user_info_update', 'UserController@userInfoUpdate'); //修改用户信息
+    Route::get('/user_list', 'UserController@userList'); //用户列表
+    
+    Route::get('/user_money_list', 'UserMoneyController@userMoneyList'); //用户余额明细
+    Route::post('/user_money_add', 'UserMoneyController@userMoneyAdd'); //添加余额明细
+    //浏览记录
+    Route::get('/user_goods_history_list', 'UserGoodsHistoryController@userGoodsHistoryList'); //我的足迹列表
+    Route::post('/user_goods_history_delete', 'UserGoodsHistoryController@userGoodsHistoryDelete'); //我的足迹删除一条
+    Route::post('/user_goods_history_clear', 'UserGoodsHistoryController@userGoodsHistoryClear'); //我的足迹清空
+    
+    //商品评价
+    Route::get('/goods_comment_list', 'CommentController@goodsCommentList'); //商品评价列表
+    Route::post('/goods_comment_add', 'CommentController@goodsCommentAdd'); //商品评价添加
+    Route::post('/goods_comment_update', 'CommentController@goodsCommentUpdate'); //商品评价修改
+    Route::post('/goods_comment_delete', 'CommentController@goodsCommentDelete'); //商品评价删除
+    //商品收藏
+    Route::get('/collect_goods_list', 'CollectGoodsController@collectGoodsList'); //收藏商品列表
+    Route::post('/collect_goods_add', 'CollectGoodsController@collectGoodsAdd'); //收藏商品
+    Route::post('/collect_goods_delete', 'CollectGoodsController@collectGoodsDelete'); //取消收藏商品
+    //订单
+    
+    //购物车
+    Route::get('/cart_list', 'CartController@cartList'); //购物车列表
+    Route::post('/cart_clear', 'CartController@cartClear'); //清空购物车
+    Route::post('/cart_add', 'CartController@cartAdd'); //添加购物车
+    Route::post('/cart_update', 'CartController@cartUpdate'); //修改购物车
+    //分销
+    
+    //积分
+    Route::get('/user_point_list', 'UserPointController@userPointList'); //用户积分列表
+    Route::post('/user_point_add', 'UserPointController@userPointAdd');
+    //优惠券
+    Route::get('/user_bonus_list', 'BonusController@userBonusList'); //用户优惠券列表
+    Route::post('/user_get_bonus', 'BonusController@userGetBonus'); //用户获取优惠券
+    Route::get('/bonus_list', 'BonusController@bonusList'); //可用获取的优惠券列表
+    Route::post('/bonus_add', 'BonusController@bonusAdd'); //添加优惠券
+    Route::post('/bonus_update', 'BonusController@bonusUpdate'); //修改优惠券
+    Route::post('/bonus_delete', 'BonusController@bonusDelete'); //删除优惠券
+    //微信
+    
+    //意见反馈
+    Route::get('/feedback_list', 'FeedBackController@feedbackList');
+    Route::post('/feedback_add', 'FeedBackController@feedbackAdd');
+    
+    //其它
+    Route::get('/verifycode_check', 'VerifyCodeController@check'); //验证码校验
+    Route::get('/andriod_upgrade', 'IndexController@andriodUpgrade'); //安卓升级
+    //图片上传
+    Route::post('/image_upload', 'ImageController@imageUpload'); //普通文件/图片上传
+    //二维码
+    Route::get('/create_simple_qrcode', 'QrcodeController@createSimpleQrcode');
+    //收货地址
+    Route::get('/user_address_list', 'UserAddressController@userAddressList');
+    Route::get('/user_address_detail', 'UserAddressController@userAddressDetail');
+    Route::post('/user_address_setdefault', 'UserAddressController@userAddressSetDefault');
+    Route::post('/user_address_add', 'UserAddressController@userAddressAdd');
+    Route::post('/user_address_update', 'UserAddressController@userAddressUpdate');
+    Route::post('/user_address_delete', 'UserAddressController@userAddressDelete');
+    //地区，省市区
+	Route::get('/region_list', 'RegionController@regionList');
+    Route::get('/region_detail', 'RegionController@regionDetail');
 });
 
 
@@ -208,99 +300,3 @@ Route::group(['prefix' => 'fladmin', 'namespace' => 'Admin', 'middleware' => ['w
 	//测试
 	Route::get('/test', 'LoginController@test')->name('admin_test');
 });
-
-//无需token验证，全局
-Route::group(['middleware' => ['web']], function () {
-    Route::post('/dataapi/listarc', 'Api\IndexController@listarc')->name('api_listarc');
-    Route::post('/dataapi/customer_login', 'Api\WechatAuthController@customerLogin');
-	Route::post('/dataapi/', 'Api\UserController@signin'); //签到
-});
-
-//API接口路由，无需token验证
-Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web']], function () {
-    //轮播图
-	Route::get('/slide_list', 'SlideController@slideList');
-    //文章
-	Route::get('/article_list', 'ArticleController@articleList');
-    Route::get('/article_detail', 'ArticleController@articleDetail');
-    Route::get('/arctype_list', 'ArctypeController@arctypeList');
-    Route::get('/arctype_detail', 'ArctypeController@arctypeDetail');
-    //商品
-    Route::get('/goods_list', 'GoodsController@goodsList'); //商品列表
-    Route::get('/goodstype_list', 'GoodsTypeController@goodsTypeList'); //商品分类列表
-});
-
-//API接口路由，需token验证
-Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web','token']], function () {
-    //用户中心
-    Route::post('/user_signin', 'UserController@signin'); //签到
-    Route::get('/user_info', 'UserController@userInfo'); //用户详细信息
-    Route::post('/user_info_update', 'UserController@userInfoUpdate'); //修改用户信息
-    Route::get('/user_list', 'UserController@userList'); //用户列表
-    
-    Route::get('/user_money_list', 'UserMoneyController@userMoneyList'); //用户余额明细
-    Route::post('/user_money_add', 'UserMoneyController@userMoneyAdd'); //添加余额明细
-    //浏览记录
-    Route::get('/user_goods_history_list', 'UserGoodsHistoryController@userGoodsHistoryList'); //我的足迹列表
-    Route::post('/user_goods_history_delete', 'UserGoodsHistoryController@userGoodsHistoryDelete'); //我的足迹删除一条
-    Route::post('/user_goods_history_clear', 'UserGoodsHistoryController@userGoodsHistoryClear'); //我的足迹清空
-    
-    //商品评价
-    Route::get('/goods_comment_list', 'CommentController@goodsCommentList'); //商品评价列表
-    Route::post('/goods_comment_add', 'CommentController@goodsCommentAdd'); //商品评价添加
-    Route::post('/goods_comment_update', 'CommentController@goodsCommentUpdate'); //商品评价修改
-    Route::post('/goods_comment_delete', 'CommentController@goodsCommentDelete'); //商品评价删除
-    //商品收藏
-    Route::get('/collect_goods_list', 'CollectGoodsController@collectGoodsList'); //收藏商品列表
-    Route::post('/collect_goods_add', 'CollectGoodsController@collectGoodsAdd'); //收藏商品
-    Route::post('/collect_goods_delete', 'CollectGoodsController@collectGoodsDelete'); //取消收藏商品
-    //订单
-    
-    //购物车
-    Route::get('/cart_list', 'CartController@cartList'); //购物车列表
-    Route::post('/cart_clear', 'CartController@cartClear'); //清空购物车
-    Route::post('/cart_add', 'CartController@cartAdd'); //添加购物车
-    Route::post('/cart_update', 'CartController@cartUpdate'); //修改购物车
-    //分销
-    
-    //积分
-    Route::get('/user_point_list', 'UserPointController@userPointList'); //用户积分列表
-    Route::post('/user_point_add', 'UserPointController@userPointAdd');
-    //优惠券
-    Route::get('/user_bonus_list', 'BonusController@userBonusList'); //用户优惠券列表
-    Route::post('/user_get_bonus', 'BonusController@userGetBonus'); //用户获取优惠券
-    Route::get('/bonus_list', 'BonusController@bonusList'); //可用获取的优惠券列表
-    Route::post('/bonus_add', 'BonusController@bonusAdd'); //添加优惠券
-    Route::post('/bonus_update', 'BonusController@bonusUpdate'); //修改优惠券
-    Route::post('/bonus_delete', 'BonusController@bonusDelete'); //删除优惠券
-    //微信
-    
-    //意见反馈
-    Route::get('/feedback_list', 'FeedBackController@feedbackList');
-    Route::post('/feedback_add', 'FeedBackController@feedbackAdd');
-    
-    //其它
-    Route::get('/verifycode_check', 'VerifyCodeController@check'); //验证码校验
-    Route::get('/andriod_upgrade', 'IndexController@andriodUpgrade'); //安卓升级
-    //图片上传
-    Route::post('/image_upload', 'ImageController@imageUpload'); //普通文件/图片上传
-    //二维码
-    Route::get('/create_simple_qrcode', 'QrcodeController@createSimpleQrcode');
-    //收货地址
-    Route::get('/user_address_list', 'UserAddressController@userAddressList');
-    Route::get('/user_address_detail', 'UserAddressController@userAddressDetail');
-    Route::post('/user_address_setdefault', 'UserAddressController@userAddressSetDefault');
-    Route::post('/user_address_add', 'UserAddressController@userAddressAdd');
-    Route::post('/user_address_update', 'UserAddressController@userAddressUpdate');
-    Route::post('/user_address_delete', 'UserAddressController@userAddressDelete');
-    //地区，省市区
-	Route::get('/region_list', 'RegionController@regionList');
-    Route::get('/region_detail', 'RegionController@regionDetail');
-});
-
-
-
-
-
-
-

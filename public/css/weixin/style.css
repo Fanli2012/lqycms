@@ -768,17 +768,15 @@ margin:5px 0
 }
 
 .setting .close a {
-    display: block;
-    background: #ec5151;
-    text-align: center;
-    width: 100%;
-    height:40px;
-    line-height:40px;
-    color: #fff;
-    font-size:18px;
-    -moz-border-radius:5px;
-    -webkit-border-radius:5px;
-    border-radius:5px
+display: block;
+background: #ec5151;
+text-align: center;
+padding:10px;
+color: #fff;
+font-size:18px;
+-moz-border-radius:5px;
+-webkit-border-radius:5px;
+border-radius:5px
 }
 
 h1.arc_tit, h2.arc_tit{font-weight: normal;font-size: 1.4em;padding: 10px;}

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Api\CommonController;
 use Illuminate\Http\Request;
 use App\Common\ReturnData;
+use App\Common\Token;
 
 use App\Http\Model\UserAddress;
 
@@ -23,6 +24,7 @@ class UserAddressController extends CommonController
         $data['user_id'] = Token::$uid;
         
         $res = UserAddress::getList($data);
+        
 		if(!$res)
 		{
 			return ReturnData::create(ReturnData::SYSTEM_FAIL);
@@ -68,18 +70,16 @@ class UserAddressController extends CommonController
         $data['user_id'] = Token::$uid;
         $data['name'] = $request->input('name',null);
         $data['mobile'] = $request->input('mobile',null);
-        $data['country'] = $request->input('country',null);
         $data['province'] = $request->input('province',null);
         $data['city'] = $request->input('city',null);
         $data['district'] = $request->input('district',null);
         $data['address'] = $request->input('address',null);
+        if($request->input('country',null)!==null){$data['country'] = $request->input('country');}
         if($request->input('telphone',null)!==null){$data['telphone'] = $request->input('telphone');}
         if($request->input('zipcode',null)!==null){$data['zipcode'] = $request->input('zipcode');}
-        if($request->input('email',null)!==null){$data['email'] = $request->input('email');}
-        if($request->input('best_time',null)!==null){$data['best_time'] = $request->input('best_time');}
         if($request->input('is_default',null)!==null){$data['is_default'] = $request->input('is_default');}
         
-        if($data['name']===null || $data['mobile']===null || $data['address']===null || $data['country']===null || $data['province']===null || $data['city']===null || $data['district']===null)
+        if($data['name']===null || $data['mobile']===null || $data['address']===null || $data['province']===null || $data['city']===null || $data['district']===null)
 		{
             return ReturnData::create(ReturnData::PARAMS_ERROR);
         }
@@ -130,7 +130,12 @@ class UserAddressController extends CommonController
     public function userAddressDelete(Request $request)
 	{
         //参数
-        $id = $request->input('id',null);
+        $id = $request->input('id','');
+        
+        if($id == '')
+		{
+            return ReturnData::create(ReturnData::PARAMS_ERROR);
+        }
         
         $res = UserAddress::remove($id,Token::$uid);
 		if(!$res)
