@@ -24,7 +24,7 @@
     <div class="scgz">
         <ul>
             <li>
-                <a href="/index.php/Mobile/User/collect_list.html">
+                <a href="<?php echo route('weixin_user_collect_goods'); ?>">
                     <h2>1</h2>
                     <p>我的收藏</p>
                 </a>

@@ -65,9 +65,13 @@ Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin'], function () {
 	Route::get('/goodslist', 'GoodsController@goodslist')->name('weixin_goods_list'); //产品分类页
     
 	Route::get('/user', 'UserController@index')->name('weixin_user');
+    //浏览记录
     Route::get('/user_goods_history', 'UserController@userGoodsHistory')->name('weixin_user_goods_history');
     Route::get('/user_goods_history_delete', 'UserController@userGoodsHistoryDelete')->name('weixin_user_goods_history_delete');
     Route::get('/user_goods_history_clear', 'UserController@userGoodsHistoryClear')->name('weixin_user_goods_history_clear');
+    
+    //商品收藏
+    Route::get('/collect_goods', 'CollectGoodsController@index')->name('weixin_user_collect_goods');
     
     Route::get('/cart', 'CartController@index')->name('weixin_cart');
     
