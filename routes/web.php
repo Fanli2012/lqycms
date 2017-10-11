@@ -105,6 +105,9 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     //商品
     Route::get('/goods_list', 'GoodsController@goodsList'); //商品列表
     Route::get('/goodstype_list', 'GoodsTypeController@goodsTypeList'); //商品分类列表
+    //地区，省市区
+	Route::get('/region_list', 'RegionController@regionList');
+    Route::get('/region_detail', 'RegionController@regionDetail');
 });
 
 //API接口路由，需token验证
@@ -170,9 +173,6 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     Route::post('/user_address_add', 'UserAddressController@userAddressAdd');
     Route::post('/user_address_update', 'UserAddressController@userAddressUpdate');
     Route::post('/user_address_delete', 'UserAddressController@userAddressDelete');
-    //地区，省市区
-	Route::get('/region_list', 'RegionController@regionList');
-    Route::get('/region_detail', 'RegionController@regionDetail');
 });
 
 

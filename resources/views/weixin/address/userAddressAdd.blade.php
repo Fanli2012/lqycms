@@ -34,6 +34,7 @@
     border: 1px solid #ddd;
     border-radius: 0;box-sizing:border-box;
 }
+.adr-form-group select{padding:5px;margin-right:10px;}
 .bottoma{display:block;font-size:18px;padding:10px;color:white;background-color: #f23030;text-align:center;}
 </style>
 
@@ -47,8 +48,130 @@
   <input type="text" name="mobile" class="" id="mobile" placeholder="输入手机号码">
 </div>
 <div class="adr-form-group">
-  <label for="doc-ipt-email-1">地区</label>
-  <input type="text" class="" id="doc-ipt-email-1" placeholder="输入电子邮件">
+地区： <select id='sheng'></select><select id='shi'></select><select id='qu'></select>
+<script>
+// JavaScript Document
+$(document).ready(function(e) {
+    //加载省的数据
+    LoadSheng();
+    //加载市的数据
+    LoadShi();
+    //加载区的数据
+    LoadQu();
+
+    //给省的下拉加点击事件
+    $("#sheng").change(function(){
+        //重新加载市
+        LoadShi();
+        //重新加载区
+        LoadQu();
+    });
+
+    //给市的下拉加点击事件
+    $("#shi").change(function(){
+        //重新加载区
+        LoadQu();
+    });
+});
+
+//加载省份的方法
+function LoadSheng(parent_id,select_id)
+{
+    //省的父级代号
+    parent_id = parent_id || '86';
+    select_id = select_id || 0;
+    
+    $.ajax({
+        async:false,
+        url:'<?php echo env('APP_API_URL')."/region_list"; ?>',
+        data:{id:parent_id},
+        type:"GET",
+        dataType:"json",
+        success: function(res){
+            var hang = res.data;
+            var str = "";
+            for(var i=0;i<hang.length;i++)
+            {
+                if(select_id != 0 && select_id == hang[i].id)
+                {
+                    str = str+"<option selected='selected' value='"+hang[i].id+"'>"+hang[i].name+"</option>";
+                }
+                else
+                {
+                    str = str+"<option value='"+hang[i].id+"'>"+hang[i].name+"</option>";
+                }
+            }
+            
+            $("#sheng").html(str);
+        }
+    });
+}
+
+//加载市的方法
+function LoadShi(parent_id,select_id)
+{
+    //找市的父级代号
+    parent_id = parent_id || $("#sheng").val();
+    select_id = select_id || 0;
+    
+    $.ajax({
+        async:false,
+        url:'<?php echo env('APP_API_URL')."/region_list"; ?>',
+        data:{id:parent_id},
+        type:"GET",
+        dataType:"json",
+        success: function(res){
+            var hang = res.data;
+            var str = "";
+            for(var i=0;i<hang.length;i++)
+            {
+                if(select_id != 0 && select_id == hang[i].id)
+                {
+                    str = str+"<option selected='selected' value='"+hang[i].id+"'>"+hang[i].name+"</option>";
+                }
+                else
+                {
+                    str = str+"<option value='"+hang[i].id+"'>"+hang[i].name+"</option>";
+                }
+            }
+            
+            $("#shi").html(str);
+        }
+    });
+}
+
+//加载区的方法
+function LoadQu(parent_id,select_id)
+{
+    //找区的父级代号
+    parent_id = parent_id || $("#shi").val();
+    select_id = select_id || 0;
+    
+    $.ajax({
+        url:'<?php echo env('APP_API_URL')."/region_list"; ?>',
+        data:{id:parent_id},
+        type:"GET",
+        dataType:"json",
+        success: function(res){
+            var hang = res.data;
+            var str = "";
+            for(var i=0;i<hang.length;i++)
+            {
+                if(select_id != 0 && select_id == hang[i].id)
+                {
+                    str = str+"<option selected='selected' value='"+hang[i].id+"'>"+hang[i].name+"</option>";
+                }
+                else
+                {
+                    str = str+"<option value='"+hang[i].id+"'>"+hang[i].name+"</option>";
+                }
+            }
+            
+            $("#qu").html(str);
+        }
+    });
+}
+</script>
 </div>
 <div class="adr-form-group">
   <label for="doc-ta-1">详细地址</label>

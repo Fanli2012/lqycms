@@ -26,12 +26,12 @@ class Region extends BaseModel
     
     public static function getList($parent_id=86)
     {
-        return self::where('parent_id', $parent_id)->get()->toArray();
+        return self::where('parent_id', $parent_id)->get();
     }
     
     public static function getOne($id)
     {
-        $res = self::where('id', $id)->first()->toArray();
+        $res = self::where('id', $id)->first();
         if (!empty($res))
         {
             return $res;
