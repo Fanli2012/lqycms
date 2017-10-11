@@ -37,7 +37,7 @@
 <?php if($list){foreach($list as $k=>$v){ ?>
 <div class="flow-have-adr">
 	<p class="f-h-adr-title"><label><?php echo $v['name']; ?></label><span class="ect-colory"><?php echo $v['mobile']; ?></span><?php if($v['is_default']==1){ ?><span class="fr">默认</span><?php } ?></p>
-	<p class="f-h-adr-con"><?php echo $v['province'].$v['city'].$v['district'].' '.$v['address']; ?></p>
+	<p class="f-h-adr-con"><?php echo $v['province_name'].$v['city_name'].$v['district_name'].' '.$v['address']; ?></p>
     <div class="adr-edit-del"><a href="<?php echo route('weixin_user_address_update',array('id'=>$v['id'])); ?>"><i class="iconfont icon-bianji"></i>编辑</a><a href="javascript:del(<?php echo $v['id']; ?>);"><i class="iconfont icon-xiao10"></i>删除</a></div>
 </div>
 <?php }} ?>

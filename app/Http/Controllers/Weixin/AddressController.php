@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Weixin;
 
 use App\Http\Controllers\Weixin\CommonController;
 use Illuminate\Http\Request;
+use App\Common\ReturnCode;
 
 class AddressController extends CommonController
 {
@@ -48,7 +49,7 @@ class AddressController extends CommonController
                         $html .= '<p class="f-h-adr-title"><label>'.$v['name'].'</label><span class="ect-colory">'.$v['mobile'].'</span></p>';
                     }
                     
-                    $html .= '<p class="f-h-adr-con">'.$v['province'].$v['city'].$v['district'].' '.$v['address'].'</p>';
+                    $html .= '<p class="f-h-adr-con">'.$v['province_name'].$v['city_name'].$v['district_name'].' '.$v['address'].'</p>';
                     $html .= '<div class="adr-edit-del"><a href="'.route('weixin_user_address_update',array('id'=>$v['id'])).'"><i class="iconfont icon-bianji"></i>编辑</a><a href="javascript:del('.$v['id'].');"><i class="iconfont icon-xiao10"></i>删除</a></div>';
                     $html .= '</div>';
                 }
@@ -63,25 +64,24 @@ class AddressController extends CommonController
     //收货地址添加
     public function userAddressAdd(Request $request)
 	{
-        if($request->input('typeid', '') != ''){$data['typeid'] = $request->input('typeid');}
-        if($request->input('tuijian', '') != ''){$data['tuijian'] = $request->input('tuijian');}
-        if($request->input('keyword', '') != ''){$data['keyword'] = $request->input('keyword');}
-        if($request->input('status', '') != ''){$data['status'] = $request->input('status');}
-        if($request->input('is_promote', '') != ''){$data['is_promote'] = $request->input('is_promote');}
-        if($request->input('orderby', '') != ''){$data['orderby'] = $request->input('orderby');}
-        if($request->input('max_price', '') != ''){$data['max_price'] = $request->input('max_price');}else{$data['max_price'] = 99999;}
-        if($request->input('min_price', '') != ''){$data['min_price'] = $request->input('min_price');}else{$data['min_price'] = 0;}
+		return view('weixin.address.userAddressAdd');
+	}
+    
+    //收货地址修改
+    public function userAddressUpdate(Request $request)
+	{
+        $id = $request->input('id','');
         
-        //商品列表
+        if($id == ''){$this->error_jump(ReturnCode::NO_FOUND,route('weixin'),3);}
+        
         $postdata = array(
-            'access_token'  => $_SESSION['weixin_user_info']['access_token'],
-            'limit'  => 10,
-            'offset' => 0
+            'id'  => $_REQUEST['id'],
+            'access_token' => $_SESSION['weixin_user_info']['access_token']
 		);
-        $url = env('APP_API_URL')."/user_address_list";
-		$goods_list = curl_request($url,$postdata,'GET');
-        $data['user_address_list'] = $goods_list['data']['list'];
+        $url = env('APP_API_URL')."/user_address_detail";
+		$res = curl_request($url,$postdata,'GET');
+        $data['post'] = $res['data'];
         
-		return view('weixin.address.userAddressAdd', $data);
+		return view('weixin.address.userAddressUpdate',$data);
 	}
 }

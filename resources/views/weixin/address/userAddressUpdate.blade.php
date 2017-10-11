@@ -1,12 +1,12 @@
 <!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html;charset=utf-8"/>
-<title>新增收货地址</title><meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport">
+<title>收货地址编辑</title><meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport">
 <link href="<?php echo env('APP_URL'); ?>/css/weixin/style.css" type="text/css" rel="stylesheet">
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/jquery.min.js"></script>
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/weixin/mobile.js"></script>
 <meta name="keywords" content="关键词"><meta name="description" content="描述"></head><body style="background-color:#f1f1f1;">
 <div class="classreturn loginsignup ">
     <div class="ds-in-bl return"><a href="javascript:history.back(-1);"><img src="<?php echo env('APP_URL'); ?>/images/weixin/return.png" alt="返回"></a></div>
-    <div class="ds-in-bl tit center"><span>新增收货地址</span></div>
+    <div class="ds-in-bl tit center"><span>收货地址编辑</span></div>
     <div class="ds-in-bl nav_menu"><a href="javascript:void(0);"><img src="<?php echo env('APP_URL'); ?>/images/weixin/class1.png" alt="菜单"></a></div>
 </div>
 <div class="flool tpnavf cl">
@@ -29,11 +29,11 @@
 <div class="adr_add">
 <div class="adr-form-group">
   <label for="doc-ipt-email-1">收货人</label>
-  <input name="name" type="text" class="" id="name" placeholder="输入姓名">
+  <input name="name" type="text" class="" id="name" placeholder="输入姓名" value="<?php echo $post['name']; ?>">
 </div>
 <div class="adr-form-group">
   <label for="doc-ipt-email-1">手机号码</label>
-  <input type="text" name="mobile" class="" id="mobile" placeholder="输入手机号码">
+  <input type="text" name="mobile" class="" id="mobile" placeholder="输入手机号码" value="<?php echo $post['mobile']; ?>">
 </div>
 <div class="adr-form-group">
 地区： <select id='sheng'></select><select id='shi'></select><select id='qu'></select>
@@ -41,11 +41,11 @@
 // JavaScript Document
 $(document).ready(function(e) {
     //加载省的数据
-    LoadSheng();
+    LoadSheng(86,<?php echo $post['province']; ?>);
     //加载市的数据
-    LoadShi();
+    LoadShi(<?php echo $post['province']; ?>,<?php echo $post['city']; ?>);
     //加载区的数据
-    LoadQu();
+    LoadQu(<?php echo $post['city']; ?>,<?php echo $post['district']; ?>);
 
     //给省的下拉加点击事件
     $("#sheng").change(function(){
@@ -163,11 +163,11 @@ function LoadQu(parent_id,select_id)
 </div>
 <div class="adr-form-group">
   <label for="doc-ta-1">详细地址</label>
-  <textarea name="address" class="" rows="3" id="address"></textarea>
+  <textarea name="address" class="" rows="3" id="address"><?php echo $post['address']; ?></textarea>
 </div>
 <div class="adr-form-group">
   <label>
-    <input type="checkbox" name="is_default" id="is_default"> 设为默认
+    <input type="checkbox" name="is_default" id="is_default" <?php if($post['is_default']==1){echo 'checked="checked"';} ?>> 设为默认
   </label>
 </div>
 </div>

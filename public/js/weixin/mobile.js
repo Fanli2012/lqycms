@@ -25,3 +25,20 @@ function delconfirm(url,des)
         }
     });
 }
+
+//手机号验证
+function validatemobile(mobile)
+{
+    if(mobile.length == 0 || mobile.length != 11) 
+    {
+        return false; 
+    }
+    
+    var reg = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
+    if(!reg.test(mobile))
+    {
+        return false;
+    }
+    
+    return true;
+}

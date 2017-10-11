@@ -36,13 +36,13 @@ class UserAddress extends BaseModel
             
             if($res['list'])
             {
-                /* foreach($res['list'] as $k=>$v)
+                foreach($res['list'] as $k=>$v)
                 {
                     $res['list'][$k]['country_name']  = Region::getRegionName($v['country']);
                     $res['list'][$k]['province_name'] = Region::getRegionName($v['province']);
                     $res['list'][$k]['city_name']     = Region::getRegionName($v['city']);
                     $res['list'][$k]['district_name'] = Region::getRegionName($v['district']);
-                } */
+                }
             }
         }
         else
@@ -62,13 +62,13 @@ class UserAddress extends BaseModel
         {
             $arr = self::where('id',$address_id)->first();
             
-            /* if($arr)
+            if($arr)
             {
                 $arr->country_name  = Region::getRegionName($arr->country);
                 $arr->province_name = Region::getRegionName($arr->province);
                 $arr->city_name     = Region::getRegionName($arr->city);
                 $arr->district_name = Region::getRegionName($arr->district);
-            } */
+            }
             
             return $arr;
         }
@@ -80,13 +80,13 @@ class UserAddress extends BaseModel
                     ->where('user.id',$user_id)->select('user_address.id','user_address.name','country','province','city','district','address','user_address.mobile','zipcode')
                     ->first();
                     
-            /* if($arr)
+            if($arr)
             {
                 $arr->country_name  = Region::getRegionName($arr->country);
                 $arr->province_name = Region::getRegionName($arr->province);
                 $arr->city_name     = Region::getRegionName($arr->city);
                 $arr->district_name = Region::getRegionName($arr->district);
-            } */
+            }
         }
         
         return $arr;
