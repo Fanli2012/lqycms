@@ -28,6 +28,113 @@ class UserController extends CommonController
 		return view('weixin.user.index', $data);
 	}
     
+    //资金管理
+    public function userAccount(Request $request)
+	{
+        $postdata = array(
+            'access_token' => $_SESSION['weixin_user_info']['access_token']
+		);
+        $url = env('APP_API_URL')."/user_info";
+		$res = curl_request($url,$postdata,'GET');
+        $data['user_info'] = $res['data'];
+        
+        return view('weixin.user.userAccount', $data);
+    }
+    
+    //余额明细
+    public function userMoneyList(Request $request)
+	{
+        $pagesize = 10;
+        $offset = 0;
+        if(isset($_REQUEST['page'])){$offset = ($_REQUEST['page']-1)*$pagesize;}
+        
+        $postdata = array(
+            'limit'  => $pagesize,
+            'offset' => $offset,
+            'access_token' => $_SESSION['weixin_user_info']['access_token']
+		);
+        $url = env('APP_API_URL')."/user_money_list";
+		$res = curl_request($url,$postdata,'GET');
+        $data['list'] = $res['data']['list'];
+        
+        $data['totalpage'] = ceil($res['data']['count']/$pagesize);
+        
+        if(isset($_REQUEST['page_ajax']) && $_REQUEST['page_ajax']==1)
+        {
+    		$html = '';
+            
+            if($res['data']['list'])
+            {
+                foreach($res['data']['list'] as $k => $v)
+                {
+                    $html .= '<li>';
+                    if($v['type']==0)
+                    {
+                        $html .= '<span class="green">+ '.$v['money'].'</span>';
+                    }
+                    else
+                    {
+                        $html .= '<span>- '.$v['money'].'</span>';
+                    }
+                    $html .= '<div class="info"><p class="tit">'.$v['des'].'</p>';
+                    $html .= '<p class="time">'.date('Y-m-d H:i:s',$v['add_time']).'</p></div>';
+                    $html .= '</li>';
+                }
+            }
+            
+    		exit(json_encode($html));
+    	}
+        
+        return view('weixin.user.userMoneyList', $data);
+    }
+    
+    //积分明细
+    public function userPointList(Request $request)
+	{
+        $pagesize = 10;
+        $offset = 0;
+        if(isset($_REQUEST['page'])){$offset = ($_REQUEST['page']-1)*$pagesize;}
+        
+        $postdata = array(
+            'limit'  => $pagesize,
+            'offset' => $offset,
+            'access_token' => $_SESSION['weixin_user_info']['access_token']
+		);
+        $url = env('APP_API_URL')."/user_point_list";
+		$res = curl_request($url,$postdata,'GET');
+        $data['list'] = $res['data']['list'];
+        
+        $data['totalpage'] = ceil($res['data']['count']/$pagesize);
+        
+        if(isset($_REQUEST['page_ajax']) && $_REQUEST['page_ajax']==1)
+        {
+    		$html = '';
+            
+            if($res['data']['list'])
+            {
+                foreach($res['data']['list'] as $k => $v)
+                {
+                    $html .= '<li>';
+                    if($v['type']==0)
+                    {
+                        $html .= '<span class="green">+ '.$v['point'].'</span>';
+                    }
+                    else
+                    {
+                        $html .= '<span>- '.$v['point'].'</span>';
+                    }
+                    $html .= '<div class="info"><p class="tit">'.$v['des'].'</p>';
+                    $html .= '<p class="time">'.date('Y-m-d H:i:s',$v['add_time']).'</p></div>';
+                    $html .= '</li>';
+                }
+            }
+            
+    		exit(json_encode($html));
+    	}
+        
+        return view('weixin.user.userPointList', $data);
+    }
+    
     //浏览记录
     public function userGoodsHistory(Request $request)
 	{

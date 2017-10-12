@@ -103,7 +103,7 @@
                     </div>
                     <div class="fr">
                         <!--<a href="bankrollmm.html">-->
-                        <a href="/index.php/Mobile/User/account.html">
+                        <a href="<?php echo route('weixin_user_account'); ?>">
                             <span>资金管理</span>
                             <i class="Mright"></i>
                         </a>
@@ -114,20 +114,20 @@
         <div class="floor w3">
             <ul>
                 <li>
-                    <a href="/index.php/Mobile/User/account.html">
-                        <h2>0.00</h2>
+                    <a href="<?php echo route('weixin_user_money_list'); ?>">
+                        <div class="tit"><?php echo $user_info['money']; ?></div>
                         <p>余额</p>
                     </a>
                 </li>
                 <li>
                     <a href="/index.php/Mobile/User/coupon.html">
-                        <h2>0</h2>
+                        <div class="tit">0</div>
                         <p>优惠券</p>
                     </a>
                 </li>
                 <li>
-                    <a href="/index.php/Mobile/User/points_list.html">
-                        <h2>100</h2>
+                    <a href="<?php echo route('weixin_user_point_list'); ?>">
+                        <div class="tit"><?php echo $user_info['point']; ?></div>
                         <p>积分</p>
                     </a>
                 </li>

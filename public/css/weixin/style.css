@@ -73,7 +73,7 @@ background:none;
 .goods_list_small li img{width:100%;height:auto;}.goods_list_small li .goods_price{color:#f23030;}.goods_list_small li .goods_price b{font-size:1rem;font-weight:normal;}
 .goods_list_small li:nth-child(even) a{margin-right:0;margin-left:2px;}
 
-.goods_list_s li{color:#333;border-bottom:1px solid #eee;overflow:hidden;margin-left:10px;margin-right:10px;padding-top:10px;padding-bottom:10px;}
+.goods_list_s li{color:#333;border-bottom:1px solid #eee;overflow:hidden;margin-left:10px;margin-right:10px;padding:15px 5px 15px 5px;}
 .goods_list_s li span{color:#333;display:block;font-size:1rem;}.goods_list_s a:last-child li{border-bottom:0}
 .goods_thumb{width:100px;height:100px;float:left;margin-right:10px;display:block;}.goods_thumb img{width:100px;height:100px;border:none;}
 .goods_list_s .goods_tit{line-height:24px;overflow:hidden;}
@@ -712,7 +712,7 @@ margin:5px 0
     height:36px
 }
 
-.my .content .floor ul li a h2 {
+.my .content .floor ul li a .tit{
     font-size:18px;
     font-weight: normal;
     height:32px;
@@ -767,17 +767,7 @@ margin:5px 0
     margin:15px 20px
 }
 
-.setting .close a {
-display: block;
-background: #ec5151;
-text-align: center;
-padding:10px;
-color: #fff;
-font-size:18px;
--moz-border-radius:5px;
--webkit-border-radius:5px;
-border-radius:5px
-}
+.setting .close a{display: block;background: #ec5151;text-align: center;padding:10px;color: #fff;font-size:18px;border-radius:2px;}
 
 h1.arc_tit, h2.arc_tit{font-weight: normal;font-size: 1.4em;padding: 10px;}
 .arc_content .ainfo{font-size: 0.875em;color: #999;}
