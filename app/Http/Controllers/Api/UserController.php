@@ -17,7 +17,7 @@ class UserController extends CommonController
     //用户信息
     public function userInfo(Request $request)
     {
-        if ($user = User::getOne(Token::$uid))
+        if ($user = User::getUserInfo(Token::$uid))
 		{
             return ReturnData::create(ReturnData::SUCCESS, $user);
         }

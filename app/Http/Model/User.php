@@ -77,7 +77,7 @@ class User extends BaseModel
         return $res;
     }
     
-    //用户信息
+    //获取一条用户信息
 	public static function getOne($id)
     {
         $user = self::where('id', $id)->first();
@@ -116,5 +116,16 @@ class User extends BaseModel
         }
         
         return true;
+    }
+    
+    //获取用户信息
+	public static function getUserInfo($user_id)
+    {
+        $user = self::where('id', $user_id)->first();
+        if(!$user){return false;}
+        $user['reciever_address'] = UserAddress::getOne($user->address_id);
+        $user['collect_goods_count'] = CollectGoods::where('user_id', $user_id)->count();
+        
+		return $user;
     }
 }

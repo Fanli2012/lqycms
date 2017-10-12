@@ -25,7 +25,7 @@
         <ul>
             <li>
                 <a href="<?php echo route('weixin_user_collect_goods'); ?>">
-                    <h2>1</h2>
+                    <h2><?php echo $user_info['collect_goods_count']; ?></h2>
                     <p>我的收藏</p>
                 </a>
             </li>

@@ -23,8 +23,21 @@
     <div class="money"><small>￥</small><?php echo $user_info['money']; ?></div>
     <br>
     <a style="margin:10px;background-color:#1aad19;text-align:center;color:white;border:1px solid #179e16;" class="bottoma" href="http://www.lqycms.com/weixin/user_address_add">充值</a>
-    <a style="margin:0 10px 10px 10px;background-color:#f1f1f1;text-align:center;color:#000;border:1px solid #bfbfbf;" class="bottoma" href="http://www.lqycms.com/weixin/user_address_add">提现</a>
+    <a style="margin:0 10px 10px 10px;background-color:#f1f1f1;text-align:center;color:#000;border:1px solid #bfbfbf;" class="bottoma" href="javascript:tixian();">提现</a>
 </div>
 
+<script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/layer/mobile/layer.js"></script>
+<script>
+function tixian()
+{
+    //页面层
+    layer.open({
+        type: 1
+        ,content: '<div style="padding:15px;"><a style="margin-bottom:10px;background-color:#1aad19;text-align:center;color:white;border:1px solid #179e16;" class="bottoma" onclick="layer.closeAll();" href="javascript:;">银行提现</a><a style="margin-bottom:10px;background-color:#ea5a3d;text-align:center;color:white;border:1px solid #dd2727;" class="bottoma" onclick="layer.closeAll();" href="javascript:;">微信提现</a><a style="background-color:#f1f1f1;text-align:center;color:#000;border:1px solid #bfbfbf;" class="bottoma" onclick="layer.closeAll();" href="javascript:;">取消</a></div>'
+        ,anim: 'up'
+        ,style: 'position:fixed;bottom:0;left:0;width:100%;border:none;'
+    });
+}
+</script>
 @include('weixin.common.footer')
 </body></html>

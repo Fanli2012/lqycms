@@ -1,22 +1,39 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-<meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport">
-<title>您访问的页面不存在或已被删除！</title>
-<meta http-equiv="refresh" content="3;URL=<?php echo route('weixin'); ?>">
-<style type="text/css">
-*{padding:0;margin:0;}
-body{background:#fff;font-family:'微软雅黑';color:#333;font-size:16px;}
-.system-message{padding:24px 48px;margin:5% auto 0 auto;}
-.system-message h1{font-size:100px;font-weight:normal;line-height:120px;margin-bottom:12px;}
-.system-message .jump{padding-top:10px}
-.system-message .jump a{color:#333;}
-.system-message .success,.system-message .error{line-height:1.8em;font-size:36px}
-.system-message .detail{font-size:14px;line-height:20px;margin-top:12px;}
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+<title>您访问的页面不存在或已被删除！</title><meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport">
+<link href="<?php echo env('APP_URL'); ?>/css/weixin/style.css" type="text/css" rel="stylesheet">
+<meta name="keywords" content="系统提示"><meta name="description" content="系统提示"></head><body>
+<style>
+.successsystem{text-align:center;padding:30px 0}
+.successsystem img{width:100px;height:100px}
+.prompt_s{font-size:16px;color:#999999;text-align:center}
+.systemprompt{text-align:center;margin-top:30px}
+.systemprompt a{display:inline-block;width:40%;height:36px;line-height:36px;background:#f23030;text-align:center;color:white;border-radius:3px;margin:0 10px;font-size:16px;}
 </style>
-</head><body>
-<div class="system-message">
-<h1>:(</h1>
-<p class="error">您访问的页面不存在或已被删除！</p>
-<p class="detail"><a href="<?php echo route('weixin'); ?>">返回首页</a></p>
+<div class="classreturn loginsignup">
+    <div class="ds-in-bl return"><a href="javascript:history.back(-1);"><img src="<?php echo env('APP_URL'); ?>/images/weixin/return.png" alt="返回"></a></div>
+    <div class="ds-in-bl tit center"><span>系统提示</span></div>
 </div>
+<div class="successsystem">
+    <img src="<?php echo env('APP_URL'); ?>/images/weixin/icogantanhao-sb.png">
+</div>
+<p class="prompt_s">
+    您访问的页面不存在或已被删除！，等待时间：<b id="wait">3</b>
+</p>
+<div class="systemprompt">
+    <a href="<?php if(isset($_SERVER["HTTP_REFERER"])){echo $_SERVER['HTTP_REFERER'];}else{echo route('weixin');} ?>" id="href">返回上一页</a>
+    <a href="<?php echo route('weixin'); ?>">返回首页</a>
+</div>
+<script type="text/javascript">
+(function(){
+var wait = document.getElementById('wait'),href = document.getElementById('href').href;
+var interval = setInterval(function(){
+	var time = --wait.innerHTML;
+	if(time <= 0)
+    {
+		location.href = href;
+		clearInterval(interval);
+	};
+}, 1000);
+})();
+</script>
 </body></html>
