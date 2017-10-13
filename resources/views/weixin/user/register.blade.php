@@ -1,12 +1,12 @@
 <!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html;charset=utf-8"/>
-<title>登录</title><meta name="keywords" content="关键词"><meta name="description" content="描述"><meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport">
+<title>注册</title><meta name="keywords" content="关键词"><meta name="description" content="描述"><meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport">
 <link href="<?php echo env('APP_URL'); ?>/css/weixin/style.css" type="text/css" rel="stylesheet">
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/jquery.min.js"></script>
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/weixin/mobile.js"></script>
 <link href="<?php echo env('APP_URL'); ?>/css/font-awesome.min.css" type="text/css" rel="stylesheet"></head><body>
 <div class="classreturn loginsignup">
     <div class="ds-in-bl return"><a href="javascript:history.back(-1);"><img src="<?php echo env('APP_URL'); ?>/images/weixin/return.png" alt="返回"></a></div>
-    <div class="ds-in-bl tit center"><span>登录</span></div>
+    <div class="ds-in-bl tit center"><span>注册</span></div>
     <div class="ds-in-bl nav_menu"><a href="javascript:void(0);"><img src="<?php echo env('APP_URL'); ?>/images/weixin/class1.png" alt="菜单"></a></div>
 </div>
 <div class="flool tpnavf cl">
@@ -36,31 +36,64 @@
     <form id="login" action="" method="post">
     <div class="adr_add">
         <div class="adr-form-group">
-            <input type="text" name="user_name" class="" id="user_name" placeholder="请输入账号">
+            <input type="text" name="user_name" class="" id="user_name" placeholder="请输入用户名">
+        </div>
+        <div class="adr-form-group">
+            <input type="text" name="mobile" class="" id="mobile" placeholder="请输入手机号码">
         </div>
         <div class="adr-form-group">
             <input type="password" name="password" class="" id="password" placeholder="请输入密码">
         </div>
+        <div class="adr-form-group">
+            <input type="password" name="re_password" class="" id="re_password" placeholder="确认密码">
+        </div>
     </div>
     </form>
-    <a style="margin:10px;background-color:#1aad19;text-align:center;color:white;border:1px solid #179e16;" class="bottoma" href="javascript:submit();">登录</a>
+    <a style="margin:10px;background-color:#1aad19;text-align:center;color:white;border:1px solid #179e16;" class="bottoma" href="javascript:submit();">提交</a>
 </div>
 <div class="box reg">
-<a style="float:left;" href="<?php echo route('weixin_register'); ?>">快速注册</a> <a style="float:right;" href="">忘记密码</a>
+<a style="float:left;" href="<?php echo route('weixin_login'); ?>">已有账号</a>
 </div>
+
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/md5.min.js"></script>
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/layer/mobile/layer.js"></script>
 <script>
 function submit()
 {
     var user_name = $("#user_name").val();
+    var mobile = $("#mobile").val();
     var password = $("#password").val();
+    var re_password = $("#re_password").val();
     
     if(user_name == '')
     {
         //提示
         layer.open({
-            content: '账号不能为空'
+            content: '用户名不能为空'
+            ,skin: 'msg'
+            ,time: 2 //2秒后自动关闭
+        });
+        
+        return false;
+    }
+    
+    if(mobile == '')
+    {
+        //提示
+        layer.open({
+            content: '手机号不能为空'
+            ,skin: 'msg'
+            ,time: 2 //2秒后自动关闭
+        });
+        
+        return false;
+    }
+    
+    if(!validatemobile(mobile))
+    {
+        //提示
+        layer.open({
+            content: '手机号格式不正确'
             ,skin: 'msg'
             ,time: 2 //2秒后自动关闭
         });
@@ -73,6 +106,18 @@ function submit()
         //提示
         layer.open({
             content: '密码不能为空'
+            ,skin: 'msg'
+            ,time: 2 //2秒后自动关闭
+        });
+        
+        return false;
+    }
+    
+    if(password != re_password)
+    {
+        //提示
+        layer.open({
+            content: '两次密码不一致'
             ,skin: 'msg'
             ,time: 2 //2秒后自动关闭
         });

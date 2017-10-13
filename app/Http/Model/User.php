@@ -15,8 +15,8 @@ class User extends BaseModel
      *
      * @var array
      */
-    protected $guarded = [];
-	protected $hidden = ['password'];
+    protected $guarded = array();
+	protected $hidden = array('password','pay_password');
 	/**
      * 获取关联到用户的角色
      */
@@ -118,14 +118,62 @@ class User extends BaseModel
         return true;
     }
     
+    //获取一条用户信息
+	public static function getOneUser($where)
+    {
+        $user = self::where($where)->first();
+        if(!$user){return false;}
+        $user['reciever_address'] = UserAddress::getOne($user->address_id);
+        
+		return $user;
+    }
+    
     //获取用户信息
 	public static function getUserInfo($user_id)
     {
         $user = self::where('id', $user_id)->first();
         if(!$user){return false;}
-        $user['reciever_address'] = UserAddress::getOne($user->address_id);
-        $user['collect_goods_count'] = CollectGoods::where('user_id', $user_id)->count();
+        $user->reciever_address = UserAddress::getOne($user->address_id);
+        $user->collect_goods_count = CollectGoods::where('user_id', $user_id)->count();
         
 		return $user;
+    }
+    
+    //注册
+    public static function wxRegister(array $param)
+	{
+        extract($param); //参数
+        
+        if(isset($user_name)){$data['user_name'] = $user_name;}
+        if(isset($mobile)){$data['mobile'] = $mobile;}
+        if(isset($password)){$data['password'] = $password;}
+        
+        if (isset($data) && $id = self::add($data))
+        {
+            //生成token
+			return Token::getToken(Token::TYPE_WEIXIN, $id);
+        }
+
+        return false;
+    }
+    
+    //用户登录
+	public static function wxLogin(array $param)
+    {
+        extract($param); //参数
+        
+        $user = self::where(array('mobile'=>$user_name,'password'=>$password))->orWhere(array('user_name'=>$user_name,'password'=>$password))->first();
+        
+        if(!$user){return false;}
+        
+        $res = self::getUserInfo($user->id);
+        $token = Token::getToken(Token::TYPE_WEIXIN, $user->id);
+        
+        foreach($token as $k=>$v)
+        {
+            $res->$k = $v;
+        }
+        
+		return $res;
     }
 }

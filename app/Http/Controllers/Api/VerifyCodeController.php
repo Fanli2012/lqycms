@@ -16,7 +16,7 @@ class VerifyCodeController extends CommonController
     }
 	
     //验证码校验
-    public function check(Request $request)
+    public function verifyCodeCheck(Request $request)
     {
         $mobile = $request->input('mobile', null); //手机号码
         $verifyCode = $request->input('verifyCode', null); //手机验证码

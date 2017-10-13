@@ -16,7 +16,7 @@ class WxLogin
 		}
 		else
 		{
-			header('Location: '.route('weixin'));exit;
+			header('Location: '.route('weixin_login'));exit;
 		}
 		
         return $next($request);

@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\CommonController;
 use Illuminate\Http\Request;
 use App\Common\ReturnData;
 use App\Common\Token;
+use App\Common\Helper;
 use App\Http\Model\User;
 
 class UserController extends CommonController
@@ -86,133 +87,63 @@ class UserController extends CommonController
     }
     
     //注册
-    public function register(Request $request)
+    public function wxRegister(Request $request)
 	{
-        $mobile = $request->input('mobile', null);
-        $password = $request->input('password', null);
-		$community_id = $request->input('community_id', null);
-		$address = $request->input('address', null);
-		$type = $request->input('type', null);
-		$verificationCode = $request->input('verificationCode', null);
-        $verificationType = $request->input('verificationType', null); //7表示验证码登录
-		
-		$yezhu_mobile = $request->input('yezhu_mobile', null);
-		
-        Log::info("注册手机号==========mobile=======".$mobile);
+        $data['mobile'] = $request->input('mobile','');
+        $data['user_name'] = $request->input('user_name','');
+        $data['password'] = $request->input('password','');
         
-        if ($mobile==null || $password==null || $verificationCode==null || $verificationType===null || $community_id===null)
+        if (($data['mobile']=='' && $data['user_name']=='') || $data['password']=='')
 		{
-            return ReturnCode::create(ReturnCode::PARAMS_ERROR);
+            return ReturnData::create(ReturnData::PARAMS_ERROR);
         }
-		
-        if (!Helper::isValidMobile($mobile))
+        
+        if (isset($data['mobile']) && !Helper::isValidMobile($data['mobile']))
 		{
-            return response(ReturnCode::create(ReturnCode::MOBILE_FORMAT_FAIL));
+            return ReturnData::create(ReturnData::MOBILE_FORMAT_FAIL);
         }
-		
-		$verifyCode = VerifyCode::isVerify($mobile, $verificationCode, $verificationType);
-		if(!$verifyCode)
-		{
-			return ReturnCode::create(ReturnCode::INVALID_VERIFY_CODE);
-		}
-		
-		if($yezhu_mobile!=null)
-		{
-			$yezhu = MallDataManager::userFirst(['mobile'=>$yezhu_mobile,'community_id'=>$community_id]);
-			if (!$yezhu)
-			{
-				return response(ReturnCode::create(ReturnCode::PARAMS_ERROR,'业主不匹配'));
-			}
-		}
 		
 		//判断是否已经注册
-		$user = MallDataManager::userFirst(['mobile'=>$mobile]);
-		if ($user)
+		if (User::getOneUser(array('mobile'=>$data['mobile'])))
 		{
-			return response(ReturnCode::create(ReturnCode::MOBILE_EXIST));
+            return ReturnData::create(ReturnData::MOBILE_EXIST);
 		}
 		
-		try
+		if (User::getOneUser(array('user_name'=>$data['user_name'])))
 		{
-			DB::beginTransaction();
-			//创建用户
-			$userdata['mobile'] = $mobile;
-			$userdata['password'] = $password;
-			$userdata['verify_mobile'] = 1;
-			$userdata['name'] = $mobile;
-			$userdata['nickname'] = $mobile;
-			$userdata['community_id'] = $community_id;
-			$userdata['address'] = $address;
-			$userdata['type'] = $type;
-			$userid = DB::table('user')->insertGetId($userdata);
-			
-			//注册环信用户
-			$Easemob = new Easemob();
-			$Easemob->imRegister(['username'=>'cuobian'.$userid,'password'=>md5('cuobian'.$userid)]);
-			
-			//生成token
-			if ($user = MallDataManager::userFirst(['mobile'=>$mobile,'password'=>$password]))
-			{
-				//获取token
-				$expired_at = Carbon::now()->addDay()->toDateTimeString();
-				$token = Token::generate(Token::TYPE_SHOP, $user->id);
-			}
-			
-			DB::commit();
-			$response         = ReturnCode::create(ReturnCode::SUCCESS);
-			$response['data'] = [
-				'id' => $user->id,
-				'mobile' => $user->mobile,
-				'expired_at' => $expired_at,
-				'token' => $token,
-			];
+            return ReturnData::create(ReturnData::SUCCESS,null,'用户名已存在');
 		}
-		catch (Exception $e)
-		{
-			DB::rollBack();
-			Log::info($e->getMessage());
-			return response(ReturnCode::error($e->getCode(), $e->getMessage()));
-		}
-		
-		return response($response);
+        
+        //添加用户
+        $res = User::wxRegister($data);
+        
+        if($res == false)
+        {
+            return ReturnData::create(ReturnData::SYSTEM_FAIL);
+        }
+        
+        return ReturnData::create(ReturnData::SUCCESS,$res);
     }
 	
 	//登录
-    public function login(Request $request)
+    public function wxLogin(Request $request)
     {
-        $mobile = $request->input('mobile');
-        $password = $request->input('password');
-		
-        if (!$mobile || !$password)
+        $data['user_name'] = $request->input('user_name','');
+        $data['password'] = $request->input('password','');
+        
+        if ($data['user_name']=='' || $data['password']=='')
 		{
-            return response(ReturnCode::create(ReturnCode::PARAMS_ERROR));
+            return ReturnData::create(ReturnData::PARAMS_ERROR);
         }
         
-        if ($user = MallDataManager::userFirst(['mobile'=>$mobile]))
+        $res = User::wxLogin($data);
+        
+        if ($res === false)
 		{
-            //判断密码
-            if ($password == $user->password)
-			{
-                //获取token
-                $expired_at = Carbon::now()->addDay()->toDateTimeString();
-                $token = Token::generate(Token::TYPE_SHOP, $user->id);
-                
-                $response = ReturnCode::success();
-                $response['data']=[
-                    'id' => $user->id, 'name' => $user->name, 'nickname' => $user->nickname, 'headimg' => (string)$user->head_img, 'token' => $token, 'expired_at' => $expired_at, 'mobile' => $user->mobile, 'hx_name' => 'cuobian'.$user->id, 'hx_pwd' => md5('cuobian'.$user->id)
-                ];
-				
-                return response($response);
-            }
-			else
-			{
-                return response(ReturnCode::create(ReturnCode::PASSWORD_NOT_MATCH));
-            }
+            return ReturnData::create(ReturnData::PARAMS_ERROR,null,'账号或密码错误');
         }
-		else
-		{
-            return response(ReturnCode::create(ReturnCode::USER_NOT_EXIST));
-        }
+            
+        return ReturnData::create(ReturnData::SUCCESS,$res);
     }
     
     //验证码登录

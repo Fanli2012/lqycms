@@ -103,6 +103,6 @@ class Token
             'expired_at' => $expired_at
         ));
 		
-        return array('access_token'=>$token,'expired_at'=>$expired_at);
+        return array('access_token'=>$token,'expired_at'=>$expired_at,'uid'=>$uid,'type'=>$type);
     }
 }

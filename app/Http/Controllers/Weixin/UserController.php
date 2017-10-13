@@ -232,7 +232,71 @@ class UserController extends CommonController
             header('Location: '.route('weixin_user'));exit;
         }
         
-		return view('weixin.user.login');
+        if($_SERVER['REQUEST_METHOD'] == 'POST')
+        {
+            if($_POST['user_name'] == '')
+            {
+                $this->error_jump('账号不能为空');
+            }
+            
+            if($_POST['password'] == '')
+            {
+                $this->error_jump('密码不能为空');
+            }
+            
+            $postdata = array(
+                'user_name' => $_POST['user_name'],
+                'password' => md5($_POST['password'])
+            );
+            $url = env('APP_API_URL')."/wx_login";
+            $res = curl_request($url,$postdata,'POST');
+            
+            if($res['code'] != ReturnCode::SUCCESS_CODE){$this->error_jump('登录失败');}
+            
+            $_SESSION['weixin_user_info'] = $res['data'];
+            
+            header('Location: '.route('weixin_user'));exit;
+        }
+        
+        return view('weixin.user.login');
+	}
+    
+    //注册
+    public function register(Request $request)
+	{
+        if(isset($_SESSION['weixin_user_info']))
+        {
+            if(isset($_SERVER["HTTP_REFERER"])){header('Location: '.$_SERVER["HTTP_REFERER"]);exit;}
+            header('Location: '.route('weixin_user'));exit;
+        }
+        
+        if($_SERVER['REQUEST_METHOD'] == 'POST')
+        {
+            if($_POST['user_name'] == '')
+            {
+                $this->error_jump('账号不能为空');
+            }
+            
+            if($_POST['password'] == '')
+            {
+                $this->error_jump('密码不能为空');
+            }
+            
+            $postdata = array(
+                'user_name' => $_POST['user_name'],
+                'password' => md5($_POST['password'])
+            );
+            $url = env('APP_API_URL')."/wx_login";
+            $res = curl_request($url,$postdata,'POST');
+            
+            if($res['code'] != ReturnCode::SUCCESS_CODE){$this->error_jump('登录失败');}
+            
+            $_SESSION['weixin_user_info'] = $res['data'];
+            
+            header('Location: '.route('weixin_user'));exit;
+        }
+        
+        return view('weixin.user.register');
 	}
     
     public function logout(Request $request)

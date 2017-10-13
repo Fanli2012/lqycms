@@ -64,7 +64,8 @@ Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin'], function () {
 	Route::get('/goods/{id}', 'GoodsController@goods')->name('weixin_goods_detail'); //商品详情页
 	Route::get('/goodslist', 'GoodsController@goodslist')->name('weixin_goods_list'); //产品分类页
     
-    Route::get('/login', 'UserController@login')->name('weixin_login');
+    Route::any('/login', 'UserController@login')->name('weixin_login');
+    Route::any('/register', 'UserController@register')->name('weixin_register');
     Route::get('/logout', 'UserController@logout')->name('weixin_user_logout'); //退出
     //页面跳转
 	Route::get('/jump', 'IndexController@jump')->name('weixin_jump');
@@ -119,6 +120,9 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     //地区，省市区
 	Route::get('/region_list', 'RegionController@regionList');
     Route::get('/region_detail', 'RegionController@regionDetail');
+    //用户
+	Route::post('/wx_register', 'UserController@wxRegister'); //注册
+    Route::post('/wx_login', 'UserController@wxLogin'); //登录
 });
 
 //API接口路由，需token验证
@@ -171,7 +175,7 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     Route::post('/feedback_add', 'FeedBackController@feedbackAdd');
     
     //其它
-    Route::get('/verifycode_check', 'VerifyCodeController@check'); //验证码校验
+    Route::get('/verifycode_check', 'VerifyCodeController@verifyCodeCheck'); //验证码校验
     Route::get('/andriod_upgrade', 'IndexController@andriodUpgrade'); //安卓升级
     //图片上传
     Route::post('/image_upload', 'ImageController@imageUpload'); //普通文件/图片上传
