@@ -61,5 +61,6 @@ class Kernel extends HttpKernel
         
         'token' => \App\Http\Middleware\TokenAuth::class,                       //Token验证，FLi
         'sign'  => \App\Http\Middleware\Sign::class,                            //Sign验证，FLi
+        'wxlogin' => \App\Http\Middleware\WxLogin::class,                       //微信端登录验证，FLi
     ];
 }

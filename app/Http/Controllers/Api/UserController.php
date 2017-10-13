@@ -46,6 +46,7 @@ class UserController extends CommonController
         if($request->input('status', null)!==null){$data['status'] = $request->input('status');}
         if($request->input('group_id', null)!==null){$data['group_id'] = $request->input('group_id');}
         if($request->input('password', null)!==null){$data['password'] = $request->input('password');}
+        if($request->input('head_img', null)!==null){$data['head_img'] = $request->input('head_img');}
         
         if ($data != '')
 		{

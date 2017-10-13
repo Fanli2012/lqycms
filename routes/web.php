@@ -64,8 +64,20 @@ Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin'], function () {
 	Route::get('/goods/{id}', 'GoodsController@goods')->name('weixin_goods_detail'); //商品详情页
 	Route::get('/goodslist', 'GoodsController@goodslist')->name('weixin_goods_list'); //产品分类页
     
+    Route::get('/login', 'UserController@login')->name('weixin_login');
+    Route::get('/logout', 'UserController@logout')->name('weixin_user_logout'); //退出
+    //页面跳转
+	Route::get('/jump', 'IndexController@jump')->name('weixin_jump');
+    
+	Route::get('/test', 'IndexController@test')->name('weixin_test');           //测试
+});
+
+//微信路由，需登录，全局
+Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin', 'middleware' => ['web','wxlogin']], function () {
+    
     //个人中心
 	Route::get('/user', 'UserController@index')->name('weixin_user');
+    Route::get('/userinfo', 'UserController@userinfo')->name('weixin_userinfo');
     Route::get('/user_account', 'UserController@userAccount')->name('weixin_user_account');
     Route::get('/user_money_list', 'UserController@userMoneyList')->name('weixin_user_money_list');
     Route::get('/user_point_list', 'UserController@userPointList')->name('weixin_user_point_list');
@@ -73,20 +85,15 @@ Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin'], function () {
     Route::get('/user_goods_history', 'UserController@userGoodsHistory')->name('weixin_user_goods_history');
     Route::get('/user_goods_history_delete', 'UserController@userGoodsHistoryDelete')->name('weixin_user_goods_history_delete');
     Route::get('/user_goods_history_clear', 'UserController@userGoodsHistoryClear')->name('weixin_user_goods_history_clear');
-    
     //商品收藏
     Route::get('/collect_goods', 'CollectGoodsController@index')->name('weixin_user_collect_goods');
-    
+    //购物车
     Route::get('/cart', 'CartController@index')->name('weixin_cart');
-    
     //收货地址
     Route::get('/user_address', 'AddressController@index')->name('weixin_user_address_list');
     Route::get('/user_address_add', 'AddressController@userAddressAdd')->name('weixin_user_address_add');
     Route::get('/user_address_update', 'AddressController@userAddressUpdate')->name('weixin_user_address_update');
-    //页面跳转
-	Route::get('/jump', 'IndexController@jump')->name('weixin_jump');
     
-	Route::get('/test', 'IndexController@test')->name('weixin_test');           //测试
 });
 
 

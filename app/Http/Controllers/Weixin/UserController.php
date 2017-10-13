@@ -15,7 +15,7 @@ class UserController extends CommonController
     //个人中心
     public function index(Request $request)
 	{
-        $_SESSION['weixin_user_info']['access_token'] = '72d623d26a1a6d61186a97f9ccf752f7';
+        //$_SESSION['weixin_user_info']['access_token'] = '72d623d26a1a6d61186a97f9ccf752f7';
         
         //获取会员信息
         $postdata = array(
@@ -26,6 +26,20 @@ class UserController extends CommonController
         $data['user_info'] = $res['data'];
         
 		return view('weixin.user.index', $data);
+	}
+    
+    //个人中心设置
+    public function userinfo(Request $request)
+	{
+        //获取会员信息
+        $postdata = array(
+            'access_token' => $_SESSION['weixin_user_info']['access_token']
+		);
+        $url = env('APP_API_URL')."/user_info";
+		$res = curl_request($url,$postdata,'GET');
+        $data['user_info'] = $res['data'];
+        
+		return view('weixin.user.userinfo', $data);
 	}
     
     //资金管理
@@ -207,5 +221,25 @@ class UserController extends CommonController
         if($res['code'] != ReturnCode::SUCCESS_CODE){$this->error_jump(ReturnCode::FAIL);}
         
         $this->success_jump(ReturnCode::SUCCESS);
+	}
+    
+    //登录
+    public function login(Request $request)
+	{
+        if(isset($_SESSION['weixin_user_info']))
+        {
+            if(isset($_SERVER["HTTP_REFERER"])){header('Location: '.$_SERVER["HTTP_REFERER"]);exit;}
+            header('Location: '.route('weixin_user'));exit;
+        }
+        
+		return view('weixin.user.login');
+	}
+    
+    public function logout(Request $request)
+	{
+        session_unset();
+        session_destroy();// 退出登录，清除session
+        
+		$this->success_jump('退出成功',route('weixin'));
 	}
 }

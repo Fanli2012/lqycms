@@ -1,10 +1,11 @@
 <!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html;charset=utf-8"/>
 <title>商城</title><meta name="keywords" content="关键词"><meta name="description" content="描述"><meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport">
 <link href="<?php echo env('APP_URL'); ?>/css/weixin/style.css" type="text/css" rel="stylesheet">
-<script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/jquery.min.js"></script></head><body>
+<script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/jquery.min.js"></script>
+<script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/weixin/mobile.js"></script></head><body>
 <div class="myhearder">
     <div class="person">
-        <!--<a href="">-->
+        <a href="<?php echo route('weixin_userinfo'); ?>">
             <div class="fl personicon">
                 <div class="personicon">
                     <img src="<?php echo $user_info['head_img']; ?>" onerror="this.src='<?php echo env('APP_URL'); ?>/images/weixin/no_user.jpg'">
@@ -13,11 +14,11 @@
             <div class="fl lors">
                 <span><?php if($user_info['user_name']){echo $user_info['user_name'];}else{echo $user_info['mobile'];} ?></span>
             </div>
-        <!--</a>-->
+        </a>
     </div>
     <div class="set">
         <!--设置-->
-        <a class="setting" href="/index.php/Mobile/User/userinfo.html"><i></i></a>
+        <a class="setting" href="<?php echo route('weixin_userinfo'); ?>"><i></i></a>
         <!--我的留言-->
         <a class="massage" href="/index.php/mobile/User/message_notice.html"><i></i></a>
     </div>
@@ -291,11 +292,7 @@
             -->
         </div>
     </div>
-    <div class="setting">
-        <div class="close">
-            <a href="/index.php/Mobile/User/logout.html" id="logout">安全退出</a>
-        </div>
-    </div>
+    <div class="setting"><div class="close"><a href="<?php echo route('weixin_user_logout'); ?>" id="logout">安全退出</a></div></div>
 </div>
 
 @include('weixin.common.footer')

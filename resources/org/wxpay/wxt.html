@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width,height=device-height,maximum-scale=1.0,user-scalable=no,inital-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<title>微信安全支付</title>
+</head>
+<script>
+//调用微信JS api 支付
+function jsApiCall()
+{
+	WeixinJSBridge.invoke(
+		'getBrandWCPayRequest',
+		{$jsApiParameters},
+		function(res){
+			WeixinJSBridge.log(res.err_msg);
+			//alert(res.err_code+res.err_desc+res.err_msg);
+
+			if(res.err_msg=='get_brand_wcpay_request:ok'){
+				alert('支付成功！');
+			}else{
+				alert('支付失败！');
+			}
+
+			setTimeout("location.href = '{$returnUrl}'",2000);
+		}
+	);
+}
+
+function callpay()
+{
+	if (typeof WeixinJSBridge == "undefined"){
+		if( document.addEventListener ){
+			document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+		}else if (document.attachEvent){
+			document.attachEvent('WeixinJSBridgeReady', jsApiCall); 
+			document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+		}
+	}else{
+		jsApiCall();
+	}
+}
+</script>
+
+<body onload="callpay();">
+</body>
+</html>
