@@ -123,7 +123,6 @@ class User extends BaseModel
     {
         $user = self::where($where)->first();
         if(!$user){return false;}
-        $user['reciever_address'] = UserAddress::getOne($user->address_id);
         
 		return $user;
     }
@@ -146,7 +145,8 @@ class User extends BaseModel
         
         if(isset($user_name)){$data['user_name'] = $user_name;}
         if(isset($mobile)){$data['mobile'] = $mobile;}
-        if(isset($password)){$data['password'] = $password;}
+        if(isset($password)){$data['password'] = $password;} //md5加密
+        if(isset($parent_id)){$data['parent_id'] = $parent_id;}
         
         if (isset($data) && $id = self::add($data))
         {

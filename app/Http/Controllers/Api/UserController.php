@@ -92,10 +92,23 @@ class UserController extends CommonController
         $data['mobile'] = $request->input('mobile','');
         $data['user_name'] = $request->input('user_name','');
         $data['password'] = $request->input('password','');
+        $parent_mobile = $request->input('parent_mobile','');
         
         if (($data['mobile']=='' && $data['user_name']=='') || $data['password']=='')
 		{
             return ReturnData::create(ReturnData::PARAMS_ERROR);
+        }
+        
+        if ($parent_mobile!='')
+		{
+            if($user = User::getOneUser(array('mobile'=>$parent_mobile)))
+            {
+                $data['parent_id'] = $user->id;
+            }
+            else
+            {
+                return ReturnData::create(ReturnData::PARAMS_ERROR,null,'推荐人手机号错误');
+            }
         }
         
         if (isset($data['mobile']) && !Helper::isValidMobile($data['mobile']))
@@ -111,7 +124,7 @@ class UserController extends CommonController
 		
 		if (User::getOneUser(array('user_name'=>$data['user_name'])))
 		{
-            return ReturnData::create(ReturnData::SUCCESS,null,'用户名已存在');
+            return ReturnData::create(ReturnData::PARAMS_ERROR,null,'用户名已存在');
 		}
         
         //添加用户

@@ -46,7 +46,7 @@
     <a style="margin:10px;background-color:#1aad19;text-align:center;color:white;border:1px solid #179e16;" class="bottoma" href="javascript:submit();">登录</a>
 </div>
 <div class="box reg">
-<a style="float:left;" href="<?php echo route('weixin_register'); ?>">快速注册</a> <a style="float:right;" href="">忘记密码</a>
+<a style="float:left;" href="<?php echo route('weixin_register'); ?>">快速注册</a> <a style="float:right;" href="">忘记密码？</a>
 </div>
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/md5.min.js"></script>
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/layer/mobile/layer.js"></script>

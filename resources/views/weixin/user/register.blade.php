@@ -42,17 +42,20 @@
             <input type="text" name="mobile" class="" id="mobile" placeholder="请输入手机号码">
         </div>
         <div class="adr-form-group">
-            <input type="password" name="password" class="" id="password" placeholder="请输入密码">
+            <input type="password" name="password" class="" id="password" placeholder="请设置6-20位登录密码">
         </div>
         <div class="adr-form-group">
             <input type="password" name="re_password" class="" id="re_password" placeholder="确认密码">
+        </div>
+        <div class="adr-form-group">
+            <input type="text" name="parent_mobile" class="" id="parent_mobile" placeholder="请输入推荐人手机号，选填">
         </div>
     </div>
     </form>
     <a style="margin:10px;background-color:#1aad19;text-align:center;color:white;border:1px solid #179e16;" class="bottoma" href="javascript:submit();">提交</a>
 </div>
 <div class="box reg">
-<a style="float:left;" href="<?php echo route('weixin_login'); ?>">已有账号</a>
+<a style="float:left;" href="<?php echo route('weixin_login'); ?>">已有账号</a> <span style="float:right;"><a href="<?php echo route('weixin_login'); ?>">注册协议</a></span>
 </div>
 
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/md5.min.js"></script>
@@ -64,10 +67,10 @@ function submit()
     var mobile = $("#mobile").val();
     var password = $("#password").val();
     var re_password = $("#re_password").val();
+    var parent_mobile = $("#parent_mobile").val();
     
     if(user_name == '')
     {
-        //提示
         layer.open({
             content: '用户名不能为空'
             ,skin: 'msg'
@@ -79,7 +82,6 @@ function submit()
     
     if(mobile == '')
     {
-        //提示
         layer.open({
             content: '手机号不能为空'
             ,skin: 'msg'
@@ -91,7 +93,6 @@ function submit()
     
     if(!validatemobile(mobile))
     {
-        //提示
         layer.open({
             content: '手机号格式不正确'
             ,skin: 'msg'
@@ -103,7 +104,6 @@ function submit()
     
     if(password == '')
     {
-        //提示
         layer.open({
             content: '密码不能为空'
             ,skin: 'msg'
@@ -115,7 +115,6 @@ function submit()
     
     if(password != re_password)
     {
-        //提示
         layer.open({
             content: '两次密码不一致'
             ,skin: 'msg'
@@ -125,25 +124,29 @@ function submit()
         return false;
     }
     
-    $("#login").submit();
-    /* $.post('<?php echo env('APP_API_URL').'/wx_login'; ?>',{user_name:user_name,password:md5(password)},function(res)
+    //$("#login").submit();
+    $.post('<?php echo env('APP_API_URL').'/wx_register'; ?>',{user_name:user_name,mobile:mobile,parent_mobile:parent_mobile,password:md5(password)},function(res)
 	{
 		if(res.code==0)
 		{
             //提示
             layer.open({
-                content: '登录成功'
+                content: '注册成功'
                 ,skin: 'msg'
                 ,time: 2 //2秒后自动关闭
             });
             
-            location.href = '<?php if(isset($_SERVER["HTTP_REFERER"])){echo $_SERVER["HTTP_REFERER"];}else{echo route('weixin_user');} ?>';
+            setInterval(function(){location.href = '<?php echo route('weixin_login'); ?>';},5000);
 		}
 		else
 		{
-            
+            layer.open({
+                content: res.msg
+                ,skin: 'msg'
+                ,time: 2 //2秒后自动关闭
+            });
 		}
-	},'json'); */
+	},'json');
 }
 </script>
 @include('weixin.common.footer')

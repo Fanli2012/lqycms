@@ -270,32 +270,6 @@ class UserController extends CommonController
             header('Location: '.route('weixin_user'));exit;
         }
         
-        if($_SERVER['REQUEST_METHOD'] == 'POST')
-        {
-            if($_POST['user_name'] == '')
-            {
-                $this->error_jump('账号不能为空');
-            }
-            
-            if($_POST['password'] == '')
-            {
-                $this->error_jump('密码不能为空');
-            }
-            
-            $postdata = array(
-                'user_name' => $_POST['user_name'],
-                'password' => md5($_POST['password'])
-            );
-            $url = env('APP_API_URL')."/wx_login";
-            $res = curl_request($url,$postdata,'POST');
-            
-            if($res['code'] != ReturnCode::SUCCESS_CODE){$this->error_jump('登录失败');}
-            
-            $_SESSION['weixin_user_info'] = $res['data'];
-            
-            header('Location: '.route('weixin_user'));exit;
-        }
-        
         return view('weixin.user.register');
 	}
     

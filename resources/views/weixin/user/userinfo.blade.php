@@ -75,27 +75,130 @@ $(function(){
 	});
 });
 </script>
-    <li>
+    <a href="javascript:update_username();"><li>
         <div class="ui-list-info">
             <h4 class="ui-nowrap">用户名</h4>
             <div class="ui-txt-info"><?php echo $user_info['user_name']; ?> &nbsp;</div>
         </div>
         <i class="fa fa-angle-right" aria-hidden="true"></i>
-    </li>
-    <li>
+    </li></a>
+<style>
+.adr_add{margin:0 10px;}
+.adr-form-group input[type=text],.adr-form-group input[type=password]{display:block;width:100%;font-size:16px;padding:12px;color:#777;vertical-align:middle;background-color:#fff;background-image:none;border:1px solid #ddd;border-radius:0;box-sizing:border-box;}
+</style>
+<script>
+function update_username()
+{
+    //询问框
+    layer.open({
+        title: [
+          '用户名修改',
+          'background-color: #FF4351; color:#fff;'
+        ]
+        ,content: '<div class="adr-form-group"><input type="text" name="user_name" class="" id="user_name" placeholder="请输入用户名"></div>'
+        ,btn: ['确定', '取消']
+        ,yes: function(index){
+            var user_name = $("#user_name").val();
+            
+            if(user_name == '')
+            {
+                layer.open({
+                    content: '修改失败'
+                    ,skin: 'msg'
+                    ,time: 2 //2秒后自动关闭
+                });
+            }
+            else
+            {
+                location.reload();
+                
+            }
+            
+            layer.close(index);
+        }
+    });
+}
+</script>
+    <a href="javascript:update_nickname();"><li>
         <div class="ui-list-info">
             <h4 class="ui-nowrap">昵称</h4>
             <div class="ui-txt-info"><?php echo $user_info['nickname']; ?> &nbsp;</div>
         </div>
         <i class="fa fa-angle-right" aria-hidden="true"></i>
-    </li>
-    <li>
+    </li></a>
+<script>
+function update_nickname()
+{
+    //询问框
+    layer.open({
+        title: [
+          '昵称修改',
+          'background-color: #FF4351; color:#fff;'
+        ]
+        ,content: '<div class="adr-form-group"><input type="text" name="nickname" class="" id="nickname" placeholder="请输入用户名"></div>'
+        ,btn: ['确定', '取消']
+        ,yes: function(index){
+            var nickname = $("#nickname").val();
+            
+            if(nickname == '')
+            {
+                layer.open({
+                    content: '修改失败'
+                    ,skin: 'msg'
+                    ,time: 2 //2秒后自动关闭
+                });
+            }
+            else
+            {
+                location.reload();
+                
+            }
+            
+            layer.close(index);
+        }
+    });
+}
+</script>
+    <a href="javascript:update_sex();"><li>
         <div class="ui-list-info">
             <h4 class="ui-nowrap">性别</h4>
             <div class="ui-txt-info"><?php if($user_info['sex']==0){echo '未知';}elseif($user_info['sex']==1){echo '男';}elseif($user_info['sex']==2){echo '女';} ?> &nbsp;</div>
         </div>
         <i class="fa fa-angle-right" aria-hidden="true"></i>
-    </li>
+    </li></a>
+<script>
+function update_sex()
+{
+    //询问框
+    layer.open({
+        title: [
+          '性别修改',
+          'background-color: #FF4351; color:#fff;'
+        ]
+        ,content: '<div class="adr-form-group"><input type="text" name="sex" class="" id="sex" placeholder="请输入用户名"></div>'
+        ,btn: ['确定', '取消']
+        ,yes: function(index){
+            var sex = $("#sex").val();
+            
+            if(sex == '')
+            {
+                layer.open({
+                    content: '修改失败'
+                    ,skin: 'msg'
+                    ,time: 2 //2秒后自动关闭
+                });
+            }
+            else
+            {
+                location.reload();
+                
+            }
+            
+            layer.close(index);
+        }
+    });
+}
+</script>
 </ul>
 
 <ul class="fui-list mt10">
