@@ -131,6 +131,7 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     Route::post('/user_signin', 'UserController@signin'); //签到
     Route::get('/user_info', 'UserController@userInfo'); //用户详细信息
     Route::post('/user_info_update', 'UserController@userInfoUpdate'); //修改用户信息
+    Route::post('/user_password_update', 'UserController@userPasswordUpdate'); //修改用户密码、支付密码
     Route::get('/user_list', 'UserController@userList'); //用户列表
     
     Route::get('/user_money_list', 'UserMoneyController@userMoneyList'); //用户余额明细

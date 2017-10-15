@@ -31,8 +31,15 @@ class UserController extends CommonController
     //修改用户信息
 	public function userInfoUpdate(Request $request)
 	{
-		$data = '';
-		if($request->input('user_name', null)!==null){$data['user_name'] = $request->input('user_name');}
+		if($request->input('user_name', null)!==null)
+        {
+            $data['user_name'] = $request->input('user_name');
+
+            if(User::getOneUser($data))
+            {
+                return ReturnData::create(ReturnData::PARAMS_ERROR,null,'用户名已存在');
+            }
+        }
 		if($request->input('email', null)!==null){$data['email'] = $request->input('email');}
 		if($request->input('sex', null)!==null){$data['sex'] = $request->input('sex');}
         if($request->input('birthday', null)!==null){$data['birthday'] = $request->input('birthday');}
@@ -49,12 +56,46 @@ class UserController extends CommonController
         if($request->input('password', null)!==null){$data['password'] = $request->input('password');}
         if($request->input('head_img', null)!==null){$data['head_img'] = $request->input('head_img');}
         
-        if ($data != '')
+        if (isset($data))
 		{
-			User::modify(['id'=>Token::$uid],$data);
+			User::modify(array('id'=>Token::$uid),$data);
         }
 		
 		return ReturnData::create(ReturnData::SUCCESS);
+    }
+
+    //修改用户密码、支付密码
+    public function userPasswordUpdate(Request $request)
+    {
+        if($request->input('password', '')!='' && $request->input('old_password', '')!='')
+        {
+            $data['password'] = $request->input('password');
+            $data['old_password'] = $request->input('old_password');
+
+            if($data['password'] == $data['old_password']){return ReturnData::create(ReturnData::PARAMS_ERROR,null,'新旧密码相同');}
+        }
+
+        if($request->input('pay_password', '')!='')
+        {
+            $data['pay_password'] = $request->input('pay_password');
+            $data['old_pay_password'] = $request->input('old_pay_password','');
+
+            if($data['pay_password'] == $data['old_pay_password']){return ReturnData::create(ReturnData::PARAMS_ERROR,null,'新旧密码相同');}
+        }
+
+        if (isset($data))
+        {
+            $res = User::userPasswordUpdate(array('id'=>Token::$uid),$data);
+
+            if($res === false)
+            {
+                return ReturnData::create(ReturnData::SYSTEM_FAIL,null,$res);
+            }
+
+            return ReturnData::create(ReturnData::SUCCESS);
+        }
+
+        return ReturnData::create(ReturnData::PARAMS_ERROR);
     }
     
     //用户列表

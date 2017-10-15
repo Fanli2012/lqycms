@@ -128,14 +128,46 @@ class User extends BaseModel
     }
     
     //获取用户信息
-	public static function getUserInfo($user_id)
+    public static function getUserInfo($user_id)
     {
         $user = self::where('id', $user_id)->first();
         if(!$user){return false;}
         $user->reciever_address = UserAddress::getOne($user->address_id);
         $user->collect_goods_count = CollectGoods::where('user_id', $user_id)->count();
-        
-		return $user;
+
+        $userinfo = $user->makeVisible(array('pay_password'))->toArray();
+        $user->pay_password = 0;
+        if($userinfo['pay_password']){$user->pay_password = 1;}
+
+        return $user;
+    }
+
+    //修改用户密码、支付密码
+    public static function userPasswordUpdate($where,array $param)
+    {
+        extract($param);
+        $data = '';
+
+        $user = self::where($where)->first();
+        if(!$user){return false;}
+
+        $user = $user->makeVisible(array('password','pay_password'))->toArray();
+
+        if(isset($old_password) && $old_password!=$user['password']){return false;} //旧密码错误
+        if(isset($password) && $password==''){return false;} //新密码为空
+
+        if(isset($old_pay_password) && $old_pay_password!=$user['pay_password']){return false;}
+        if(isset($pay_password) && $pay_password==''){return false;}
+
+        if(isset($password)){$data['password'] = $password;}
+        if(isset($pay_password)){$data['pay_password'] = $pay_password;}
+
+        if ($data != '' && self::where($where)->update($data))
+        {
+            return true;
+        }
+
+        return false;
     }
     
     //注册

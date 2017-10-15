@@ -22,7 +22,7 @@
 
 <div class="floor">
 <ul class="fui-list mt10">
-    <li>
+    <a href="javascript:update_avator();"><li>
         <div class="ui-list-thumb">
             <!-- <span style="background-image:url(<?php echo env('APP_URL'); ?>/images/weixin/no_user.jpg)"></span> -->
             <form id="head_img" action="<?php echo env('APP_API_URL').'/image_upload'; ?>" method="post" enctype="multipart/form-data">
@@ -35,15 +35,19 @@
             <h4 class="ui-nowrap">头像</h4>
             <div class="ui-reddot ui-reddot-static"></div>
         </div>
-        <i id="avatorright" class="fa fa-angle-right" aria-hidden="true"></i>
-    </li>
+        <i class="fa fa-angle-right" aria-hidden="true"></i>
+    </li></a>
+<script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/md5.min.js"></script>
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/layer/mobile/layer.js"></script>
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/jquery-form.js"></script>
 <script type="text/javascript">
+function update_avator()
+{
+    $("#fileupload").trigger("click");
+}
+
 $(function(){
-    $("#avator,#avatorright").click(function(){
-        $("#fileupload").trigger("click");
-    });
+    
     
     $("#fileupload").change(function(){
 		$("#head_img").ajaxSubmit({
@@ -85,6 +89,7 @@ $(function(){
 <style>
 .adr_add{margin:0 10px;}
 .adr-form-group input[type=text],.adr-form-group input[type=password]{display:block;width:100%;font-size:16px;padding:12px;color:#777;vertical-align:middle;background-color:#fff;background-image:none;border:1px solid #ddd;border-radius:0;box-sizing:border-box;}
+.bottoma{display:block;font-size:18px;padding:10px;border-radius:2px;}
 </style>
 <script>
 function update_username()
@@ -110,8 +115,28 @@ function update_username()
             }
             else
             {
-                location.reload();
+                $.post('<?php echo env('APP_API_URL').'/user_info_update'; ?>',{user_name:user_name,access_token:'<?php echo $_SESSION['weixin_user_info']['access_token']; ?>'},function(res)
+                {
+                    if(res.code==0)
+                    {
+                        //提示
+                        layer.open({
+                            content: '修改成功'
+                            ,skin: 'msg'
+                            ,time: 2 //2秒后自动关闭
+                        });
+                    }
+                    else
+                    {
+                        layer.open({
+                            content: res.msg
+                            ,skin: 'msg'
+                            ,time: 2 //2秒后自动关闭
+                        });
+                    }
+                },'json');
                 
+                window.location.reload();
             }
             
             layer.close(index);
@@ -135,7 +160,7 @@ function update_nickname()
           '昵称修改',
           'background-color: #FF4351; color:#fff;'
         ]
-        ,content: '<div class="adr-form-group"><input type="text" name="nickname" class="" id="nickname" placeholder="请输入用户名"></div>'
+        ,content: '<div class="adr-form-group"><input type="text" name="nickname" class="" id="nickname" placeholder="请输入昵称"></div>'
         ,btn: ['确定', '取消']
         ,yes: function(index){
             var nickname = $("#nickname").val();
@@ -150,8 +175,28 @@ function update_nickname()
             }
             else
             {
-                location.reload();
+                $.post('<?php echo env('APP_API_URL').'/user_info_update'; ?>',{nickname:nickname,access_token:'<?php echo $_SESSION['weixin_user_info']['access_token']; ?>'},function(res)
+                {
+                    if(res.code==0)
+                    {
+                        //提示
+                        layer.open({
+                            content: '修改成功'
+                            ,skin: 'msg'
+                            ,time: 2 //2秒后自动关闭
+                        });
+                    }
+                    else
+                    {
+                        layer.open({
+                            content: res.msg
+                            ,skin: 'msg'
+                            ,time: 2 //2秒后自动关闭
+                        });
+                    }
+                },'json');
                 
+                window.location.reload();
             }
             
             layer.close(index);
@@ -159,7 +204,7 @@ function update_nickname()
     });
 }
 </script>
-    <a href="javascript:update_sex();"><li>
+    <a href="javascript:update_sex_layer();"><li>
         <div class="ui-list-info">
             <h4 class="ui-nowrap">性别</h4>
             <div class="ui-txt-info"><?php if($user_info['sex']==0){echo '未知';}elseif($user_info['sex']==1){echo '男';}elseif($user_info['sex']==2){echo '女';} ?> &nbsp;</div>
@@ -167,20 +212,66 @@ function update_nickname()
         <i class="fa fa-angle-right" aria-hidden="true"></i>
     </li></a>
 <script>
-function update_sex()
+function update_sex_layer()
+{
+    //询问框
+    layer.open({
+        content: '<div style="padding:15px;"><a style="margin-bottom:10px;background-color:#1aad19;text-align:center;color:white;border:1px solid #179e16;" class="bottoma" onclick="layer.closeAll();" href="javascript:update_sex(1);">男</a><a style="margin-bottom:10px;background-color:#ea5a3d;text-align:center;color:white;border:1px solid #dd2727;" class="bottoma" onclick="layer.closeAll();" href="javascript:update_sex(2);">女</a></div>'
+    });
+}
+
+function update_sex(sex)
+{
+    $.post('<?php echo env('APP_API_URL').'/user_info_update'; ?>',{sex:sex,access_token:'<?php echo $_SESSION['weixin_user_info']['access_token']; ?>'},function(res)
+    {
+        if(res.code==0)
+        {
+            //提示
+            layer.open({
+                content: '修改成功'
+                ,skin: 'msg'
+                ,time: 2 //2秒后自动关闭
+            });
+        }
+        else
+        {
+            layer.open({
+                content: res.msg
+                ,skin: 'msg'
+                ,time: 2 //2秒后自动关闭
+            });
+        }
+    },'json');
+    
+    window.location.reload();
+}
+</script>
+</ul>
+
+<ul class="fui-list mt10">
+    <a href="javascript:update_password();"><li>
+        <div class="ui-list-info">
+            <h4 class="ui-nowrap">修改密码</h4>
+            <div class="ui-txt-info"> &nbsp;</div>
+        </div>
+        <i class="fa fa-angle-right" aria-hidden="true"></i>
+    </li></a>
+<script>
+function update_password()
 {
     //询问框
     layer.open({
         title: [
-          '性别修改',
+          '修改密码',
           'background-color: #FF4351; color:#fff;'
         ]
-        ,content: '<div class="adr-form-group"><input type="text" name="sex" class="" id="sex" placeholder="请输入用户名"></div>'
+        ,content: '<div class="adr-form-group"><input style="margin-bottom:10px;" type="password" name="old_password" class="" id="old_password" placeholder="请输入旧密码"><input type="password" name="password" class="" id="password" placeholder="请输入新密码"></div>'
         ,btn: ['确定', '取消']
         ,yes: function(index){
-            var sex = $("#sex").val();
+            var old_password = $("#old_password").val();
+            var password = $("#password").val();
             
-            if(sex == '')
+            if(password == '' || old_password=='')
             {
                 layer.open({
                     content: '修改失败'
@@ -190,8 +281,39 @@ function update_sex()
             }
             else
             {
-                location.reload();
+                if(password == old_password)
+                {
+                    layer.open({
+                        content: '新旧密码一样'
+                        ,skin: 'msg'
+                        ,time: 2 //2秒后自动关闭
+                    });
+                    
+                    return false;
+                }
                 
+                $.post('<?php echo env('APP_API_URL').'/user_password_update'; ?>',{password:md5(password),old_password:md5(old_password),access_token:'<?php echo $_SESSION['weixin_user_info']['access_token']; ?>'},function(res)
+                {
+                    if(res.code==0)
+                    {
+                        //提示
+                        layer.open({
+                            content: '修改成功'
+                            ,skin: 'msg'
+                            ,time: 2 //2秒后自动关闭
+                        });
+                    }
+                    else
+                    {
+                        layer.open({
+                            content: res.msg
+                            ,skin: 'msg'
+                            ,time: 2 //2秒后自动关闭
+                        });
+                    }
+                },'json');
+                
+                window.location.reload();
             }
             
             layer.close(index);
@@ -199,23 +321,131 @@ function update_sex()
     });
 }
 </script>
-</ul>
-
-<ul class="fui-list mt10">
-    <li>
-        <div class="ui-list-info">
-            <h4 class="ui-nowrap">修改密码</h4>
-            <div class="ui-txt-info"> &nbsp;</div>
-        </div>
-        <i class="fa fa-angle-right" aria-hidden="true"></i>
-    </li>
-    <li>
+    <a href="javascript:<?php if($user_info['pay_password']){echo 'update_pay_password()';}else{echo 'set_pay_password()';} ?>;"><li>
         <div class="ui-list-info">
             <h4 class="ui-nowrap">支付密码</h4>
             <div class="ui-txt-info"> &nbsp;</div>
         </div>
         <i class="fa fa-angle-right" aria-hidden="true"></i>
-    </li>
+    </li></a>
+<script>
+//设置支付密码
+function set_pay_password()
+{
+    //询问框
+    layer.open({
+        title: [
+          '设置支付密码',
+          'background-color: #FF4351; color:#fff;'
+        ]
+        ,content: '<div class="adr-form-group"><input type="password" name="pay_password" class="" id="pay_password" placeholder="请输入新支付密码"></div>'
+        ,btn: ['确定', '取消']
+        ,yes: function(index){
+            var pay_password = $("#pay_password").val();
+            
+            if(pay_password == '')
+            {
+                layer.open({
+                    content: '设置失败'
+                    ,skin: 'msg'
+                    ,time: 2 //2秒后自动关闭
+                });
+            }
+            else
+            {
+                $.post('<?php echo env('APP_API_URL').'/user_password_update'; ?>',{pay_password:md5(pay_password),old_pay_password:'',access_token:'<?php echo $_SESSION['weixin_user_info']['access_token']; ?>'},function(res)
+                {
+                    if(res.code==0)
+                    {
+                        //提示
+                        layer.open({
+                            content: '设置成功'
+                            ,skin: 'msg'
+                            ,time: 2 //2秒后自动关闭
+                        });
+                    }
+                    else
+                    {
+                        layer.open({
+                            content: res.msg
+                            ,skin: 'msg'
+                            ,time: 2 //2秒后自动关闭
+                        });
+                    }
+                },'json');
+                
+                window.location.reload();
+            }
+            
+            layer.close(index);
+        }
+    });
+}
+//修改支付密码
+function update_pay_password()
+{
+    //询问框
+    layer.open({
+        title: [
+          '修改支付密码',
+          'background-color: #FF4351; color:#fff;'
+        ]
+        ,content: '<div class="adr-form-group"><input style="margin-bottom:10px;" type="password" name="old_pay_password" class="" id="old_pay_password" placeholder="请输入旧支付密码"><input type="password" name="pay_password" class="" id="pay_password" placeholder="请输入新支付密码"></div>'
+        ,btn: ['确定', '取消']
+        ,yes: function(index){
+            var old_pay_password = $("#old_pay_password").val();
+            var pay_password = $("#pay_password").val();
+            
+            if(pay_password == '' || old_pay_password == '')
+            {
+                layer.open({
+                    content: '修改失败'
+                    ,skin: 'msg'
+                    ,time: 2 //2秒后自动关闭
+                });
+            }
+            else
+            {
+                if(pay_password == old_pay_password)
+                {
+                    layer.open({
+                        content: '新旧密码一样'
+                        ,skin: 'msg'
+                        ,time: 2 //2秒后自动关闭
+                    });
+                    
+                    return false;
+                }
+                
+                $.post('<?php echo env('APP_API_URL').'/user_password_update'; ?>',{pay_password:md5(pay_password),old_pay_password:md5(old_pay_password),access_token:'<?php echo $_SESSION['weixin_user_info']['access_token']; ?>'},function(res)
+                {
+                    if(res.code==0)
+                    {
+                        //提示
+                        layer.open({
+                            content: '修改成功'
+                            ,skin: 'msg'
+                            ,time: 2 //2秒后自动关闭
+                        });
+                    }
+                    else
+                    {
+                        layer.open({
+                            content: res.msg
+                            ,skin: 'msg'
+                            ,time: 2 //2秒后自动关闭
+                        });
+                    }
+                },'json');
+                
+                window.location.reload();
+            }
+            
+            layer.close(index);
+        }
+    });
+}
+</script>
 </ul>
 <div class="setting"><div class="close"><a href="<?php echo route('weixin_user_logout'); ?>" id="logout">安全退出</a></div></div>
 </div>
