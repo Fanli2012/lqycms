@@ -134,7 +134,7 @@ class UserAddress extends BaseModel
             $model->user_id         = $user_id;
             $model->is_default = isset($is_default) ? $is_default : 0;
             
-            if(isset($name)){$model->name = $country;}
+            if(isset($name)){$model->name = $name;}
             if(isset($country)){$model->country = $country;}
             if(isset($province)){$model->province = $province;}
             if(isset($city)){$model->city = $city;}

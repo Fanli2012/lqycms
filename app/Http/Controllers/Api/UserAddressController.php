@@ -101,18 +101,14 @@ class UserAddressController extends CommonController
         $data['id'] = $request->input('id',null);
         $data['name'] = $request->input('name',null);
         $data['mobile'] = $request->input('mobile',null);
-        $data['country'] = $request->input('country',null);
         $data['province'] = $request->input('province',null);
         $data['city'] = $request->input('city',null);
         $data['district'] = $request->input('district',null);
         $data['address'] = $request->input('address',null);
-        if($request->input('telphone',null)!==null){$data['telphone'] = $request->input('telphone');}
-        if($request->input('zipcode',null)!==null){$data['zipcode'] = $request->input('zipcode');}
-        if($request->input('email',null)!==null){$data['email'] = $request->input('email');}
-        if($request->input('best_time',null)!==null){$data['best_time'] = $request->input('best_time');}
+        if($request->input('country',null)!==null){$data['country'] = $request->input('country');}
         if($request->input('is_default',null)!==null){$data['is_default'] = $request->input('is_default');}
         
-        if($data['id']===null || $data['name']===null || $data['mobile']===null || $data['address']===null || $data['country']===null || $data['province']===null || $data['city']===null || $data['district']===null)
+        if($data['id']===null || $data['name']===null || $data['mobile']===null || $data['address']===null || $data['province']===null || $data['city']===null || $data['district']===null)
 		{
             return ReturnData::create(ReturnData::PARAMS_ERROR);
         }

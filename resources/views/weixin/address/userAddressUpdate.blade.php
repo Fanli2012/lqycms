@@ -26,6 +26,7 @@
 .adr-form-group select{padding:5px;margin-right:10px;}
 .bottoma{display:block;font-size:18px;padding:10px;color:white;background-color: #f23030;text-align:center;}
 </style>
+<input name="id" type="hidden" class="" id="id" value="<?php echo $post['id']; ?>">
 <div class="adr_add">
 <div class="adr-form-group">
   <label for="doc-ipt-email-1">收货人</label>
@@ -178,7 +179,8 @@ function adr_dosubmit()
 {
     var access_token = '<?php echo $_SESSION['weixin_user_info']['access_token']; ?>';
     
-	var url = '<?php echo env('APP_API_URL').'/user_address_add'; ?>';
+	var url = '<?php echo env('APP_API_URL').'/user_address_update'; ?>';
+    var id = $("#id").val();
 	var name = $("#name").val();
 	var mobile = $("#mobile").val();
 	var address = $("#address").val();
@@ -238,7 +240,7 @@ function adr_dosubmit()
         return false;
     }
     
-	$.post(url,{access_token:access_token,name:name,mobile:mobile,address:address,province:province,city:city,district:district,is_default:is_default},function(res)
+	$.post(url,{access_token:access_token,id:id,name:name,mobile:mobile,address:address,province:province,city:city,district:district,is_default:is_default},function(res)
 	{
 		if(res.code==0)
 		{

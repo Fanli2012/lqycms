@@ -61,8 +61,8 @@ Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin'], function () {
 	Route::get('/cat{cat}', 'ArticleController@category')->name('weixin_article_category'); //分类页
 	Route::get('/tag{tag}', 'IndexController@tag')->name('weixin_tag');           //标签页
 	Route::get('/page/{id}', 'IndexController@page')->name('weixin_singlepage');  //单页
-	Route::get('/goods/{id}', 'GoodsController@goods')->name('weixin_goods_detail'); //商品详情页
-	Route::get('/goodslist', 'GoodsController@goodslist')->name('weixin_goods_list'); //产品分类页
+	Route::get('/goods/{id}', 'GoodsController@goodsDetail')->name('weixin_goods_detail'); //商品详情页
+	Route::get('/goodslist', 'GoodsController@goodsList')->name('weixin_goods_list'); //产品分类页
     
     Route::any('/login', 'UserController@login')->name('weixin_login');
     Route::any('/register', 'UserController@register')->name('weixin_register');

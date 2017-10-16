@@ -47,8 +47,6 @@ function update_avator()
 }
 
 $(function(){
-    
-    
     $("#fileupload").change(function(){
 		$("#head_img").ajaxSubmit({
 			dataType: 'json',
