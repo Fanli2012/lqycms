@@ -229,4 +229,27 @@ class Goods extends BaseModel
             }
         }
     }
+    
+    //获取商品详情
+	public static function goodsDetail(array $param)
+    {
+        extract($param); //参数：limit，offset
+        
+        $model = new Goods;
+        
+        if(isset($id)){$where['id'] = $id;}
+        
+        if(isset($where))
+        {
+            $model = $model->where($where);
+        }
+        else
+        {
+            return false;
+        }
+        
+        $res = $model->first();
+        
+        return $res;
+    }
 }

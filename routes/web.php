@@ -115,6 +115,7 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     Route::get('/arctype_list', 'ArctypeController@arctypeList');
     Route::get('/arctype_detail', 'ArctypeController@arctypeDetail');
     //商品
+    Route::get('/goods_detail', 'GoodsController@goodsDetail'); //商品列表
     Route::get('/goods_list', 'GoodsController@goodsList'); //商品列表
     Route::get('/goodstype_list', 'GoodsTypeController@goodsTypeList'); //商品分类列表
     //地区，省市区

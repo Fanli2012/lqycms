@@ -14,6 +14,16 @@ class GoodsController extends CommonController
         parent::__construct();
     }
     
+    public function goodsDetail(Request $request)
+	{
+        //参数
+        $data['id'] = $request->input('id');
+        
+        $res = Goods::goodsDetail($data);
+		
+		return ReturnData::create(ReturnData::SUCCESS,$res);
+    }
+    
     public function goodsList(Request $request)
 	{
         //参数
