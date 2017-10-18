@@ -809,8 +809,6 @@ h1.arc_tit, h2.arc_tit{font-weight: normal;font-size: 1.4em;padding: 10px;}
 }
 .goods-header .wish-add {
     position: relative;
-    height: 12px;
-    line-height: 12px;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -818,12 +816,11 @@ h1.arc_tit, h2.arc_tit{font-weight: normal;font-size: 1.4em;padding: 10px;}
     color:#ea6f5a;
     background-color: transparent;
     border: 1px solid #ea6f5a;
-    border-radius: 3px;
-    font-size: 16px;
-    padding:4px 6px;
+    border-radius:2px;
+    font-size:14px;
+    padding:0 3px;
     display: inline-block;
-    text-align: center;
-    margin:3px 10px 0 0;
+    margin-right:10px;
 }
 .goods-header .wish-add-activate{color:#fff;background-color:#ea6f5a;}
 .goods-header .goods-price {
@@ -915,7 +912,7 @@ display: block;
 position: absolute;
 top: 0;
 }
-.goods_info_pop{ background-color:#fff; display:block; position:fixed; z-index:100; bottom:0px; left:0; padding-bottom:20px; /*box-shadow:0 -2px 3px #a0a0a0;*/ border-top:2px solid #dcdcdc; width:100%;}
+.goods_info_pop{background-color:#fff; display:block; position:fixed; z-index:100; bottom:0px; left:0; padding-bottom:20px; /*box-shadow:0 -2px 3px #a0a0a0;*/ border-top:1px solid #f1f1f1; width:100%;}
 
 .goods_info_pop ul{ padding:0px 0 35px; display:inline-block;}
 

@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Weixin;
 
 use App\Http\Controllers\Weixin\CommonController;
 use Illuminate\Http\Request;
+use App\Common\ReturnCode;
 
 class GoodsController extends CommonController
 {
@@ -21,6 +22,8 @@ class GoodsController extends CommonController
         $url = env('APP_API_URL')."/goods_detail";
 		$res = curl_request($url,$postdata,'GET');
         $data['post'] = $res['data'];
+        
+        if(!$data['post']){$this->error_jump(ReturnCode::NO_FOUND,route('weixin'),3);}
         
 		return view('weixin.goods.goodsDetail', $data);
 	}

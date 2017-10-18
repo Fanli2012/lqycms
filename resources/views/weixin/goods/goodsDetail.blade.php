@@ -83,7 +83,7 @@ var swiper = new Swiper('.swiper-container', {
         </dl>
     </div>
     
-    <div class="goods-comment">用户评价<span>共0条评价 ></span></div>
+    <div class="goods-comment">用户评价<span>共<?php echo $post['goods_comments_num']; ?>条评价 ></span></div>
 </div>
 
 <div class="goods-content">
@@ -99,14 +99,14 @@ var swiper = new Swiper('.swiper-container', {
      <div class="cart_list" >                
         <div class="cart_list_info goods_list_item">
           <div class="cart_list_img">
-            <img src="http://www.yst.com/yst/Public/kindeditor/attached/image/20160227/20160227031317_35279.png"  style=" width:100%; height:100%;">
+            <img src="/uploads/2017/06/201706041951031181.jpg"  style="width:100%; height:100%;">
           </div>
           <div class="cart_goods_info">
             <div class="cart_list_name">
-              <div class="cart_detail_gray" style=""><span style="" class="cart_detail_gray_name">1232</span></div>
+              <div class="cart_detail_gray" style=""><span style="" class="cart_detail_gray_name"><?php echo $post['title']; ?></span></div>
               <div class="cart_detail_gray" style="">                        
-                <p class="cart_sum" id="total_price1_296">￥<span class="attr_price">1.00</span></p>
-                <p class="goods_type">库存<span class="attr_storage">10</span>件</p>
+                <p class="cart_sum" id="total_price1_296">￥<span class="attr_price"><?php echo $post['price']; ?></span></p>
+                <p class="goods_type">库存<span class="attr_storage"><?php echo $post['goods_number']; ?></span>件</p>
               </div>
             </div>
           </div>  <!--cart_info-->
@@ -123,8 +123,8 @@ var swiper = new Swiper('.swiper-container', {
           </div>
         </div>
       </div>
-      <input type="hidden" id="resultid" value="">
-      <input type="hidden" id="storage" value="10">
+      <input type="hidden" id="id" value="<?php echo $post['id']; ?>">
+      <input type="hidden" id="goods_number" value="<?php echo $post['goods_number']; ?>">
       <div class="registered_btn pop_btn confirmBtn" style="display:none;" onclick="dosubmit()">
       	<input type="hidden" name="cartType" id="cartType" value="">
         <span>确定</span>
@@ -155,21 +155,31 @@ function masterunshow()
 function cart_num_sub()
 {
     var num = $('#num').val();
-    if(num>1){
+    
+    if(num>1)
+    {
         num = parseInt(num)-1;
         $('#num').val(num);
     }
 }
 function cart_num_add()
 {
-    var storage = $('#storage').val();
+    var goods_number = $('#goods_number').val();
     var num = $('#num').val();
     num = parseInt(num)+1;
-    if(storage<num){
-        /* jAlert("库存量不足！", alert_title); */
-        messageNotice("库存量不足！");
+    
+    if(goods_number<num)
+    {
+        //提示
+        layer.open({
+            content: '库存量不足！'
+            ,skin: 'msg'
+            ,time: 2 //2秒后自动关闭
+        });
+        
         return false;
     }
+    
     $('#num').val(num);
 }
 </script>
@@ -179,7 +189,7 @@ function cart_num_add()
 <div class="bottom_tool_black">
  <div class="bottom_tool_white">
   <ul>
-    <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=386092124&amp;site=qq&amp;menu=yes"><li>
+    <a href="tel:12345678910"><li>
     <img src="<?php echo env('APP_URL'); ?>/images/weixin/goods_ic_kefu.png">
     <p>客服</p>
     </li></a>

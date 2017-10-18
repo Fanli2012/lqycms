@@ -17,7 +17,10 @@ class Comment extends BaseModel
      */
     protected $guarded = [];
 	
-    const SHOW_COMMENT = 1; //评论已审核
+    const UNSHOW_COMMENT = 0; //评论未批准显示
+    const SHOW_COMMENT = 1; //评论批准显示
+    const GOODS_COMMENT_TYPE = 0; //商品评论
+    const ARTICLE_COMMENT_TYPE = 1; //文章评论
     
     //获取列表
 	public static function getList(array $param)

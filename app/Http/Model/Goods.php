@@ -250,6 +250,14 @@ class Goods extends BaseModel
         
         $res = $model->first();
         
+        if($res)
+        {
+            $where2['comment_type'] = Comment::GOODS_COMMENT_TYPE;
+            $where2['status'] = Comment::SHOW_COMMENT;
+            $where2['id_value'] = $id;
+            $res->goods_comments_num = Comment::where($where2)->count();
+        }
+        
         return $res;
     }
 }
