@@ -75,13 +75,15 @@ Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin'], function () {
 
 //微信路由，需登录，全局
 Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin', 'middleware' => ['web','wxlogin']], function () {
-    
+    Route::get('/category', 'CartController@index')->name('weixin_category');
     //个人中心
 	Route::get('/user', 'UserController@index')->name('weixin_user');
     Route::get('/userinfo', 'UserController@userinfo')->name('weixin_userinfo');
     Route::get('/user_account', 'UserController@userAccount')->name('weixin_user_account');
     Route::get('/user_money_list', 'UserController@userMoneyList')->name('weixin_user_money_list');
     Route::get('/user_point_list', 'UserController@userPointList')->name('weixin_user_point_list');
+    //优惠券、红包
+    Route::get('/user_bonus_list', 'UserController@userBonusList')->name('weixin_user_bonus_list');
     //浏览记录
     Route::get('/user_goods_history', 'UserController@userGoodsHistory')->name('weixin_user_goods_history');
     Route::get('/user_goods_history_delete', 'UserController@userGoodsHistoryDelete')->name('weixin_user_goods_history_delete');
@@ -164,8 +166,8 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     Route::get('/user_point_list', 'UserPointController@userPointList'); //用户积分列表
     Route::post('/user_point_add', 'UserPointController@userPointAdd');
     //优惠券
-    Route::get('/user_bonus_list', 'BonusController@userBonusList'); //用户优惠券列表
-    Route::post('/user_get_bonus', 'BonusController@userGetBonus'); //用户获取优惠券
+    Route::get('/user_bonus_list', 'UserBonusController@userBonusList'); //用户优惠券列表
+    Route::post('/user_bonus_add', 'UserBonusController@userBonusAdd'); //用户获取优惠券
     Route::get('/bonus_list', 'BonusController@bonusList'); //可用获取的优惠券列表
     Route::post('/bonus_add', 'BonusController@bonusAdd'); //添加优惠券
     Route::post('/bonus_update', 'BonusController@bonusUpdate'); //修改优惠券

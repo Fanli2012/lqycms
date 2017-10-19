@@ -121,8 +121,8 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/index.php/Mobile/User/coupon.html">
-                        <div class="tit">0</div>
+                    <a href="<?php echo route('weixin_user_bonus_list'); ?>">
+                        <div class="tit"><?php echo $user_info['bonus_count']; ?></div>
                         <p>优惠券</p>
                     </a>
                 </li>

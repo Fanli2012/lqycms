@@ -118,41 +118,4 @@ class BonusController extends CommonController
         
 		return ReturnData::create(ReturnData::SUCCESS,$res);
     }
-    
-    //用户获取优惠券
-    public function userGetBonus(Request $request)
-	{
-        //参数
-        $data['bonus_id'] = $request->input('bonus_id',null);
-        if($data['bonus_id']===null)
-		{
-            return ReturnData::create(ReturnData::PARAMS_ERROR);
-        }
-        
-        $data['user_id'] = Token::$uid;
-        
-        $res = UserBonus::add($data);
-		if($res !== true)
-		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL,null,$res);
-		}
-        
-		return ReturnData::create(ReturnData::SUCCESS,$res);
-    }
-    
-    //用户优惠券列表
-    public function userBonusList(Request $request)
-	{
-        //参数
-        $data['used_time'] = 0;
-        $data['user_id'] = Token::$uid;
-        
-        $res = UserBonus::getList($data);
-		if(!$res)
-		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL,null,$res);
-		}
-        
-		return ReturnData::create(ReturnData::SUCCESS,$res);
-    }
 }

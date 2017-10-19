@@ -134,7 +134,8 @@ class User extends BaseModel
         if(!$user){return false;}
         $user->reciever_address = UserAddress::getOne($user->address_id);
         $user->collect_goods_count = CollectGoods::where('user_id', $user_id)->count();
-
+        $user->bonus_count = UserBonus::where(array('user_id'=>$user_id,'status'=>0))->count();
+        
         $userinfo = $user->makeVisible(array('pay_password'))->toArray();
         $user->pay_password = 0;
         if($userinfo['pay_password']){$user->pay_password = 1;}

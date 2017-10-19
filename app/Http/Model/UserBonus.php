@@ -26,7 +26,7 @@ class UserBonus extends BaseModel
         
         $model = new UserBonus;
         
-        if(isset($used_time)){$where['used_time'] = $used_time;}
+        if(isset($status)){$where['status'] = $status;}
         
         $model = $model->where($where);
         
@@ -35,7 +35,13 @@ class UserBonus extends BaseModel
         
 		if($res['count']>0)
         {
-            $res['list']  = $model->skip($offset)->take($limit)->orderBy('id','desc')->get()->toArray();
+            $bonus_list = $model->skip($offset)->take($limit)->orderBy('id','desc')->get();
+            foreach($bonus_list as $k=>$v)
+            {
+                $bonus_list[$k]->bonus = Bonus::where('id',$v->bonus_id)->first();
+            }
+            
+            $res['list'] = $bonus_list;
         }
         else
         {
@@ -45,18 +51,21 @@ class UserBonus extends BaseModel
         return $res;
     }
     
-    public static function getOne($id)
+    public static function getOne($where)
     {
-        return self::where('id', $id)->first()->toArray();
+        $res = self::where($where)->first();
+        if($res){$res->bonus = Bonus::where('id',$res->bonus_id)->first();}
+        
+        return $res;
     }
     
     public static function add(array $data)
     {
-        if(self::where($data)->first()){return '亲，您已获取！';}
+        if(self::where(['bonus_id'=>$data['bonus_id'],'user_id'=>$data['user_id']])->first()){return '亲，您已获取！';}
         
         if ($id = self::insertGetId($data))
         {
-            return true;
+            return $id;
         }
 
         return false;

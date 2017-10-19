@@ -149,6 +149,48 @@ class UserController extends CommonController
         return view('weixin.user.userPointList', $data);
     }
     
+    //用户优惠券列表
+    public function userBonusList(Request $request)
+	{
+        //商品列表
+        $pagesize = 1;
+        $offset = 0;
+        if(isset($_REQUEST['page'])){$offset = ($_REQUEST['page']-1)*$pagesize;}
+        
+        $postdata = array(
+            'limit'  => $pagesize,
+            'offset' => $offset,
+            'status' => 0,
+            'access_token' => $_SESSION['weixin_user_info']['access_token']
+		);
+        $url = env('APP_API_URL')."/user_bonus_list";
+		$res = curl_request($url,$postdata,'GET');
+        $data['list'] = $res['data']['list'];
+        
+        $data['totalpage'] = ceil($res['data']['count']/$pagesize);
+        
+        if(isset($_REQUEST['page_ajax']) && $_REQUEST['page_ajax']==1)
+        {
+    		$html = '';
+            
+            if($res['data']['list'])
+            {
+                foreach($res['data']['list'] as $k => $v)
+                {
+                    $html .= '<div class="flow-have-adr">';
+                    $html .= '<p class="f-h-adr-title">'.$v['bonus']['name'].'</label><span class="ect-colory fr"><small>￥</small>'.$v['bonus']['money'].'</span><div class="cl"></div></p>';
+                    $html .= '<p class="f-h-adr-con">有效期至'.$v['bonus']['end_time'].' <span class="fr">满'.$v['bonus']['min_amount'].'可用</span></p>';
+                    //$html .= '<div class="adr-edit-del">说明</div>';
+                    $html .= '</div>';
+                }  
+            }
+            
+    		exit(json_encode($html));
+    	}
+        
+        return view('weixin.user.userBonusList', $data);
+	}
+    
     //浏览记录
     public function userGoodsHistory(Request $request)
 	{
