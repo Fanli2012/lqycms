@@ -38,31 +38,78 @@ class Cart extends BaseModel
     const CART_EXCHANGE_GOODS       = 4; // 积分商城
     
     //获取列表
-	public static function getList($uid)
+	public static function getList(array $param)
     {
+        extract($param); //参数：limit，offset
+        
+        $limit  = isset($limit) ? $limit : 10;
+        $offset = isset($offset) ? $offset : 0;
+        
         $goods = self::join('goods', 'goods.id', '=', 'cart.goods_id')
-            ->where('cart.user_id', $uid)
-            ->where('goods.status', 0)
-            ->select('cart.*')
+            ->where('cart.user_id', $user_id)
+            ->where('goods.status', Goods::STATUS)
+            ->select('cart.*','goods.id as goods_id','goods.title','goods.sn','goods.price as goods_price','goods.market_price','goods.litpic as goods_thumb_img','goods.goods_number as stock','goods.promote_start_date','goods.promote_price','goods.promote_end_date')
+            ->skip($offset)->take($limit)
             ->get();
         
         if($goods)
         {
-            foreach ($goods as $key => $value) 
+            foreach ($goods as $k => $v) 
             {
+                $goods[$k]->is_promote = 0;
+                if(Goods::bargain_price($v->goods_price,$v->promote_start_date,$v->promote_end_date) > 0){$goods[$k]->is_promote = 1;}
+                
+                
                 //订货数量大于0
-                if ($value->goods_number > 0)
+                if ($v->goods_number > 0)
                 {
-                    $goods->goods_price = $goods_price = Goods::get_final_price($value->goods_id);
+                    $goods[$k]->price = $goods_price = Goods::get_final_price($v->goods_id);
 
                     //更新购物车中的商品数量
-                    self::where('id', $value->id)->update(array('goods_price' => $goods_price));
-                    
+                    self::where('id', $v->id)->update(array('price' => $goods_price));
                 }
             }
         }
         
-        return $goods->toArray();
+        return $goods;
+    }
+    
+    public static function getOne($where)
+    {
+        $goods = self::where($where)->first();
+        
+        return $goods;
+    }
+    
+    public static function add(array $data)
+    {
+        if ($id = self::insertGetId($data))
+        {
+            return $id;
+        }
+        
+        return false;
+    }
+    
+    public static function modify($where, array $data)
+    {
+        if (self::where($where)->update($data))
+        {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    //删除一条记录
+    public static function remove($id,$user_id)
+    {
+        if (self::whereIn('id', explode(',', $id))->where('user_id',$user_id)->delete() === false)
+        {
+            return false;
+        }
+        
+        return true;
     }
     
     /**
@@ -79,9 +126,9 @@ class Cart extends BaseModel
         extract($attributes);
         
         //获取商品信息
-        $good = Goods::where(['goods_id' => $goods_id, 'status' => 0])->first();
+        $goods = Goods::where(['goods_id' => $goods_id, 'status' => Goods::STATUS])->first();
         
-        if (!$good)
+        if (!$goods)
         {
             return '商品不存在';
         }
@@ -94,48 +141,6 @@ class Cart extends BaseModel
         {
             $property = [];
         }
-        
-        
-    }
-    
-    public static function getOne($id)
-    {
-        $where['id'] = $id;
-        
-        $goods = self::where($where)->first()->toArray();
-        
-        return $goods;
-    }
-    
-    public static function add(array $data)
-    {
-        if ($id = self::insertGetId($data))
-        {
-            return $id;
-        }
-
-        return false;
-    }
-    
-    public static function modify($where, array $data)
-    {
-        if (self::where($where)->update($data))
-        {
-            return true;
-        }
-        
-        return false;
-    }
-    
-    //删除一条记录
-    public static function remove($id)
-    {
-        if (!self::whereIn('id', explode(',', $id))->delete())
-        {
-            return false;
-        }
-        
-        return true;
     }
     
     /**

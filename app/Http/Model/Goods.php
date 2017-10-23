@@ -211,7 +211,7 @@ class Goods extends BaseModel
      */
     public static function bargain_price($price, $start, $end)
     {
-        if ($price == 0)
+        if ($price <= 0)
         {
             return 0;
         }

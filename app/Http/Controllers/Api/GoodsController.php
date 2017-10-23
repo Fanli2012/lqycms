@@ -17,7 +17,8 @@ class GoodsController extends CommonController
     public function goodsDetail(Request $request)
 	{
         //参数
-        $data['id'] = $request->input('id');
+        $data['id'] = $request->input('id','');
+        if($data['id']==''){return ReturnData::create(ReturnData::PARAMS_ERROR);}
         
         $res = Goods::goodsDetail($data);
 		
