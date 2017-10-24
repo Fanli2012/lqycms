@@ -3,7 +3,7 @@ namespace App\Http\Model;
 
 class Cart extends BaseModel
 {
-	//产品模型
+	//购物车模型
 	
     /**
      * 关联到模型的数据表
@@ -11,24 +11,8 @@ class Cart extends BaseModel
      * @var string
      */
 	protected $table = 'cart';
-	
-	/**
-     * 表明模型是否应该被打上时间戳
-     * 默认情况下，Eloquent 期望 created_at 和updated_at 已经存在于数据表中，如果你不想要这些 Laravel 自动管理的数据列，在模型类中设置 $timestamps 属性为 false
-	 * 
-     * @var bool
-     */
+    
     public $timestamps = false;
-	
-	//protected $guarded = []; //$guarded包含你不想被赋值的字段数组。
-	//protected $fillable = ['name']; //定义哪些字段是可以进行赋值的,与$guarded相反
-	
-	/**
-     * The connection name for the model.
-     * 默认情况下，所有的 Eloquent 模型使用应用配置中的默认数据库连接，如果你想要为模型指定不同的连接，可以通过 $connection 属性来设置
-     * @var string
-     */
-    //protected $connection = 'connection-name';
 	
     //购物车商品类型
     const CART_GENERAL_GOODS        = 0; // 普通商品
@@ -42,14 +26,10 @@ class Cart extends BaseModel
     {
         extract($param); //参数：limit，offset
         
-        $limit  = isset($limit) ? $limit : 10;
-        $offset = isset($offset) ? $offset : 0;
-        
         $goods = self::join('goods', 'goods.id', '=', 'cart.goods_id')
             ->where('cart.user_id', $user_id)
             ->where('goods.status', Goods::STATUS)
             ->select('cart.*','goods.id as goods_id','goods.title','goods.sn','goods.price as goods_price','goods.market_price','goods.litpic as goods_thumb_img','goods.goods_number as stock','goods.promote_start_date','goods.promote_price','goods.promote_end_date')
-            ->skip($offset)->take($limit)
             ->get();
         
         if($goods)
@@ -59,14 +39,13 @@ class Cart extends BaseModel
                 $goods[$k]->is_promote = 0;
                 if(Goods::bargain_price($v->goods_price,$v->promote_start_date,$v->promote_end_date) > 0){$goods[$k]->is_promote = 1;}
                 
-                
                 //订货数量大于0
                 if ($v->goods_number > 0)
                 {
-                    $goods[$k]->price = $goods_price = Goods::get_final_price($v->goods_id);
+                    $goods[$k]->final_price = Goods::get_final_price($v->goods_id);   //商品最终价格
 
                     //更新购物车中的商品数量
-                    self::where('id', $v->id)->update(array('price' => $goods_price));
+                    //self::where('id', $v->id)->update(array('price' => $goods_price));
                 }
             }
         }
@@ -126,21 +105,57 @@ class Cart extends BaseModel
         extract($attributes);
         
         //获取商品信息
-        $goods = Goods::where(['goods_id' => $goods_id, 'status' => Goods::STATUS])->first();
+        $goods = Goods::where(['id' => $goods_id, 'status' => Goods::STATUS])->first();
         
         if (!$goods)
         {
             return '商品不存在';
         }
         
-        if (isset($property) && json_decode($property,true))
+        //判断库存 是否足够
+        if($goods['goods_number']<$goods_number)
         {
-            $property = json_decode($property,true);
+            return '库存不足';
+        }
+        
+        //判断购物车商品数
+        if(Cart::where(['user_id'=>$user_id])->count() >= 20)
+        {
+            return '购物车商品最多20件';
+        }
+        
+        //查看是否已经有购物车插入记录
+        $where = array(
+            'user_id'	=> $user_id,
+            'goods_id'	=> $goods_id
+        );
+        
+        $cart = Cart::where($where)->first();
+        
+        if($cart)
+        {
+            //更新购物车
+            $updateArr = array(
+                'goods_number'		=> $goods_number,
+                'add_time'			=> time(),
+            );
+            
+            self::where(array('id'=>$cart->id))->update($updateArr);
         }
         else
         {
-            $property = [];
+            //添加购物车
+            $cartInsert = array(
+                'user_id'			=> $user_id,
+                'goods_id'			=> $goods_id,
+                'goods_number'		=> $goods_number,
+                'add_time'			=> time(),
+            );
+            
+            self::insertGetId($cartInsert);
         }
+        
+        return true;
     }
     
     /**
@@ -153,20 +168,6 @@ class Cart extends BaseModel
         self::where('user_id',$user_id)->delete();
 
         return true;
-    }
-    
-    //购物车总价格
-    public static function TotalPrice($user_id)
-    {
-        $goods = self::where('user_id',$user_id)->get();
-        $total = 0;
-        
-        foreach ($goods as $k => $v)
-        {
-            $total += ($v['goods_number'] * $v['goods_price']);
-        }
-        
-        return (float)$total;
     }
     
     //购物车商品总数量

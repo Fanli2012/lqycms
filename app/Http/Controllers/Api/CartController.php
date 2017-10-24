@@ -18,8 +18,6 @@ class CartController extends CommonController
     public function cartList(Request $request)
 	{
         //参数
-        $data['limit'] = $request->input('limit', 10);
-        $data['offset'] = $request->input('offset', 0);
         $data['user_id'] = Token::$uid;
         
         $res = Cart::getList($data);
@@ -31,50 +29,26 @@ class CartController extends CommonController
     public function cartAdd(Request $request)
 	{
         //参数
-        $data['type'] = $request->input('type',null);
-        $data['money'] = $request->input('money',null);
-        $data['des'] = $request->input('des',null);
-        if($request->input('user_money', null) !== null){$data['user_money'] = $request->input('user_money');}
+        $data['goods_number'] = $request->input('goods_number','');
+        $data['goods_id'] = $request->input('goods_id','');
+        
+        if($request->input('goods_attr', '') != ''){$data['goods_attr'] = $request->input('goods_attr');}
+        if($request->input('shop_id', '') != ''){$data['shop_id'] = $request->input('shop_id');}
         $data['add_time'] = time();
         $data['user_id'] = Token::$uid;
         
-        if($data['type']===null || $data['money']===null || $data['des']===null)
+        if($data['goods_number']=='' || $data['goods_id']=='')
 		{
             return ReturnData::create(ReturnData::PARAMS_ERROR);
         }
         
-        $res = UserMoney::add($data);
-		if(!$res)
+        $res = Cart::cartAdd($data);
+		if($res !== true)
 		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
+			return ReturnData::create(ReturnData::SYSTEM_FAIL,null,$res);
 		}
         
-		return ReturnData::create(ReturnData::SUCCESS,$res);
-    }
-    
-    //修改购物车
-    public function cartUpdate(Request $request)
-	{
-        //参数
-        $data['type'] = $request->input('type',null);
-        $data['money'] = $request->input('money',null);
-        $data['des'] = $request->input('des',null);
-        if($request->input('user_money', null) !== null){$data['user_money'] = $request->input('user_money');}
-        $data['add_time'] = time();
-        $data['user_id'] = Token::$uid;
-        
-        if($data['type']===null || $data['money']===null || $data['des']===null)
-		{
-            return ReturnData::create(ReturnData::PARAMS_ERROR);
-        }
-        
-        $res = UserMoney::add($data);
-		if($res != true)
-		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
-		}
-        
-		return ReturnData::create(ReturnData::SUCCESS,$res);
+		return ReturnData::create(ReturnData::SUCCESS);
     }
     
     //删除购物车
@@ -88,7 +62,7 @@ class CartController extends CommonController
         }
         
         $res = Cart::remove($id,Token::$uid);
-		if($res == true)
+		if($res === true)
 		{
 			return ReturnData::create(ReturnData::SUCCESS,$res);
 		}
@@ -100,7 +74,7 @@ class CartController extends CommonController
     public function cartClear(Request $request)
 	{
         $res = Cart::clearCart(Token::$uid);
-		if(!$res)
+		if($res !== true)
 		{
 			return ReturnData::create(ReturnData::SYSTEM_FAIL);
 		}
