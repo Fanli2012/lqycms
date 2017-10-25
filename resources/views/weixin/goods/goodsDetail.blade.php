@@ -99,7 +99,7 @@ var swiper = new Swiper('.swiper-container', {
      <div class="cart_list" >                
         <div class="cart_list_info goods_list_item">
           <div class="cart_list_img">
-            <img src="/uploads/2017/06/201706041951031181.jpg"  style="width:100%; height:100%;">
+            <img src="<?php echo $post['goods_img']; ?>"  style="width:100%; height:100%;">
           </div>
           <div class="cart_goods_info">
             <div class="cart_list_name">
@@ -126,7 +126,7 @@ var swiper = new Swiper('.swiper-container', {
       <input type="hidden" id="id" value="<?php echo $post['id']; ?>">
       <input type="hidden" id="goods_number" value="<?php echo $post['goods_number']; ?>">
       <div class="registered_btn pop_btn confirmBtn" style="display:none;" onclick="dosubmit()">
-      	<input type="hidden" name="cartType" id="cartType" value="">
+      	<input type="hidden" name="cart_type" id="cart_type" value="">
         <span>确定</span>
       </div>
    </div>
@@ -136,16 +136,17 @@ var swiper = new Swiper('.swiper-container', {
 <script>
 function mastershow(confirm)
 {
-    /*如果已经选择属性，则弹出确定按钮，否则弹出加入购物车和立即购买按钮  */
+    //如果已经选择属性，则弹出确定按钮，否则弹出加入购物车和立即购买按钮
     var selectname = $("#selectname").html();
     if(selectname||confirm==1||confirm==2){
-        $("#cartType").val(confirm);
+        $("#cart_type").val(confirm);
         $(".btnBox").hide();
         $(".confirmBtn").show();
     }else{
         $(".btnBox").show();
         $(".confirmBtn").hide();
     }
+    
     $("#master").show();
 }
 function masterunshow()
@@ -172,7 +173,7 @@ function cart_num_add()
     {
         //提示
         layer.open({
-            content: '库存量不足！'
+            content: '库存不足'
             ,skin: 'msg'
             ,time: 2 //2秒后自动关闭
         });
@@ -181,6 +182,45 @@ function cart_num_add()
     }
     
     $('#num').val(num);
+}
+
+function dosubmit()
+{
+    var url = '<?php echo env('APP_API_URL').'/cart_add'; ?>';
+    var access_token = '<?php echo $_SESSION['weixin_user_info']['access_token']; ?>';
+    
+    var cart_type = $("#cart_type").val();
+    var goods_number = $("#num").val();
+    var goods_id = $("#id").val();
+    
+    $.post(url,{access_token:access_token,goods_id:goods_id,goods_number:goods_number},function(res)
+	{
+		if(res.code==0)
+		{
+            //提示
+            layer.open({
+                content: res.msg
+                ,skin: 'msg'
+                ,time: 2 //2秒后自动关闭
+            });
+            
+            /* if(cart_type == 2)
+            {
+                location.href = '<?php echo substr(route('weixin_order_pay',array('id'=>1)),0,strlen(route('weixin_order_pay',array('id'=>1)))-1); ?>' + res.data['id'];
+            } */
+		}
+		else
+		{
+            //提示
+            layer.open({
+                content: res.msg
+                ,skin: 'msg'
+                ,time: 2 //2秒后自动关闭
+            });
+		}
+	},'json');
+        
+    $("#master").hide();
 }
 </script>
 

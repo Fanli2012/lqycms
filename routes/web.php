@@ -92,6 +92,8 @@ Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin', 'middleware' => ['w
     Route::get('/collect_goods', 'CollectGoodsController@index')->name('weixin_user_collect_goods');
     //购物车
     Route::get('/cart', 'CartController@index')->name('weixin_cart');
+    //订单
+    Route::get('/order_pay/{id}', 'OrderController@orderPay')->name('weixin_order_pay'); //订单支付
     //收货地址
     Route::get('/user_address', 'AddressController@index')->name('weixin_user_address_list');
     Route::get('/user_address_add', 'AddressController@userAddressAdd')->name('weixin_user_address_add');
@@ -159,7 +161,6 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     Route::get('/cart_list', 'CartController@cartList'); //购物车列表
     Route::post('/cart_clear', 'CartController@cartClear'); //清空购物车
     Route::post('/cart_add', 'CartController@cartAdd'); //添加购物车
-    Route::post('/cart_update', 'CartController@cartUpdate'); //修改购物车
     Route::post('/cart_delete', 'CartController@cartDelete'); //删除购物
     //分销
     
