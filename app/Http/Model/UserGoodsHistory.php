@@ -66,6 +66,8 @@ class UserGoodsHistory extends BaseModel
     
     public static function add(array $data)
     {
+        if(self::where($data)->first()){return false;}
+        
         if (!self::where($data)->first())
         {
             $data['add_time'] = time();

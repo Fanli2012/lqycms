@@ -292,29 +292,10 @@ margin:5px 0
 .banner_headline .tit{border-top:1px dashed #dedede;text-align:center;margin:25px 0;}
 .banner_headline .tit h4{color:#666666;background-color:#f1f1f1;font-size:18px;font-weight:normal;position:relative;top:-12px;display:inline;padding:0 20px;}
 
-.radio .che span {
-    margin-left: .21333rem;
-    vertical-align: sub
-}
+.radio .check_t i {background-position: -30px 0}
 
-.radio .check_t i {
-    background-position: -.768rem 0
-}
-
-.radio i {
-    width:22px;
-    height:22px;
-    display: block;
-    float: left;
-    background-image: url("../../images/weixin/check.png");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: 0
-}
-.signup-find span,.radio span {
-    font-size:24px;
-    cursor: pointer
-}
+.radio i {width:22px;height:22px;display: block;float: left;background-image: url("../../images/weixin/check.png");background-repeat: no-repeat;background-size: cover;background-position: 0}
+.signup-find span,.radio span {font-size:24px;cursor: pointer}
 
 .sc_list {
     padding:10px;
@@ -886,7 +867,7 @@ color: #666;
 border-left: 3px solid #FF0036;border-bottom: 1px solid #f4f4f4;}
 .goods-content .module-content{padding:10px;}
 
-.bottom_tool_black{ width:100%; display:block; position:fixed; bottom:0;background-color:#fff;border-top:1px solid #f1f1f1;}
+.bottom_tool_black{ width:100%; display:block; position:fixed; bottom:0;background-color:#fff;border-top:1px solid #f1f1f1;z-index:2;}
 .bottom_tool_white { width:40%; float:left;}
 .bottom_tool_white li { width:50%; float:left; text-align:center; position:relative;}
 .bottom_tool_white ul li img{ margin:0 auto; display:block; margin-top:2px; width:32px; height:32px;}

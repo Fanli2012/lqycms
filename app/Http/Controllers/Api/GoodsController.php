@@ -18,10 +18,14 @@ class GoodsController extends CommonController
 	{
         //参数
         $data['id'] = $request->input('id','');
+        $user_id = $request->input('user_id','');
         if($data['id']==''){return ReturnData::create(ReturnData::PARAMS_ERROR);}
         
         $res = Goods::goodsDetail($data);
 		
+        if($user_id){$res->is_collect = \DB::table('collect_goods')->where(array('user_id'=>$user_id,'goods_id'=>$data['id']))->count();}
+        \DB::table('goods')->where(array('id'=>$data['id']))->increment('click', 1);
+        
 		return ReturnData::create(ReturnData::SUCCESS,$res);
     }
     

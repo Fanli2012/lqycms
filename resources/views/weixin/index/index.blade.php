@@ -108,11 +108,11 @@ var swiper = new Swiper('.swiper-nav', {
                 <img src="images/weixin/icon_16.png" alt="我的订单" />
                 <span>我的订单</span>
         </a>
-        <a href="http://www.shop.com/index.php/mobile/Cart/index.html">
+        <a href="<?php echo route('weixin_cart'); ?>">
                 <img src="images/weixin/icon_17.png" alt="购物车" />
                 <span>购物车</span>
         </a>
-        <a href="http://www.shop.com/index.php/mobile/User/index.html">
+        <a href="<?php echo route('weixin_user'); ?>">
                 <img src="images/weixin/icon_19.png" alt="个人中心" />
                 <span>个人中心</span>
         </a>

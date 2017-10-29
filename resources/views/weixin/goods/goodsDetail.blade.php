@@ -58,11 +58,11 @@ var swiper = new Swiper('.swiper-container', {
 <!--顶部滚动广告栏-end-->
 
 <div class="goods-header">
-    <span class="wish-add fr wish-add-activate">收藏</span><h1 class="title"><?php echo $post['title']; ?></h1>
+    <span class="wish-add fr<?php if(isset($post['is_collect']) && $post['is_collect']>=1){echo ' wish-add-activate';} ?>" onclick="collect_goods()">收藏</span><h1 class="title"><?php echo $post['title']; ?></h1>
     
     <div class="goods-price">
         <div class="current-price">
-            <span>¥</span><i class="price"><?php echo $post['price']; ?></i>
+            <span>￥</span><i class="price"><?php echo $post['price']; ?></i>
         </div>
         <span class="btn-retail">门店有售</span>
         
@@ -221,6 +221,31 @@ function dosubmit()
 	},'json');
         
     $("#master").hide();
+}
+
+function collect_goods()
+{
+    var url = '<?php if(isset($post['is_collect']) && $post['is_collect']>=1){echo env('APP_API_URL').'/collect_goods_delete';}else{echo env('APP_API_URL').'/collect_goods_add';} ?>';
+    var access_token = '<?php echo $_SESSION['weixin_user_info']['access_token']; ?>';
+    var goods_id = $("#id").val();
+    
+    $.post(url,{access_token:access_token,goods_id:goods_id},function(res)
+	{
+		if(res.code==0)
+		{
+            window.location.reload();
+		}
+		else
+		{
+            
+		}
+        
+        layer.open({
+            content: res.msg
+            ,skin: 'msg'
+            ,time: 2 //2秒后自动关闭
+        });
+	},'json');
 }
 </script>
 

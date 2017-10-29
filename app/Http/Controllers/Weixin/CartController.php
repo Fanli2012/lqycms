@@ -14,23 +14,23 @@ class CartController extends CommonController
     //商品列表
     public function index(Request $request)
 	{
-        if($request->input('typeid', '') != ''){$data['typeid'] = $request->input('typeid');}
-        if($request->input('tuijian', '') != ''){$data['tuijian'] = $request->input('tuijian');}
-        if($request->input('keyword', '') != ''){$data['keyword'] = $request->input('keyword');}
-        if($request->input('status', '') != ''){$data['status'] = $request->input('status');}
-        if($request->input('is_promote', '') != ''){$data['is_promote'] = $request->input('is_promote');}
-        if($request->input('orderby', '') != ''){$data['orderby'] = $request->input('orderby');}
-        if($request->input('max_price', '') != ''){$data['max_price'] = $request->input('max_price');}else{$data['max_price'] = 99999;}
-        if($request->input('min_price', '') != ''){$data['min_price'] = $request->input('min_price');}else{$data['min_price'] = 0;}
-        
-        //商品列表
+        //购物车列表
         $postdata = array(
-            'limit'  => 10,
+            'access_token' => $_SESSION['weixin_user_info']['access_token']
+		);
+        $url = env('APP_API_URL')."/cart_list";
+		$res = curl_request($url,$postdata,'GET');
+        $data['list'] = $res['data']['list'];
+        
+        //猜你喜欢商品列表
+        $postdata = array(
+            'limit'  => 4,
+            'orderby'=> 1,
             'offset' => 0
 		);
         $url = env('APP_API_URL')."/goods_list";
-		$goods_list = curl_request($url,$postdata,'GET');
-        $data['goods_list'] = $goods_list['data']['list'];
+		$res = curl_request($url,$postdata,'GET');
+        $data['like_goods_list'] = $res['data']['list'];
         
 		return view('weixin.cart.index', $data);
 	}

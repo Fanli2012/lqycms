@@ -26,31 +26,40 @@ class Cart extends BaseModel
     {
         extract($param); //参数：limit，offset
         
-        $goods = self::join('goods', 'goods.id', '=', 'cart.goods_id')
+        $model = self::join('goods', 'goods.id', '=', 'cart.goods_id')
             ->where('cart.user_id', $user_id)
             ->where('goods.status', Goods::STATUS)
-            ->select('cart.*','goods.id as goods_id','goods.title','goods.sn','goods.price as goods_price','goods.market_price','goods.litpic as goods_thumb_img','goods.goods_number as stock','goods.promote_start_date','goods.promote_price','goods.promote_end_date')
-            ->get();
+            ->select('cart.*','goods.id as goods_id','goods.title','goods.sn','goods.price as goods_price','goods.market_price','goods.litpic','goods.goods_number as stock','goods.promote_start_date','goods.promote_price','goods.promote_end_date');
+            
+        $res['count'] = $model->count();
+        $res['list'] = array();
         
-        if($goods)
+        if($res['count']>0)
         {
-            foreach ($goods as $k => $v) 
+            $res['list'] = $model->get();
+            
+            foreach ($res['list'] as $k => $v) 
             {
-                $goods[$k]->is_promote = 0;
-                if(Goods::bargain_price($v->goods_price,$v->promote_start_date,$v->promote_end_date) > 0){$goods[$k]->is_promote = 1;}
+                $res['list'][$k]->is_promote = 0;
+                if(Goods::bargain_price($v->goods_price,$v->promote_start_date,$v->promote_end_date) > 0){$res['list'][$k]->is_promote = 1;}
                 
                 //订货数量大于0
                 if ($v->goods_number > 0)
                 {
-                    $goods[$k]->final_price = Goods::get_final_price($v->goods_id);   //商品最终价格
-
+                    $res['list'][$k]->final_price = Goods::get_final_price($v->goods_id);   //商品最终价格
+                    $res['list'][$k]->goods_detail_url = route('weixin_goods_detail',array('id'=>$v->goods_id));
+                    
                     //更新购物车中的商品数量
                     //self::where('id', $v->id)->update(array('price' => $goods_price));
                 }
             }
         }
+        else
+        {
+            return false;
+        }
         
-        return $goods;
+        return $res;
     }
     
     public static function getOne($where)
@@ -83,7 +92,8 @@ class Cart extends BaseModel
     //删除一条记录
     public static function remove($id,$user_id)
     {
-        if (self::whereIn('id', explode(',', $id))->where('user_id',$user_id)->delete() === false)
+        if(!is_array($id)){$id = explode(',', $id);}
+        if (self::whereIn('id', $id)->where('user_id',$user_id)->delete() === false)
         {
             return false;
         }

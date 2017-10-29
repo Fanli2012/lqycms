@@ -54,6 +54,8 @@ class ArticleController extends CommonController
         $res->pubdate = date('Y-m-d H:i',$res->pubdate);
         $res->addtime = date('Y-m-d H:i',$res->addtime);
         
+        \DB::table('article')->where(array('id'=>$data['id']))->increment('click', 1);
+        
 		return ReturnData::create(ReturnData::SUCCESS,$res);
     }
 }

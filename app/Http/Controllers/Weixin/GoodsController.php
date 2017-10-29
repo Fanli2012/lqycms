@@ -15,15 +15,25 @@ class GoodsController extends CommonController
     //商品详情
     public function goodsDetail($id)
 	{
-        //商品列表
         $postdata = array(
             'id'  => $id
 		);
+        if(isset($_SESSION['weixin_user_info'])){$postdata['user_id']=$_SESSION['weixin_user_info']['id'];}
         $url = env('APP_API_URL')."/goods_detail";
 		$res = curl_request($url,$postdata,'GET');
         $data['post'] = $res['data'];
-        
         if(!$data['post']){$this->error_jump(ReturnCode::NO_FOUND,route('weixin'),3);}
+        
+        //添加浏览记录
+        if(isset($_SESSION['weixin_user_info']))
+        {
+            $postdata = array(
+                'goods_id'  => $id,
+                'access_token' => $_SESSION['weixin_user_info']['access_token']
+            );
+            $url = env('APP_API_URL')."/user_goods_history_add";
+            curl_request($url,$postdata,'POST');
+        }
         
 		return view('weixin.goods.goodsDetail', $data);
 	}
