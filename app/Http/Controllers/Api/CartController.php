@@ -42,13 +42,7 @@ class CartController extends CommonController
             return ReturnData::create(ReturnData::PARAMS_ERROR);
         }
         
-        $res = Cart::cartAdd($data);
-		if($res !== true)
-		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL,null,$res);
-		}
-        
-		return ReturnData::create(ReturnData::SUCCESS);
+		return Cart::cartAdd($data);
     }
     
     //删除购物车

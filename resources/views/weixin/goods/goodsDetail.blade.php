@@ -197,17 +197,18 @@ function dosubmit()
 	{
 		if(res.code==0)
 		{
+            if(cart_type == 2)
+            {
+                location.href = '<?php echo substr(route('weixin_cart_checkout',array('ids'=>1)),0,-1); ?>' + res.data;
+                return false;
+            }
+            
             //提示
             layer.open({
                 content: res.msg
                 ,skin: 'msg'
                 ,time: 2 //2秒后自动关闭
             });
-            
-            /* if(cart_type == 2)
-            {
-                location.href = '<?php echo substr(route('weixin_order_pay',array('id'=>1)),0,strlen(route('weixin_order_pay',array('id'=>1)))-1); ?>' + res.data['id'];
-            } */
 		}
 		else
 		{

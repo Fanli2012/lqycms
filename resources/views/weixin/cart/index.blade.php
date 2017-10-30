@@ -31,7 +31,7 @@
                 <!--商品勾选按钮-->
                 <span onclick="checkGoods(this)" class="che">
                  <i>
-                     <input name="checkItem" type="checkbox" style="display:none;" data-goods-id="<?php echo $v['goods_id']; ?>">
+                     <input name="checkItem" type="checkbox" style="display:none;" data-goods-id="<?php echo $v['goods_id']; ?>" data-cart-id="<?php echo $v['id']; ?>">
                  </i>
                  </span>
             </div>
@@ -117,6 +117,28 @@
 <br><br>
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/layer/mobile/layer.js"></script>
 <script>
+function cart_submit()
+{
+    var cart_goods_ids = '';
+    $('[name="checkItem"][checked]').each(function(){
+        var goods_id = $(this).attr('data-cart-id');
+        if(cart_goods_ids){cart_goods_ids = cart_goods_ids+'_'+goods_id;}else{cart_goods_ids = cart_goods_ids+goods_id;}
+    });
+    
+    if(cart_goods_ids == '')
+    {
+        layer.open({
+            content: '请选择商品'
+            ,skin: 'msg'
+            ,time: 2 //2秒后自动关闭
+        });
+        
+        return false;
+    }
+    
+    location.href = '<?php echo substr(route('weixin_cart_checkout',array('ids'=>1)), 0, -1); ?>' + cart_goods_ids;
+}
+
 function change_goods_number(type, id)
 {
     var goods_number = document.getElementById('goods_number'+id).value;

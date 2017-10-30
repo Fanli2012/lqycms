@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Model;
+use App\Common\ReturnData;
 
 class Cart extends BaseModel
 {
@@ -119,19 +120,19 @@ class Cart extends BaseModel
         
         if (!$goods)
         {
-            return '商品不存在';
+            return ReturnData::create(ReturnData::PARAMS_ERROR,null,'商品不存在');
         }
         
         //判断库存 是否足够
         if($goods['goods_number']<$goods_number)
         {
-            return '库存不足';
+            return ReturnData::create(ReturnData::PARAMS_ERROR,null,'库存不足');
         }
         
         //判断购物车商品数
         if(Cart::where(['user_id'=>$user_id])->count() >= 20)
         {
-            return '购物车商品最多20件';
+            return ReturnData::create(ReturnData::PARAMS_ERROR,null,'购物车商品最多20件');
         }
         
         //查看是否已经有购物车插入记录
@@ -151,6 +152,8 @@ class Cart extends BaseModel
             );
             
             self::where(array('id'=>$cart->id))->update($updateArr);
+            
+            $cart_id = $cart->id;
         }
         else
         {
@@ -162,10 +165,10 @@ class Cart extends BaseModel
                 'add_time'			=> time(),
             );
             
-            self::insertGetId($cartInsert);
+            $cart_id = self::insertGetId($cartInsert);
         }
         
-        return true;
+        return ReturnData::create(ReturnData::SUCCESS,$cart_id,'购物车添加成功');
     }
     
     /**

@@ -92,6 +92,7 @@ Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin', 'middleware' => ['w
     Route::get('/collect_goods', 'CollectGoodsController@index')->name('weixin_user_collect_goods');
     //购物车
     Route::get('/cart', 'CartController@index')->name('weixin_cart');
+    Route::get('/cart_checkout/{ids}', 'CartController@cartCheckout')->name('weixin_cart_checkout');
     //订单
     Route::get('/order_pay/{id}', 'OrderController@orderPay')->name('weixin_order_pay'); //订单支付
     //收货地址
