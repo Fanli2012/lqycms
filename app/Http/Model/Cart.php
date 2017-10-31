@@ -188,4 +188,38 @@ class Cart extends BaseModel
     {
         return self::where('user_id',$user_id)->sum('goods_number');
     }
+    
+    //购物车结算商品列表
+    public static function cartCheckoutGoodsList(array $param)
+    {
+        extract($param);
+        
+        $cartIds = explode("_",$ids);
+        
+        // 获取购物车列表
+    	$cartList = self::where(array('user_id'=>$user_id))->whereIn('id', $cartIds)->get();
+        
+        if(!empty($cartList))
+        {
+    		$resultList = array();
+    		$checkArr = array();
+            
+            foreach($cartList as $k=>$v)
+            {
+                $goods = Goods::where(array('id'=>$v['goods_id']))->first();
+                
+                $cartList[$k]->is_promote = 0;
+                if(Goods::bargain_price($goods->price,$goods->promote_start_date,$goods->promote_end_date) > 0){$cartList[$k]->is_promote = 1;}
+                
+                $cartList[$k]->final_price = Goods::get_final_price($v['goods_id']);   //商品最终价格
+                $cartList[$k]->goods_detail_url = route('weixin_goods_detail',array('id'=>$v['goods_id']));
+                $cartList[$k]->title = $goods->title;
+                $cartList[$k]->litpic = $goods->litpic;
+            }
+        }
+        
+        $res['list'] = $cartList;
+        
+        return ReturnData::create(ReturnData::SUCCESS,$res);
+    }
 }

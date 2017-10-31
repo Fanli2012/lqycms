@@ -164,6 +164,8 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     Route::post('/cart_clear', 'CartController@cartClear'); //清空购物车
     Route::post('/cart_add', 'CartController@cartAdd'); //添加购物车
     Route::post('/cart_delete', 'CartController@cartDelete'); //删除购物
+    Route::get('/cart_checkout_goods_list', 'CartController@cartCheckoutGoodsList'); //购物车结算商品列表
+    
     //分销
     
     //积分

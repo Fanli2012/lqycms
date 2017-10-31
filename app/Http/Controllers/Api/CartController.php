@@ -75,4 +75,19 @@ class CartController extends CommonController
         
 		return ReturnData::create(ReturnData::SUCCESS,$res);
     }
+    
+    //购物车结算商品列表
+    public function cartCheckoutGoodsList(Request $request)
+	{
+        //参数
+        $data['ids'] = $request->input('ids','');
+        $data['user_id'] = Token::$uid;
+        
+        if($data['ids']=='')
+		{
+            return ReturnData::create(ReturnData::PARAMS_ERROR);
+        }
+        
+        return Cart::cartCheckoutGoodsList($data);
+    }
 }

@@ -84,13 +84,7 @@ class UserAddressController extends CommonController
             return ReturnData::create(ReturnData::PARAMS_ERROR);
         }
         
-        $res = UserAddress::add($data);
-		if(!$res)
-		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
-		}
-        
-		return ReturnData::create(ReturnData::SUCCESS,$res);
+        return UserAddress::add($data);
     }
     
     //修改收货地址

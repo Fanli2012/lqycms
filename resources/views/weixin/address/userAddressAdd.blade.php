@@ -260,8 +260,7 @@ function adr_dosubmit()
                 ,time: 2 //2秒后自动关闭
             });
             
-			var url = "http://www.baidu.com";
-			location.href = url;
+			location.href = "<?php echo route('weixin_user_address_list'); ?>";
 		}
 	},'json');
 }

@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Model;
+use App\Common\ReturnData;
 
 class UserAddress extends BaseModel
 {
@@ -96,6 +97,11 @@ class UserAddress extends BaseModel
     {
         extract($param);
         
+        if(UserAddress::where('user_id', $user_id)->count() >= 3)
+        {
+            return ReturnData::create(ReturnData::PARAMS_ERROR,null,'最多10个收货地址');
+        }
+        
         $model = new UserAddress;
         $model->user_id    = $user_id;
         $model->name       = $name;
@@ -119,10 +125,10 @@ class UserAddress extends BaseModel
                 self::setDefault($model->id,$user_id);
             }
             
-            return $model->toArray();
+            return ReturnData::create(ReturnData::SUCCESS,$model);
         }
 
-        return false;
+        return ReturnData::create(ReturnData::SYSTEM_FAIL);
     }
     
     public static function modify(array $param)
