@@ -18,6 +18,8 @@ class UserAddress extends BaseModel
      */
     protected $guarded = array();
     
+    const IS_DEFAULT = 1; //是默认地址
+    
     //获取列表
 	public static function getList(array $param)
     {
@@ -62,15 +64,6 @@ class UserAddress extends BaseModel
         if ($address_id)
         {
             $arr = self::where('id',$address_id)->first();
-            
-            if($arr)
-            {
-                $arr->country_name  = Region::getRegionName($arr->country);
-                $arr->province_name = Region::getRegionName($arr->province);
-                $arr->city_name     = Region::getRegionName($arr->city);
-                $arr->district_name = Region::getRegionName($arr->district);
-            }
-            
             return $arr;
         }
         
@@ -80,14 +73,14 @@ class UserAddress extends BaseModel
             $arr = self::join('user','user_address.id', '=', 'user.address_id')
                     ->where('user.id',$user_id)->select('user_address.id','user_address.name','country','province','city','district','address','user_address.mobile','zipcode')
                     ->first();
-                    
-            if($arr)
-            {
-                $arr->country_name  = Region::getRegionName($arr->country);
-                $arr->province_name = Region::getRegionName($arr->province);
-                $arr->city_name     = Region::getRegionName($arr->city);
-                $arr->district_name = Region::getRegionName($arr->district);
-            }
+        }
+        
+        if($arr)
+        {
+            $arr->country_name  = Region::getRegionName($arr->country);
+            $arr->province_name = Region::getRegionName($arr->province);
+            $arr->city_name     = Region::getRegionName($arr->city);
+            $arr->district_name = Region::getRegionName($arr->district);
         }
         
         return $arr;
@@ -206,5 +199,27 @@ class UserAddress extends BaseModel
         }
 
         return false;
+    }
+    
+    // 获取默认地址
+    public static function userDefaultAddress($user_id)
+    {
+        $arr = '';
+        $arr = self::where(array('user_id'=>$user_id,'is_default'=>self::IS_DEFAULT))->first();
+        
+        if (!$arr)
+        {
+            $arr = self::where(array('user_id'=>$user_id))->first();
+        }
+        
+        if($arr)
+        {
+            $arr->country_name  = Region::getRegionName($arr->country);
+            $arr->province_name = Region::getRegionName($arr->province);
+            $arr->city_name     = Region::getRegionName($arr->city);
+            $arr->district_name = Region::getRegionName($arr->district);
+        }
+        
+        return $arr;
     }
 }

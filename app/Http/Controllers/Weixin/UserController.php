@@ -55,6 +55,12 @@ class UserController extends CommonController
         return view('weixin.user.userAccount', $data);
     }
     
+    //用户充值
+    public function userRecharge(Request $request)
+	{
+        return view('weixin.user.userRecharge');
+    }
+    
     //余额明细
     public function userMoneyList(Request $request)
 	{

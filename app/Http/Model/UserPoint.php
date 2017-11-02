@@ -13,7 +13,7 @@ class UserPoint extends BaseModel
      *
      * @var array
      */
-    protected $guarded = [];
+    protected $guarded = array();
 	
     //获取列表
 	public static function getList(array $param)
@@ -35,7 +35,7 @@ class UserPoint extends BaseModel
         
 		if($res['count']>0)
         {
-            $res['list']  = $model->skip($offset)->take($limit)->orderBy('id','desc')->get()->toArray();
+            $res['list']  = $model->skip($offset)->take($limit)->orderBy('id','desc')->get();
         }
         else
         {
@@ -47,7 +47,7 @@ class UserPoint extends BaseModel
     
     public static function getOne($id)
     {
-        return self::where('id', $id)->first()->toArray();
+        return self::where('id', $id)->first();
     }
     
     public static function add(array $data)

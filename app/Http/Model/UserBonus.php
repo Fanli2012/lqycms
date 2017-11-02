@@ -13,7 +13,7 @@ class UserBonus extends BaseModel
      *
      * @var array
      */
-    protected $guarded = [];
+    protected $guarded = array();
 	
     //获取列表
 	public static function getList(array $param)

@@ -38,6 +38,7 @@ class CartController extends CommonController
     //购物车结算
     public function cartCheckout($ids)
 	{
+        //购物车结算商品列表
         $postdata = array(
             'ids' => $ids,
             'access_token' => $_SESSION['weixin_user_info']['access_token']
@@ -45,6 +46,23 @@ class CartController extends CommonController
         $url = env('APP_API_URL')."/cart_checkout_goods_list";
 		$res = curl_request($url,$postdata,'GET');
         $data['list'] = $res['data']['list'];
+        
+        //支付方式列表
+        $postdata = array(
+            'status' => 1,
+            'access_token' => $_SESSION['weixin_user_info']['access_token']
+		);
+        $url = env('APP_API_URL')."/payment_list";
+		$res = curl_request($url,$postdata,'GET');
+        $data['payment_list'] = $res['data']['list'];
+        
+        //支付方式列表
+        $postdata = array(
+            'access_token' => $_SESSION['weixin_user_info']['access_token']
+		);
+        $url = env('APP_API_URL')."/user_default_address";
+		$res = curl_request($url,$postdata,'GET');
+        $data['user_default_address'] = $res['data'];
         
         return view('weixin.cart.cartCheckout', $data);
     }

@@ -11,22 +11,12 @@
     <div class="ds-in-bl nav_menu"><a href="javascript:void(0);"><img src="<?php echo env('APP_URL'); ?>/images/weixin/class1.png" alt="菜单"></a></div>
 </div>
 
-
-<div class="flool tpnavf cl">
-    <div class="nav_list">
-        <ul>
-        <a href="<?php echo route('weixin'); ?>"><li><img src="<?php echo env('APP_URL'); ?>/images/weixin/home_icon.png"><p>首页</p></li></a>
-        <a href="/Weixin/index.php?m=Store&amp;a=index"><li><img src="<?php echo env('APP_URL'); ?>/images/weixin/brand_icon.png"><p>分类</p></li></a>	
-        <a href="/Weixin/index.php?m=Cart&amp;a=index"><li><img src="<?php echo env('APP_URL'); ?>/images/weixin/car_icon.png"><p>购物车</p></li></a>	
-        <a href="/Weixin/index.php?m=User&amp;a=index"><li><img src="<?php echo env('APP_URL'); ?>/images/weixin/center_icon.png"><p>个人中心</p></li></a></ul>
-        <div class="cl"></div>
-    </div>
-</div>
+@include('weixin.common.headerNav')
 
 <a href="/v2/index.php?m=default&amp;c=flow&amp;a=consignee_list&amp;u=53657">
 <div class="checkout-addr">
-  <p class="title">范例 <span>15280767654</span></p>
-  <p class="des">福建厦门湖里区 软件园二期100号</p>
+  <p class="title"><?php echo $user_default_address['name']; ?> <span><?php echo $user_default_address['mobile']; ?></span></p>
+  <p class="des"><?php echo $user_default_address['province_name']; ?><?php echo $user_default_address['city_name']; ?><?php echo $user_default_address['district_name']; ?> <?php echo $user_default_address['address']; ?></p>
   <i></i>
 </div>
 </a>
@@ -58,16 +48,19 @@
     <a href="javascript:update_pay_mode_layer();"><li>
         <div class="ui-list-info">
             <h4 class="ui-nowrap">支付方式</h4>
-            <div class="ui-txt-info">支付宝 &nbsp;</div>
+            <div class="ui-txt-info">微信支付 &nbsp;</div>
         </div>
         <i class="fa fa-angle-right" aria-hidden="true"></i>
     </li></a>
+<style>
+.bottoma{display:block;font-size:18px;padding:10px;border-radius:2px;}
+</style>
 <script>
 function update_pay_mode_layer()
 {
     //询问框
     layer.open({
-        content: '<div style="padding:15px;"><a style="margin-bottom:10px;background-color:#1aad19;text-align:center;color:white;border:1px solid #179e16;" class="bottoma" onclick="layer.closeAll();" href="javascript:update_pay_mode(1);">男</a><a style="margin-bottom:10px;background-color:#ea5a3d;text-align:center;color:white;border:1px solid #dd2727;" class="bottoma" onclick="layer.closeAll();" href="javascript:update_pay_mode(2);">女</a></div>'
+        content: '<div style="padding:15px;"><a style="margin-bottom:10px;background-color:#1aad19;text-align:center;color:white;border:1px solid #179e16;" class="bottoma" onclick="layer.closeAll();" href="javascript:update_pay_mode(1);">账户余额 38.62元</a><a style="margin-bottom:10px;background-color:#ea5a3d;text-align:center;color:white;border:1px solid #dd2727;" class="bottoma" onclick="layer.closeAll();" href="javascript:update_pay_mode(2);">微信支付</a></div>'
     });
 }
 

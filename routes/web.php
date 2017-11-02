@@ -82,6 +82,7 @@ Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin', 'middleware' => ['w
     Route::get('/user_account', 'UserController@userAccount')->name('weixin_user_account');
     Route::get('/user_money_list', 'UserController@userMoneyList')->name('weixin_user_money_list');
     Route::get('/user_point_list', 'UserController@userPointList')->name('weixin_user_point_list');
+    Route::get('/user_recharge', 'UserController@userRecharge')->name('weixin_user_recharge');
     //优惠券、红包
     Route::get('/user_bonus_list', 'UserController@userBonusList')->name('weixin_user_bonus_list');
     //浏览记录
@@ -187,6 +188,7 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     //其它
     Route::get('/verifycode_check', 'VerifyCodeController@verifyCodeCheck'); //验证码校验
     Route::get('/andriod_upgrade', 'IndexController@andriodUpgrade'); //安卓升级
+    Route::get('/payment_list', 'PaymentController@paymentList'); //支付方式列表
     //图片上传
     Route::post('/image_upload', 'ImageController@imageUpload'); //普通文件/图片上传
     //二维码
@@ -194,6 +196,7 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     //收货地址
     Route::get('/user_address_list', 'UserAddressController@userAddressList');
     Route::get('/user_address_detail', 'UserAddressController@userAddressDetail');
+    Route::get('/user_default_address', 'UserAddressController@userDefaultAddress'); //获取用户默认地址
     Route::post('/user_address_setdefault', 'UserAddressController@userAddressSetDefault');
     Route::post('/user_address_add', 'UserAddressController@userAddressAdd');
     Route::post('/user_address_update', 'UserAddressController@userAddressUpdate');

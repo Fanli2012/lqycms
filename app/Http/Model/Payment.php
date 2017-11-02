@@ -1,11 +1,12 @@
 <?php
 namespace App\Http\Model;
+use App\Common\ReturnData;
 
-class UserMoney extends BaseModel
+class Payment extends BaseModel
 {
-	//用户余额明细
+	//用户优惠券
 	
-    protected $table = 'user_money';
+    protected $table = 'payment';
 	public $timestamps = false;
 	
 	/**
@@ -15,49 +16,45 @@ class UserMoney extends BaseModel
      */
     protected $guarded = array();
 	
+    const STATUS = 1; // 可用支付方式
+    
     //获取列表
 	public static function getList(array $param)
     {
         extract($param); //参数：limit，offset
         
-        $where['user_id'] = $user_id;
-        $limit  = isset($limit) ? $limit : 10;
-        $offset = isset($offset) ? $offset : 0;
+        $model = new Payment;
         
-        $model = new UserMoney;
+        if(isset($status) && $status!=-1){$where['status'] = $status;} //-1表示获取所有
         
-        if(isset($type)){$where['type'] = $type;}
-        
-        $model = $model->where($where);
+        if(isset($where)){$model = $model->where($where);}
         
         $res['count'] = $model->count();
         $res['list'] = array();
         
 		if($res['count']>0)
         {
-            $res['list']  = $model->skip($offset)->take($limit)->orderBy('id','desc')->get();
-        }
-        else
-        {
-            return false;
+            $res['list'] = $model->orderBy('listorder','desc')->get();
         }
         
         return $res;
     }
     
-    public static function getOne($id)
+    public static function getOne($where)
     {
-        return self::where('id', $id)->first();
+        return self::where($where)->first();
     }
     
     public static function add(array $data)
     {
+        if(self::where(array('pay_code'=>$data['pay_code']))->first()){return ReturnData::create(ReturnData::PARAMS_ERROR,null,'支付方式已存在');}
+        
         if ($id = self::insertGetId($data))
         {
-            return $id;
+            return ReturnData::create(ReturnData::SUCCESS,$id);
         }
 
-        return false;
+        return ReturnData::create(ReturnData::SYSTEM_FAIL);
     }
     
     public static function modify($where, array $data)

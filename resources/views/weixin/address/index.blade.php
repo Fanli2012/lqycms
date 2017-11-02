@@ -9,16 +9,8 @@
     <div class="ds-in-bl tit center"><span>收货地址管理</span></div>
     <div class="ds-in-bl nav_menu"><a href="javascript:void(0);"><img src="<?php echo env('APP_URL'); ?>/images/weixin/class1.png" alt="菜单"></a></div>
 </div>
-<div class="flool tpnavf cl">
-    <div class="nav_list">
-        <ul>
-        <a href="<?php echo route('weixin'); ?>"><li><img src="<?php echo env('APP_URL'); ?>/images/weixin/home_icon.png"><p>首页</p></li></a>
-        <a href="/Weixin/index.php?m=Store&amp;a=index"><li><img src="<?php echo env('APP_URL'); ?>/images/weixin/brand_icon.png"><p>分类</p></li></a>	
-        <a href="/Weixin/index.php?m=Cart&amp;a=index"><li><img src="<?php echo env('APP_URL'); ?>/images/weixin/car_icon.png"><p>购物车</p></li></a>	
-        <a href="/Weixin/index.php?m=User&amp;a=index"><li><img src="<?php echo env('APP_URL'); ?>/images/weixin/center_icon.png"><p>个人中心</p></li></a></ul>
-        <div class="cl"></div>
-    </div>
-</div>
+
+@include('weixin.common.headerNav')
 
 <style>
 .address_list .flow-have-adr{padding:15px;margin-bottom:10px;background-color:#fff;}

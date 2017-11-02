@@ -135,4 +135,16 @@ class UserAddressController extends CommonController
         
 		return ReturnData::create(ReturnData::SUCCESS,$res);
     }
+    
+    //获取用户默认地址
+    public function userDefaultAddress(Request $request)
+	{
+        $res = UserAddress::userDefaultAddress(Token::$uid);
+		if(!$res)
+		{
+			return ReturnData::create(ReturnData::SYSTEM_FAIL);
+		}
+        
+		return ReturnData::create(ReturnData::SUCCESS,$res);
+    }
 }

@@ -1,11 +1,12 @@
 <?php
 namespace App\Http\Model;
+use App\Common\ReturnData;
 
-class UserMoney extends BaseModel
+class UserRecharge extends BaseModel
 {
 	//用户余额明细
 	
-    protected $table = 'user_money';
+    protected $table = 'user_recharge';
 	public $timestamps = false;
 	
 	/**
@@ -15,6 +16,8 @@ class UserMoney extends BaseModel
      */
     protected $guarded = array();
 	
+    const COMPLETE_PAY = 1;
+    
     //获取列表
 	public static function getList(array $param)
     {
@@ -24,9 +27,9 @@ class UserMoney extends BaseModel
         $limit  = isset($limit) ? $limit : 10;
         $offset = isset($offset) ? $offset : 0;
         
-        $model = new UserMoney;
+        $model = new UserRecharge;
         
-        if(isset($type)){$where['type'] = $type;}
+        if(isset($status) && $status!=-1){$where['status'] = $status;} //-1表示获取所有
         
         $model = $model->where($where);
         
@@ -45,9 +48,9 @@ class UserMoney extends BaseModel
         return $res;
     }
     
-    public static function getOne($id)
+    public static function getOne($where)
     {
-        return self::where('id', $id)->first();
+        return self::where($where)->first();
     }
     
     public static function add(array $data)
@@ -62,12 +65,12 @@ class UserMoney extends BaseModel
     
     public static function modify($where, array $data)
     {
-        if (self::where($where)->update($data))
+        if (self::where($where)->update($data) === false)
         {
-            return true;
+            return false;
         }
         
-        return false;
+        return true;
     }
     
     //删除一条记录

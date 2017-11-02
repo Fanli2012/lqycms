@@ -1,5 +1,5 @@
 <!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html;charset=utf-8"/>
-<title>购物车 - 商城</title><meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport">
+<title>购物车</title><meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport">
 <link href="<?php echo env('APP_URL'); ?>/css/weixin/style.css" type="text/css" rel="stylesheet">
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/jquery.min.js"></script>
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/weixin/mobile.js"></script>
@@ -10,17 +10,7 @@
     <div class="ds-in-bl nav_menu"><a href="javascript:void(0);"><img src="<?php echo env('APP_URL'); ?>/images/weixin/class1.png" alt="菜单"></a></div>
 </div>
 
-
-<div class="flool tpnavf cl">
-    <div class="nav_list">
-        <ul>
-        <a href="<?php echo route('weixin'); ?>"><li><img src="<?php echo env('APP_URL'); ?>/images/weixin/home_icon.png"><p>首页</p></li></a>
-        <a href="/Weixin/index.php?m=Store&amp;a=index"><li><img src="<?php echo env('APP_URL'); ?>/images/weixin/brand_icon.png"><p>分类</p></li></a>	
-        <a href="/Weixin/index.php?m=Cart&amp;a=index"><li><img src="<?php echo env('APP_URL'); ?>/images/weixin/car_icon.png"><p>购物车</p></li></a>	
-        <a href="/Weixin/index.php?m=User&amp;a=index"><li><img src="<?php echo env('APP_URL'); ?>/images/weixin/center_icon.png"><p>个人中心</p></li></a></ul>
-        <div class="cl"></div>
-    </div>
-</div>
+@include('weixin.common.headerNav')
 
 <div class="cart_list">
     <!--商品列表-s-->

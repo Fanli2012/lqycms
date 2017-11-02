@@ -11,7 +11,7 @@
 </div>
 
 <style>
-.account{text-align:center;margin-top:50px;}
+.account{text-align:center;margin-top:30px;}
 .account .icon{color:#FFCC00;font-size:100px;}
 .account .money{color:#353535;font-size:36px;}
 .account .tit{color:#000;font-size:18px;}
@@ -22,7 +22,7 @@
     <div class="tit">我的余额</div>
     <div class="money"><small>￥</small><?php echo $user_info['money']; ?></div>
     <br>
-    <a style="margin:10px;background-color:#1aad19;text-align:center;color:white;border:1px solid #179e16;" class="bottoma" href="http://www.lqycms.com/weixin/user_address_add">充值</a>
+    <a style="margin:10px;background-color:#1aad19;text-align:center;color:white;border:1px solid #179e16;" class="bottoma" href="<?php echo route('weixin_user_recharge'); ?>">充值</a>
     <a style="margin:0 10px 10px 10px;background-color:#f1f1f1;text-align:center;color:#000;border:1px solid #bfbfbf;" class="bottoma" href="javascript:tixian();">提现</a>
 </div>
 
