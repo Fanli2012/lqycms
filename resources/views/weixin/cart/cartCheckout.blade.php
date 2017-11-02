@@ -55,13 +55,48 @@
 
 <div class="floor">
 <ul class="fui-list mt10">
-    <a href="javascript:update_username();"><li>
+    <a href="javascript:update_pay_mode_layer();"><li>
         <div class="ui-list-info">
             <h4 class="ui-nowrap">支付方式</h4>
             <div class="ui-txt-info">支付宝 &nbsp;</div>
         </div>
         <i class="fa fa-angle-right" aria-hidden="true"></i>
     </li></a>
+<script>
+function update_pay_mode_layer()
+{
+    //询问框
+    layer.open({
+        content: '<div style="padding:15px;"><a style="margin-bottom:10px;background-color:#1aad19;text-align:center;color:white;border:1px solid #179e16;" class="bottoma" onclick="layer.closeAll();" href="javascript:update_pay_mode(1);">男</a><a style="margin-bottom:10px;background-color:#ea5a3d;text-align:center;color:white;border:1px solid #dd2727;" class="bottoma" onclick="layer.closeAll();" href="javascript:update_pay_mode(2);">女</a></div>'
+    });
+}
+
+function update_pay_mode(sex)
+{
+    $.post('<?php echo env('APP_API_URL').'/user_info_update'; ?>',{sex:sex,access_token:'<?php echo $_SESSION['weixin_user_info']['access_token']; ?>'},function(res)
+    {
+        if(res.code==0)
+        {
+            //提示
+            layer.open({
+                content: '修改成功'
+                ,skin: 'msg'
+                ,time: 2 //2秒后自动关闭
+            });
+        }
+        else
+        {
+            layer.open({
+                content: res.msg
+                ,skin: 'msg'
+                ,time: 2 //2秒后自动关闭
+            });
+        }
+    },'json');
+    
+    window.location.reload();
+}
+</script>
     <a href="javascript:update_username();"><li>
         <div class="ui-list-info">
             <h4 class="ui-nowrap">优惠券</h4>
@@ -74,7 +109,7 @@
 <div class="floor" style="background-color:#fff;margin-top:10px;padding:10px;">
 <div class="buy_note">
     <div class="buy_note_tit"><span>备注</span></div>
-    <textarea name="message"></textarea>
+    <textarea name="message" rows="3"></textarea>
 </div>
 <div class="order_check_info">
     <p>共1件商品</p>
@@ -87,7 +122,7 @@
 <style>
 .buy_note{margin:5px 0 15px 0;}
 .buy_note_tit{font-size:16px;margin-bottom:15px;}
-.buy_note textarea{display:block;font-size: 14px;min-height:100px;border:1px solid #e1e1e1;width: 100%;padding:10px;box-sizing: border-box;}
+.buy_note textarea{display:block;font-size: 14px;border:1px solid #e1e1e1;width: 100%;padding:10px;box-sizing: border-box;}
 .order_check_info p{text-align:right;line-height:22px;color: #666;font-size:14px;}
 .order_check_info p .red{color:#ff5500;font-size:18px;}
 </style>

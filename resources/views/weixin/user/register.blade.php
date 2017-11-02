@@ -56,7 +56,7 @@
 </div>
 <div class="box reg">
 <a style="float:left;" href="<?php echo route('weixin_login'); ?>">已有账号</a> <span style="float:right;"><a href="<?php echo route('weixin_login'); ?>">注册协议</a></span>
-</div>
+</div><br><br>
 
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/md5.min.js"></script>
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/layer/mobile/layer.js"></script>

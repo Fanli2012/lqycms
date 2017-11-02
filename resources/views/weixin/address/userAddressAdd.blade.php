@@ -24,7 +24,7 @@
 .adr-form-group{margin-top:10px;}
 .adr-form-group input[type=text],.adr-form-group textarea{display: block;width: 100%;font-size:16px;padding:10px;color: #777;vertical-align: middle;background-color: #fff;background-image: none;border: 1px solid #ddd;border-radius: 0;box-sizing:border-box;}
 .adr-form-group select{padding:5px;margin-right:10px;}
-.bottoma{display:block;font-size:18px;padding:10px;color:white;background-color: #f23030;text-align:center;}
+.bottoma{display:block;font-size:18px;padding:10px;color:white;background-color:#f23030;text-align:center;}
 </style>
 <div class="adr_add">
 <div class="adr-form-group">
