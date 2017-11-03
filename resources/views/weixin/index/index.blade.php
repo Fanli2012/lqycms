@@ -146,59 +146,6 @@ var swiper = new Swiper('.swiper-nav', {
         </ul>
     </div>
 </div>
-<script>
-$(function(){
-    var ajaxload=false;
-    var maxpage=false;
-    var startpage=1;
-    var totalpage="{$totalpage}";
-    var tmp_url = window.location.href;
-    msg = tmp_url.split("#");
-    tmp_url = msg[0];
-    $(window).scroll(function ()
-	{
-        var listheight = $("#goods_list").outerHeight(); 
-        
-        if ($(document).scrollTop() + $(window).height() >= listheight) {
-            if(startpage>=totalpage){
-                //$("#submit_bt_one").html("已是最后一页，没有更多数据！");
-                return false;
-            }
-            if(!ajaxload&&!maxpage){
-                ajaxload=true;
-                //$("#submit_bt_one").html("努力加载中...");
-                var url = tmp_url;
-                var nextpage = startpage+1;
-				var role_id = "{$role_id}";
-                $.post(url,{page_ajax:1,page:nextpage,role_id:role_id},function(data){
-				//alert(data.html);
-                    if(data.html){
-                        $("#goods_list").append(data.html);
-                        startpage++;
-                        if(startpage>=totalpage){
-                            maxpage=true;
-                            //$("#submit_bt_one").html("已是最后一页，没有更多数据！");
-                        }else{
-                            //$("#submit_bt_one").html("点击加载更多");
-                        }
-                        ajaxload=false;
-                    }else{
-                        //$("#submit_bt_one").html("请求失败，请稍候再试！");
-                        ajaxload=false;
-                    }
-                },'json');
-            }
-        }
-    });
-});
-
-function messageNotice(message)
-{
-	$("#message").html(message);
-	$(".messageShow").show();
-	setInterval(function(){$(".messageShow").hide();},3000);
-}
-</script>
 <!--猜您喜欢-end-->
 
 <!--猜您喜欢-start-->

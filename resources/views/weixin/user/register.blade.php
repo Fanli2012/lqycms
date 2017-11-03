@@ -13,7 +13,7 @@
 @include('weixin.common.headerNav')
 
 <style>
-.account{text-align:center;margin-top:50px;}
+.account{text-align:center;margin-top:30px;}
 .account .icon{color:#FFCC00;font-size:100px;}
 .bottoma{display:block;font-size:18px;padding:10px;border-radius:2px;}
 
