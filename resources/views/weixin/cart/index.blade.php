@@ -12,9 +12,10 @@
 
 @include('weixin.common.headerNav')
 
+<?php if($list){ ?>
 <div class="cart_list">
     <!--商品列表-s-->
-    <?php if($list){foreach($list as $k=>$v){ ?>
+    <?php foreach($list as $k=>$v){ ?>
     <div class="sc_list" id="cart_list_<?php echo $v['id']; ?>">
         <div class="radio-img">
             <div class="radio fl ">
@@ -54,7 +55,6 @@
             </div>
         </div>
     </div>
-    <?php }} ?>
     <!--商品列表-e-->
     
     <!--提交栏-s-->
@@ -75,9 +75,9 @@
         </div>
     </div>
     <!--提交栏-e-->
+    <?php } ?>
 </div>
-
-<?php if(!$list){ ?>
+<?php }else{ ?>
 <!--购物车没有商品-start-->
 <div class="cart_list">
     <div class="nonenothing">
@@ -103,8 +103,9 @@
 </div>
 </div>
 <!--购物车没有商品-end-->
+@include('weixin.common.footer')
 <?php } ?>
-<br><br>
+
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/layer/mobile/layer.js"></script>
 <script>
 function cart_submit()

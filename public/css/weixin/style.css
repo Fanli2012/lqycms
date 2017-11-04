@@ -75,7 +75,7 @@ background:none;
 
 .goods_list_s li{color:#333;border-bottom:1px solid #eee;overflow:hidden;margin-left:10px;margin-right:10px;padding:15px 5px 15px 5px;}
 .goods_list_s li span{color:#333;display:block;font-size:1rem;}.goods_list_s a:last-child li{border-bottom:0}
-.goods_thumb{width:100px;height:100px;float:left;margin-right:10px;display:block;}.goods_thumb img{width:100px;height:100px;border:none;}
+.goods_list_s .goods_thumb{width:100px;height:100px;float:left;margin-right:10px;display:block;}.goods_list_s .goods_thumb img{width:100px;height:100px;border:none;}
 .goods_list_s .goods_tit{line-height:24px;overflow:hidden;}
 .goods_list_s .goods_price{color:#f23030;}.goods_list_s .goods_price b{font-size:1rem;font-weight:normal;}
 .goods_list_s .goods_des{color:#999999;font-size:0.875rem;}
@@ -290,7 +290,7 @@ margin:5px 0
 
 .banner_headline{height:30px;overflow:hidden;background-color:#f1f1f1;padding-bottom:20px;}
 .banner_headline .tit{border-top:1px dashed #dedede;text-align:center;margin:25px 0;}
-.banner_headline .tit h4{color:#666666;background-color:#f1f1f1;font-size:18px;font-weight:normal;position:relative;top:-12px;display:inline;padding:0 20px;}
+.banner_headline .tit h4{color:#666666;background-color:#f1f1f1;font-size:18px;font-weight:normal;position:relative;top:-14px;display:inline;padding:0 20px;}
 
 .radio .check_t i {background-position: -30px 0}
 
@@ -572,9 +572,6 @@ margin:5px 0
     display: inline-block;
     position: relative;
     top: .10667rem
-}
-.ma-to-20 {
-    margin-top:10px;
 }
 .myorder {
     padding:0 20px;
