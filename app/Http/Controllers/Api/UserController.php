@@ -127,12 +127,35 @@ class UserController extends CommonController
 		return ReturnData::create(ReturnData::SUCCESS);
     }
     
+	//登录
+    public function wxLogin(Request $request)
+    {
+        $data['user_name'] = $request->input('user_name','');
+        $data['password'] = $request->input('password','');
+        $data['openid'] = $request->input('openid','');
+        
+        if (($data['user_name']=='' && $data['password']=='') || $data['openid']=='')
+		{
+            return ReturnData::create(ReturnData::PARAMS_ERROR);
+        }
+        
+        $res = User::wxLogin($data);
+        
+        if ($res === false)
+		{
+            return ReturnData::create(ReturnData::PARAMS_ERROR,null,'账号或密码错误');
+        }
+            
+        return ReturnData::create(ReturnData::SUCCESS,$res);
+    }
+    
     //注册
     public function wxRegister(Request $request)
 	{
         $data['mobile'] = $request->input('mobile','');
         $data['user_name'] = $request->input('user_name','');
         $data['password'] = $request->input('password','');
+        $data['parent_id'] = $request->input('parent_id','');
         $parent_mobile = $request->input('parent_mobile','');
         
         if (($data['mobile']=='' && $data['user_name']=='') || $data['password']=='')
@@ -179,25 +202,59 @@ class UserController extends CommonController
         return ReturnData::create(ReturnData::SUCCESS,$res);
     }
 	
-	//登录
-    public function wxLogin(Request $request)
-    {
-        $data['user_name'] = $request->input('user_name','');
-        $data['password'] = $request->input('password','');
+    //微信授权注册
+    public function wxOauthRegister(Request $request)
+	{
+        $data['openid'] = $data['user_name'] = $request->input('openid','');
+        $data['sex'] = $request->input('sex','');
+        $data['head_img'] = $request->input('head_img','');
+        $data['nickname'] = $request->input('nickname','');
+        $data['parent_id'] = $request->input('parent_id','');
+        $parent_mobile = $request->input('parent_mobile','');
+        $data['mobile'] = $request->input('mobile','');
         
-        if ($data['user_name']=='' || $data['password']=='')
+        if ($data['openid']=='')
 		{
             return ReturnData::create(ReturnData::PARAMS_ERROR);
         }
         
-        $res = User::wxLogin($data);
-        
-        if ($res === false)
+        if ($parent_mobile!='')
 		{
-            return ReturnData::create(ReturnData::PARAMS_ERROR,null,'账号或密码错误');
+            if($user = User::getOneUser(array('mobile'=>$parent_mobile)))
+            {
+                $data['parent_id'] = $user->id;
+            }
+            else
+            {
+                return ReturnData::create(ReturnData::PARAMS_ERROR,null,'推荐人手机号错误');
+            }
         }
-            
-        return ReturnData::create(ReturnData::SUCCESS,$res);
+        
+        if (isset($data['mobile']) && !Helper::isValidMobile($data['mobile']))
+		{
+            return ReturnData::create(ReturnData::MOBILE_FORMAT_FAIL);
+        }
+		
+		//判断是否已经注册
+		if (User::getOneUser(array('mobile'=>$data['mobile'])))
+		{
+            return ReturnData::create(ReturnData::MOBILE_EXIST);
+		}
+		
+		if (User::getOneUser(array('openid'=>$data['openid'])))
+		{
+            return ReturnData::create(ReturnData::SUCCESS,User::wxLogin(array('openid'=>$data['openid'])));
+		}
+        
+        //添加用户
+        $res = User::wxRegister($data);
+        
+        if($res === false)
+        {
+            return ReturnData::create(ReturnData::SYSTEM_FAIL);
+        }
+        
+        return ReturnData::create(ReturnData::SUCCESS,User::wxLogin(array('openid'=>$data['openid'])));
     }
     
     //验证码登录

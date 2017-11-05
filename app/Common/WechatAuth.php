@@ -2,44 +2,77 @@
 namespace App\Common;
 
 /**
-  * OAuth2.0微信授权登录实现
-  *
-  * @author FLi
-  * @文件名：GetWxUserInfo.php
-  */
+ * OAuth2.0微信授权登录实现
+ * 
+ */
 class WechatAuth
 {
 	//高级功能->开发者模式->获取
-    private $app_id = 'xxx';
-    private $app_secret = 'xxxxxxx';
+    private $app_id;
+    private $app_secret;
 	
-	//$registration_id = getenv('registration_id');
-	
-    public static function send($msg, $param='')
+	public function __construct($app_id, $app_secret)
     {
-        $client = new JPushMsg(self::APP_KEY, self::APP_SECRET, null);
-		
-		$push_payload = $client->push();
-		$push_payload = $push_payload->setPlatform('all');
-		if(isset($param['mobile'])){$push_payload = $push_payload->addAlias(md5($param['mobile']));}
-		$push_payload = $push_payload->addAllAudience();
-		$push_payload = $push_payload->setNotificationAlert($msg);
-		
-		try
-		{
-			$push_payload->send();
-		}
-		catch (JPushMsg\Exceptions\APIConnectionException $e)
-		{
-			Log::info($e);
-			return false;
-		}
-		catch (JPushMsg\Exceptions\APIRequestException $e)
-		{
-			Log::info($e);
-			return false;
-		}
-		
-		return true;
+        $this->app_id = $app_id;
+        $this->app_secret = $app_secret;
+    }
+    
+    /**
+     * 获取微信授权链接
+     * 
+     * @param string $redirect_uri 回调地址，授权后重定向的回调链接地址，请使用urlEncode对链接进行处理
+     * @param mixed $state 可以为空，重定向后会带上state参数，开发者可以填写a-zA-Z0-9的参数值，最多128字节
+     */
+    public function get_authorize_url($redirect_uri = '', $state = '')
+    {
+        return "https://open.weixin.qq.com/connect/oauth2/authorize?appid=".$this->app_id."&redirect_uri=".urlencode($redirect_uri)."&response_type=code&scope=snsapi_userinfo&state=".$state."#wechat_redirect";
+    }
+    
+    /**
+     * 获取授权token
+     * 
+     * @param string $code 通过get_authorize_url获取到的code
+     */
+    public function get_access_token($code = '')
+    {
+        $token_url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid={$this->app_id}&secret={$this->app_secret}&code={$code}&grant_type=authorization_code";
+        $token_data = $this->http($token_url);
+        
+        return json_decode($token_data, true);
+    }
+    
+    /**
+     * 获取授权后的微信用户信息
+     * 
+     * @param string $access_token
+     * @param string $open_id
+     */
+    public function get_user_info($access_token = '', $open_id = '')
+    {
+        $info_url = "https://api.weixin.qq.com/sns/userinfo?access_token={$access_token}&openid={$open_id}&lang=zh_CN";
+        $info_data = $this->http($info_url);
+            
+        return json_decode($info_data, true);
+    }
+    
+    // cURL函数简单封装
+    function http($url, $data = null)
+    {
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+        
+        if (!empty($data))
+        {
+            curl_setopt($curl, CURLOPT_POST, 1);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+        }
+        
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $output = curl_exec($curl);
+        curl_close($curl);
+        
+        return $output;
     }
 }

@@ -180,13 +180,17 @@ class User extends BaseModel
         if(isset($mobile)){$data['mobile'] = $mobile;}
         if(isset($password)){$data['password'] = $password;} //md5加密
         if(isset($parent_id)){$data['parent_id'] = $parent_id;}
+        if(isset($openid)){$data['openid'] = $openid}
+        if(isset($sex)){$data['sex'] = $sex}
+        if(isset($head_img)){$data['head_img'] = $head_img}
+        if(isset($nickname)){$data['nickname'] = $nickname}
         
         if (isset($data) && $id = self::add($data))
         {
             //生成token
 			return Token::getToken(Token::TYPE_WEIXIN, $id);
         }
-
+        
         return false;
     }
     
@@ -195,7 +199,7 @@ class User extends BaseModel
     {
         extract($param); //参数
         
-        $user = self::where(array('mobile'=>$user_name,'password'=>$password))->orWhere(array('user_name'=>$user_name,'password'=>$password))->first();
+        $user = self::where(array('mobile'=>$user_name,'password'=>$password))->orWhere(array('user_name'=>$user_name,'password'=>$password))->orWhere(array('openid'=>$openid))->first();
         
         if(!$user){return false;}
         

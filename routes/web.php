@@ -52,7 +52,7 @@ Route::group(['namespace' => 'Home'], function () {
 });
 
 
-//微信路由
+//微信路由，无需登录
 Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin'], function () {
 	Route::get('/', 'IndexController@index')->name('weixin');
 	Route::get('/page404', 'IndexController@page404')->name('weixin_page404');         //404页面
@@ -64,6 +64,7 @@ Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin'], function () {
 	Route::get('/goods/{id}', 'GoodsController@goodsDetail')->name('weixin_goods_detail'); //商品详情页
 	Route::get('/goodslist', 'GoodsController@goodsList')->name('weixin_goods_list'); //产品分类页
     
+    Route::any('/wxoauth', 'UserController@oauth')->name('weixin_wxoauth'); //微信网页授权
     Route::any('/login', 'UserController@login')->name('weixin_login');
     Route::any('/register', 'UserController@register')->name('weixin_register');
     Route::get('/logout', 'UserController@logout')->name('weixin_user_logout'); //退出
@@ -130,6 +131,7 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     //用户
 	Route::post('/wx_register', 'UserController@wxRegister'); //注册
     Route::post('/wx_login', 'UserController@wxLogin'); //登录
+    Route::post('/wx_oauth_register', 'UserController@wxOauthRegister'); //微信授权注册登录
 });
 
 //API接口路由，需token验证
