@@ -321,9 +321,9 @@ class UserController extends CommonController
         );
         $url = env('APP_API_URL')."/wx_oauth_register";
         $res = curl_request($url,$postdata,'POST');
-        dd($postdata);
-        if($res['code'] != ReturnCode::SUCCESS_CODE){$this->error_jump('系统错误');}
         
+        if($res['code'] != ReturnCode::SUCCESS_CODE){$this->error_jump('系统错误');}
+        dd($res);
         $_SESSION['weixin_user_info'] = $res['data'];
         
         header('Location: '.route('weixin_user'));exit;

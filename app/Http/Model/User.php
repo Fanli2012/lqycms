@@ -179,11 +179,11 @@ class User extends BaseModel
         if(isset($user_name)){$data['user_name'] = $user_name;}
         if(isset($mobile)){$data['mobile'] = $mobile;}
         if(isset($password)){$data['password'] = $password;} //md5加密
-        if(isset($parent_id)){$data['parent_id'] = $parent_id;}
-        if(isset($openid)){$data['openid'] = $openid}
-        if(isset($sex)){$data['sex'] = $sex}
-        if(isset($head_img)){$data['head_img'] = $head_img}
-        if(isset($nickname)){$data['nickname'] = $nickname}
+        if(isset($parent_id) && !empty($parent_id)){$data['parent_id'] = $parent_id;}
+        if(isset($openid)){$data['openid'] = $openid;}
+        if(isset($sex)){$data['sex'] = $sex;}
+        if(isset($head_img)){$data['head_img'] = $head_img;}
+        if(isset($nickname)){$data['nickname'] = $nickname;}
         
         if (isset($data) && $id = self::add($data))
         {
