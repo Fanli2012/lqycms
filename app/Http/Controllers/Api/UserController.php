@@ -134,7 +134,7 @@ class UserController extends CommonController
         $data['password'] = $request->input('password','');
         $data['openid'] = $request->input('openid','');
         
-        if (($data['user_name']=='' && $data['password']=='') || $data['openid']=='')
+        if (($data['user_name']=='' || $data['password']=='') && $data['openid']=='')
 		{
             return ReturnData::create(ReturnData::PARAMS_ERROR);
         }

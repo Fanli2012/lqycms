@@ -323,7 +323,7 @@ class UserController extends CommonController
         $res = curl_request($url,$postdata,'POST');
         
         if($res['code'] != ReturnCode::SUCCESS_CODE){$this->error_jump('系统错误');}
-        dd($res);
+        
         $_SESSION['weixin_user_info'] = $res['data'];
         
         header('Location: '.route('weixin_user'));exit;

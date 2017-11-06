@@ -199,9 +199,16 @@ class User extends BaseModel
     {
         extract($param); //参数
         
-        $user = self::where(array('mobile'=>$user_name,'password'=>$password))->orWhere(array('user_name'=>$user_name,'password'=>$password))->orWhere(array('openid'=>$openid))->first();
+        if(isset($openid))
+        {
+            $user = self::where(array('openid'=>$openid))->first();
+        }
+        else
+        {
+            $user = self::where(array('mobile'=>$user_name,'password'=>$password))->orWhere(array('user_name'=>$user_name,'password'=>$password))->first();
+        }
         
-        if(!$user){return false;}
+        if(!isset($user)){return false;}
         
         $res = self::getUserInfo($user->id);
         $token = Token::getToken(Token::TYPE_WEIXIN, $user->id);
