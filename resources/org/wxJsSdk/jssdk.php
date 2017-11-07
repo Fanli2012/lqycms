@@ -122,12 +122,14 @@ class JSSDK
 
     private function get_php_file($filename)
     {
-        return trim(substr(file_get_contents($filename), 15));
+        //return trim(substr(file_get_contents($filename), 15)); //原版
+        return trim(substr(file_get_contents(resource_path('org/wxJsSdk/'.$filename)), 15)); //Laravel版
     }
     
     private function set_php_file($filename, $content)
     {
-        $fp = fopen($filename, "w");
+        //$fp = fopen($filename, "w"); //原版
+        $fp = fopen(resource_path('org/wxJsSdk/'.$filename), "w"); //Laravel版
         fwrite($fp, "<?php exit();?>" . $content);
         fclose($fp);
     }

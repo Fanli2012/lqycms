@@ -18,7 +18,7 @@ class UserRechargeController extends CommonController
     public function userRechargeList(Request $request)
 	{
         //参数
-        $data['limit'] = $request->input('limit', 10);
+        $data['limit']  = $request->input('limit', 10);
         $data['offset'] = $request->input('offset', 0);
         $data['status'] = $request->input('status', -1);
         

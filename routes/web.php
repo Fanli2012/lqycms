@@ -142,7 +142,9 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     Route::post('/user_info_update', 'UserController@userInfoUpdate'); //修改用户信息
     Route::post('/user_password_update', 'UserController@userPasswordUpdate'); //修改用户密码、支付密码
     Route::get('/user_list', 'UserController@userList'); //用户列表
-    
+    //用户充值
+    Route::post('/user_recharge_add', 'UserMoneyController@userRechargeAdd'); //添加余额明细
+    //用户余额(钱包)
     Route::get('/user_money_list', 'UserMoneyController@userMoneyList'); //用户余额明细
     Route::post('/user_money_add', 'UserMoneyController@userMoneyAdd'); //添加余额明细
     //浏览记录

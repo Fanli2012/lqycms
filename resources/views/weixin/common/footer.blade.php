@@ -10,3 +10,5 @@
 </div>
 </div>
 <!--底部导航-end-->
+
+<?php if($isWechatBrowser){ ?>@include('weixin.common.wxshare')<?php } ?>

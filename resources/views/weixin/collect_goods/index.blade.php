@@ -15,7 +15,7 @@
         <li><a href="<?php echo $v['goods']['goods_detail_url']; ?>"><span class="goods_thumb"><img alt="<?php echo $v['goods']['title']; ?>" src="<?php echo env('APP_URL'); ?><?php echo $v['goods']['litpic']; ?>"></span></a>
         <div class="goods_info"><p class="goods_tit"><?php echo $v['goods']['title']; ?></p>
         <p class="goods_price">￥<b><?php echo $v['goods']['price']; ?></b></p>
-        <p class="goods_des fr"><span id="del_history" onclick="del('<?php echo $v['goods_id']; ?>')">删除</span></p>
+        <p class="goods_des fr"><span class="btn" id="del_history" onclick="del('<?php echo $v['goods_id']; ?>')">删除</span></p>
         </div></li>
         <?php }} ?>
     </ul>

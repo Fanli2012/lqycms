@@ -15,14 +15,15 @@
 
 <a href="/v2/index.php?m=default&amp;c=flow&amp;a=consignee_list&amp;u=53657">
 <div class="checkout-addr">
-  <p class="title"><?php echo $user_default_address['name']; ?> <span><?php echo $user_default_address['mobile']; ?></span></p>
+  <!-- <p class="des">请添加收货地址</p> -->
+  <p class="title"><span class="name"><?php echo $user_default_address['name']; ?></span> <span class="tel"><?php echo $user_default_address['mobile']; ?></span></p>
   <p class="des"><?php echo $user_default_address['province_name']; ?><?php echo $user_default_address['city_name']; ?><?php echo $user_default_address['district_name']; ?> <?php echo $user_default_address['address']; ?></p>
   <i></i>
 </div>
 </a>
 <style>
 .checkout-addr{position: relative;/* border-top: 1px solid #e3e3e3;border-bottom: 1px solid #e3e3e3; */background: #fff;margin-top:10px;padding:10px;}
-.checkout-addr p{margin-right:20px;}.checkout-addr .title{font-size:18px;margin-bottom:5px;}.checkout-addr .des{color:#666;}
+.checkout-addr p{margin-right:20px;}.checkout-addr .title{font-size:18px;color:#353535;}.checkout-addr .des{color:#9b9b9b;}
 .checkout-addr i{position: absolute;top: 50%;right:12px;margin-top:-6px;color:#bbb;display:inline-block;border-right:2px solid;border-bottom:2px solid;width:12px;height:12px;transform:rotate(-45deg);}
 </style>
 <ul class="goodslist">
@@ -102,7 +103,7 @@ function update_pay_mode(sex)
 <div class="floor" style="background-color:#fff;margin-top:10px;padding:10px;">
 <div class="buy_note">
     <div class="buy_note_tit"><span>备注</span></div>
-    <textarea name="message" rows="3"></textarea>
+    <textarea name="message" rows="3" placeholder="给卖家留言"></textarea>
 </div>
 <div class="order_check_info">
     <p>共1件商品</p>

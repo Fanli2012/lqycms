@@ -17,15 +17,19 @@
 .money_list span.green{color:#f23030;}
 </style>
 <div class="floor">
+<?php if($list){ ?>
     <ul class="money_list cl">
-        <?php if($list){foreach($list as $k=>$v){ ?>
+        <?php foreach($list as $k=>$v){ ?>
         <li>
         <span <?php if($v['type']==0){echo 'class="green"';} ?>><?php if($v['type']==0){echo '+';}else{echo '-';} ?> <?php echo $v['point']; ?></span>
         <div class="info"><p class="tit"><?php echo $v['des']; ?></p>
         <p class="time"><?php echo date('Y-m-d H:i:s',$v['add_time']); ?></p></div>
         </li>
-        <?php }} ?>
+        <?php } ?>
     </ul>
+<?php }else{ ?>
+    <div style="text-align:center;line-height:40px;color:#999;">暂无记录</div>
+<?php } ?>
 </div>
 <script>
 $(function(){

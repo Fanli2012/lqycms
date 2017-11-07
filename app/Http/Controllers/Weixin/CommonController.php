@@ -2,12 +2,18 @@
 namespace App\Http\Controllers\Weixin;
 
 use App\Http\Controllers\Controller;
+use App\Common\Helper;
 
 class CommonController extends Controller
 {
+    protected $isWechatBrowser;
+    
     public function __construct()
     {
         parent::__construct();
+        
+        $this->isWechatBrowser = Helper::isWechatBrowser();
+        view()->share('isWechatBrowser', $this->isWechatBrowser);
     }
     
     /**

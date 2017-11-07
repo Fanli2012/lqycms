@@ -21,6 +21,12 @@ class IndexController extends CommonController
 	//首页
     public function index()
 	{
+        //分享到首页，把推荐id存下来
+        if(isset($_GET['parent_id']) && !empty($_GET['parent_id']))
+        {
+			$_SESSION['weixin_user_parent_id'] = intval($_GET['parent_id']);
+		}
+        
         //banner轮播图
         $postdata = array(
             'limit'  => 5,

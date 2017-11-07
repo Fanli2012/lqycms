@@ -152,24 +152,14 @@ var swiper = new Swiper('.swiper-nav', {
 <div class="floor guesslike">
     <div class="banner_tit"><img src="images/weixin/ind_52.jpg" alt="猜您喜欢"/></div>
     <ul class="goods_list_s cl">
-        <a href="http://www.baidu.com"><li><span class="goods_thumb"><img alt="决定基金业绩的主要因素" src="images/weixin/goods_thumb_400_400.jpeg"></span>
-        <div class="goods_info"><p class="goods_tit">买基金要因素决定基金业绩的主要因素决定基金业绩的主要因素决定基金业绩的主要因素</p>
-        <p class="goods_price">￥<b>100.00</b></p>
-        <p class="goods_des">库存：10</p>
+    <?php if($goods_list){foreach($goods_list as $k=>$v){ ?>
+        <a href="<?php echo $v['goods_detail_url']; ?>"><li><span class="goods_thumb"><img alt="<?php echo $v['title']; ?>" src="<?php echo $v['litpic']; ?>"></span>
+        <div class="goods_info"><p class="goods_tit"><?php echo $v['title']; ?></p>
+        <p class="goods_price">￥<b><?php echo $v['price']; ?></b></p>
+        <p class="goods_des">库存：<?php echo $v['goods_number']; ?><a href="<?php echo $v['goods_detail_url']; ?>"><span class="buy fr">立即抢购</span></a></p>
         </div>
         </li></a>
-        <a href="http://www.baidu.com"><li><span class="goods_thumb"><img alt="决定基金业绩的主要因素" src="images/weixin/goods_thumb_400_400.jpeg"></span>
-        <div class="goods_info"><p class="goods_tit">买基金的好处</p>
-        <p class="goods_price">￥<b>100.00</b></p>
-        <p class="goods_des">库存：10</p>
-        </div>
-        </li></a>
-        <a href="http://www.baidu.com"><li><span class="goods_thumb"><img alt="决定基金业绩的主要因素" src="images/weixin/goods_thumb_400_400.jpeg"></span>
-        <div class="goods_info"><p class="goods_tit">买基金的好处</p>
-        <p class="goods_price">￥<b>100.00</b></p>
-        <p class="goods_des">库存：10</p>
-        </div>
-        </li></a>
+    <?php }} ?>
     </ul>
 </div>
 <!--猜您喜欢-end-->

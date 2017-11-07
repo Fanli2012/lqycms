@@ -3,7 +3,6 @@ namespace App\Common;
 
 /**
  * OAuth2.0微信授权登录实现
- * 
  */
 class WechatAuth
 {

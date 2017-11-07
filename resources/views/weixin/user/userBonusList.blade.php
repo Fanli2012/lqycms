@@ -24,7 +24,9 @@
 	<p class="f-h-adr-con">有效期至<?php echo $v['bonus']['end_time']; ?> <span class="fr">满<?php echo $v['bonus']['min_amount']; ?>可用</span></p>
     <!-- <div class="adr-edit-del">说明</div> -->
 </div>
-<?php }} ?>
+<?php }}else{ ?>
+    <div style="text-align:center;line-height:40px;color:#999;">暂无记录</div>
+<?php } ?>
 </div>
 <script>
 $(function(){

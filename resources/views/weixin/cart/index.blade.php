@@ -56,7 +56,7 @@
         </div>
     </div>
     <!--商品列表-e-->
-    
+    <?php } ?>
     <!--提交栏-s-->
     <div class="foohi foohiext">
         <div class="payit ma-to-20 payallb">
@@ -75,7 +75,6 @@
         </div>
     </div>
     <!--提交栏-e-->
-    <?php } ?>
 </div>
 <?php }else{ ?>
 <!--购物车没有商品-start-->
@@ -251,7 +250,7 @@ function changeCartTotalPrice()
         total_price = total_price + $('#goods_number'+goods_id).val() * $('#goods_price'+goods_id).text();
     });
     
-    $('#total_fee').text(total_price);
+    $('#total_fee').text(total_price.toFixed(2));
 }
 </script>
 </body></html>
