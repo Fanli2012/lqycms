@@ -84,6 +84,7 @@ Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin', 'middleware' => ['w
     Route::get('/user_money_list', 'UserController@userMoneyList')->name('weixin_user_money_list');
     Route::get('/user_point_list', 'UserController@userPointList')->name('weixin_user_point_list');
     Route::get('/user_recharge', 'UserController@userRecharge')->name('weixin_user_recharge');
+    Route::get('/user_recharge_two/{id}', 'UserController@userRechargeTwo')->name('weixin_user_recharge_two');
     //优惠券、红包
     Route::get('/user_bonus_list', 'UserController@userBonusList')->name('weixin_user_bonus_list');
     //浏览记录
@@ -143,10 +144,11 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     Route::post('/user_password_update', 'UserController@userPasswordUpdate'); //修改用户密码、支付密码
     Route::get('/user_list', 'UserController@userList'); //用户列表
     //用户充值
-    Route::post('/user_recharge_add', 'UserMoneyController@userRechargeAdd'); //添加余额明细
+    Route::post('/user_recharge_add', 'UserRechargeController@userRechargeAdd');
+    Route::get('/user_recharge_detail', 'UserRechargeController@userRechargeDetail');
     //用户余额(钱包)
-    Route::get('/user_money_list', 'UserMoneyController@userMoneyList'); //用户余额明细
-    Route::post('/user_money_add', 'UserMoneyController@userMoneyAdd'); //添加余额明细
+    Route::get('/user_money_list', 'UserMoneyController@userMoneyList');
+    Route::post('/user_money_add', 'UserMoneyController@userMoneyAdd');
     //浏览记录
     Route::get('/user_goods_history_list', 'UserGoodsHistoryController@userGoodsHistoryList'); //我的足迹列表
     Route::post('/user_goods_history_delete', 'UserGoodsHistoryController@userGoodsHistoryDelete'); //我的足迹删除一条

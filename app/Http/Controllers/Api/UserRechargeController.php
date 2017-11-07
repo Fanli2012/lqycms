@@ -33,16 +33,36 @@ class UserRechargeController extends CommonController
 		return ReturnData::create(ReturnData::SUCCESS,$res);
     }
     
+    //获取一条用户充值
+    public function userRechargeDetail(Request $request)
+	{
+        //参数
+        $data['id']  = $request->input('id', '');
+        if($data['id']=='')
+		{
+            return ReturnData::create(ReturnData::PARAMS_ERROR);
+        }
+        $data['user_id'] = Token::$uid;
+        
+        $res = UserRecharge::getOne($data);
+		if($res === false)
+		{
+			return ReturnData::create(ReturnData::SYSTEM_FAIL);
+		}
+        
+		return ReturnData::create(ReturnData::SUCCESS,$res);
+    }
+    
     //添加充值记录
     public function userRechargeAdd(Request $request)
 	{
         //参数
         $data['money'] = $request->input('money','');
-        if($request->input('status', '') != ''){$data['status'] = $request->input('status');}
-        if($request->input('pay_type', '') != ''){$data['pay_type'] = $request->input('pay_type');}
+        $data['status'] = UserRecharge::UN_PAY; //0未处理，1已完成
+        $data['pay_type'] = $request->input('pay_type',''); //充值类型：1微信，2支付宝
         $data['user_id'] = Token::$uid;
         
-        if($data['money']=='')
+        if($data['money']=='' || $data['pay_type']=='')
 		{
             return ReturnData::create(ReturnData::PARAMS_ERROR);
         }

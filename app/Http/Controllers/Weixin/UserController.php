@@ -62,6 +62,20 @@ class UserController extends CommonController
         return view('weixin.user.userRecharge');
     }
     
+    //用户充值第二步，支付
+    public function userRechargeTwo($id)
+	{
+        $postdata = array(
+            'id' => $id,
+            'access_token' => $_SESSION['weixin_user_info']['access_token']
+		);
+        $url = env('APP_API_URL')."/user_recharge_detail";
+		$res = curl_request($url,$postdata,'GET');
+        $data['post'] = $res['data'];
+        
+        return view('weixin.user.userRechargeTwo', $data);
+    }
+    
     //余额明细
     public function userMoneyList(Request $request)
 	{

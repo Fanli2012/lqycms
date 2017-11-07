@@ -16,6 +16,7 @@ class UserRecharge extends BaseModel
      */
     protected $guarded = array();
 	
+    const UN_PAY = 0;
     const COMPLETE_PAY = 1;
     
     //获取列表
