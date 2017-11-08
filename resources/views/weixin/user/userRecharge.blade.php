@@ -77,7 +77,7 @@ function chongzhi()
                 
                 if(res.code==0)
                 {
-                    location.href = '<?php echo substr(route('weixin_user_recharge_two',array('id'=>1)), 0, -1); ?>' + res.data;
+                    location.href = '<?php echo substr(route('weixin_user_recharge_order_detail',array('id'=>1)), 0, -1); ?>' + res.data;
                 }
                 else
                 {

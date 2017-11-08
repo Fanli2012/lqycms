@@ -64,6 +64,7 @@ Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin'], function () {
 	Route::get('/goods/{id}', 'GoodsController@goodsDetail')->name('weixin_goods_detail'); //商品详情页
 	Route::get('/goodslist', 'GoodsController@goodsList')->name('weixin_goods_list'); //产品分类页
     
+    Route::any('/wxpay_notify', 'WxPayController@wxpayNotify')->name('weixin_wxpay_notify'); //微信回调
     Route::any('/wxoauth', 'UserController@oauth')->name('weixin_wxoauth'); //微信网页授权
     Route::any('/login', 'UserController@login')->name('weixin_login');
     Route::any('/register', 'UserController@register')->name('weixin_register');
@@ -83,8 +84,10 @@ Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin', 'middleware' => ['w
     Route::get('/user_account', 'UserController@userAccount')->name('weixin_user_account');
     Route::get('/user_money_list', 'UserController@userMoneyList')->name('weixin_user_money_list');
     Route::get('/user_point_list', 'UserController@userPointList')->name('weixin_user_point_list');
+    //用户充值
     Route::get('/user_recharge', 'UserController@userRecharge')->name('weixin_user_recharge');
-    Route::get('/user_recharge_two/{id}', 'UserController@userRechargeTwo')->name('weixin_user_recharge_two');
+    Route::get('/user_recharge_order', 'UserController@userRechargeOrder')->name('weixin_user_recharge_order');
+    Route::get('/user_recharge_order_detail/{id}', 'UserController@userRechargeOrderDetail')->name('weixin_user_recharge_order_detail');
     //优惠券、红包
     Route::get('/user_bonus_list', 'UserController@userBonusList')->name('weixin_user_bonus_list');
     //浏览记录

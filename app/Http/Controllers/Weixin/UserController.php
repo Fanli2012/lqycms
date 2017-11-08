@@ -63,8 +63,9 @@ class UserController extends CommonController
     }
     
     //用户充值第二步，支付
-    public function userRechargeTwo($id)
+    public function userRechargeOrderDetail($id)
 	{
+        //获取充值记录详情
         $postdata = array(
             'id' => $id,
             'access_token' => $_SESSION['weixin_user_info']['access_token']
@@ -73,7 +74,44 @@ class UserController extends CommonController
 		$res = curl_request($url,$postdata,'GET');
         $data['post'] = $res['data'];
         
-        return view('weixin.user.userRechargeTwo', $data);
+        //微信支付-start
+        require_once(resource_path('org/wxpay/WxPayConfig.php')); // 导入微信配置类
+        require_once(resource_path('org/wxpay/WxPayPubHelper.class.php')); // 导入微信支付类
+        
+		$body = '商品购买';//订单详情
+		$out_trade_no = '2017787878';//订单号
+		$total_fee = floatval(0.01*100);//价格0.01
+		$notify_url = route('weixin_wxpay_notify');//通知地址
+		$wxconfig= \WxPayConfig::wxconfig();
+        
+		//=========步骤1：网页授权获取用户openid============
+		$jsApi = new \JsApi_pub($wxconfig);
+		$openid = $jsApi->getOpenid();
+		//=========步骤2：使用统一支付接口，获取prepay_id============
+		//使用统一支付接口
+        $unifiedOrder = new \UnifiedOrder_pub($wxconfig);
+		//设置统一支付接口参数
+		//设置必填参数
+		//appid已填,商户无需重复填写
+		//mch_id已填,商户无需重复填写
+		//noncestr已填,商户无需重复填写
+		//spbill_create_ip已填,商户无需重复填写
+		//sign已填,商户无需重复填写
+		$unifiedOrder->setParameter("openid","$openid");//微信用户
+		$unifiedOrder->setParameter("body","$body");//商品描述
+		$unifiedOrder->setParameter("out_trade_no","$out_trade_no");//商户订单号
+		$unifiedOrder->setParameter("total_fee","$total_fee");//总金额
+		$unifiedOrder->setParameter("notify_url","$notify_url");//通知地址
+		$unifiedOrder->setParameter("trade_type","JSAPI");//交易类型
+		//$unifiedOrder->setParameter("attach","test"); //附加数据，选填，在查询API和支付通知中原样返回，可作为自定义参数使用
+        $prepay_id = $unifiedOrder->getPrepayId();
+		//=========步骤3：使用jsapi调起支付============
+		$jsApi->setPrepayId($prepay_id);
+		$jsApiParameters = $jsApi->getParameters();
+        
+		$data['jsApiParameters'] = $jsApiParameters;
+        $data['returnUrl'] = route('weixin_user'); //支付完成要跳转的url
+        return view('weixin.user.userRechargeOrderDetail', $data);
     }
     
     //余额明细

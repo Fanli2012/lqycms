@@ -199,7 +199,7 @@ class User extends BaseModel
     {
         extract($param); //参数
         
-        if(isset($openid))
+        if(isset($openid) && !empty($openid))
         {
             $user = self::where(array('openid'=>$openid))->first();
         }

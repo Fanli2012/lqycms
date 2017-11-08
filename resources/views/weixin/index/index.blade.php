@@ -85,35 +85,35 @@ var swiper = new Swiper('.swiper-nav', {
 <div class="floor home_menu">
     <nav>
         <a href="/index.php/mobile/Goods/categoryList.html">
-                <img src="images/weixin/icon_03.png" alt="全部分类" />
+                <img src="<?php echo env('APP_URL'); ?>/images/weixin/icon_03.png" alt="全部分类" />
                 <span>全部分类</span>
         </a>
         <a href="http://www.shop.com/index.php/mobile/Goods/integralMall.html">
-                <img src="images/weixin/icon_05.png" alt="积分商城" />
+                <img src="<?php echo env('APP_URL'); ?>/images/weixin/icon_05.png" alt="积分商城" />
                 <span>积分商城</span>
         </a>
         <a href="http://www.shop.com/index.php/mobile/Goods/brandstreet.html">
-                <img src="images/weixin/icon_07.png" alt="品牌街" />
+                <img src="<?php echo env('APP_URL'); ?>/images/weixin/icon_07.png" alt="品牌街" />
                 <span>品牌街</span>
         </a>
         <a href="http://www.shop.com/index.php/mobile/Activity/promote_goods.html">
-                <img src="images/weixin/icon_09.png" alt="优惠活动" />
+                <img src="<?php echo env('APP_URL'); ?>/images/weixin/icon_09.png" alt="优惠活动" />
                 <span>优惠活动</span>
         </a>
         <a href="http://www.shop.com/index.php/mobile/Activity/group_list.html">
-                <img src="images/weixin/icon_15.png" alt="团购" />
+                <img src="<?php echo env('APP_URL'); ?>/images/weixin/icon_15.png" alt="团购" />
                 <span>团购</span>
         </a>
         <a href="http://www.shop.com/index.php/mobile/User/order_list.html">
-                <img src="images/weixin/icon_16.png" alt="我的订单" />
+                <img src="<?php echo env('APP_URL'); ?>/images/weixin/icon_16.png" alt="我的订单" />
                 <span>我的订单</span>
         </a>
         <a href="<?php echo route('weixin_cart'); ?>">
-                <img src="images/weixin/icon_17.png" alt="购物车" />
+                <img src="<?php echo env('APP_URL'); ?>/images/weixin/icon_17.png" alt="购物车" />
                 <span>购物车</span>
         </a>
         <a href="<?php echo route('weixin_user'); ?>">
-                <img src="images/weixin/icon_19.png" alt="个人中心" />
+                <img src="<?php echo env('APP_URL'); ?>/images/weixin/icon_19.png" alt="个人中心" />
                 <span>个人中心</span>
         </a>
     </nav>
@@ -123,7 +123,7 @@ var swiper = new Swiper('.swiper-nav', {
 <!--资讯头条-start-->
 <div class="bggrey">
 <div class="home_toutiao">
-    <div class="home_toutiao_tit"><img src="images/weixin/ad_tit.png"></div>
+    <div class="home_toutiao_tit"><img src="<?php echo env('APP_URL'); ?>/images/weixin/ad_tit.png"></div>
     <div class="home_toutiao_box">
         <ul>
           <marquee id="mar1" scrollamount="1" direction="up" height="30" style="height: 30px;">
@@ -137,7 +137,7 @@ var swiper = new Swiper('.swiper-nav', {
 
 <!--猜您喜欢-start-->
 <div class="floor guesslike">
-    <div class="banner_tit"><img src="images/weixin/ind_52.jpg" alt="猜您喜欢"/></div>
+    <div class="banner_tit"><img src="<?php echo env('APP_URL'); ?>/images/weixin/ind_52.jpg" alt="猜您喜欢"/></div>
     <div class="likeshop">
         <ul class="goods_list" id="goods_list">
         <?php if($goods_list){foreach($goods_list as $k=>$v){ ?>
@@ -150,7 +150,7 @@ var swiper = new Swiper('.swiper-nav', {
 
 <!--猜您喜欢-start-->
 <div class="floor guesslike">
-    <div class="banner_tit"><img src="images/weixin/ind_52.jpg" alt="猜您喜欢"/></div>
+    <div class="banner_tit"><img src="<?php echo env('APP_URL'); ?>/images/weixin/ind_52.jpg" alt="猜您喜欢"/></div>
     <ul class="goods_list_s cl">
     <?php if($goods_list){foreach($goods_list as $k=>$v){ ?>
         <a href="<?php echo $v['goods_detail_url']; ?>"><li><span class="goods_thumb"><img alt="<?php echo $v['title']; ?>" src="<?php echo $v['litpic']; ?>"></span>
