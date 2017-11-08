@@ -166,7 +166,7 @@ class Common_util_pub
         //初始化curl        
        	$ch = curl_init();
 		//设置超时
-		curl_setopt($ch, CURLOP_TIMEOUT, $second);
+		curl_setopt($ch, CURLOPT_TIMEOUT, $second);
         //这里设置代理，如果有的话
         //curl_setopt($ch,CURLOPT_PROXY, '8.8.8.8');
         //curl_setopt($ch,CURLOPT_PROXYPORT, 8080);
@@ -186,7 +186,6 @@ class Common_util_pub
 		//返回结果
 		if($data)
 		{
-			curl_close($ch);
 			return $data;
 		}
 		else 
@@ -194,7 +193,6 @@ class Common_util_pub
 			$error = curl_errno($ch);
 			echo "curl出错，错误码:$error"."<br>"; 
 			echo "<a href='http://curl.haxx.se/libcurl/c/libcurl-errors.html'>错误原因查询</a></br>";
-			curl_close($ch);
 			return false;
 		}
 	}
@@ -379,7 +377,6 @@ class UnifiedOrder_pub extends Wxpay_client_pub
         
 		return $prepay_id;
 	}
-	
 }
 
 /**
@@ -826,7 +823,7 @@ class JsApi_pub extends Common_util_pub
         //初始化curl
        	$ch = curl_init();
 		//设置超时
-		curl_setopt($ch, CURLOP_TIMEOUT, $this->curl_timeout);
+		curl_setopt($ch, CURLOPT_TIMEOUT, $this->curl_timeout);
 		curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,FALSE);
         curl_setopt($ch,CURLOPT_SSL_VERIFYHOST,FALSE);

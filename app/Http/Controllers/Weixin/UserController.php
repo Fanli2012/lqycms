@@ -78,9 +78,10 @@ class UserController extends CommonController
         require_once(resource_path('org/wxpay/WxPayConfig.php')); // 导入微信配置类
         require_once(resource_path('org/wxpay/WxPayPubHelper.class.php')); // 导入微信支付类
         
-		$body = '商品购买';//订单详情
-		$out_trade_no = '2017787878';//订单号
+		$body = '充值';//订单详情
+		$out_trade_no = '20177878738';//订单号
 		$total_fee = floatval(0.01*100);//价格0.01
+        $attach = 'pay_type=1';
 		$notify_url = route('weixin_wxpay_notify');//通知地址
 		$wxconfig= \WxPayConfig::wxconfig();
         
@@ -101,10 +102,10 @@ class UserController extends CommonController
 		$unifiedOrder->setParameter("body","$body");//商品描述
 		$unifiedOrder->setParameter("out_trade_no","$out_trade_no");//商户订单号
 		$unifiedOrder->setParameter("total_fee","$total_fee");//总金额
-		$unifiedOrder->setParameter("notify_url","$notify_url");//通知地址
+		//$unifiedOrder->setParameter("attach","$attach"); //附加数据，选填，在查询API和支付通知中原样返回，可作为自定义参数使用，示例：a=1&b=2
+        $unifiedOrder->setParameter("notify_url","$notify_url");//通知地址
 		$unifiedOrder->setParameter("trade_type","JSAPI");//交易类型
-		//$unifiedOrder->setParameter("attach","test"); //附加数据，选填，在查询API和支付通知中原样返回，可作为自定义参数使用
-        $prepay_id = $unifiedOrder->getPrepayId();
+		$prepay_id = $unifiedOrder->getPrepayId();
 		//=========步骤3：使用jsapi调起支付============
 		$jsApi->setPrepayId($prepay_id);
 		$jsApiParameters = $jsApi->getParameters();

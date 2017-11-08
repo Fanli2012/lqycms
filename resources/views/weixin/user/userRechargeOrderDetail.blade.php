@@ -3,19 +3,18 @@
 <link href="<?php echo env('APP_URL'); ?>/css/weixin/style.css" type="text/css" rel="stylesheet">
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/jquery.min.js"></script>
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/weixin/mobile.js"></script>
-<link href="<?php echo env('APP_URL'); ?>/css/font-awesome.min.css" type="text/css" rel="stylesheet">
 <script>
 //调用微信JS api 支付
 function jsApiCall()
 {
 	WeixinJSBridge.invoke(
 		'getBrandWCPayRequest',
-		{$jsApiParameters},
+		<?php echo $jsApiParameters; ?>,
 		function(res){
 			WeixinJSBridge.log(res.err_msg);
 			//alert(res.err_code+res.err_desc+res.err_msg);
             
-			if(res.err_msg=='get_brand_wcpay_request:ok')
+            if(res.err_msg=='get_brand_wcpay_request:ok')
             {
 				alert('支付成功！');
 			}
@@ -23,8 +22,8 @@ function jsApiCall()
             {
 				alert('支付失败！');
 			}
-
-			setTimeout("location.href = '{$returnUrl}'",2000);
+            
+			//setTimeout("location.href = '<?php echo $returnUrl; ?>'",2000);
 		}
 	);
 }
@@ -51,21 +50,16 @@ function callpay()
 </div>
 
 <style>
-.account{text-align:center;margin-top:30px;}
-.account .icon{color:#FFCC00;font-size:100px;}
-.account .tit{color:#000;font-size:18px;}
 .bottoma{display:block;font-size:18px;padding:10px;border-radius:2px;}
 </style>
-<div class="floor account">
-    <div class="icon"><i class="fa fa-google-wallet"></i></div>
+<div class="floor">
     <div style="margin:10px;text-align:left;">
-        <p style="color:#7abd65;">订单已于 <b style="color:#fea700;"><?php echo $post['created_at']; ?></b> 提交成功，请您尽快付款！</p>
+        <p>订单已于 <b style="color:#fea700;"><?php echo $post['created_at']; ?></b> 提交成功，请您尽快付款！</p>
         订单号：<?php echo $post['id']; ?><br>
         应付金额：<strong style="color:#D03737;">￥<?php echo $post['money']; ?></strong> 元<br><br>
 
         <p style="color:#999;font-size:.875em">请您在提交订单后30分钟内完成支付，否则订单会自动取消。</p>
     </div>
-    <a style="margin:0 10px 10px 10px;background-color:#1aad19;text-align:center;color:#fff;border:1px solid #179e16;" class="bottoma" href="javascript:chongzhi();">去支付</a>
+    <a style="margin:0 10px 10px 10px;background-color:#1aad19;text-align:center;color:#fff;border:1px solid #179e16;" class="bottoma" href="javascript:callpay();">去支付</a>
 </div>
-
 </body></html>
