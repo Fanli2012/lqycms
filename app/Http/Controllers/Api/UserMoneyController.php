@@ -14,6 +14,7 @@ class UserMoneyController extends CommonController
         parent::__construct();
     }
     
+    //余额明细列表
     public function userMoneyList(Request $request)
 	{
         //参数

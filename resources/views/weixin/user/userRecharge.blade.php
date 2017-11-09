@@ -7,6 +7,7 @@
 <div class="classreturn loginsignup">
     <div class="ds-in-bl return"><a href="javascript:history.back(-1);"><img src="<?php echo env('APP_URL'); ?>/images/weixin/return.png" alt="返回"></a></div>
     <div class="ds-in-bl tit center"><span>充值</span></div>
+    <div class="ds-in-bl nav_menu"><a href="<?php echo route('weixin_user_recharge_order'); ?>">充值明细</a></div>
 </div>
 
 <style>
@@ -77,7 +78,7 @@ function chongzhi()
                 
                 if(res.code==0)
                 {
-                    location.href = '<?php echo substr(route('weixin_user_recharge_order_detail',array('id'=>1)), 0, -1); ?>' + res.data;
+                    location.href = '<?php echo route('weixin_user_recharge_order_detail'); ?>?id=' + res.data;
                 }
                 else
                 {

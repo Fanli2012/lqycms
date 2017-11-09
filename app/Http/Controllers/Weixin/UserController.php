@@ -62,9 +62,53 @@ class UserController extends CommonController
         return view('weixin.user.userRecharge');
     }
     
-    //用户充值第二步，支付
-    public function userRechargeOrderDetail($id)
+    //充值明细
+    public function userRechargeOrder(Request $request)
 	{
+        $pagesize = 10;
+        $offset = 0;
+        if(isset($_REQUEST['page'])){$offset = ($_REQUEST['page']-1)*$pagesize;}
+        
+        $postdata = array(
+            'limit'  => $pagesize,
+            'offset' => $offset,
+            'status' => 1,
+            'access_token' => $_SESSION['weixin_user_info']['access_token']
+		);
+        $url = env('APP_API_URL')."/user_recharge_list";
+		$res = curl_request($url,$postdata,'GET');
+        $data['list'] = $res['data']['list'];
+        
+        $data['totalpage'] = ceil($res['data']['count']/$pagesize);
+        
+        if(isset($_REQUEST['page_ajax']) && $_REQUEST['page_ajax']==1)
+        {
+    		$html = '';
+            
+            if($res['data']['list'])
+            {
+                foreach($res['data']['list'] as $k => $v)
+                {
+                    $html .= '<li>';
+                    $html .= '<span class="green">+ '.$v['money'].'</span>';
+                    $html .= '<div class="info"><p class="tit">充值</p>';
+                    $html .= '<p class="time">'.$v['created_at'].'</p></div>';
+                    $html .= '</li>';
+                }
+            }
+            
+    		exit(json_encode($html));
+    	}
+        
+        return view('weixin.user.userRechargeOrder', $data);
+    }
+    
+    //用户充值第二步，支付
+    public function userRechargeOrderDetail(Request $request)
+	{
+        $id = $request->input('id','');
+        if($id == ''){$this->error_jump(ReturnData::PARAMS_ERROR);}
+        
         //获取充值记录详情
         $postdata = array(
             'id' => $id,
@@ -102,7 +146,7 @@ class UserController extends CommonController
 		$unifiedOrder->setParameter("body","$body");//商品描述
 		$unifiedOrder->setParameter("out_trade_no","$out_trade_no");//商户订单号
 		$unifiedOrder->setParameter("total_fee","$total_fee");//总金额
-		//$unifiedOrder->setParameter("attach","$attach"); //附加数据，选填，在查询API和支付通知中原样返回，可作为自定义参数使用，示例：a=1&b=2
+		$unifiedOrder->setParameter("attach","$attach"); //附加数据，选填，在查询API和支付通知中原样返回，可作为自定义参数使用，示例：a=1&b=2
         $unifiedOrder->setParameter("notify_url","$notify_url");//通知地址
 		$unifiedOrder->setParameter("trade_type","JSAPI");//交易类型
 		$prepay_id = $unifiedOrder->getPrepayId();
@@ -111,7 +155,7 @@ class UserController extends CommonController
 		$jsApiParameters = $jsApi->getParameters();
         
 		$data['jsApiParameters'] = $jsApiParameters;
-        $data['returnUrl'] = route('weixin_user'); //支付完成要跳转的url
+        $data['returnUrl'] = route('weixin_user_recharge_order'); //支付完成要跳转的url
         return view('weixin.user.userRechargeOrderDetail', $data);
     }
     

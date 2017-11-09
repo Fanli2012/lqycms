@@ -28,7 +28,7 @@ class UserRecharge extends BaseModel
         $limit  = isset($limit) ? $limit : 10;
         $offset = isset($offset) ? $offset : 0;
         
-        $model = new UserRecharge;
+        $model = new self();
         
         if(isset($status) && $status!=-1){$where['status'] = $status;} //-1表示获取所有
         
@@ -40,10 +40,6 @@ class UserRecharge extends BaseModel
 		if($res['count']>0)
         {
             $res['list']  = $model->skip($offset)->take($limit)->orderBy('id','desc')->get();
-        }
-        else
-        {
-            return false;
         }
         
         return $res;

@@ -23,7 +23,7 @@ function jsApiCall()
 				alert('支付失败！');
 			}
             
-			//setTimeout("location.href = '<?php echo $returnUrl; ?>'",2000);
+			setTimeout("location.href = '<?php echo $returnUrl; ?>'",2000);
 		}
 	);
 }

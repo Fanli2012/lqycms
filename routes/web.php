@@ -87,7 +87,6 @@ Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin', 'middleware' => ['w
     //用户充值
     Route::get('/user_recharge', 'UserController@userRecharge')->name('weixin_user_recharge');
     Route::get('/user_recharge_order', 'UserController@userRechargeOrder')->name('weixin_user_recharge_order');
-    Route::get('/user_recharge_order_detail/{id}', 'UserController@userRechargeOrderDetail')->name('weixin_user_recharge_order_detail');
     //优惠券、红包
     Route::get('/user_bonus_list', 'UserController@userBonusList')->name('weixin_user_bonus_list');
     //浏览记录
@@ -105,12 +104,12 @@ Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin', 'middleware' => ['w
     Route::get('/user_address', 'AddressController@index')->name('weixin_user_address_list');
     Route::get('/user_address_add', 'AddressController@userAddressAdd')->name('weixin_user_address_add');
     Route::get('/user_address_update', 'AddressController@userAddressUpdate')->name('weixin_user_address_update');
-    
 });
 
 
 //无需token验证，全局
 Route::group(['middleware' => ['web']], function () {
+    Route::get('/weixin_user_recharge_order_detail', 'Weixin\UserController@userRechargeOrderDetail')->name('weixin_user_recharge_order_detail'); //微信充值支付，为了配合公众号支付授权目录
     Route::post('/dataapi/listarc', 'Api\IndexController@listarc')->name('api_listarc');
     Route::post('/dataapi/customer_login', 'Api\WechatAuthController@customerLogin');
 	Route::post('/dataapi/', 'Api\UserController@signin'); //签到
@@ -149,6 +148,7 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     //用户充值
     Route::post('/user_recharge_add', 'UserRechargeController@userRechargeAdd');
     Route::get('/user_recharge_detail', 'UserRechargeController@userRechargeDetail');
+    Route::get('/user_recharge_list', 'UserRechargeController@userRechargeList');
     //用户余额(钱包)
     Route::get('/user_money_list', 'UserMoneyController@userMoneyList');
     Route::post('/user_money_add', 'UserMoneyController@userMoneyAdd');
