@@ -179,7 +179,20 @@ function cart_num_add()
 function dosubmit()
 {
     var url = '<?php echo env('APP_API_URL').'/cart_add'; ?>';
-    var access_token = '<?php echo $_SESSION['weixin_user_info']['access_token']; ?>';
+    var access_token = '<?php if(isset($_SESSION['weixin_user_info']['access_token'])){echo $_SESSION['weixin_user_info']['access_token'];} ?>';
+    if(access_token=='')
+    {
+        //提示
+        layer.open({
+            content: '请先登录'
+            ,skin: 'msg'
+            ,time: 2 //2秒后自动关闭
+        });
+        
+        setTimeout("location.href = '<?php echo route('weixin_login',array('return_url'=>route('weixin_goods_detail',array('id'=>$post['id'])))); ?>'",1000);
+        
+        return false;
+    }
     
     var cart_type = $("#cart_type").val();
     var goods_number = $("#num").val();
@@ -219,8 +232,22 @@ function dosubmit()
 function collect_goods()
 {
     var url = '<?php if(isset($post['is_collect']) && $post['is_collect']>=1){echo env('APP_API_URL').'/collect_goods_delete';}else{echo env('APP_API_URL').'/collect_goods_add';} ?>';
-    var access_token = '<?php echo $_SESSION['weixin_user_info']['access_token']; ?>';
+    var access_token = '<?php if(isset($_SESSION['weixin_user_info']['access_token'])){echo $_SESSION['weixin_user_info']['access_token'];} ?>';
     var goods_id = $("#id").val();
+    
+    if(access_token=='')
+    {
+        //提示
+        layer.open({
+            content: '请先登录'
+            ,skin: 'msg'
+            ,time: 2 //2秒后自动关闭
+        });
+        
+        setTimeout("location.href = '<?php echo route('weixin_login',array('return_url'=>route('weixin_goods_detail',array('id'=>$post['id'])))); ?>'",1000);
+        
+        return false;
+    }
     
     $.post(url,{access_token:access_token,goods_id:goods_id},function(res)
 	{

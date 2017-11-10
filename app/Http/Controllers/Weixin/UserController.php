@@ -435,6 +435,9 @@ class UserController extends CommonController
             header('Location: '.route('weixin_user'));exit;
         }
         
+        $return_url = '';
+        if(isset($_REQUEST['return_url']) && !empty($_REQUEST['return_url'])){$return_url = $_SESSION['weixin_history_back_url'] = $_REQUEST['return_url'];}
+        
         if($_SERVER['REQUEST_METHOD'] == 'POST')
         {
             if($_POST['user_name'] == '')
@@ -458,6 +461,7 @@ class UserController extends CommonController
             
             $_SESSION['weixin_user_info'] = $res['data'];
             
+            if($return_url != ''){header('Location: '.$return_url);exit;}
             header('Location: '.route('weixin_user'));exit;
         }
         
@@ -472,6 +476,10 @@ class UserController extends CommonController
             if(isset($_SERVER["HTTP_REFERER"])){header('Location: '.$_SERVER["HTTP_REFERER"]);exit;}
             header('Location: '.route('weixin_user'));exit;
         }
+        
+        $return_url = '';
+        if(isset($_REQUEST['return_url']) && !empty($_REQUEST['return_url'])){$_SESSION['weixin_history_back_url'] = $_REQUEST['return_url'];}
+        if(isset($_REQUEST['parent_id']) && !empty($_REQUEST['parent_id'])){$_SESSION['weixin_user_parent_id'] = $_REQUEST['parent_id'];} //推荐人id存在session，首页入口也存了一次
         
         return view('weixin.user.register');
 	}

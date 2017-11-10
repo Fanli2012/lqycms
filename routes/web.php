@@ -327,6 +327,14 @@ Route::group(['prefix' => 'fladmin', 'namespace' => 'Admin', 'middleware' => ['w
 	Route::get('/menu/edit', 'MenuController@edit')->name('admin_menu_edit');
 	Route::post('/menu/doedit', 'MenuController@doedit')->name('admin_menu_doedit');
 	Route::get('/menu/del', 'MenuController@del')->name('admin_menu_del');
+    //微信自定义菜单管理
+	Route::get('/weixinmenu', 'WeixinMenuController@index')->name('admin_weixinmenu');
+	Route::get('/weixinmenu/add', 'WeixinMenuController@add')->name('admin_weixinmenu_add');
+	Route::post('/weixinmenu/doadd', 'WeixinMenuController@doadd')->name('admin_weixinmenu_doadd');
+	Route::get('/weixinmenu/edit', 'WeixinMenuController@edit')->name('admin_weixinmenu_edit');
+	Route::post('/weixinmenu/doedit', 'WeixinMenuController@doedit')->name('admin_weixinmenu_doedit');
+	Route::get('/weixinmenu/del', 'WeixinMenuController@del')->name('admin_weixinmenu_del');
+    Route::get('/weixinmenu/createmenu', 'WeixinMenuController@createmenu')->name('admin_weixinmenu_createmenu'); //生成自定义菜单
 	//后台登录注销
 	Route::get('/login', 'LoginController@login')->name('admin_login');
 	Route::post('/dologin', 'LoginController@dologin')->name('admin_dologin');

@@ -44,7 +44,7 @@
 <div class="floor my g4">
     <div class="content">
         <!--订单管理模块-s-->
-        <div class="floor myorder ma-to-20 p">
+        <div class="floor myorder mt10">
             <div class="content30">
                 <div class="order">
                     <div class="fl">
@@ -95,7 +95,7 @@
         <!--订单管理模块-e-->
 
         <!--资金管理-s-->
-        <div class="floor myorder ma-to-20 p">
+        <div class="floor myorder mt10">
             <div class="content30">
                 <div class="order">
                     <div class="fl">
@@ -136,7 +136,7 @@
         </div>
         <!--资金管理-e-->
 
-        <div class="floor list7 ma-to-20">
+        <div class="floor list7 mt10">
                                 <div class="myorder p">
                     <div class="content30">
                         <a href="javascript:void(0);" onclick="alert('请购买商业正版哦!');">
