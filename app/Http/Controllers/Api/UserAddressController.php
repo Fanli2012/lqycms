@@ -40,7 +40,7 @@ class UserAddressController extends CommonController
         $id = $request->input('id',null);
         
         $res = UserAddress::getOne(Token::$uid,$id);
-		if(!$res)
+		if($res === false)
 		{
 			return ReturnData::create(ReturnData::SYSTEM_FAIL);
 		}

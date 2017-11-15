@@ -63,7 +63,7 @@ class UserAddress extends BaseModel
         
         if ($address_id)
         {
-            $arr = self::where('id',$address_id)->first();
+            $arr = self::where(array('id'=>$address_id,'user_id'=>$user_id))->first();
             return $arr;
         }
         

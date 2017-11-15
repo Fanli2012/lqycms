@@ -2,7 +2,8 @@
 namespace App\Common;
 
 /**
- * OAuth2.0微信授权登录实现
+ * OAuth2.0微信授权登录实现/微信PC扫码授权登录
+ * 微信/PC扫码登录，两种的方式是一样的，先跳转到微信网页获取code，通过code获取token，通过token获取用户信息
  */
 class WechatAuth
 {
@@ -25,6 +26,17 @@ class WechatAuth
     public function get_authorize_url($redirect_uri = '', $state = '')
     {
         return "https://open.weixin.qq.com/connect/oauth2/authorize?appid=".$this->app_id."&redirect_uri=".urlencode($redirect_uri)."&response_type=code&scope=snsapi_userinfo&state=".$state."#wechat_redirect";
+    }
+    
+    /**
+     * 微信PC扫码授权登录链接
+     * 
+     * @param string $redirect_uri 回调地址，授权后重定向的回调链接地址，请使用urlEncode对链接进行处理
+     * @param mixed $state 可以为空，重定向后会带上state参数，开发者可以填写a-zA-Z0-9的参数值，最多128字节
+     */
+    public function get_qrconnect_url($redirect_uri = '', $state = '')
+    {
+        return "https://open.weixin.qq.com/connect/qrconnect?appid".$this->app_id."&redirect_uri=".urlencode($redirect_uri)."&response_type=code&scope=snsapi_login&state=".$state."#wechat_redirect";
     }
     
     /**

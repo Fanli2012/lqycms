@@ -5,6 +5,8 @@
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/weixin/mobile.js"></script>
 <link href="<?php echo env('APP_URL'); ?>/css/font-awesome.min.css" type="text/css" rel="stylesheet">
 <meta name="keywords" content="关键词"><meta name="description" content="描述"></head><body style="background-color:#f1f1f1;">
+<!-- 订单确认信息-start -->
+<div id="checkout_info">
 <div class="classreturn loginsignup">
     <div class="ds-in-bl return"><a href="javascript:history.back(-1);"><img src="<?php echo env('APP_URL'); ?>/images/weixin/return.png" alt="返回"></a></div>
     <div class="ds-in-bl tit center"><span>确认订单</span></div>
@@ -13,12 +15,12 @@
 
 @include('weixin.common.headerNav')
 
-<a href="/v2/index.php?m=default&amp;c=flow&amp;a=consignee_list&amp;u=53657">
+<a href="javascript:;" onclick="selectaddress();">
 <div class="checkout-addr">
-  <!-- <p class="des">请添加收货地址</p> -->
-  <p class="title"><span class="name"><?php echo $user_default_address['name']; ?></span> <span class="tel"><?php echo $user_default_address['mobile']; ?></span></p>
-  <p class="des"><?php echo $user_default_address['province_name']; ?><?php echo $user_default_address['city_name']; ?><?php echo $user_default_address['district_name']; ?> <?php echo $user_default_address['address']; ?></p>
-  <i></i>
+    <input name="default_address_id" type="hidden" id="default_address_id" value="<?php if($user_default_address){echo $user_default_address['id'];} ?>">
+    <p class="title"><span class="name" id="default_consignee"><?php if($user_default_address){echo $user_default_address['name'];} ?></span> <span class="tel" id="default_phone"><?php if($user_default_address){echo $user_default_address['mobile'];} ?></span></p>
+    <p class="des" id="default_address"><?php if($user_default_address){ ?><?php echo $user_default_address['province_name']; ?><?php echo $user_default_address['city_name']; ?><?php echo $user_default_address['district_name']; ?> <?php echo $user_default_address['address']; ?><?php }else{ ?>请添加收货地址<?php } ?></p>
+    <i></i>
 </div>
 </a>
 <style>
@@ -26,6 +28,13 @@
 .checkout-addr p{margin-right:20px;}.checkout-addr .title{font-size:18px;color:#353535;}.checkout-addr .des{color:#9b9b9b;}
 .checkout-addr i{position: absolute;top: 50%;right:12px;margin-top:-6px;color:#bbb;display:inline-block;border-right:2px solid;border-bottom:2px solid;width:12px;height:12px;transform:rotate(-45deg);}
 </style>
+<script>
+function selectaddress()
+{
+    $('#addressList').show();
+    $('#checkout_info').hide();
+}
+</script>
 <ul class="goodslist">
 <?php if($list){foreach($list as $k=>$v){ ?>
 <li>
@@ -122,6 +131,78 @@ function update_pay_mode(sex)
 </style>
 
 <div class="setting"><div class="close"><a href="<?php echo route('weixin_user_logout'); ?>" id="logout">提交</a></div></div>
+</div>
+<!-- 订单确认信息-end -->
+
+<!-- 收货地址选择-start -->
+<div id="addressList" style="display:none;">
+    <div class="classreturn loginsignup">
+        <div class="ds-in-bl return"><a href="javascript:addressback();"><img src="<?php echo env('APP_URL'); ?>/images/weixin/return.png" alt="返回"></a></div>
+        <div class="ds-in-bl tit center"><span>选择收货地址</span></div>
+    </div>
+    <script>
+    function addressback()
+    {
+        $('#checkout_info').show();
+        $('#addressList').hide();
+    }
+    
+    function defaultback(id)
+    {
+        setdefault(id);
+        addressback();
+        //var url = "";
+        //location.href = url;
+    }
+    
+    function setdefault(id)
+    {
+        var access_token = '<?php echo $_SESSION['weixin_user_info']['access_token']; ?>';
+        var url = '<?php echo env('APP_API_URL').'/user_address_setdefault'; ?>';
+        
+        $.post(url,{access_token:access_token,id:id},function(res)
+        {
+            if (res.code == 0)
+            {
+                //订单确认页面
+                $("#default_address_id").val(id);
+                $("#default_consignee").html($("#consignee"+id).html());
+                $("#default_phone").html($("#con_phone"+id).html());
+                $("#default_address").html($("#con_address"+id).html());
+            }
+            else
+            {
+                //提示
+                layer.open({
+                    content: res.msg
+                    ,skin: 'msg'
+                    ,time: 2 //2秒后自动关闭
+                });
+            }
+        }, 'json');
+    }
+
+    </script>
+    <div class="address_list mt10">
+    <style>
+    .address_list .flow-have-adr{padding:15px;margin-bottom:10px;background-color:#fff;}
+    .address_list .ect-colory{color:#e23435;}
+    .address_list .f-h-adr-title label{font-size:18px;color:#000;margin-right:5px;}
+    .address_list .f-h-adr-con{color:#777;margin-top:5px;margin-bottom:5px;}
+    .bottoma{display:block;font-size:18px;padding:10px;color:white;background-color: #f23030;text-align:center;}
+    </style>
+    <?php if($address_list){foreach($address_list as $k=>$v){ ?>
+    <div class="flow-have-adr" onclick="defaultback('<?php echo $v['id']; ?>')">
+        <p class="f-h-adr-title"><label id="consignee<?php echo $v['id']; ?>"><?php echo $v['name']; ?></label><span class="ect-colory fr" id="con_phone<?php echo $v['id']; ?>"><?php echo $v['mobile']; ?></span></p>
+        <p class="f-h-adr-con"><span class="ect-colory"><?php if($v['is_default']==1){ ?>[默认地址]<?php } ?></span><span id="con_address<?php echo $v['id']; ?>"><?php echo $v['province_name'].$v['city_name'].$v['district_name'].' '.$v['address']; ?></span></p>
+    </div>
+    <?php }}else{ ?>
+        
+    <?php } ?>
+    </div>
+
+</div>
+<!-- 收货地址选择-end -->
 
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/layer/mobile/layer.js"></script>
 <script>
