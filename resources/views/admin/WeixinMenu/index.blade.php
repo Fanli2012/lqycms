@@ -12,7 +12,7 @@
 <tr id="cat-<?php echo $row["id"]; ?>">
 <td><?php echo $row["id"]; ?></td>
 <td><?php if($row["pid"]!=0){echo "— ";}echo $row["name"]; ?></td><td><?php echo $row["type"]; ?></td><td><?php if($row["is_show"]==0){echo '是';}else{echo '<font color="red">否</font>';} ?></td><td><?php echo date('Y-m-d',$row["addtime"]); ?></td>
-<td><?php if($row["pid"]==0){ ?><a href="/fladmin/weixinmenu/add?reid=<?php echo $row["id"]; ?>">增加子类</a> | <?php } ?><a href="/fladmin/weixinmenu/edit?id=<?php echo $row["id"]; ?>">更改</a> | <a onclick="delconfirm('/fladmin/weixinmenu/del?id=<?php echo $row["id"]; ?>')" href="javascript:;">删除</a></td>
+<td><a href="/fladmin/weixinmenu/edit?id=<?php echo $row["id"]; ?>">更改</a> | <a onclick="delconfirm('/fladmin/weixinmenu/del?id=<?php echo $row["id"]; ?>')" href="javascript:;">删除</a><?php if($row["pid"]==0){ ?> | <a href="/fladmin/weixinmenu/add?reid=<?php echo $row["id"]; ?>">增加子类</a><?php } ?></td>
 </tr><?php }} ?>
 </tbody></table></div><!-- 表格结束 --></form><!-- 表单结束 -->
 

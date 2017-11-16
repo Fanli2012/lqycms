@@ -156,7 +156,7 @@ function change_goods_number(type, id)
         {
             //提示
             layer.open({
-                content: '姓名不能为空'
+                content: res.msg
                 ,skin: 'msg'
                 ,time: 2 //2秒后自动关闭
             });

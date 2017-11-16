@@ -49,7 +49,7 @@ class WeixinMenuController extends CommonController
 		unset($_POST["prid"]);
 		unset($_POST["_token"]);
 		
-		if(DB::table('weixin_menu')->insert(array_filter($_POST)))
+		if(DB::table('weixin_menu')->insert($_POST))
         {
             success_jump('添加成功！');
         }
@@ -79,7 +79,7 @@ class WeixinMenuController extends CommonController
         $_POST['addtime'] = time(); //添加时间
         unset($_POST["_token"]);
 		
-		if(DB::table('weixin_menu')->where('id', $id)->update(array_filter($_POST)))
+		if(DB::table('weixin_menu')->where('id', $id)->update($_POST))
         {
             success_jump('修改成功！', route('admin_weixinmenu'));
         }

@@ -41,7 +41,7 @@ function selectaddress()
 <!-- 选择收货地址-end -->
 <!-- 订单商品列表-start -->
 <ul class="goodslist">
-<?php if($list){foreach($list as $k=>$v){ ?>
+<?php if($checkout_goods['list']){foreach($checkout_goods['list'] as $k=>$v){ ?>
 <li>
 	<img src="<?php echo $v['litpic']; ?>">
 	<p><b><?php echo $v['title']; ?></b><span>￥<?php echo $v['final_price']; ?><i>x<?php echo $v['goods_number']; ?></i></span></p>
@@ -73,7 +73,7 @@ function selectaddress()
     {
         //询问框
         layer.open({
-            content: '<div style="padding:15px;"><a style="margin-bottom:10px;background-color:#1aad19;border:1px solid #179e16;color:white;text-align:center;border-radius:2px;" class="bottoma" onclick="layer.closeAll();" href="javascript:update_pay_mode(1,\'余额支付\');">账户余额 <?php echo $user_info['money']; ?>元</a><a style="margin-bottom:10px;background-color:#ea5a3d;border:1px solid #dd2727;color:white;border-radius:2px;text-align:center;" class="bottoma" onclick="layer.closeAll();" href="javascript:update_pay_mode(2,\'微信支付\');">微信支付</a></div>'
+            content: '<div style="padding:15px;"><?php if($is_balance_enough){ ?><a style="margin-bottom:10px;background-color:#1aad19;border:1px solid #179e16;color:white;border-radius:2px;text-align:center;" class="bottoma" onclick="layer.closeAll();" href="javascript:update_pay_mode(1,\'余额支付\');">账户余额 <?php echo $user_info['money']; ?>元</a><?php }else{ ?><a style="margin-bottom:10px;background-color:#999;border:1px solid #999;color:white;border-radius:2px;text-align:center;" class="bottoma" href="javascript:;">余额不足 <?php echo $user_info['money']; ?>元</a><?php } ?><a style="background-color:#ea5a3d;border:1px solid #dd2727;color:white;border-radius:2px;text-align:center;" class="bottoma" onclick="layer.closeAll();" href="javascript:update_pay_mode(2,\'微信支付\');">微信支付</a></div>'
         });
     }
     
@@ -98,10 +98,10 @@ function selectaddress()
     <textarea name="message" rows="3" placeholder="给卖家留言"></textarea>
 </div>
 <div class="order_check_info">
-    <p>共1件商品</p>
+    <p>共<?php echo $checkout_goods['total_goods']; ?>件商品</p>
     <p>运费：¥0</p>
     <p>满¥15.00减¥1.00</p>
-    <p>商品总价：¥99</span></p>
+    <p>商品总价：¥<?php echo $checkout_goods['total_price']; ?></span></p>
     <p>应付款金额：<span class="red">¥<i id="totalamount">99</i></span></p>
 </div>
 </div>

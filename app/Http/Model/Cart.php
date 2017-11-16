@@ -198,7 +198,8 @@ class Cart extends BaseModel
         
         // 获取购物车列表
     	$cartList = self::where(array('user_id'=>$user_id))->whereIn('id', $cartIds)->get();
-        $total_price = 0;//总金额
+        $total_price = 0; //商品总金额
+        $total_goods = 0; //商品总数量
         
         if(!empty($cartList))
         {
@@ -217,12 +218,14 @@ class Cart extends BaseModel
                 $cartList[$k]->title = $goods->title;
                 $cartList[$k]->litpic = $goods->litpic;
                 
-                $total_price += $cartList[$k]->final_price*$tempInfo['price'];
+                $total_price = $total_price + $cartList[$k]->final_price*$cartList[$k]->goods_number;
+                $total_goods = $total_goods + $cartList[$k]->goods_number;
             }
         }
         
         $res['list'] = $cartList;
-        $res['list'] = $cartList;
+        $res['total_price'] = $total_price;
+        $res['total_goods'] = $total_goods;
         
         return ReturnData::create(ReturnData::SUCCESS,$res);
     }
