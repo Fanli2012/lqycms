@@ -90,7 +90,7 @@ class UserAddress extends BaseModel
     {
         extract($param);
         
-        if(UserAddress::where('user_id', $user_id)->count() >= 3)
+        if(UserAddress::where('user_id', $user_id)->count() >= 10)
         {
             return ReturnData::create(ReturnData::PARAMS_ERROR,null,'最多10个收货地址');
         }

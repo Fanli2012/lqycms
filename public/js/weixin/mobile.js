@@ -42,3 +42,14 @@ function validatemobile(mobile)
     
     return true;
 }
+
+//提示层
+function messageNotice(message,time)
+{
+    time = time*1000 || 3000;
+    // 创建一个 Mask 层，追加到body中
+    $('body').append('<div id="mask_msg"></div>');
+	$('#mask_msg').html(message);
+	$('#mask_msg').show();
+	setInterval(function(){$('#mask_msg').remove();},time);
+}

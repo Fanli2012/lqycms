@@ -64,7 +64,6 @@ class CartController extends CommonController
 		$res = curl_request($url,$postdata,'GET');
         $data['user_default_address'] = $res['data'];
         
-        //用户收货地址列表
         //收货地址列表
         $postdata = array(
             'limit'  => 100,
@@ -73,6 +72,15 @@ class CartController extends CommonController
         $url = env('APP_API_URL')."/user_address_list";
 		$res = curl_request($url,$postdata,'GET');
         $data['address_list'] = $res['data']['list'];
+        $data['cartids'] = $ids;
+        
+        //获取会员信息
+        $postdata = array(
+            'access_token' => $_SESSION['weixin_user_info']['access_token']
+		);
+        $url = env('APP_API_URL')."/user_info";
+		$res = curl_request($url,$postdata,'GET');
+        $data['user_info'] = $res['data'];
         
         return view('weixin.cart.cartCheckout', $data);
     }

@@ -15,6 +15,9 @@
 
 @include('weixin.common.headerNav')
 
+<form action="<?php echo route('weixin_cart_done'); ?>" method="post" id="myform">
+<input type="hidden" name="cartids" id="cartids" value="<?php echo $cartids; ?>">
+<!-- 选择收货地址-start -->
 <a href="javascript:;" onclick="selectaddress();">
 <div class="checkout-addr">
     <input name="default_address_id" type="hidden" id="default_address_id" value="<?php if($user_default_address){echo $user_default_address['id'];} ?>">
@@ -35,6 +38,8 @@ function selectaddress()
     $('#checkout_info').hide();
 }
 </script>
+<!-- 选择收货地址-end -->
+<!-- 订单商品列表-start -->
 <ul class="goodslist">
 <?php if($list){foreach($list as $k=>$v){ ?>
 <li>
@@ -52,54 +57,32 @@ function selectaddress()
 .goodslist li p span {color:#f23030;font-size:18px;display: block;padding-top:8px;}
 .goodslist li p i{color:#666;float:right;font-size:14px;}
 </style>
-
+<!-- 订单商品列表-end -->
 <div class="floor">
 <ul class="fui-list mt10">
     <a href="javascript:update_pay_mode_layer();"><li>
         <div class="ui-list-info">
             <h4 class="ui-nowrap">支付方式</h4>
-            <div class="ui-txt-info">微信支付 &nbsp;</div>
+            <div class="ui-txt-info"><span id="paytext">微信支付</span> &nbsp;</div>
+            <input type="hidden" name="payment" id="payid" value="2">
         </div>
         <i class="fa fa-angle-right" aria-hidden="true"></i>
     </li></a>
-<style>
-.bottoma{display:block;font-size:18px;padding:10px;border-radius:2px;}
-</style>
-<script>
-function update_pay_mode_layer()
-{
-    //询问框
-    layer.open({
-        content: '<div style="padding:15px;"><a style="margin-bottom:10px;background-color:#1aad19;text-align:center;color:white;border:1px solid #179e16;" class="bottoma" onclick="layer.closeAll();" href="javascript:update_pay_mode(1);">账户余额 38.62元</a><a style="margin-bottom:10px;background-color:#ea5a3d;text-align:center;color:white;border:1px solid #dd2727;" class="bottoma" onclick="layer.closeAll();" href="javascript:update_pay_mode(2);">微信支付</a></div>'
-    });
-}
-
-function update_pay_mode(sex)
-{
-    $.post('<?php echo env('APP_API_URL').'/user_info_update'; ?>',{sex:sex,access_token:'<?php echo $_SESSION['weixin_user_info']['access_token']; ?>'},function(res)
+    <script>
+    function update_pay_mode_layer()
     {
-        if(res.code==0)
-        {
-            //提示
-            layer.open({
-                content: '修改成功'
-                ,skin: 'msg'
-                ,time: 2 //2秒后自动关闭
-            });
-        }
-        else
-        {
-            layer.open({
-                content: res.msg
-                ,skin: 'msg'
-                ,time: 2 //2秒后自动关闭
-            });
-        }
-    },'json');
+        //询问框
+        layer.open({
+            content: '<div style="padding:15px;"><a style="margin-bottom:10px;background-color:#1aad19;border:1px solid #179e16;color:white;text-align:center;border-radius:2px;" class="bottoma" onclick="layer.closeAll();" href="javascript:update_pay_mode(1,\'余额支付\');">账户余额 <?php echo $user_info['money']; ?>元</a><a style="margin-bottom:10px;background-color:#ea5a3d;border:1px solid #dd2727;color:white;border-radius:2px;text-align:center;" class="bottoma" onclick="layer.closeAll();" href="javascript:update_pay_mode(2,\'微信支付\');">微信支付</a></div>'
+        });
+    }
     
-    window.location.reload();
-}
-</script>
+    function update_pay_mode(id,name)
+    {
+        $("#paytext").html(name);
+        $("#payid").val(id);
+    }
+    </script>
     <a href="javascript:update_username();"><li>
         <div class="ui-list-info">
             <h4 class="ui-nowrap">优惠券</h4>
@@ -131,6 +114,7 @@ function update_pay_mode(sex)
 </style>
 
 <div class="setting"><div class="close"><a href="<?php echo route('weixin_user_logout'); ?>" id="logout">提交</a></div></div>
+</form>
 </div>
 <!-- 订单确认信息-end -->
 
@@ -183,13 +167,13 @@ function update_pay_mode(sex)
     }
 
     </script>
+    <!-- 收货地址列表-start -->
     <div class="address_list mt10">
     <style>
     .address_list .flow-have-adr{padding:15px;margin-bottom:10px;background-color:#fff;}
     .address_list .ect-colory{color:#e23435;}
     .address_list .f-h-adr-title label{font-size:18px;color:#000;margin-right:5px;}
     .address_list .f-h-adr-con{color:#777;margin-top:5px;margin-bottom:5px;}
-    .bottoma{display:block;font-size:18px;padding:10px;color:white;background-color: #f23030;text-align:center;}
     </style>
     <?php if($address_list){foreach($address_list as $k=>$v){ ?>
     <div class="flow-have-adr" onclick="defaultback('<?php echo $v['id']; ?>')">
@@ -197,14 +181,251 @@ function update_pay_mode(sex)
         <p class="f-h-adr-con"><span class="ect-colory"><?php if($v['is_default']==1){ ?>[默认地址]<?php } ?></span><span id="con_address<?php echo $v['id']; ?>"><?php echo $v['province_name'].$v['city_name'].$v['district_name'].' '.$v['address']; ?></span></p>
     </div>
     <?php }}else{ ?>
-        
+        <div style="text-align:center;line-height:40px;color:#999;">暂无记录</div>
     <?php } ?>
     </div>
+    <!-- 收货地址列表-end -->
+    <!-- 添加收货地址-start -->
+    <style>
+    .adr_add{padding:0 10px;background-color:#fff;}
+    .adr-form-group{margin-top:10px;}
+    .adr-form-group input[type=text],.adr-form-group textarea{display: block;width: 100%;font-size:16px;padding:10px;color: #777;vertical-align: middle;background-color: #fff;background-image: none;border: 1px solid #ddd;border-radius: 0;box-sizing:border-box;}
+    .adr-form-group select{padding:5px;margin-right:10px;}
+    .bottoma{display:block;font-size:18px;padding:10px;color:white;background-color:#f23030;text-align:center;}
+    </style>
+    <div class="adr_add">
+    <div style="font-size:18px;padding-top:10px;text-align:center;">添加新的收货地址</div>
+    <div class="adr-form-group">
+      <label for="doc-ipt-email-1">收货人</label>
+      <input name="name" type="text" class="" id="name" placeholder="输入姓名">
+    </div>
+    <div class="adr-form-group">
+      <label for="doc-ipt-email-1">手机号码</label>
+      <input type="text" name="mobile" class="" id="mobile" placeholder="输入手机号码">
+    </div>
+    <div class="adr-form-group">
+    地区： <select id='sheng'></select><select id='shi'></select><select id='qu'></select>
+    <script>
+    // JavaScript Document
+    $(document).ready(function(e) {
+        //加载省的数据
+        LoadSheng();
+        //加载市的数据
+        LoadShi();
+        //加载区的数据
+        LoadQu();
 
+        //给省的下拉加点击事件
+        $("#sheng").change(function(){
+            //重新加载市
+            LoadShi();
+            //重新加载区
+            LoadQu();
+        });
+
+        //给市的下拉加点击事件
+        $("#shi").change(function(){
+            //重新加载区
+            LoadQu();
+        });
+    });
+
+    //加载省份的方法
+    function LoadSheng(parent_id,select_id)
+    {
+        //省的父级代号
+        parent_id = parent_id || '86';
+        select_id = select_id || 0;
+        
+        $.ajax({
+            async:false,
+            url:'<?php echo env('APP_API_URL')."/region_list"; ?>',
+            data:{id:parent_id},
+            type:"GET",
+            dataType:"json",
+            success: function(res){
+                var hang = res.data;
+                var str = "";
+                for(var i=0;i<hang.length;i++)
+                {
+                    if(select_id != 0 && select_id == hang[i].id)
+                    {
+                        str = str+"<option selected='selected' value='"+hang[i].id+"'>"+hang[i].name+"</option>";
+                    }
+                    else
+                    {
+                        str = str+"<option value='"+hang[i].id+"'>"+hang[i].name+"</option>";
+                    }
+                }
+                
+                $("#sheng").html(str);
+            }
+        });
+    }
+
+    //加载市的方法
+    function LoadShi(parent_id,select_id)
+    {
+        //找市的父级代号
+        parent_id = parent_id || $("#sheng").val();
+        select_id = select_id || 0;
+        
+        $.ajax({
+            async:false,
+            url:'<?php echo env('APP_API_URL')."/region_list"; ?>',
+            data:{id:parent_id},
+            type:"GET",
+            dataType:"json",
+            success: function(res){
+                var hang = res.data;
+                var str = "";
+                for(var i=0;i<hang.length;i++)
+                {
+                    if(select_id != 0 && select_id == hang[i].id)
+                    {
+                        str = str+"<option selected='selected' value='"+hang[i].id+"'>"+hang[i].name+"</option>";
+                    }
+                    else
+                    {
+                        str = str+"<option value='"+hang[i].id+"'>"+hang[i].name+"</option>";
+                    }
+                }
+                
+                $("#shi").html(str);
+            }
+        });
+    }
+
+    //加载区的方法
+    function LoadQu(parent_id,select_id)
+    {
+        //找区的父级代号
+        parent_id = parent_id || $("#shi").val();
+        select_id = select_id || 0;
+        
+        $.ajax({
+            url:'<?php echo env('APP_API_URL')."/region_list"; ?>',
+            data:{id:parent_id},
+            type:"GET",
+            dataType:"json",
+            success: function(res){
+                var hang = res.data;
+                var str = "";
+                for(var i=0;i<hang.length;i++)
+                {
+                    if(select_id != 0 && select_id == hang[i].id)
+                    {
+                        str = str+"<option selected='selected' value='"+hang[i].id+"'>"+hang[i].name+"</option>";
+                    }
+                    else
+                    {
+                        str = str+"<option value='"+hang[i].id+"'>"+hang[i].name+"</option>";
+                    }
+                }
+                
+                $("#qu").html(str);
+            }
+        });
+    }
+    </script>
+    </div>
+    <div class="adr-form-group">
+      <label for="doc-ta-1">详细地址</label>
+      <textarea name="address" class="" rows="3" id="address"></textarea>
+    </div>
+    <a style="margin:10px;" class="bottoma" href="javascript:adr_dosubmit();">提交</a>
+    <br><br>
+    </div>
+    
+    <!-- 添加收货地址-start -->
+    <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/layer/mobile/layer.js"></script>
+    <script>
+    function adr_dosubmit()
+    {
+        var access_token = '<?php echo $_SESSION['weixin_user_info']['access_token']; ?>';
+        
+        var url = '<?php echo env('APP_API_URL').'/user_address_add'; ?>';
+        var name = $("#name").val();
+        var mobile = $("#mobile").val();
+        var address = $("#address").val();
+        
+        var province = $("#sheng").val();
+        var city = $("#shi").val();
+        var district = $("#qu").val();
+        
+        var is_default = 0;
+        //if(document.getElementById("is_default").checked){is_default = 1;}
+        
+        if(name == '')
+        {
+            //提示
+            layer.open({
+                content: '姓名不能为空'
+                ,skin: 'msg'
+                ,time: 2 //2秒后自动关闭
+            });
+            
+            return false;
+        }
+        
+        if(mobile == '')
+        {
+            //提示
+            layer.open({
+                content: '手机号不能为空'
+                ,skin: 'msg'
+                ,time: 2 //2秒后自动关闭
+            });
+            
+            return false;
+        }
+        
+        if(validatemobile(mobile) == false)
+        {
+            //提示
+            layer.open({
+                content: '手机号格式不正确'
+                ,skin: 'msg'
+                ,time: 2 //2秒后自动关闭
+            });
+            
+            return false;
+        }
+        
+        if(address == '')
+        {
+            //提示
+            layer.open({
+                content: '地址不能为空'
+                ,skin: 'msg'
+                ,time: 2 //2秒后自动关闭
+            });
+            
+            return false;
+        }
+        
+        $.post(url,{access_token:access_token,name:name,mobile:mobile,address:address,province:province,city:city,district:district,is_default:is_default},function(res)
+        {
+            if(res.code==0)
+            {
+                setdefault(res.data.id);
+                window.location.reload();
+            }
+            else
+            {
+                //提示
+                layer.open({
+                    content: res.msg
+                    ,skin: 'msg'
+                    ,time: 2 //2秒后自动关闭
+                });
+            }
+        },'json');
+    }
+    </script>
 </div>
 <!-- 收货地址选择-end -->
 
-<script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/layer/mobile/layer.js"></script>
 <script>
 function cart_submit()
 {
@@ -350,6 +571,18 @@ function changeCartTotalPrice()
     });
     
     $('#total_fee').text(total_price);
+}
+</script>
+
+<script>
+function unshow(id)
+{
+	$(id).hide();
+}
+
+function showmask(id)
+{
+	$(id).show();
 }
 </script>
 </body></html>

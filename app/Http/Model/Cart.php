@@ -198,6 +198,7 @@ class Cart extends BaseModel
         
         // 获取购物车列表
     	$cartList = self::where(array('user_id'=>$user_id))->whereIn('id', $cartIds)->get();
+        $total_price = 0;//总金额
         
         if(!empty($cartList))
         {
@@ -211,13 +212,16 @@ class Cart extends BaseModel
                 $cartList[$k]->is_promote = 0;
                 if(Goods::bargain_price($goods->price,$goods->promote_start_date,$goods->promote_end_date) > 0){$cartList[$k]->is_promote = 1;}
                 
-                $cartList[$k]->final_price = Goods::get_final_price($v['goods_id']);   //商品最终价格
+                $cartList[$k]->final_price = Goods::get_final_price($v['goods_id']); //商品最终价格
                 $cartList[$k]->goods_detail_url = route('weixin_goods_detail',array('id'=>$v['goods_id']));
                 $cartList[$k]->title = $goods->title;
                 $cartList[$k]->litpic = $goods->litpic;
+                
+                $total_price += $cartList[$k]->final_price*$tempInfo['price'];
             }
         }
         
+        $res['list'] = $cartList;
         $res['list'] = $cartList;
         
         return ReturnData::create(ReturnData::SUCCESS,$res);
