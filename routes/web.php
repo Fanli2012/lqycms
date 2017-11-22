@@ -183,6 +183,7 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     Route::get('/user_point_list', 'UserPointController@userPointList'); //用户积分列表
     Route::post('/user_point_add', 'UserPointController@userPointAdd');
     //优惠券
+    Route::get('/user_available_bonus_list', 'UserBonusController@userAvailableBonusList'); //用户结算时获取可用优惠券列表
     Route::get('/user_bonus_list', 'UserBonusController@userBonusList'); //用户优惠券列表
     Route::post('/user_bonus_add', 'UserBonusController@userBonusAdd'); //用户获取优惠券
     Route::get('/bonus_list', 'BonusController@bonusList'); //可用获取的优惠券列表

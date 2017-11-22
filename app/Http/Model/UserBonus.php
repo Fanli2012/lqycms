@@ -1,5 +1,7 @@
 <?php
 namespace App\Http\Model;
+use App\Common\ReturnData;
+use DB;
 
 class UserBonus extends BaseModel
 {
@@ -61,14 +63,21 @@ class UserBonus extends BaseModel
     
     public static function add(array $data)
     {
-        if(self::where(['bonus_id'=>$data['bonus_id'],'user_id'=>$data['user_id']])->first()){return '亲，您已获取！';}
+        if(!Bonus::where(['id'=>$data['bonus_id']])->where('num',-1)->first() && !Bonus::where(['id'=>$data['bonus_id']])->where('num','>',0)->first())
+        {
+            return ReturnData::create(ReturnData::PARAMS_ERROR,null,'亲，您来晚了啦，已被抢光了');
+        }
+        
+        if(self::where(['bonus_id'=>$data['bonus_id'],'user_id'=>$data['user_id']])->first()){return ReturnData::create(ReturnData::PARAMS_ERROR,null,'亲，您已获取！');}
         
         if ($id = self::insertGetId($data))
         {
-            return $id;
+            DB::table('bonus')->where(array('id'=>$data['bonus_id']))->decrement('num', 1);
+            
+            return ReturnData::create(ReturnData::SUCCESS,$id);
         }
-
-        return false;
+        
+        return ReturnData::create(ReturnData::SYSTEM_FAIL);
     }
     
     public static function modify($where, array $data)
@@ -90,5 +99,26 @@ class UserBonus extends BaseModel
         }
         
         return true;
+    }
+    
+    //商品结算时，获取优惠券列表
+	public static function getAvailableBonusList(array $param)
+    {
+        extract($param);
+        
+        $where['user_bonus.user_id'] = $user_id;
+        if(isset($status)){$where['bonus.status'] = 0;}
+        
+        $model = new UserBonus;
+        if(isset($min_amount)){$model = $model->where('bonus.min_amount', '<=', $min_amount);} //满多少使用
+        if(isset($bonus_end_time)){$model = $model->where('bonus.end_time', '>=', date('Y-m-d H:i:s'));} //有效期
+        
+        $bonus_list = $model->join('bonus', 'bonus.id', '=', 'user_bonus.bonus_id')->where($where)
+            ->select('bonus.*', 'user_bonus.user_id', 'user_bonus.used_time', 'user_bonus.get_time', 'user_bonus.status as user_bonus_status', 'user_bonus.id as user_bonus_id')
+            ->orderBy('bonus.money','desc')->get();
+        
+		$res['list'] = $bonus_list;
+        
+        return $res;
     }
 }

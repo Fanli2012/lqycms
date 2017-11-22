@@ -44,13 +44,7 @@ class UserBonusController extends CommonController
             return ReturnData::create(ReturnData::PARAMS_ERROR);
         }
         
-        $res = UserBonus::add($data);
-		if($res == false)
-		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
-		}
-        
-		return ReturnData::create(ReturnData::SUCCESS,$res);
+		return UserBonus::add($data);
     }
     
     //用户删除优惠券
@@ -66,6 +60,26 @@ class UserBonusController extends CommonController
 		if($res == false)
 		{
 			return ReturnData::create(ReturnData::SYSTEM_FAIL,null,$res);
+		}
+        
+		return ReturnData::create(ReturnData::SUCCESS,$res);
+    }
+    
+    public function userAvailableBonusList(Request $request)
+	{
+        //参数
+        $data['user_id'] = Token::$uid;
+        
+        $data['min_amount'] = $request->input('min_amount','');
+        if($data['min_amount']=='')
+		{
+            return ReturnData::create(ReturnData::PARAMS_ERROR);
+        }
+        
+        $res = UserBonus::getAvailableBonusList($data);
+		if($res == false)
+		{
+			return ReturnData::create(ReturnData::SYSTEM_FAIL);
 		}
         
 		return ReturnData::create(ReturnData::SUCCESS,$res);

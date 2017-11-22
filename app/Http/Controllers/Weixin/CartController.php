@@ -87,6 +87,15 @@ class CartController extends CommonController
         if($data['checkout_goods']['total_price']>$data['user_info']['money']){$is_balance_enough = 0;}
         $data['is_balance_enough'] = $is_balance_enough;
         
+        //获取用户优惠券列表
+        $postdata = array(
+            'min_amount' => $data['checkout_goods']['total_price'],
+            'access_token' => $_SESSION['weixin_user_info']['access_token']
+		);
+        $url = env('APP_API_URL')."/user_available_bonus_list";
+		$res = curl_request($url,$postdata,'GET');
+        $data['bonus_list'] = $res['data'];
+        
         return view('weixin.cart.cartCheckout', $data);
     }
 }
