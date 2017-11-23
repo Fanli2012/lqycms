@@ -110,7 +110,7 @@ class UserBonus extends BaseModel
         if(isset($status)){$where['bonus.status'] = 0;}
         
         $model = new UserBonus;
-        if(isset($min_amount)){$model = $model->where('bonus.min_amount', '<=', $min_amount);} //满多少使用
+        if(isset($min_amount)){$model = $model->where('bonus.min_amount', '<=', $min_amount)->where('bonus.money', '<=', $min_amount);} //满多少使用
         if(isset($bonus_end_time)){$model = $model->where('bonus.end_time', '>=', date('Y-m-d H:i:s'));} //有效期
         
         $bonus_list = $model->join('bonus', 'bonus.id', '=', 'user_bonus.bonus_id')->where($where)

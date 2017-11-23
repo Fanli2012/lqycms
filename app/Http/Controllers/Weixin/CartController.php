@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Weixin;
 
 use App\Http\Controllers\Weixin\CommonController;
 use Illuminate\Http\Request;
+use App\Common\ReturnData;
 
 class CartController extends CommonController
 {
@@ -94,8 +95,53 @@ class CartController extends CommonController
 		);
         $url = env('APP_API_URL')."/user_available_bonus_list";
 		$res = curl_request($url,$postdata,'GET');
-        $data['bonus_list'] = $res['data'];
+        $data['bonus_list'] = $res['data']['list'];
         
         return view('weixin.cart.cartCheckout', $data);
+    }
+    
+    //生成订单
+    public function cartDone(Request $request)
+	{
+        $cartids = $request->input('cartids',''); //购物车商品id，8_9
+        $default_address_id = $request->input('default_address_id',''); //收货地址id
+        $payid = $request->input('payid',''); //支付方式：1余额支付，2微信，3支付宝
+        $user_bonus_id = $request->input('user_bonus_id',0); //优惠券id，0没有优惠券
+        $shipping_costs = $request->input('shipping_costs',''); //运费
+        $message = $request->input('message',''); //买家留言
+        
+        if($default_address_id==''){$this->error_jump('请选择收货地址');}
+        if($payid==''){$this->error_jump('请选择支付方式');}
+        if($cartids==''){$this->error_jump(ReturnData::PARAMS_ERROR);}
+        
+        //订单提交
+        $postdata = array(
+            'cartids' => $cartids,
+            'default_address_id' => $default_address_id,
+            'payid' => $payid,
+            'user_bonus_id' => $user_bonus_id,
+            'shipping_costs' => $shipping_costs,
+            'message' => $message,
+            'access_token' => $_SESSION['weixin_user_info']['access_token']
+		);
+        $url = env('APP_API_URL')."/order_add";
+		$res = curl_request($url,$postdata,'POST');
+        
+        if($res['code'] == ReturnData::SUCCESS)
+        {
+    		/* $url = U('Order/orderlist');
+            header("Location: $url");
+            exit(); */
+    	}
+        else
+        {
+            $ReturnMsg = '生成订单失败';
+    		if($res['msg'])
+            {
+    			$ReturnMsg = $res['msg'];
+    		}
+            
+            $this->error_jump($ReturnMsg);
+    	}
     }
 }

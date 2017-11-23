@@ -158,7 +158,6 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     Route::post('/user_goods_history_delete', 'UserGoodsHistoryController@userGoodsHistoryDelete'); //我的足迹删除一条
     Route::post('/user_goods_history_clear', 'UserGoodsHistoryController@userGoodsHistoryClear'); //我的足迹清空
     Route::post('/user_goods_history_add', 'UserGoodsHistoryController@userGoodsHistoryAdd'); //我的足迹添加
-    
     //商品评价
     Route::get('/goods_comment_list', 'CommentController@goodsCommentList'); //商品评价列表
     Route::post('/goods_comment_add', 'CommentController@goodsCommentAdd'); //商品评价添加
@@ -169,7 +168,8 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     Route::post('/collect_goods_add', 'CollectGoodsController@collectGoodsAdd'); //收藏商品
     Route::post('/collect_goods_delete', 'CollectGoodsController@collectGoodsDelete'); //取消收藏商品
     //订单
-    
+    Route::post('/order_add', 'OrderController@orderAdd'); //生成订单
+    Route::get('/order_list', 'OrderController@orderList'); //订单列表
     //购物车
     Route::get('/cart_list', 'CartController@cartList'); //购物车列表
     Route::post('/cart_clear', 'CartController@cartClear'); //清空购物车

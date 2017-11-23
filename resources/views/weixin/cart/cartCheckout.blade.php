@@ -64,7 +64,7 @@ function selectaddress()
         <div class="ui-list-info">
             <h4 class="ui-nowrap">支付方式</h4>
             <div class="ui-txt-info"><span id="paytext">微信支付</span> &nbsp;</div>
-            <input type="hidden" name="payment" id="payid" value="2">
+            <input type="hidden" name="payid" id="payid" value="2">
         </div>
         <i class="fa fa-angle-right" aria-hidden="true"></i>
     </li></a>
@@ -83,13 +83,74 @@ function selectaddress()
         $("#payid").val(id);
     }
     </script>
-    <a href="javascript:update_username();"><li>
+    <a href="javascript:select_bonus_layer();"><li>
         <div class="ui-list-info">
             <h4 class="ui-nowrap">优惠券</h4>
-            <div class="ui-txt-info">请选择优惠券 &nbsp;</div>
+            <div class="ui-txt-info"><span id="bonustext">请选择优惠券</span> &nbsp;</div>
+            <input type="hidden" name="user_bonus_id" id="user_bonus_id" value="0">
         </div>
         <i class="fa fa-angle-right" aria-hidden="true"></i>
     </li></a>
+    <script>
+    function select_bonus_layer()
+    {
+        //询问框
+        layer.open({
+            title: [
+              '请选择优惠券',
+              'background-color: #FF4351; color:#fff;'
+            ]
+            ,content: '<div><?php if($bonus_list){foreach($bonus_list as $k=>$v){ ?><a style="margin-bottom:10px;background-color:#1aad19;border:1px solid #179e16;color:white;border-radius:2px;text-align:center;" class="bottoma" onclick="layer.closeAll();" href="javascript:select_bonus(<?php echo $v['user_bonus_id']; ?>,\'省<?php echo $v['money']; ?>元\',<?php echo $v['money']; ?>);">省<?php echo $v['money']; ?>元</a><?php }} ?><a style="background-color:#ea5a3d;border:1px solid #dd2727;color:white;border-radius:2px;text-align:center;" class="bottoma" onclick="layer.closeAll();" href="javascript:select_bonus(0,\'不使用优惠\',0);">不使用优惠</a></div>'
+        });
+    }
+    
+    function select_bonus(id,name,money)
+    {
+        $("#bonustext").html(name);
+        $("#user_bonus_id").val(id);
+        //更改总计价格
+        change_totalamount(money);
+    }
+    
+    function change_totalamount(discount)
+    {
+        totalamount = $("#product_total_price").val(); //商品总价
+        shipping_costs = $("#shipping_costs").val(); //运费
+        totalamount = totalamount + shipping_costs - discount;
+        $("#totalamount").html(totalamount.toFixed(2));
+    }
+    
+    function submit_form()
+    {
+        payid = $("#payid").val();
+        default_address_id = $("#default_address_id").val();
+        
+        if(payid==''){alert("请选择支付方式");}
+        if(default_address_id==''){alert("请选择收货地址");}
+        
+        var re = /^[0-9]+.?[0-9]*$/; //判断字符串是否为数字
+        if (!re.test(payid))
+        {
+            alert("支付方式格式不正确");
+            return false;
+        }
+        
+        if (!re.test(default_address_id))
+        {
+            alert("收货地址格式不正确");
+            return false;
+        }
+        
+        //询问框
+        layer.open({
+            content: '您确定要提交吗？'
+            ,btn: ['确定', '取消']
+            ,yes: function(index){
+                document.getElementById("myform").submit();
+            }
+        });
+    }
+    </script>
 </ul></div>
 
 <div class="floor" style="background-color:#fff;margin-top:10px;padding:10px;">
@@ -99,10 +160,10 @@ function selectaddress()
 </div>
 <div class="order_check_info">
     <p>共<?php echo $checkout_goods['total_goods']; ?>件商品</p>
-    <p>运费：¥0</p>
-    <p>满¥15.00减¥1.00</p>
-    <p>商品总价：¥<?php echo $checkout_goods['total_price']; ?></span></p>
-    <p>应付款金额：<span class="red">¥<i id="totalamount">99</i></span></p>
+    <!-- <p>运费：¥0</p> -->
+    <input type="hidden" name="shipping_costs" id="shipping_costs" value="0">
+    <input type="hidden" name="product_total_price" id="product_total_price" value="<?php echo $checkout_goods['total_price']; ?>">
+    <p>应付款金额：<span class="red">¥<i id="totalamount"><?php echo $checkout_goods['total_price']; ?></i></span></p>
 </div>
 </div>
 <style>
@@ -113,7 +174,7 @@ function selectaddress()
 .order_check_info p .red{color:#ff5500;font-size:18px;}
 </style>
 
-<div class="setting"><div class="close"><a href="<?php echo route('weixin_user_logout'); ?>" id="logout">提交</a></div></div>
+<div class="setting"><div class="close"><a href="javascript:submit_form();" id="logout">提交</a></div></div>
 </form>
 </div>
 <!-- 订单确认信息-end -->
@@ -165,7 +226,6 @@ function selectaddress()
             }
         }, 'json');
     }
-
     </script>
     <!-- 收货地址列表-start -->
     <div class="address_list mt10">
