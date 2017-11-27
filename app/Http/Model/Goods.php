@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Model;
+use DB;
 
 class Goods extends BaseModel
 {
@@ -259,5 +260,22 @@ class Goods extends BaseModel
         }
         
         return $res;
+    }
+    
+    //增加或减少商品库存
+    public static function changeGoodsStock(array $param)
+    {
+        extract($param);
+        
+        if(isset($type))
+        {
+            //增加库存
+            DB::table('goods')->where(array('id'=>$goods_id))->decrement('goods_number', $goods_number);
+        }
+        else
+        {
+            //减少库存
+            DB::table('goods')->where(array('id'=>$goods_id))->increment('goods_number', $goods_number);
+        }
     }
 }

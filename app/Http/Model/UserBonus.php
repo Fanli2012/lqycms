@@ -70,6 +70,7 @@ class UserBonus extends BaseModel
         
         if(self::where(['bonus_id'=>$data['bonus_id'],'user_id'=>$data['user_id']])->first()){return ReturnData::create(ReturnData::PARAMS_ERROR,null,'亲，您已获取！');}
         
+        $data['get_time'] = time(); //优惠券获取时间
         if ($id = self::insertGetId($data))
         {
             DB::table('bonus')->where(array('id'=>$data['bonus_id']))->decrement('num', 1);
@@ -120,5 +121,24 @@ class UserBonus extends BaseModel
 		$res['list'] = $bonus_list;
         
         return $res;
+    }
+    
+    public static function getUserBonusByid(array $param)
+    {
+        extract($param);
+        
+        $where['user_bonus.user_id'] = $user_id;
+        $where['bonus.status'] = 0;
+        $where['user_bonus.id'] = $user_bonus_id;
+        
+        $model = new UserBonus;
+        if(isset($min_amount)){$model = $model->where('bonus.min_amount', '<=', $min_amount)->where('bonus.money', '<=', $min_amount);} //满多少使用
+        $model = $model->where('bonus.end_time', '>=', date('Y-m-d H:i:s')); //有效期
+        
+        $bonus = $model->join('bonus', 'bonus.id', '=', 'user_bonus.bonus_id')->where($where)
+            ->select('bonus.*', 'user_bonus.user_id', 'user_bonus.used_time', 'user_bonus.get_time', 'user_bonus.status as user_bonus_status', 'user_bonus.id as user_bonus_id')
+            ->first();
+        
+        return $bonus;
     }
 }

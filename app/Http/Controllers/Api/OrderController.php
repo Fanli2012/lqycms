@@ -40,21 +40,21 @@ class OrderController extends CommonController
     public function orderAdd(Request $request)
 	{
         //参数
-        $default_address_id = $request->input('default_address_id','');
-        $payid = $request->input('payid','');
-        $user_bonus_id = $request->input('user_bonus_id','');
-        $shipping_costs = $request->input('shipping_costs','');
-        $message = $request->input('message','');
+        $data['default_address_id'] = $request->input('default_address_id','');
+        $data['payid'] = $request->input('payid','');
+        $data['user_bonus_id'] = $request->input('user_bonus_id','');
+        $data['shipping_costs'] = $request->input('shipping_costs','');
+        $data['message'] = $request->input('message','');
+        $data['place_type'] = $request->input('place_type','');
+        $data['user_id'] = Token::$uid;
         
         //获取商品列表
-        $cartids = $request->input('cartids','');
+        $data['cartids'] = $request->input('cartids','');
         
-        if($cartids=='')
+        if($data['cartids']=='')
 		{
             return ReturnData::create(ReturnData::PARAMS_ERROR);
         }
-        
-        $orderGoods = Cart::cartCheckoutGoodsList(array('ids'=>$cartids,'user_id'=>Token::$uid));
         
 		return Order::add($data);
     }

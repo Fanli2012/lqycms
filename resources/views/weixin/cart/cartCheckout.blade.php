@@ -116,7 +116,7 @@ function selectaddress()
     {
         totalamount = $("#product_total_price").val(); //商品总价
         shipping_costs = $("#shipping_costs").val(); //运费
-        totalamount = totalamount + shipping_costs - discount;
+        totalamount = parseFloat(totalamount) + parseFloat(shipping_costs) - parseFloat(discount);
         $("#totalamount").html(totalamount.toFixed(2));
     }
     

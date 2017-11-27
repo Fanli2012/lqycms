@@ -1,8 +1,9 @@
 <?php
 namespace App\Http\Model;
 use App\Common\ReturnData;
+use DB;
 
-class Cart extends BaseModel
+class Order extends BaseModel
 {
 	//购物车模型
 	
@@ -11,17 +12,10 @@ class Cart extends BaseModel
      *
      * @var string
      */
-	protected $table = 'cart';
+	protected $table = 'order';
     
     public $timestamps = false;
 	
-    //购物车商品类型
-    const CART_GENERAL_GOODS        = 0; // 普通商品
-    const CART_GROUP_BUY_GOODS      = 1; // 团购商品
-    const CART_AUCTION_GOODS        = 2; // 拍卖商品
-    const CART_SNATCH_GOODS         = 3; // 夺宝奇兵
-    const CART_EXCHANGE_GOODS       = 4; // 积分商城
-    
     //获取列表
 	public static function getList(array $param)
     {
@@ -70,14 +64,105 @@ class Cart extends BaseModel
         return $goods;
     }
     
-    public static function add(array $data)
+    public static function add(array $param)
     {
-        if ($id = self::insertGetId($data))
+        extract($param);
+        
+        //获取订单商品列表
+        $order_goods = Cart::cartCheckoutGoodsList(array('ids'=>$cartids,'user_id'=>$user_id));
+        if(!$order_goods){return ReturnData::create(ReturnData::SYSTEM_FAIL,null,'订单商品不存在');}
+        return $order_goods;
+        //获取收货地址
+        $user_address = UserAddress::getOne($user_id,$default_address_id);
+        if(!$user_address){return ReturnData::create(ReturnData::SYSTEM_FAIL,null,'收货地址不存在');}
+        
+        //获取优惠券信息
+        $user_bonus = UserBonus::getUserBonusByid(array('user_bonus_id'=>$user_bonus_id,'user_id'=>$user_id));
+        
+        $discount = !empty($user_bonus)?$user_bonus['money']:0.00; //优惠金额=优惠券
+        
+        $order_amount = $order_goods['total_price'] - $discount;
+        $pay_status = 0; //未付款
+        
+        //如果各种优惠金额大于订单实际金额跟运费之和，则默认订单状态为已付款
+        if($order_amount < 0)
         {
-            return $id;
+            $order_amount = 0;
+            $pay_status = 1; //已付款
         }
         
-        return false;
+        //构造订单字段
+		$order_info = array(
+            'order_sn'     => date('YmdHis'.rand(1000,9999)),
+            'add_time'     => time(),
+            'pay_status'   => $pay_status,
+            'user_id'      => $user_id,
+            'goods_amount' => $order_goods['total_price'], //商品的总金额
+            'order_amount' => $order_amount, //应付金额=商品总价+运费-优惠(积分、红包)
+            'discount'     => $discount, //优惠金额
+            'name'         => $user_address['name'],
+            'country'      => $user_address['country'],
+            'province'     => $user_address['province'],
+            'city'         => $user_address['city'],
+            'district'     => $user_address['district'],
+            'address'      => $user_address['address'],
+            'zipcode'      => $user_address['zipcode'],
+            'mobile'       => $user_address['mobile'],
+            'place_type'   => $place_type, //订单来源
+            'bonus_id'     => !empty($user_bonus)?$user_bonus['id']:0,
+            'bonus_money'  => !empty($user_bonus)?$user_bonus['money']:0.00,
+            'message'      => $message
+		);
+        
+        //插入订单
+        $order_id = self::insertGetId($order_info);
+        
+        if ($order_id)
+        {
+            //订单生成成功之后，扣除用户的积分和改变优惠券的使用状态
+			//改变优惠券使用状态
+            UserBonus::where(array('user_id'=>$user_id,'id'=>$user_bonus_id))->update(array('status'=>1,'used_time'=>time()));
+			//扣除用户积分，预留
+			//$updateMember['validscore'] = $addressInfo['validscore']-$PointPay;
+			//M("Member")->where(array('id'=>$CustomerSysNo))->save($updateMember);
+			//增加一条积分支出记录，一条购物获取积分记录
+            
+            //插入订单商品
+            $order_goods_list = array();
+            foreach($order_goods['list'] as $k=>$v)
+            {
+                $temp_order_goods = array(
+                    'order_id' => $order_id,
+                    'goods_id' => $v['goods_id'],
+                    'goods_name' => $v['title'],
+                    'goods_number' => $v['goods_number'],
+                    'market_price' => $v['market_price'],
+                    'goods_price' => $v['final_price'],
+                    //'goods_attr' => '', //商品属性，预留
+                    'goods_img' => $v['litpic']
+                );
+                array_push($order_goods_list,$temp_order_goods);
+                
+                //订单商品直行减库存操作
+				Goods::changeGoodsStock(array('goods_id'=>$v['goods_id'],'goods_number'=>$v['goods_number']));
+            }
+            $result = DB::table('order_goods')->insert($order_goods_list);
+            if($result)
+            {
+                //删除购物对应的记录
+                Cart::where(array('user_id'=>$user_id))->whereIn('id', explode("_",$cartids))->delete();
+                
+                return ReturnData::create(ReturnData::SUCCESS,$order_id);
+            }
+            else
+            {
+                return ReturnData::create(ReturnData::SYSTEM_FAIL,null,'订单商品添加失败');
+            }
+        }
+        else
+        {
+			return ReturnData::create(ReturnData::SYSTEM_FAIL,null,'生成订单失败');
+		}
     }
     
     public static function modify($where, array $data)
@@ -217,16 +302,10 @@ class Cart extends BaseModel
                 $cartList[$k]->goods_detail_url = route('weixin_goods_detail',array('id'=>$v['goods_id']));
                 $cartList[$k]->title = $goods->title;
                 $cartList[$k]->litpic = $goods->litpic;
-                $cartList[$k]->market_price = $goods->market_price;
-                $cartList[$k]->goods_sn = $goods->sn;
                 
                 $total_price = $total_price + $cartList[$k]->final_price*$cartList[$k]->goods_number;
                 $total_goods = $total_goods + $cartList[$k]->goods_number;
             }
-        }
-        else
-        {
-            return false;
         }
         
         $res['list'] = $cartList;
