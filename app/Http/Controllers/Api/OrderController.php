@@ -25,24 +25,38 @@ class OrderController extends CommonController
 		return ReturnData::create(ReturnData::SUCCESS,$res);
     }
     
-    //生成订单
-    public function orderAdd(Request $request)
-	{return ReturnData::create(ReturnData::SUCCESS);
+    //订单详情
+    public function orderDetail(Request $request)
+	{
         //参数
-        $data['goods_number'] = $request->input('goods_number','');
-        $data['goods_id'] = $request->input('goods_id','');
-        
-        if($request->input('goods_attr', '') != ''){$data['goods_attr'] = $request->input('goods_attr');}
-        if($request->input('shop_id', '') != ''){$data['shop_id'] = $request->input('shop_id');}
-        $data['add_time'] = time();
         $data['user_id'] = Token::$uid;
         
-        if($data['goods_number']=='' || $data['goods_id']=='')
+        $res = Order::getList($data);
+		
+		return ReturnData::create(ReturnData::SUCCESS,$res);
+    }
+    
+    //生成订单
+    public function orderAdd(Request $request)
+	{
+        //参数
+        $default_address_id = $request->input('default_address_id','');
+        $payid = $request->input('payid','');
+        $user_bonus_id = $request->input('user_bonus_id','');
+        $shipping_costs = $request->input('shipping_costs','');
+        $message = $request->input('message','');
+        
+        //获取商品列表
+        $cartids = $request->input('cartids','');
+        
+        if($cartids=='')
 		{
             return ReturnData::create(ReturnData::PARAMS_ERROR);
         }
         
-		return Order::cartAdd($data);
+        $orderGoods = Cart::cartCheckoutGoodsList(array('ids'=>$cartids,'user_id'=>Token::$uid));
+        
+		return Order::add($data);
     }
     
     //删除订单

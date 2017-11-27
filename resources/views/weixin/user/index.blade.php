@@ -52,7 +52,7 @@
                         <span>我的订单</span>
                     </div>
                     <div class="fr">
-                        <a href="/index.php/Mobile/User/order_list.html">
+                        <a href="<?php echo route('weixin_order_list'); ?>">
                             <span>全部订单</span>
                             <i class="Mright"></i>
                         </a>
@@ -63,28 +63,28 @@
         <div class="floor floor_order">
             <ul>
                 <li>
-                    <a href="/index.php/Mobile/User/order_list/type/WAITPAY.html">
+                    <a href="<?php echo route('weixin_order_list',array('status'=>0)); ?>">
                         <span>0</span>
                         <img src="<?php echo env('APP_URL'); ?>/images/weixin/q1.png" alt="">
                         <p>待付款</p>
                     </a>
                 </li>
                 <li>
-                    <a href="/index.php/Mobile/User/wait_receive/type/WAITRECEIVE.html">
+                    <a href="<?php echo route('weixin_order_list',array('status'=>0)); ?>">
                         <span>0</span>
                         <img src="<?php echo env('APP_URL'); ?>/images/weixin/q2.png" alt="">
                         <p>待收货</p>
                     </a>
                 </li>
                 <li>
-                    <a href="/index.php/Mobile/User/comment/status/0.html">
+                    <a href="<?php echo route('weixin_order_list',array('status'=>0)); ?>">
                         <span>0</span>
                         <img src="<?php echo env('APP_URL'); ?>/images/weixin/q3.png" alt="">
                         <p>待评价</p>
                     </a>
                 </li>
                 <li>
-                    <a href="/index.php/Mobile/User/return_goods_list/type/1.html">
+                    <a href="<?php echo route('weixin_order_list',array('status'=>0)); ?>">
                         <span>0</span>
                         <img src="<?php echo env('APP_URL'); ?>/images/weixin/q4.png" alt="">
                         <p>退款/退货</p>
