@@ -125,7 +125,7 @@ class UserController extends CommonController
 		$body = '充值';//订单详情
 		$out_trade_no = '20177878738';//订单号
 		$total_fee = floatval(0.01*100);//价格0.01
-        $attach = 'pay_type=1';
+        $attach = 'pay_type=1'; //pay_type=1充值支付
 		$notify_url = route('weixin_wxpay_notify');//通知地址
 		$wxconfig= \WxPayConfig::wxconfig();
         

@@ -19,10 +19,9 @@ class OrderController extends CommonController
 	{
         //参数
         $data['user_id'] = Token::$uid;
+        $data['status'] = $request->input('status','');
         
-        $res = Order::getList($data);
-		
-		return ReturnData::create(ReturnData::SUCCESS,$res);
+        return Order::getList($data);
     }
     
     //订单详情
@@ -30,10 +29,14 @@ class OrderController extends CommonController
 	{
         //参数
         $data['user_id'] = Token::$uid;
+        $data['order_id'] = $request->input('order_id','');
         
-        $res = Order::getList($data);
-		
-		return ReturnData::create(ReturnData::SUCCESS,$res);
+        if($data['order_id']=='')
+		{
+            return ReturnData::create(ReturnData::PARAMS_ERROR);
+        }
+        
+        return Order::getUnpaidOrder($data);
     }
     
     //生成订单
@@ -60,7 +63,7 @@ class OrderController extends CommonController
     }
     
     //删除订单
-    public function cartDelete(Request $request)
+    public function orderDelete(Request $request)
 	{
         $id = $request->input('id','');
         
@@ -69,12 +72,6 @@ class OrderController extends CommonController
             return ReturnData::create(ReturnData::PARAMS_ERROR);
         }
         
-        $res = Cart::remove($id,Token::$uid);
-		if($res === true)
-		{
-			return ReturnData::create(ReturnData::SUCCESS,$res);
-		}
-        
-		return ReturnData::create(ReturnData::SYSTEM_FAIL);
+        return Order::remove($id,Token::$uid);
     }
 }
