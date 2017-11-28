@@ -60,7 +60,7 @@ function selectaddress()
 <!-- 订单商品列表-end -->
 <div class="floor">
 <ul class="fui-list mt10">
-    <a href="javascript:update_pay_mode_layer();"><li>
+    <!-- <a href="javascript:update_pay_mode_layer();"><li>
         <div class="ui-list-info">
             <h4 class="ui-nowrap">支付方式</h4>
             <div class="ui-txt-info"><span id="paytext">微信支付</span> &nbsp;</div>
@@ -82,7 +82,7 @@ function selectaddress()
         $("#paytext").html(name);
         $("#payid").val(id);
     }
-    </script>
+    </script> -->
     <a href="javascript:select_bonus_layer();"><li>
         <div class="ui-list-info">
             <h4 class="ui-nowrap">优惠券</h4>
@@ -122,18 +122,18 @@ function selectaddress()
     
     function submit_form()
     {
-        payid = $("#payid").val();
-        default_address_id = $("#default_address_id").val();
+        //payid = $("#payid").val();
+        //if(payid==''){alert("请选择支付方式");}
         
-        if(payid==''){alert("请选择支付方式");}
+        default_address_id = $("#default_address_id").val();
         if(default_address_id==''){alert("请选择收货地址");}
         
         var re = /^[0-9]+.?[0-9]*$/; //判断字符串是否为数字
-        if (!re.test(payid))
+        /* if (!re.test(payid))
         {
             alert("支付方式格式不正确");
             return false;
-        }
+        } */
         
         if (!re.test(default_address_id))
         {

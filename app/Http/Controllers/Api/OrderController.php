@@ -44,11 +44,11 @@ class OrderController extends CommonController
 	{
         //参数
         $data['default_address_id'] = $request->input('default_address_id','');
-        $data['payid'] = $request->input('payid','');
+        //$data['payid'] = $request->input('payid','');
         $data['user_bonus_id'] = $request->input('user_bonus_id','');
         $data['shipping_costs'] = $request->input('shipping_costs','');
         $data['message'] = $request->input('message','');
-        $data['place_type'] = $request->input('place_type','');
+        $data['place_type'] = $request->input('place_type',2); //订单来源,1pc，2微信，3app
         $data['user_id'] = Token::$uid;
         
         //获取商品列表

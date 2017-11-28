@@ -81,7 +81,7 @@ class OrderController extends CommonController
         
         //判断余额是否足够
         $is_balance_enough = 1; //足够
-        if($data['order_detail']['total_price']>$data['user_info']['money']){$is_balance_enough = 0;}
+        if($data['order_detail']['order_amount']>$data['user_info']['money']){$is_balance_enough = 0;}
         $data['is_balance_enough'] = $is_balance_enough;
         
 		return view('weixin.order.pay', $data);
@@ -101,7 +101,7 @@ class OrderController extends CommonController
         
         if($payment_id == 1) //余额支付
         {
-            $url = '';
+            $url = route('weixin_order_yuepay',array('order_id'=>$order_id));
         }
         elseif($payment_id == 2) //微信支付
         {

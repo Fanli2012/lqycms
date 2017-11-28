@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Weixin;
 use App\Http\Controllers\Weixin\CommonController;
 use Illuminate\Http\Request;
 use App\Common\ReturnData;
+use App\Common\ReturnCode;
 
 class CartController extends CommonController
 {
@@ -82,6 +83,7 @@ class CartController extends CommonController
         $url = env('APP_API_URL')."/cart_checkout_goods_list";
 		$res = curl_request($url,$postdata,'GET');
         $data['checkout_goods'] = $res['data'];
+        if(empty($data['checkout_goods']['list'])){$this->error_jump(ReturnCode::NO_FOUND);}
         
         //判断余额是否足够
         $is_balance_enough = 1; //足够
@@ -105,20 +107,20 @@ class CartController extends CommonController
 	{
         $cartids = $request->input('cartids',''); //购物车商品id，8_9
         $default_address_id = $request->input('default_address_id',''); //收货地址id
-        $payid = $request->input('payid',''); //支付方式：1余额支付，2微信，3支付宝
+        //$payid = $request->input('payid',''); //支付方式：1余额支付，2微信，3支付宝
         $user_bonus_id = $request->input('user_bonus_id',0); //优惠券id，0没有优惠券
         $shipping_costs = $request->input('shipping_costs',''); //运费
         $message = $request->input('message',''); //买家留言
         
         if($default_address_id==''){$this->error_jump('请选择收货地址');}
-        if($payid==''){$this->error_jump('请选择支付方式');}
+        //if($payid==''){$this->error_jump('请选择支付方式');}
         if($cartids==''){$this->error_jump(ReturnData::PARAMS_ERROR);}
         
         //订单提交
         $postdata = array(
             'cartids' => $cartids,
             'default_address_id' => $default_address_id,
-            'payid' => $payid,
+            //'payid' => $payid,
             'user_bonus_id' => $user_bonus_id,
             'shipping_costs' => $shipping_costs,
             'message' => $message,
@@ -129,7 +131,7 @@ class CartController extends CommonController
         
         if($res['code'] == ReturnData::SUCCESS)
         {
-            header("Location: ".route('weixin_order_wxpay',array('order_id'=>$res['data'])));
+            header("Location: ".route('weixin_order_pay',array('id'=>$res['data'])));
             exit;
     	}
         else

@@ -224,10 +224,6 @@ class Cart extends BaseModel
                 $total_goods = $total_goods + $cartList[$k]->goods_number;
             }
         }
-        else
-        {
-            return false;
-        }
         
         $res['list'] = $cartList;
         $res['total_price'] = $total_price;

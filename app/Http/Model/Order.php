@@ -16,45 +16,69 @@ class Order extends BaseModel
     
     public $timestamps = false;
 	
-    //获取列表
-	public static function getList(array $param)
+    //获取订单列表
+    public static function getList(array $param)
     {
-        extract($param); //参数：limit，offset
+        extract($param);
         
-        $model = self::join('goods', 'goods.id', '=', 'cart.goods_id')
-            ->where('cart.user_id', $user_id)
-            ->where('goods.status', Goods::STATUS)
-            ->select('cart.*','goods.id as goods_id','goods.title','goods.sn','goods.price as goods_price','goods.market_price','goods.litpic','goods.goods_number as stock','goods.promote_start_date','goods.promote_price','goods.promote_end_date');
-            
+        $limit  = isset($limit) ? $limit : 10;
+        $offset = isset($offset) ? $offset : 0;
+        
+        $where['user_id'] = $user_id;
+        $where['is_delete'] = 0;
+        
+        //0或者不传表示全部，1待付款，2待发货,3待收货,4待评价(确认收货，交易完成),5退款/售后
+        if($status == 1)
+        {
+            $where['order_status'] = 0;
+            $where['pay_status'] = 0;
+        }
+        elseif($status == 2)
+        {
+            $where['order_status'] = 0;
+            $where['shipping_status'] = 0;
+            $where['pay_status'] = 1;
+        }
+        elseif($status == 3)
+        {
+            $where['order_status'] = 0;
+            $where['refund_status'] = 0;
+            $where['shipping_status'] = 1;
+            $where['pay_status'] = 1;
+        }
+        elseif($status == 4)
+        {
+            $where['order_status'] = 3;
+            $where['refund_status'] = 0;
+            $where['shipping_status'] = 2;
+            $where['is_comment'] = 0;
+        }
+        elseif($status == 5)
+        {
+            $where['order_status'] = 3;
+            $where['refund_status'] = 1;
+        }
+        
+        $model = self::where($where);
+        
         $res['count'] = $model->count();
         $res['list'] = array();
         
-        if($res['count']>0)
+		if($res['count']>0)
         {
-            $res['list'] = $model->get();
+            $res['list'] = $model->skip($offset)->take($limit)->get();
             
-            foreach ($res['list'] as $k => $v) 
+            if($res['list'])
             {
-                $res['list'][$k]->is_promote = 0;
-                if(Goods::bargain_price($v->goods_price,$v->promote_start_date,$v->promote_end_date) > 0){$res['list'][$k]->is_promote = 1;}
-                
-                //订货数量大于0
-                if ($v->goods_number > 0)
+                foreach($res['list'] as $k=>$v)
                 {
-                    $res['list'][$k]->final_price = Goods::get_final_price($v->goods_id);   //商品最终价格
-                    $res['list'][$k]->goods_detail_url = route('weixin_goods_detail',array('id'=>$v->goods_id));
-                    
-                    //更新购物车中的商品数量
-                    //self::where('id', $v->id)->update(array('price' => $goods_price));
+                    $order_goods = OrderGoods::where(array('order_id'=>$v['id']))->get();
+                    $res[$k]['goods_list'] = $order_goods;
                 }
             }
         }
-        else
-        {
-            return false;
-        }
         
-        return $res;
+        return ReturnData::create(ReturnData::SUCCESS,$res);
     }
     
     public static function getOne($where)
@@ -64,14 +88,16 @@ class Order extends BaseModel
         return $goods;
     }
     
+    //生成订单
     public static function add(array $param)
     {
         extract($param);
         
         //获取订单商品列表
-        $order_goods = Cart::cartCheckoutGoodsList(array('ids'=>$cartids,'user_id'=>$user_id));
-        if(!$order_goods){return ReturnData::create(ReturnData::SYSTEM_FAIL,null,'订单商品不存在');}
-        return $order_goods;
+        $cartCheckoutGoods = Cart::cartCheckoutGoodsList(array('ids'=>$cartids,'user_id'=>$user_id));
+        $order_goods = $cartCheckoutGoods['data'];
+        if(!$order_goods['list']){return ReturnData::create(ReturnData::SYSTEM_FAIL,null,'订单商品不存在');}
+        
         //获取收货地址
         $user_address = UserAddress::getOne($user_id,$default_address_id);
         if(!$user_address){return ReturnData::create(ReturnData::SYSTEM_FAIL,null,'收货地址不存在');}
@@ -101,7 +127,7 @@ class Order extends BaseModel
             'order_amount' => $order_amount, //应付金额=商品总价+运费-优惠(积分、红包)
             'discount'     => $discount, //优惠金额
             'name'         => $user_address['name'],
-            'country'      => $user_address['country'],
+            //'country'      => $user_address['country'],
             'province'     => $user_address['province'],
             'city'         => $user_address['city'],
             'district'     => $user_address['district'],
@@ -187,130 +213,17 @@ class Order extends BaseModel
         return true;
     }
     
-    /**
-     * 添加商品到购物车
-     *
-     * @access  public
-     * @param   integer $goods_id   商品编号
-     * @param   integer $num        商品数量
-     * @param   json   $property    规格值对应的id json数组
-     * @return  boolean
-     */
-    public static function cartAdd(array $attributes)
-    {
-        extract($attributes);
-        
-        //获取商品信息
-        $goods = Goods::where(['id' => $goods_id, 'status' => Goods::STATUS])->first();
-        
-        if (!$goods)
-        {
-            return ReturnData::create(ReturnData::PARAMS_ERROR,null,'商品不存在');
-        }
-        
-        //判断库存 是否足够
-        if($goods['goods_number']<$goods_number)
-        {
-            return ReturnData::create(ReturnData::PARAMS_ERROR,null,'库存不足');
-        }
-        
-        //判断购物车商品数
-        if(Cart::where(['user_id'=>$user_id])->count() >= 20)
-        {
-            return ReturnData::create(ReturnData::PARAMS_ERROR,null,'购物车商品最多20件');
-        }
-        
-        //查看是否已经有购物车插入记录
-        $where = array(
-            'user_id'	=> $user_id,
-            'goods_id'	=> $goods_id
-        );
-        
-        $cart = Cart::where($where)->first();
-        
-        if($cart)
-        {
-            //更新购物车
-            $updateArr = array(
-                'goods_number'		=> $goods_number,
-                'add_time'			=> time(),
-            );
-            
-            self::where(array('id'=>$cart->id))->update($updateArr);
-            
-            $cart_id = $cart->id;
-        }
-        else
-        {
-            //添加购物车
-            $cartInsert = array(
-                'user_id'			=> $user_id,
-                'goods_id'			=> $goods_id,
-                'goods_number'		=> $goods_number,
-                'add_time'			=> time(),
-            );
-            
-            $cart_id = self::insertGetId($cartInsert);
-        }
-        
-        return ReturnData::create(ReturnData::SUCCESS,$cart_id,'购物车添加成功');
-    }
-    
-    /**
-     * 清空购物车
-     * 
-     * @param int $type 类型：默认普通商品
-     */
-    public static function clearCart($user_id)
-    {
-        self::where('user_id',$user_id)->delete();
-
-        return true;
-    }
-    
-    //购物车商品总数量
-    public static function TotalGoodsCount($user_id)
-    {
-        return self::where('user_id',$user_id)->sum('goods_number');
-    }
-    
-    //购物车结算商品列表
-    public static function cartCheckoutGoodsList(array $param)
+    //获取未支付的订单详情
+    public static function getUnpaidOrder(array $param)
     {
         extract($param);
         
-        $cartIds = explode("_",$ids);
+        $res = self::where(array('id'=>$order_id,'order_status'=>0,'pay_status'=>0,'user_id'=>$user_id))->select('id', 'order_sn', 'user_id', 'add_time', 'order_amount')->first();
         
-        // 获取购物车列表
-    	$cartList = self::where(array('user_id'=>$user_id))->whereIn('id', $cartIds)->get();
-        $total_price = 0; //商品总金额
-        $total_goods = 0; //商品总数量
-        
-        if(!empty($cartList))
+        if(!$res)
         {
-    		$resultList = array();
-    		$checkArr = array();
-            
-            foreach($cartList as $k=>$v)
-            {
-                $goods = Goods::where(array('id'=>$v['goods_id']))->first();
-                
-                $cartList[$k]->is_promote = 0;
-                if(Goods::bargain_price($goods->price,$goods->promote_start_date,$goods->promote_end_date) > 0){$cartList[$k]->is_promote = 1;}
-                
-                $cartList[$k]->final_price = Goods::get_final_price($v['goods_id']); //商品最终价格
-                $cartList[$k]->goods_detail_url = route('weixin_goods_detail',array('id'=>$v['goods_id']));
-                $cartList[$k]->title = $goods->title;
-                $cartList[$k]->litpic = $goods->litpic;
-                
-                $total_price = $total_price + $cartList[$k]->final_price*$cartList[$k]->goods_number;
-                $total_goods = $total_goods + $cartList[$k]->goods_number;
-            }
+            return ReturnData::create(ReturnData::SYSTEM_FAIL,null,'');
         }
-        
-        $res['list'] = $cartList;
-        $res['total_price'] = $total_price;
-        $res['total_goods'] = $total_goods;
         
         return ReturnData::create(ReturnData::SUCCESS,$res);
     }

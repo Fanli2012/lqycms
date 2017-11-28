@@ -270,12 +270,12 @@ class Goods extends BaseModel
         if(isset($type))
         {
             //增加库存
-            DB::table('goods')->where(array('id'=>$goods_id))->decrement('goods_number', $goods_number);
+            DB::table('goods')->where(array('id'=>$goods_id))->increment('goods_number', $goods_number);
         }
         else
         {
             //减少库存
-            DB::table('goods')->where(array('id'=>$goods_id))->increment('goods_number', $goods_number);
+            DB::table('goods')->where(array('id'=>$goods_id))->decrement('goods_number', $goods_number);
         }
     }
 }
