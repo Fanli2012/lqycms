@@ -129,9 +129,8 @@ class CartController extends CommonController
         
         if($res['code'] == ReturnData::SUCCESS)
         {
-    		/* $url = U('Order/orderlist');
-            header("Location: $url");
-            exit(); */
+            header("Location: ".route('weixin_order_wxpay',array('order_id'=>$res['data'])));
+            exit;
     	}
         else
         {
