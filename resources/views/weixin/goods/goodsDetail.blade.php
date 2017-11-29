@@ -57,7 +57,6 @@ var swiper = new Swiper('.swiper-container', {
             <span>￥</span><i class="price"><?php echo $post['price']; ?></i>
         </div>
         <span class="btn-retail">门店有售</span>
-        
     </div>
     
     <div class="stock-detail table-cell">

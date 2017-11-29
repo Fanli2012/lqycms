@@ -27,7 +27,7 @@ class Order extends BaseModel
         $where['user_id'] = $user_id;
         $where['is_delete'] = 0;
         
-        //0或者不传表示全部，1待付款，2待发货,3待收货,4待评价(确认收货，交易完成),5退款/售后
+        //0或者不传表示全部，1待付款，2待发货,3待收货,4待评价(确认收货，交易成功),5退款/售后
         if($status == 1)
         {
             $where['order_status'] = 0;
@@ -66,26 +66,52 @@ class Order extends BaseModel
         
 		if($res['count']>0)
         {
-            $res['list'] = $model->skip($offset)->take($limit)->get();
+            $order_list = $model->skip($offset)->take($limit)->get();
             
-            if($res['list'])
+            if($order_list)
             {
-                foreach($res['list'] as $k=>$v)
+                foreach($order_list as $k=>$v)
                 {
+                    $order_list[$k]['order_status_text'] = self::getOrderStatusText($v);
+                    
                     $order_goods = OrderGoods::where(array('order_id'=>$v['id']))->get();
-                    $res[$k]['goods_list'] = $order_goods;
+                    $order_list[$k]['goods_list'] = $order_goods;
                 }
             }
+            
+            $res['list'] = $order_list;
         }
         
         return ReturnData::create(ReturnData::SUCCESS,$res);
     }
     
-    public static function getOne($where)
+    public static function getOne(array $param)
     {
-        $goods = self::where($where)->first();
+        extract($param);
         
-        return $goods;
+        $where['id'] = $order_id;
+        $where['user_id'] = $user_id;
+        
+        if(isset($order_status)){$where['order_status'] = $order_status;}
+        if(isset($pay_status)){$where['pay_status'] = $pay_status;}
+        
+        $res = self::where($where)->first();
+        
+        if(!$res)
+        {
+            return ReturnData::create(ReturnData::SYSTEM_FAIL);
+        }
+        
+        $res['order_status_text'] = self::getOrderStatusText($res);
+        
+        $res['province_name'] = Region::getRegionName($res['province']);
+        $res['city_name'] = Region::getRegionName($res['city']);
+        $res['district_name'] = Region::getRegionName($res['district']);
+        
+        $order_goods = OrderGoods::where(array('order_id'=>$res['id']))->get();
+        $res['goods_list'] = $order_goods;
+        
+        return ReturnData::create(ReturnData::SUCCESS,$res);
     }
     
     //生成订单
@@ -96,7 +122,7 @@ class Order extends BaseModel
         //获取订单商品列表
         $cartCheckoutGoods = Cart::cartCheckoutGoodsList(array('ids'=>$cartids,'user_id'=>$user_id));
         $order_goods = $cartCheckoutGoods['data'];
-        if(!$order_goods['list']){return ReturnData::create(ReturnData::SYSTEM_FAIL,null,'订单商品不存在');}
+        if(empty($order_goods['list'])){return ReturnData::create(ReturnData::SYSTEM_FAIL,null,'订单商品不存在');}
         
         //获取收货地址
         $user_address = UserAddress::getOne($user_id,$default_address_id);
@@ -213,18 +239,31 @@ class Order extends BaseModel
         return true;
     }
     
-    //获取未支付的订单详情
-    public static function getUnpaidOrder(array $param)
+    //获取订单状态文字，1待付款，2待发货,3待收货,4待评价(确认收货，交易成功),5退款/售后
+    public static function getOrderStatusText($where)
     {
-        extract($param);
-        
-        $res = self::where(array('id'=>$order_id,'order_status'=>0,'pay_status'=>0,'user_id'=>$user_id))->select('id', 'order_sn', 'user_id', 'add_time', 'order_amount')->first();
-        
-        if(!$res)
+        $res = '';
+        if($where['order_status'] == 0 && $where['pay_status'] ==0)
         {
-            return ReturnData::create(ReturnData::SYSTEM_FAIL,null,'');
+            $res = '待付款';
+        }
+        elseif($where['order_status'] == 0 && $where['shipping_status'] == 0 && $where['pay_status'] == 1)
+        {
+            $res = '待发货';
+        }
+        elseif($where['order_status'] == 0 && $where['refund_status'] == 0 && $where['shipping_status'] == 1 && $where['pay_status'] == 1)
+        {
+            $res = '待收货';
+        }
+        elseif($where['order_status'] == 3 && $where['refund_status'] == 0 && $where['shipping_status'] == 2 && $where['is_comment'] == 0)
+        {
+            $res = '交易成功';
+        }
+        elseif($where['order_status'] == 3 && $where['refund_status'] == 1)
+        {
+            $res = '售后';
         }
         
-        return ReturnData::create(ReturnData::SUCCESS,$res);
+        return $res;
     }
 }

@@ -97,7 +97,7 @@ class ReturnData
         //验证码
         8801 =>'验证码无效',
 	);
-
+    
     public static function create($code, $data = null, $msg = '')
     {
         if (empty($msg) && isset(self::$codeTexts[$code]))
@@ -107,7 +107,7 @@ class ReturnData
         
         return array('code' => $code, 'msg' => $msg, 'data' => $data);
     }
-
+    
     public static function success($data = null, $msg = '')
     {
         if (empty($msg) && isset(self::$codeTexts[self::SUCCESS]))
@@ -117,7 +117,7 @@ class ReturnData
 		
         return array('code' => self::SUCCESS, 'msg' => $msg, 'data' => $data);
     }
-
+    
     public static function error($code, $data = null, $msg = '')
     {
         if (empty($msg) && isset(self::$codeTexts[$code]))

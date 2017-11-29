@@ -55,6 +55,23 @@ class OrderController extends CommonController
         
         return view('weixin.order.orderList', $data);
     }
+    
+    //订单详情
+    public function orderDetail(Request $request)
+	{
+        $id = $request->input('id','');
+        
+        $postdata = array(
+            'order_id'  => $id,
+            'access_token' => $_SESSION['weixin_user_info']['access_token']
+		);
+        $url = env('APP_API_URL')."/order_detail";
+		$res = curl_request($url,$postdata,'GET');
+        $data['post'] = $res['data'];
+        if(empty($data['post'])){$this->error_jump('订单不存在');}
+        
+        return view('weixin.order.orderDetail', $data);
+    }
 	
     //订单支付
     public function pay($id)
@@ -62,6 +79,8 @@ class OrderController extends CommonController
         //获取订单详情
         $postdata = array(
             'order_id' => $id, //要支付的订单id
+            'order_status' => 0,
+            'pay_status' => 0,
             'access_token' => $_SESSION['weixin_user_info']['access_token']
 		);
         $url = env('APP_API_URL')."/order_detail";
@@ -69,7 +88,7 @@ class OrderController extends CommonController
         $data['order_detail'] = $res['data'];
         $data['order_id'] = $id;
         
-        /* if(!$res['code']!=0){$this->error_jump('订单不存在或已过期');} */
+        if($res['code']!=0 || empty($data['order_detail'])){$this->error_jump('订单不存在或已过期');}
         
         //获取会员信息
         $postdata = array(
@@ -126,6 +145,8 @@ class OrderController extends CommonController
         //获取订单详情
         $postdata = array(
             'order_id' => $order_id, //要支付的订单id
+            'order_status' => 0,
+            'pay_status' => 0,
             'access_token' => $_SESSION['weixin_user_info']['access_token']
 		);
         $url = env('APP_API_URL')."/order_detail";
@@ -133,7 +154,7 @@ class OrderController extends CommonController
         $data['order_detail'] = $res['data'];
         $data['order_id'] = $order_id;
         
-        if(!$res['code']!=0){$this->error_jump('订单不存在或已过期');}
+        if($res['code']!=0){$this->error_jump('订单不存在或已过期');}
         
         //微信支付-start
         require_once(resource_path('org/wxpay/WxPayConfig.php')); // 导入微信配置类

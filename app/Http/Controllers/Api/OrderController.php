@@ -30,13 +30,15 @@ class OrderController extends CommonController
         //参数
         $data['user_id'] = Token::$uid;
         $data['order_id'] = $request->input('order_id','');
+        if($request->input('order_status','') != ''){$data['order_status'] = $request->input('order_status');}
+        if($request->input('pay_status','') != ''){$data['pay_status'] = $request->input('pay_status');}
         
         if($data['order_id']=='')
 		{
             return ReturnData::create(ReturnData::PARAMS_ERROR);
         }
         
-        return Order::getUnpaidOrder($data);
+        return Order::getOne($data);
     }
     
     //生成订单

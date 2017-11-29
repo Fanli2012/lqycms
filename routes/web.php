@@ -103,6 +103,7 @@ Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin', 'middleware' => ['w
     Route::get('/order_pay/{id}', 'OrderController@pay')->name('weixin_order_pay'); //订单支付
     Route::post('/order_dopay', 'OrderController@dopay')->name('weixin_order_dopay'); //订单支付
     Route::get('/order_list', 'OrderController@orderList')->name('weixin_order_list'); //全部订单列表
+    Route::get('/order_detail', 'OrderController@orderDetail')->name('weixin_order_detail'); //订单详情
     Route::get('/order_wxpay', 'OrderController@orderWxpay')->name('weixin_order_wxpay'); //订单微信支付
     Route::get('/order_yuepay', 'OrderController@orderYuepay')->name('weixin_order_yuepay'); //订单余额支付
     //收货地址

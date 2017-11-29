@@ -220,6 +220,25 @@ class Helper
     }
     
     /**
+     * 检查是否是POST请求
+     */
+    public static function isPostRequest()
+    {
+        if($_SERVER['REQUEST_METHOD'] == 'POST') return true;
+        if($_POST) return true;
+        
+        return false;
+    }
+    
+    /**
+     * 是否是GET提交的
+     */
+    public static function isGetRequest()
+    {
+        return $_SERVER['REQUEST_METHOD'] == 'GET' ? true : false;
+    }
+    
+    /**
      * 301跳转。
      * Header 301 Moved Permanently.
      * 
@@ -286,4 +305,14 @@ class Helper
         
         return false; 
     }
+    
+    //判断是不是https
+    public static function isHttpsRequest()
+    {
+        if((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) return true;
+        
+        if($_SERVER['SERVER_PORT'] == 443) return true;
+        
+        return false;
+   } 
 }

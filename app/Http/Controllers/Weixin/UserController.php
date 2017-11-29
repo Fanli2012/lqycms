@@ -379,7 +379,7 @@ class UserController extends CommonController
         {
             $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
             $callback_url = $http_type . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; //回调地址，当前页面
-            //-------生成唯一随机串防CSRF攻击
+            //生成唯一随机串防CSRF攻击
             $state = md5(uniqid(rand(), true));
             $_SESSION['weixin_oauth']['state'] = $state; //存到SESSION
             $authorize_url = $wechat_auth->get_authorize_url($callback_url, $state);
