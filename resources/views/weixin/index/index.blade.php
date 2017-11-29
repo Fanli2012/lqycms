@@ -104,7 +104,7 @@ var swiper = new Swiper('.swiper-nav', {
                 <img src="<?php echo env('APP_URL'); ?>/images/weixin/icon_15.png" alt="团购" />
                 <span>团购</span>
         </a>
-        <a href="http://www.shop.com/index.php/mobile/User/order_list.html">
+        <a href="<?php echo route('weixin_order_list'); ?>">
                 <img src="<?php echo env('APP_URL'); ?>/images/weixin/icon_16.png" alt="我的订单" />
                 <span>我的订单</span>
         </a>

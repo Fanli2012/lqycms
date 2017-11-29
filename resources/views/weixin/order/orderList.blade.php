@@ -10,6 +10,32 @@
 </div>
 
 @include('weixin.common.headerNav')
+
+<!--导航左右滑动-start-->
+<script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/swiper.min.js"></script>
+<link rel="stylesheet" href="<?php echo env('APP_URL'); ?>/css/swiper.min.css">
+<div class="swiper-nav">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide<?php $order_status=0;if(isset($_REQUEST['status']) && !empty($_REQUEST['status'])){$order_status=$_REQUEST['status'];}if($order_status==0){echo ' swiper-slide-activate';} ?>"><a href="<?php echo route('weixin_order_list'); ?>">全部</a></div>
+        <div class="swiper-slide<?php if($order_status==1){echo ' swiper-slide-activate';} ?>"><a href="<?php echo route('weixin_order_list',array('status'=>1)); ?>">待付款</a></div>
+        <div class="swiper-slide<?php if($order_status==2){echo ' swiper-slide-activate';} ?>"><a href="<?php echo route('weixin_order_list',array('status'=>2)); ?>">待发货</a></div>
+        <div class="swiper-slide<?php if($order_status==3){echo ' swiper-slide-activate';} ?>"><a href="<?php echo route('weixin_order_list',array('status'=>3)); ?>">待收货</a></div>
+        <div class="swiper-slide<?php if($order_status==4){echo ' swiper-slide-activate';} ?>"><a href="<?php echo route('weixin_order_list',array('status'=>4)); ?>">待评价</a></div>
+        <div class="swiper-slide<?php if($order_status==5){echo ' swiper-slide-activate';} ?>"><a href="<?php echo route('weixin_order_list',array('status'=>5)); ?>">退款/售后</a></div>
+    </div>
+</div>
+<style>
+.swiper-nav{width:100%;height:46px;line-height:46px;border-bottom:1px solid #efefef;background:#fff;}
+.swiper-slide{text-align:center;font-size:18px;background:#fff;}.swiper-slide a{color:#666;}
+.swiper-slide-activate{color:#f23030;border-bottom:2px solid #f23030;}.swiper-slide-activate a{color:#f23030;}
+</style>
+<script>
+var swiper = new Swiper('.swiper-nav', {
+    slidesPerView: 4 //一行4列显示
+});
+</script>
+<!--导航左右滑动-end-->
+
 <?php if($list){foreach($list as $key=>$value){ ?>
 <div class="floor mt10">
 <a href="<?php echo route('weixin_order_detail',array('id'=>$value['id'])); ?>">
@@ -25,9 +51,11 @@
 </a>
 
 <p class="des">合计: ￥<?php echo $value['order_amount']; ?> <small>(含运费:￥<?php echo $value['shipping_fee']; ?>)</small></p>
-<div class="tag"><a href="" class="activate">我要付款</a><a href="">评价</a></div>
+<div class="tag"><?php if($value['order_status_num']==1){ ?><a href="<?php echo route('weixin_order_pay',array('id'=>$value['id'])); ?>">我要付款</a><?php } ?><a href="" class="activate">评价</a></div>
 </div>
-<?php }} ?>
+<?php }}else{ ?>
+    <div style="text-align:center;line-height:40px;color:#999;">暂无记录</div>
+<?php } ?>
 <style>
 .goodslist{background-color:#fbfbfb;}
 .goodslist li{display:-webkit-box;margin:0 10px;padding:10px 0;border-bottom:1px solid #f1f1f1;}.goodslist li:last-child{border-bottom:none;}
@@ -44,5 +72,4 @@
 .tag a{color:#666;background-color:#fff;border:1px solid #ddd;border-radius:5px;font-size:14px;padding:2px 6px;display:inline-block;margin-right:10px;}
 .tag a.activate{color:#ea6f5a;border:1px solid #ea6f5a;}
 </style>
-@include('weixin.common.footer')
 </body></html>

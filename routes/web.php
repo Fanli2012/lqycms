@@ -55,7 +55,9 @@ Route::group(['namespace' => 'Home'], function () {
 //微信路由，无需登录
 Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin'], function () {
 	Route::get('/', 'IndexController@index')->name('weixin');
-	Route::get('/page404', 'IndexController@page404')->name('weixin_page404');         //404页面
+	Route::get('/category', 'IndexController@category')->name('weixin_category');
+    Route::get('/category_goods_list', 'GoodsController@categoryGoodsList')->name('weixin_category_goods_list'); //产品分类页
+    Route::get('/page404', 'IndexController@page404')->name('weixin_page404');  //404页面
 	Route::get('/search', 'IndexController@search')->name('weixin_search');  //搜索页面
 	Route::get('/p/{id}', 'ArticleController@detail')->name('weixin_article_detail'); //文章详情页
 	Route::get('/cat{cat}', 'ArticleController@category')->name('weixin_article_category'); //分类页
@@ -77,7 +79,6 @@ Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin'], function () {
 
 //微信路由，需登录，全局
 Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin', 'middleware' => ['web','wxlogin']], function () {
-    Route::get('/category', 'CartController@index')->name('weixin_category');
     //个人中心
 	Route::get('/user', 'UserController@index')->name('weixin_user');
     Route::get('/userinfo', 'UserController@userinfo')->name('weixin_userinfo');

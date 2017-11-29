@@ -15,7 +15,7 @@
         </li>
         <li class="red">
             <a href="/index.php/Mobile/Goods/search/id/0/q/冰箱/sort/sales_sum">
-                 <span class="dq">销量</span>
+                <span class="dq">销量</span>
             </a>
         </li>
         <li>

@@ -57,6 +57,13 @@ class IndexController extends CommonController
         return view('weixin.index.index',$data);
     }
 	
+    //分类
+    public function category()
+	{
+        $data['aaa'] = 111;
+        return view('weixin.index.category',$data);
+    }
+    
     //标签详情页，共有3种显示方式，1正常列表，2列表显示文章，3显示描述
 	public function tag($tag, $page=0)
 	{

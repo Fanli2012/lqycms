@@ -11,6 +11,14 @@
 </div>
 
 @include('weixin.common.headerNav')
+
+<div class="orderdetail-des">
+    <p><?php echo $post['order_status_text']; ?></p>
+</div>
+<style>
+.orderdetail-des{background:#ea5a3d;padding:20px 10px;color:#fff;font-size:18px;}
+</style>
+
 <!-- 选择收货地址-start -->
 <div class="checkout-addr">
     <p class="title"><span class="name" id="default_consignee"><?php echo $post['name']; ?></span> <span class="tel" id="default_phone"><?php echo $post['mobile']; ?></span></p>
@@ -27,12 +35,12 @@
 <div class="floor mt10">
 <div class="tit_h">订单商品</div>
 <ul class="goodslist">
-<?php if($post){foreach($post['goods_list'] as $key=>$value){ ?>
+<?php foreach($post['goods_list'] as $key=>$value){ ?>
 <li>
 	<img src="<?php echo $value['goods_img']; ?>">
 	<p><b><?php echo $value['goods_name']; ?></b><span>￥<?php echo $value['goods_price']; ?><i>x<?php echo $value['goods_number']; ?></i></span></p>
 </li>
-<?php }} ?>
+<?php } ?>
 </ul>
 
 <p class="des">合计: ￥<?php echo $post['order_amount']; ?> <small>(含运费:￥<?php echo $post['shipping_fee']; ?>)</small></p>

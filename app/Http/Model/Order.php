@@ -72,7 +72,9 @@ class Order extends BaseModel
             {
                 foreach($order_list as $k=>$v)
                 {
-                    $order_list[$k]['order_status_text'] = self::getOrderStatusText($v);
+                    $order_status_arr = self::getOrderStatusText($v);
+                    $order_list[$k]['order_status_text'] = $order_status_arr['text'];
+                    $order_list[$k]['order_status_num'] = $order_status_arr['num'];
                     
                     $order_goods = OrderGoods::where(array('order_id'=>$v['id']))->get();
                     $order_list[$k]['goods_list'] = $order_goods;
@@ -102,7 +104,9 @@ class Order extends BaseModel
             return ReturnData::create(ReturnData::SYSTEM_FAIL);
         }
         
-        $res['order_status_text'] = self::getOrderStatusText($res);
+        $order_status_arr = self::getOrderStatusText($res);
+        $res['order_status_text'] = $order_status_arr['text'];
+        $res['order_status_num'] = $order_status_arr['num'];
         
         $res['province_name'] = Region::getRegionName($res['province']);
         $res['city_name'] = Region::getRegionName($res['city']);
@@ -163,7 +167,7 @@ class Order extends BaseModel
             'place_type'   => $place_type, //订单来源
             'bonus_id'     => !empty($user_bonus)?$user_bonus['id']:0,
             'bonus_money'  => !empty($user_bonus)?$user_bonus['money']:0.00,
-            'message'      => $message
+            'message'      => !empty($message)?$message:'',
 		);
         
         //插入订单
@@ -245,23 +249,23 @@ class Order extends BaseModel
         $res = '';
         if($where['order_status'] == 0 && $where['pay_status'] ==0)
         {
-            $res = '待付款';
+            $res = array('text'=>'待付款','num'=>1);
         }
         elseif($where['order_status'] == 0 && $where['shipping_status'] == 0 && $where['pay_status'] == 1)
         {
-            $res = '待发货';
+            $res = array('text'=>'待发货','num'=>2);
         }
         elseif($where['order_status'] == 0 && $where['refund_status'] == 0 && $where['shipping_status'] == 1 && $where['pay_status'] == 1)
         {
-            $res = '待收货';
+            $res = array('text'=>'待收货','num'=>3);
         }
         elseif($where['order_status'] == 3 && $where['refund_status'] == 0 && $where['shipping_status'] == 2 && $where['is_comment'] == 0)
         {
-            $res = '交易成功';
+            $res = array('text'=>'交易成功','num'=>4);
         }
         elseif($where['order_status'] == 3 && $where['refund_status'] == 1)
         {
-            $res = '售后';
+            $res = array('text'=>'售后','num'=>5);
         }
         
         return $res;
