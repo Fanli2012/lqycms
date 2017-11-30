@@ -137,7 +137,7 @@ var swiper = new Swiper('.swiper-nav', {
 
 <!--猜您喜欢-start-->
 <div class="floor guesslike">
-    <div class="banner_tit"><img src="<?php echo env('APP_URL'); ?>/images/weixin/ind_52.jpg" alt="猜您喜欢"/></div>
+    <div class="banner_tit">- 精品推荐 -</div>
     <div class="likeshop">
         <ul class="goods_list" id="goods_list">
         <?php if($goods_list){foreach($goods_list as $k=>$v){ ?>
@@ -150,7 +150,7 @@ var swiper = new Swiper('.swiper-nav', {
 
 <!--猜您喜欢-start-->
 <div class="floor guesslike">
-    <div class="banner_tit"><img src="<?php echo env('APP_URL'); ?>/images/weixin/ind_52.jpg" alt="猜您喜欢"/></div>
+    <div class="banner_tit">- 猜你喜欢 -</div>
     <ul class="goods_list_s cl">
     <?php if($goods_list){foreach($goods_list as $k=>$v){ ?>
         <a href="<?php echo $v['goods_detail_url']; ?>"><li><span class="goods_thumb"><img alt="<?php echo $v['title']; ?>" src="<?php echo $v['litpic']; ?>"></span>
@@ -163,6 +163,8 @@ var swiper = new Swiper('.swiper-nav', {
     </ul>
 </div>
 <!--猜您喜欢-end-->
-
+<style>
+.banner_tit{font-size:18px;font-weight:400;background-color:#fff;color:#f23030;height:46px;line-height:46px;padding-left:10px;padding-right:10px;border-bottom:1px solid #eee;text-align:center;}
+</style>
 @include('weixin.common.footer')
 </body></html>

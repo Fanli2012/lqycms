@@ -5,6 +5,7 @@ use App\Http\Controllers\Weixin\CommonController;
 use Illuminate\Http\Request;
 use App\Common\ReturnCode;
 use App\Common\WechatAuth;
+use App\Common\Helper;
 
 class UserController extends CommonController
 {
@@ -465,7 +466,8 @@ class UserController extends CommonController
             header('Location: '.route('weixin_user'));exit;
         }
         
-        return view('weixin.user.login');
+        $data['isWechatBrowser'] = Helper::isWechatBrowser();
+        return view('weixin.user.login',$data);
 	}
     
     //注册

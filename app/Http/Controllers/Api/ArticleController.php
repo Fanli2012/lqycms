@@ -20,7 +20,7 @@ class ArticleController extends CommonController
         //参数
         $data['limit'] = $request->input('limit', 10);
         $data['offset'] = $request->input('offset', 0);
-        if($request->input('typeid', null) !== null){$data['typeid'] = $request->input('typeid');}
+        if($request->input('typeid', '') != ''){$data['typeid'] = $request->input('typeid');}
         $data['ischeck'] = Article::IS_CHECK;
         
         $res = Article::getList($data);
@@ -51,8 +51,8 @@ class ArticleController extends CommonController
 			return ReturnData::create(ReturnData::SYSTEM_FAIL);
 		}
         
-        $res->pubdate = date('Y-m-d H:i',$res->pubdate);
-        $res->addtime = date('Y-m-d H:i',$res->addtime);
+        //$res->pubdate = date('Y-m-d H:i',$res->pubdate);
+        //$res->addtime = date('Y-m-d H:i',$res->addtime);
         
         \DB::table('article')->where(array('id'=>$data['id']))->increment('click', 1);
         

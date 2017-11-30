@@ -14,22 +14,9 @@
 <h1 class="arc_tit"><?php echo $post['title']; ?></h1>
 
 <div class="arc_content box">
-<div class="ainfo"><?php echo $post['pubdate']; ?></div>
-<div>
-	查询新股配号主要有以下三点：</div>
-<div>
-	&nbsp;</div>
-<div>
-	1.到证券营业部进行查询。</div>
-<div>
-	&nbsp;</div>
-<div>
-	2.在申购日后的第三天投资者可通过网上进行新股配号的查询。</div>
-<div>
-	&nbsp;</div>
-<div>
-	3.客户还可以通过交易所的咨询电话进行查询：0755-2288800（深市），021-16893006（沪市）投资者所查到的配号是投资者在一个帐户上申购新股所得配号的起始号，其余配号依次顺延.</div>
-<!-- <div class="arcnext cl">下: <a class="red" href="" rel="prev"></a></div> --></div>
+<div class="ainfo"><?php echo $post['pubdate']; ?> <a style="color:#ee5b03;" href="<?php echo route('weixin_article_category',array('cat'=>$post['typeid'])); ?>"><?php echo $post['type_name']; ?></a></div>
+<?php echo $post['body']; ?>
+<div class="arcnext cl mb10" style="margin-top:10px;color:#999;">阅读 <?php echo $post['click']; ?><!-- <a class="red" href="" rel="prev"></a> --></div></div>
 
 @include('weixin.common.footer')
 </body></html>

@@ -66,7 +66,7 @@ class Order extends BaseModel
         
 		if($res['count']>0)
         {
-            $order_list = $model->skip($offset)->take($limit)->get();
+            $order_list = $model->orderBy('id', 'desc')->skip($offset)->take($limit)->get();
             
             if($order_list)
             {

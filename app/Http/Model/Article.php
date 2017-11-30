@@ -98,7 +98,11 @@ class Article extends BaseModel
         $where['id'] = $id;
         if(isset($ischeck)){$where['ischeck'] = $ischeck;}
         
-        return self::where($where)->first();
+        $res = self::where($where)->first();
+        
+        if($res){$res->type_name = Arctype::where('id', $res->typeid)->value('name');}
+        
+        return $res;
     }
     
     public static function add(array $data)
