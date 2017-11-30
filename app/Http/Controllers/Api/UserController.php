@@ -205,13 +205,14 @@ class UserController extends CommonController
     //微信授权注册
     public function wxOauthRegister(Request $request)
 	{
-        $data['openid'] = $data['user_name'] = $request->input('openid','');
+        $data['openid'] = $request->input('openid','');
         $data['sex'] = $request->input('sex','');
         $data['head_img'] = $request->input('head_img','');
         $data['nickname'] = $request->input('nickname','');
         $data['parent_id'] = $request->input('parent_id','');
         $parent_mobile = $request->input('parent_mobile','');
         $data['mobile'] = $request->input('mobile','');
+        $data['user_name'] = date('YmdHis').dechex(rand(1000,9999));
         
         if ($data['openid']=='')
 		{
@@ -453,5 +454,4 @@ class UserController extends CommonController
 		
 		return ReturnCode::create(ReturnCode::SUCCESS);
     }
-    
 }

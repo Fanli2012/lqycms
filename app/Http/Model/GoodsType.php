@@ -14,7 +14,15 @@ class GoodsType extends BaseModel
      */
 	protected $table = 'goods_type';
 	public $timestamps = false;
-	
+    
+	/**
+     * 不能被批量赋值的属性
+     *
+     * @var array
+     */
+    protected $guarded = array();
+	protected $hidden = array('content');
+    
 	/**
 	 * 获取分类对应的产品
 	 */
@@ -33,7 +41,7 @@ class GoodsType extends BaseModel
         $limit  = isset($limit) ? $limit : 10;
         $offset = isset($offset) ? $offset : 0;
         
-        $model = new GoodsType;
+        $model = new self;
         
         if(isset($pid)){$where['pid'] = $pid;}
         
@@ -47,7 +55,7 @@ class GoodsType extends BaseModel
         
 		if($res['count']>0)
         {
-            $res['list']  = $model->skip($offset)->take($limit)->orderBy('listorder','desc')->get()->toArray();
+            $res['list']  = $model->skip($offset)->take($limit)->orderBy('listorder','desc')->get();
         }
         else
         {
@@ -57,9 +65,9 @@ class GoodsType extends BaseModel
         return $res;
     }
     
-    public static function getOne($id)
+    public static function getOne($where)
     {
-        return self::where('id', $id)->first()->toArray();
+        return self::where($where)->first();
     }
     
     public static function add(array $data)

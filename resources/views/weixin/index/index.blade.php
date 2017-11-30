@@ -84,7 +84,7 @@ var swiper = new Swiper('.swiper-nav', {
 <!--菜单-start-->
 <div class="floor home_menu">
     <nav>
-        <a href="/index.php/mobile/Goods/categoryList.html">
+        <a href="<?php echo route('weixin_category_goods_list'); ?>">
                 <img src="<?php echo env('APP_URL'); ?>/images/weixin/icon_03.png" alt="全部分类" />
                 <span>全部分类</span>
         </a>

@@ -8,6 +8,9 @@ $(function(){
 	$('.classlist ul li').click(function(){
 		$(this).addClass('red').siblings().removeClass('red');
 	});
+    
+    //设置图片长等于宽
+    $(".imgzsy").height(function(){return $(this).width();});
 });
 
 //删除确认框

@@ -17,6 +17,7 @@ class User extends BaseModel
      */
     protected $guarded = array();
 	protected $hidden = array('password','pay_password');
+    
 	/**
      * 获取关联到用户的角色
      */

@@ -15,43 +15,26 @@
 <div class="flool classlist">
     <div class="fl category1">
         <ul>
-            <li class="on">
-               <a href="javascript:void(0);" data-id="0">数码产品</a>
+        <li<?php if(0==$typeid){echo ' class="on"';} ?>>
+            <a href="<?php echo route('weixin_category_goods_list'); ?>" data-id="0">全部</a>
+        </li>
+        <?php if($goodstype_list){foreach($goodstype_list as $k=>$v){ ?>
+            <li<?php if($v['id']==$typeid){echo ' class="on"';} ?>>
+               <a href="<?php echo route('weixin_category_goods_list',array('typeid'=>$v['id'])); ?>" data-id="<?php echo $v['id']; ?>"><?php echo $v['name']; ?></a>
             </li>
-                                <li class="">
-               <a href="javascript:void(0);" data-id="1">家用电器</a>
-            </li>
-                                <li class="">
-               <a href="javascript:void(0);" data-id="2">电脑</a>
-            </li>
-                                <li class="">
-               <a href="javascript:void(0);" data-id="3">家具</a>
-            </li>
-                                <li class="">
-               <a href="javascript:void(0);" data-id="4">服装</a>
-            </li>
-                                <li class="">
-               <a href="javascript:void(0);" data-id="5">箱包</a>
-            </li>
-                                <li class="">
-               <a href="javascript:void(0);" data-id="6">个人化妆</a>
-            </li>
+        <?php }} ?>
         </ul>
     </div>
     <div class="fr category2">
+        <?php if($goods_list){ ?>
         <ul class="goods_list_small">
-            <li><a href="http://m.m99.info/cat1/youhuo1486"><img alt="1" src="images/weixin/goods_thumb_400_400.jpeg"><div class="goods_info"><p class="goods_tit">美女真空凸点诱惑</p><div class="goods_price">￥<b>100.00</b></div></div></a></li>
-            <li><a href="http://m.m99.info/cat1/youhuo1485"><img alt="2" src="images/weixin/goods_thumb_400_400.jpeg"><div class="goods_info"><p class="goods_tit">性感小骚货在床上</p><div class="goods_price">￥<b>100.00</b></div></div></a></li>
-            <li><a href="http://m.m99.info/cat1/youhuo1484"><img alt="3" src="images/weixin/goods_thumb_400_400.jpeg"><div class="goods_info"><p class="goods_tit">小野猫嫩模大尺度写真</p><div class="goods_price">￥<b>100.00</b></div></div></a></li>
-            <li><a href="http://m.m99.info/cat1/youhuo1482"><img alt="4" src="images/weixin/goods_thumb_400_400.jpeg"><div class="goods_info"><p class="goods_tit">韩国嫩模的逆天身材</p><div class="goods_price">￥<b>100.00</b></div></div></a></li>
-            <li><a href="http://m.m99.info/cat1/youhuo1481"><img alt="5" src="images/weixin/goods_thumb_400_400.jpeg"><div class="goods_info"><p class="goods_tit">推女郎林夕图片</p><div class="goods_price">￥<b>100.00</b></div></div></a></li>
-            <li><a href="http://m.m99.info/cat1/youhuo1486"><img alt="1" src="images/weixin/goods_thumb_400_400.jpeg"><div class="goods_info"><p class="goods_tit">美女真空凸点诱惑</p><div class="goods_price">￥<b>100.00</b></div></div></a></li>
-            <li><a href="http://m.m99.info/cat1/youhuo1485"><img alt="2" src="images/weixin/goods_thumb_400_400.jpeg"><div class="goods_info"><p class="goods_tit">性感小骚货在床上</p><div class="goods_price">￥<b>100.00</b></div></div></a></li>
-            <li><a href="http://m.m99.info/cat1/youhuo1484"><img alt="3" src="images/weixin/goods_thumb_400_400.jpeg"><div class="goods_info"><p class="goods_tit">小野猫嫩模大尺度写真</p><div class="goods_price">￥<b>100.00</b></div></div></a></li>
-            <li><a href="http://m.m99.info/cat1/youhuo1482"><img alt="4" src="images/weixin/goods_thumb_400_400.jpeg"><div class="goods_info"><p class="goods_tit">韩国嫩模的逆天身材</p><div class="goods_price">￥<b>100.00</b></div></div></a></li>
-            <li><a href="http://m.m99.info/cat1/youhuo1481"><img alt="5" src="images/weixin/goods_thumb_400_400.jpeg"><div class="goods_info"><p class="goods_tit">推女郎林夕图片</p><div class="goods_price">￥<b>100.00</b></div></div></a></li>
-            <li><a href="http://m.m99.info/cat1/youhuo1483"><img alt="6" src="images/weixin/goods_thumb_400_400.jpeg"><div class="goods_info"><p class="goods_tit">性感闺蜜艺术照</p><div class="goods_price">￥<b>100.00</b></div></div></a></li>
+        <?php foreach($goods_list as $k=>$v){ ?>
+            <li><a href="<?php echo $v['goods_detail_url']; ?>"><img class="imgzsy" alt="<?php echo $v['title']; ?>" src="<?php echo $v['litpic']; ?>"><div class="goods_info"><p class="goods_tit"><?php echo $v['title']; ?></p><div class="goods_price">￥<b><?php echo $v['price']; ?></b></div></div></a></li>
+        <?php } ?>
         </ul>
+        <?php }else{ ?>
+            <div style="text-align:center;line-height:40px;color:#999;">暂无记录</div>
+        <?php } ?>
     </div>
 </div>
 

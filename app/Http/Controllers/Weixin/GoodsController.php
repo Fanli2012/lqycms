@@ -56,8 +56,8 @@ class GoodsController extends CommonController
             'offset' => 0
 		);
         $url = env('APP_API_URL')."/goods_list";
-		$goods_list = curl_request($url,$postdata,'GET');
-        $data['goods_list'] = $goods_list['data']['list'];
+		$res = curl_request($url,$postdata,'GET');
+        $data['goods_list'] = $res['data']['list'];
         
 		return view('weixin.goods.goodsList', $data);
 	}
@@ -65,23 +65,28 @@ class GoodsController extends CommonController
     //商品列表
     public function categoryGoodsList(Request $request)
 	{
+        $data['typeid'] = 0;
         if($request->input('typeid', '') != ''){$data['typeid'] = $request->input('typeid');}
-        if($request->input('tuijian', '') != ''){$data['tuijian'] = $request->input('tuijian');}
-        if($request->input('keyword', '') != ''){$data['keyword'] = $request->input('keyword');}
-        if($request->input('status', '') != ''){$data['status'] = $request->input('status');}
-        if($request->input('is_promote', '') != ''){$data['is_promote'] = $request->input('is_promote');}
-        if($request->input('orderby', '') != ''){$data['orderby'] = $request->input('orderby');}
-        if($request->input('max_price', '') != ''){$data['max_price'] = $request->input('max_price');}else{$data['max_price'] = 99999;}
-        if($request->input('min_price', '') != ''){$data['min_price'] = $request->input('min_price');}else{$data['min_price'] = 0;}
         
-        //商品列表
+        //商品分类列表
         $postdata = array(
-            'limit'  => 10,
+            'pid'    => 0,
+            'limit'  => 100,
+            'offset' => 0
+		);
+        $url = env('APP_API_URL')."/goodstype_list";
+		$res = curl_request($url,$postdata,'GET');
+        $data['goodstype_list'] = $res['data']['list'];
+        
+       //商品列表
+        $postdata = array(
+            'typeid' => $data['typeid'],
+            'limit'  => 100,
             'offset' => 0
 		);
         $url = env('APP_API_URL')."/goods_list";
-		$goods_list = curl_request($url,$postdata,'GET');
-        $data['goods_list'] = $goods_list['data']['list'];
+		$res = curl_request($url,$postdata,'GET');
+        $data['goods_list'] = $res['data']['list'];
         
 		return view('weixin.goods.categoryGoodsList', $data);
 	}
