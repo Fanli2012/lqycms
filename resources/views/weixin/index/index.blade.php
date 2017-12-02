@@ -19,7 +19,7 @@
     <div class="swiper-container">
         <div class="swiper-wrapper">
         <?php foreach($slide_list as $k=>$v){ ?>
-            <div class="swiper-slide"><img src="<?php echo $v['pic']; ?>" alt="<?php echo $v['title']; ?>"></div>
+            <div class="swiper-slide"><a href="<?php echo $v['url']; ?>"><img src="<?php echo $v['pic']; ?>" alt="<?php echo $v['title']; ?>"></a></div>
         <?php } ?>
         </div>
         <!-- Add Pagination -->

@@ -85,6 +85,7 @@ Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin', 'middleware' => ['w
     Route::get('/user_account', 'UserController@userAccount')->name('weixin_user_account');
     Route::get('/user_money_list', 'UserController@userMoneyList')->name('weixin_user_money_list');
     Route::get('/user_point_list', 'UserController@userPointList')->name('weixin_user_point_list');
+    Route::get('/user_message_list', 'UserController@userMessageList')->name('weixin_user_message_list');
     //用户充值
     Route::get('/user_recharge', 'UserController@userRecharge')->name('weixin_user_recharge');
     Route::get('/user_recharge_order', 'UserController@userRechargeOrder')->name('weixin_user_recharge_order');
@@ -159,6 +160,10 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     //用户余额(钱包)
     Route::get('/user_money_list', 'UserMoneyController@userMoneyList');
     Route::post('/user_money_add', 'UserMoneyController@userMoneyAdd');
+    //用户消息
+    Route::get('/user_message_list', 'UserMessageController@userMessageList');
+    Route::post('/user_message_add', 'UserMessageController@userMessageAdd');
+    Route::post('/user_message_update', 'UserMessageController@userMessageUpdate');
     //浏览记录
     Route::get('/user_goods_history_list', 'UserGoodsHistoryController@userGoodsHistoryList'); //我的足迹列表
     Route::post('/user_goods_history_delete', 'UserGoodsHistoryController@userGoodsHistoryDelete'); //我的足迹删除一条
@@ -275,6 +280,13 @@ Route::group(['prefix' => 'fladmin', 'namespace' => 'Admin', 'middleware' => ['w
 	Route::get('/goodstype/edit', 'GoodsTypeController@edit')->name('admin_goodstype_edit');
 	Route::post('/goodstype/doedit', 'GoodsTypeController@doedit')->name('admin_goodstype_doedit');
 	Route::get('/goodstype/del', 'GoodsTypeController@del')->name('admin_goodstype_del');
+    //商品品牌
+	Route::get('/goodbrand', 'GoodsBrandController@index')->name('admin_goodbrand');
+	Route::get('/goodbrand/add', 'GoodsBrandController@add')->name('admin_goodbrand_add');
+	Route::post('/goodbrand/doadd', 'GoodsBrandController@doadd')->name('admin_goodbrand_doadd');
+	Route::get('/goodbrand/edit', 'GoodsBrandController@edit')->name('admin_goodbrand_edit');
+	Route::post('/goodbrand/doedit', 'GoodsBrandController@doedit')->name('admin_goodbrand_doedit');
+	Route::get('/goodbrand/del', 'GoodsBrandController@del')->name('admin_goodbrand_del');
 	//友情链接
 	Route::get('/friendlink', 'FriendlinkController@index')->name('admin_friendlink');
 	Route::get('/friendlink/add', 'FriendlinkController@add')->name('admin_friendlink_add');

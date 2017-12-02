@@ -647,15 +647,9 @@ function get_keywords($keyword)
 }
 
 //获取二维码
-function get_erweima($url="")
+function get_erweima($url='',$size=150)
 {
-	Vendor('phpqrcode.qrlib');
-	
-	$url = str_replace("%26","&",$url);
-	$url = str_replace("%3F","?",$url);
-	$url = str_replace("%3D","=",$url);
-	
-	return QRcode::png($url, false, "H", 6);
+    return 'data:image/png;base64,'.base64_encode(\QrCode::format('png')->encoding('UTF-8')->size($size)->margin(0)->errorCorrection('H')->generate($url));
 }
 
 //根据栏目id获取栏目信息
@@ -1145,7 +1139,21 @@ function get_table_columns($table, $field='')
 	return $res;
 }
 
-
+function http_host($flag=true)
+{
+    $res = '';
+    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+    if($flag)
+    {
+        $res = "$protocol$_SERVER[HTTP_HOST]";
+    }
+    else
+    {
+        $res = "$protocol$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"; //完整网址
+    }
+    
+    return $res;
+}
 
 
 

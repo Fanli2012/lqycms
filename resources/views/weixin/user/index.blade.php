@@ -20,7 +20,7 @@
         <!--设置-->
         <a class="setting" href="<?php echo route('weixin_userinfo'); ?>"><i></i></a>
         <!--我的留言-->
-        <a class="massage" href="/index.php/mobile/User/message_notice.html"><i></i></a>
+        <a class="massage" href="<?php echo route('weixin_user_message_list'); ?>"><i></i></a>
     </div>
     <div class="scgz">
         <ul>
@@ -31,7 +31,7 @@
                 </a>
             </li>
             <li>
-                <a href="/index.php/Mobile/User/message_notice.html">
+                <a href="<?php echo route('weixin_user_message_list'); ?>">
                     <h2>0</h2>
                     <p>消息通知</p>
                 </a>

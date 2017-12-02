@@ -41,7 +41,7 @@
             <input type="password" name="re_password" class="" id="re_password" placeholder="确认密码">
         </div>
         <div class="adr-form-group">
-            <input type="text" name="parent_mobile" class="" id="parent_mobile" placeholder="请输入推荐人手机号，选填">
+            <input value="<?php if(isset($_SESSION['weixin_user_invite_code'])){echo $_SESSION['weixin_user_invite_code'];} ?>" type="text" name="parent_mobile" class="" id="parent_mobile" placeholder="请输入推荐人手机号，选填">
         </div>
     </div>
     </form>

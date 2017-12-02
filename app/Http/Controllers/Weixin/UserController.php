@@ -296,6 +296,54 @@ class UserController extends CommonController
         return view('weixin.user.userBonusList', $data);
 	}
     
+    //用户消息
+    public function userMessageList(Request $request)
+	{
+        $pagesize = 10;
+        $offset = 0;
+        if(isset($_REQUEST['page'])){$offset = ($_REQUEST['page']-1)*$pagesize;}
+        
+        $postdata = array(
+            'limit'  => $pagesize,
+            'offset' => $offset,
+            'access_token' => $_SESSION['weixin_user_info']['access_token']
+		);
+        $url = env('APP_API_URL')."/user_message_list";
+		$res = curl_request($url,$postdata,'GET');
+        $data['list'] = $res['data']['list'];
+        
+        $data['totalpage'] = ceil($res['data']['count']/$pagesize);
+        
+        if(isset($_REQUEST['page_ajax']) && $_REQUEST['page_ajax']==1)
+        {
+    		$html = '';
+            
+            if($res['data']['list'])
+            {
+                foreach($res['data']['list'] as $k => $v)
+                {
+                    $html .= '<li>';
+                    if($v['title']==0)
+                    {
+                        $html .= '<p class="tit">'.$v['title'].'</p>';
+                    }
+                    
+                    if($v['des']==0)
+                    {
+                        $html .= '<p class="des">'.$v['des'].'</p>';
+                    }
+                    
+                    $html .= '<p class="time">'.date('Y-m-d H:i:s',$v['add_time']).'</p>';
+                    $html .= '</li>';
+                }
+            }
+            
+    		exit(json_encode($html));
+    	}
+        
+        return view('weixin.user.userMessageList', $data);
+    }
+    
     //浏览记录
     public function userGoodsHistory(Request $request)
 	{
@@ -481,7 +529,7 @@ class UserController extends CommonController
         
         $return_url = '';
         if(isset($_REQUEST['return_url']) && !empty($_REQUEST['return_url'])){$_SESSION['weixin_history_back_url'] = $_REQUEST['return_url'];}
-        if(isset($_REQUEST['parent_id']) && !empty($_REQUEST['parent_id'])){$_SESSION['weixin_user_parent_id'] = $_REQUEST['parent_id'];} //推荐人id存在session，首页入口也存了一次
+        if(isset($_REQUEST['invite_code']) && !empty($_REQUEST['invite_code'])){$_SESSION['weixin_user_invite_code'] = $_REQUEST['invite_code'];} //推荐人id存在session，首页入口也存了一次
         
         return view('weixin.user.register');
 	}

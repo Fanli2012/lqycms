@@ -236,6 +236,22 @@ function update_sex(sex)
     window.location.reload();
 }
 </script>
+    <a href="javascript:qrcode_layer();"><li>
+        <div class="ui-list-info">
+            <h4 class="ui-nowrap">二维码名片</h4>
+            <div class="ui-txt-info"> &nbsp;</div>
+        </div>
+        <i class="fa fa-qrcode" aria-hidden="true" style="font-size:24px;"></i>
+    </li></a>
+<script>
+function qrcode_layer()
+{
+    //询问框
+    layer.open({
+        content: '<div><div><img style="width:100%;" class="imgzsy" src="<?php echo get_erweima(route('weixin',array('invite_code'=>$_SESSION['weixin_user_info']['mobile'])),240); ?>"></div><p style="color:#999;">扫一扫，你懂得</p></div>'
+    });
+}
+</script>
 </ul>
 
 <ul class="fui-list mt10">

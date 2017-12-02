@@ -22,9 +22,9 @@ class IndexController extends CommonController
     public function index()
 	{
         //分享到首页，把推荐id存下来
-        if(isset($_GET['parent_id']) && !empty($_GET['parent_id']))
+        if(isset($_REQUEST['invite_code']) && !empty($_REQUEST['invite_code']))
         {
-			$_SESSION['weixin_user_parent_id'] = intval($_GET['parent_id']);
+			$_SESSION['weixin_user_invite_code'] = $_REQUEST['invite_code'];
 		}
         
         //banner轮播图
@@ -33,8 +33,8 @@ class IndexController extends CommonController
             'offset' => 0
 		);
         $url = env('APP_API_URL')."/slide_list";
-		$slide_list = curl_request($url,$postdata,'GET');
-        $data['slide_list'] = $slide_list['data']['list'];
+		$res = curl_request($url,$postdata,'GET');
+        $data['slide_list'] = $res['data']['list'];
         
         //最新资讯
         $postdata = array(
@@ -42,8 +42,8 @@ class IndexController extends CommonController
             'offset' => 0
 		);
         $url = env('APP_API_URL')."/article_list";
-		$article_list = curl_request($url,$postdata,'GET');
-        $data['article_list'] = $article_list['data']['list'];
+		$res = curl_request($url,$postdata,'GET');
+        $data['article_list'] = $res['data']['list'];
         
         //商品列表
         $postdata = array(
@@ -51,8 +51,8 @@ class IndexController extends CommonController
             'offset' => 0
 		);
         $url = env('APP_API_URL')."/goods_list";
-		$goods_list = curl_request($url,$postdata,'GET');
-        $data['goods_list'] = $goods_list['data']['list'];
+		$res = curl_request($url,$postdata,'GET');
+        $data['goods_list'] = $res['data']['list'];
         
         return view('weixin.index.index',$data);
     }

@@ -32,7 +32,8 @@ class QrcodeController extends CommonController
 		$url = str_replace("%3F","?",$url);
 		$url = str_replace("%3D","=",$url);
 		
-        require_once base_path('resources/org/phpqrcode').'/phpqrcode.php';
+        require_once(resource_path('org/phpqrcode/phpqrcode.php'));
+        
 		return \QRcode::png($url,false,"H",6);
 	}
 }
