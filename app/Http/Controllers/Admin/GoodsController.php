@@ -48,7 +48,9 @@ class GoodsController extends CommonController
     {
 		$data = [];
 		if(!empty($_GET["catid"])){$data['catid'] = $_GET["catid"];}else{$data['catid'] = 0;}
-		
+        
+		$data['goodsbrand_list'] = object_to_array(DB::table('goods_brand')->where('status', 0)->orderBy('listorder', 'asc')->get()); //商品品牌
+        
         return view('admin.goods.add', $data);
     }
     
@@ -101,6 +103,7 @@ class GoodsController extends CommonController
         if($goods->promote_end_date != 0){$goods->promote_end_date = date('Y-m-d H:i:s',$goods->promote_end_date);}
         
 		$data['post'] = object_to_array($goods, 1);
+        $data['goodsbrand_list'] = object_to_array(DB::table('goods_brand')->where('status', 0)->orderBy('listorder', 'asc')->get()); //商品品牌
         
         return view('admin.goods.edit', $data);
     }

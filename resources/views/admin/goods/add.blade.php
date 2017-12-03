@@ -100,6 +100,17 @@ function upImage()
         </td>
     </tr>
     <tr>
+        <td align="right">商品品牌：</td>
+        <td>
+            <select name="brand_id" id="brand_id">
+                <option value="0">请选择品牌</option>
+                <?php foreach($goodsbrand_list as $row){ ?>
+                <option value="<?php echo $row["id"]; ?>"><?php echo $row["title"]; ?></option>
+                <?php } ?>
+            </select>
+        </td>
+    </tr>
+    <tr>
         <td align="right">关键词：</td>
         <td><input type="text" name="keywords" id="keywords" style="width:50%" value=""> (多个用","分开)</td>
     </tr>

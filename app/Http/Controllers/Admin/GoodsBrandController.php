@@ -13,7 +13,7 @@ class GoodsBrandController extends CommonController
 	
     public function index()
     {
-		$data['posts'] = object_to_array(DB::table("goods_brand")->select('add_time', 'title', 'litpic', 'status', 'listorder', 'cover_img', 'click')->orderBy('id', 'desc')->get());
+		$data['posts'] = object_to_array(DB::table("goods_brand")->select('id', 'add_time', 'title', 'litpic', 'status', 'listorder', 'cover_img', 'click')->orderBy('id', 'desc')->get());
         return view('admin.GoodsBrand.index', $data);
     }
     
@@ -27,7 +27,7 @@ class GoodsBrandController extends CommonController
 		
         if(DB::table("goods_brand")->insert($_POST))
         {
-            success_jump('添加成功！');
+            success_jump('添加成功！', route('admin_goodsbrand'));
         }
 		else
 		{

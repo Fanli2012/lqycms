@@ -67,9 +67,16 @@ class Goods extends BaseModel
             $model = $model->where($where);
         }
         
-        if(isset($keyword)){$model = $model->where("title", "like", "%$keyword%")->orWhere("sn", "like", "%$keyword%");} //关键词搜索
+         //关键词搜索
         if(isset($max_price) && isset($min_price)){$model = $model->where("price", ">=", $min_price)->where("price", "<=", $max_price);} //价格区间搜索
-        
+        if(isset($keyword))
+        {
+            $model = $model->where(function ($query) use ($keyword) {$query->where("title", "like", "%$keyword%")->orWhere("sn", "like", "%$keyword%");});
+            
+            //添加搜索关键词
+            GoodsSearchword::add(array('name'=>$keyword));
+        }
+        //return $model->toSql();//打印sql语句
         $res['count'] = $model->count();
         $res['list'] = array();
         

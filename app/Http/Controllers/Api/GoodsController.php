@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Common\ReturnData;
 use App\Common\Token;
 use App\Http\Model\Goods;
+use App\Http\Model\GoodsSearchword;
 
 class GoodsController extends CommonController
 {
@@ -47,28 +48,14 @@ class GoodsController extends CommonController
 		return ReturnData::create(ReturnData::SUCCESS,$res);
     }
     
-    //添加余额明细
-    public function userMoneyAdd(Request $request)
+    public function goodsSearchwordList(Request $request)
 	{
         //参数
-        $data['type'] = $request->input('type',null);
-        $data['money'] = $request->input('money',null);
-        $data['des'] = $request->input('des',null);
-        if($request->input('user_money', null) !== null){$data['user_money'] = $request->input('user_money');}
-        $data['add_time'] = time();
-        $data['user_id'] = Token::$uid;
+        $data['limit'] = $request->input('limit', 10);
+        $data['offset'] = $request->input('offset', 0);
         
-        if($data['type']===null || $data['money']===null || $data['des']===null)
-		{
-            return ReturnData::create(ReturnData::PARAMS_ERROR);
-        }
-        
-        $res = UserMoney::add($data);
-		if(!$res)
-		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
-		}
-        
+        $res = GoodsSearchword::getList($data);
+		
 		return ReturnData::create(ReturnData::SUCCESS,$res);
     }
 }

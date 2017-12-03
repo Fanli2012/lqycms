@@ -41,23 +41,24 @@ class GoodsController extends CommonController
     //商品列表
     public function goodsList(Request $request)
 	{
-        if($request->input('typeid', '') != ''){$data['typeid'] = $request->input('typeid');}
-        if($request->input('tuijian', '') != ''){$data['tuijian'] = $request->input('tuijian');}
-        if($request->input('keyword', '') != ''){$data['keyword'] = $request->input('keyword');}
-        if($request->input('status', '') != ''){$data['status'] = $request->input('status');}
-        if($request->input('is_promote', '') != ''){$data['is_promote'] = $request->input('is_promote');}
-        if($request->input('orderby', '') != ''){$data['orderby'] = $request->input('orderby');}
-        if($request->input('max_price', '') != ''){$data['max_price'] = $request->input('max_price');}else{$data['max_price'] = 99999;}
-        if($request->input('min_price', '') != ''){$data['min_price'] = $request->input('min_price');}else{$data['min_price'] = 0;}
+        if($request->input('typeid', '') != ''){$param['typeid'] = $request->input('typeid');}
+        if($request->input('tuijian', '') != ''){$param['tuijian'] = $request->input('tuijian');}
+        if($request->input('keyword', '') != ''){$param['keyword'] = $request->input('keyword');}
+        if($request->input('status', '') != ''){$param['status'] = $request->input('status');}
+        if($request->input('is_promote', '') != ''){$param['is_promote'] = $request->input('is_promote');}
+        if($request->input('orderby', '') != ''){$param['orderby'] = $request->input('orderby');}
+        if($request->input('max_price', '') != ''){$param['max_price'] = $request->input('max_price');}else{$param['max_price'] = 99999;}
+        if($request->input('min_price', '') != ''){$param['min_price'] = $request->input('min_price');}else{$param['min_price'] = 0;}
         
         //商品列表
-        $postdata = array(
-            'limit'  => 10,
-            'offset' => 0
-		);
+        $postdata = $param;
+        $postdata['limit'] = 10;
+        $postdata['offset'] = 0;
+        
         $url = env('APP_API_URL')."/goods_list";
 		$res = curl_request($url,$postdata,'GET');
         $data['goods_list'] = $res['data']['list'];
+        $data['request_param'] = $param;
         
 		return view('weixin.goods.goodsList', $data);
 	}

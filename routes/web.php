@@ -61,11 +61,12 @@ Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin'], function () {
 	Route::get('/search', 'IndexController@search')->name('weixin_search');  //搜索页面
 	Route::get('/p/{id}', 'ArticleController@detail')->name('weixin_article_detail'); //文章详情页
 	Route::get('/cat{cat}', 'ArticleController@category')->name('weixin_article_category'); //分类页
-	Route::get('/tag{tag}', 'IndexController@tag')->name('weixin_tag');           //标签页
-	Route::get('/page/{id}', 'IndexController@page')->name('weixin_singlepage');  //单页
+	Route::get('/tag{tag}', 'IndexController@tag')->name('weixin_tag');         //标签页
+	Route::get('/page/{id}', 'IndexController@page')->name('weixin_singlepage');//单页
 	Route::get('/goods/{id}', 'GoodsController@goodsDetail')->name('weixin_goods_detail'); //商品详情页
 	Route::get('/goodslist', 'GoodsController@goodsList')->name('weixin_goods_list'); //产品分类页
     
+    Route::get('/bonus_list', 'BonusController@bonusList')->name('weixin_bonus_list');
     Route::any('/wxpay_notify', 'WxPayController@wxpayNotify')->name('weixin_wxpay_notify'); //微信回调
     Route::any('/wxoauth', 'UserController@oauth')->name('weixin_wxoauth'); //微信网页授权
     Route::any('/login', 'UserController@login')->name('weixin_login');
@@ -136,6 +137,7 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     Route::get('/goods_detail', 'GoodsController@goodsDetail'); //商品详情
     Route::get('/goods_list', 'GoodsController@goodsList'); //商品列表
     Route::get('/goodstype_list', 'GoodsTypeController@goodsTypeList'); //商品分类列表
+    Route::get('/goods_searchword_list', 'GoodsController@goodsSearchwordList'); //商品搜索词列表
     //地区，省市区
 	Route::get('/region_list', 'RegionController@regionList');
     Route::get('/region_detail', 'RegionController@regionDetail');
@@ -281,12 +283,12 @@ Route::group(['prefix' => 'fladmin', 'namespace' => 'Admin', 'middleware' => ['w
 	Route::post('/goodstype/doedit', 'GoodsTypeController@doedit')->name('admin_goodstype_doedit');
 	Route::get('/goodstype/del', 'GoodsTypeController@del')->name('admin_goodstype_del');
     //商品品牌
-	Route::get('/goodbrand', 'GoodsBrandController@index')->name('admin_goodbrand');
-	Route::get('/goodbrand/add', 'GoodsBrandController@add')->name('admin_goodbrand_add');
-	Route::post('/goodbrand/doadd', 'GoodsBrandController@doadd')->name('admin_goodbrand_doadd');
-	Route::get('/goodbrand/edit', 'GoodsBrandController@edit')->name('admin_goodbrand_edit');
-	Route::post('/goodbrand/doedit', 'GoodsBrandController@doedit')->name('admin_goodbrand_doedit');
-	Route::get('/goodbrand/del', 'GoodsBrandController@del')->name('admin_goodbrand_del');
+	Route::get('/goodsbrand', 'GoodsBrandController@index')->name('admin_goodsbrand');
+	Route::get('/goodsbrand/add', 'GoodsBrandController@add')->name('admin_goodsbrand_add');
+	Route::post('/goodsbrand/doadd', 'GoodsBrandController@doadd')->name('admin_goodsbrand_doadd');
+	Route::get('/goodsbrand/edit', 'GoodsBrandController@edit')->name('admin_goodsbrand_edit');
+	Route::post('/goodsbrand/doedit', 'GoodsBrandController@doedit')->name('admin_goodsbrand_doedit');
+	Route::get('/goodsbrand/del', 'GoodsBrandController@del')->name('admin_goodsbrand_del');
 	//友情链接
 	Route::get('/friendlink', 'FriendlinkController@index')->name('admin_friendlink');
 	Route::get('/friendlink/add', 'FriendlinkController@add')->name('admin_friendlink_add');

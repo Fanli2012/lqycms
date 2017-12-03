@@ -1,5 +1,5 @@
 <!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html;charset=utf-8"/>
-<title>商城</title><meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport">
+<title>搜索</title><meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport">
 <link href="<?php echo env('APP_URL'); ?>/css/weixin/style.css" type="text/css" rel="stylesheet">
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/jquery.min.js"></script>
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/weixin/mobile.js"></script>
@@ -9,16 +9,8 @@
     <div class="ds-in-bl tit center"><span>搜索</span></div>
     <div class="ds-in-bl nav_menu"><a href="javascript:void(0);"><img src="<?php echo env('APP_URL'); ?>/images/weixin/class1.png" alt="菜单"></a></div>
 </div>
-<div class="flool tpnavf cl">
-    <div class="nav_list">
-        <ul>
-        <a href="<?php echo route('weixin'); ?>"><li><img src="<?php echo env('APP_URL'); ?>/images/weixin/home_icon.png"><p>首页</p></li></a>
-        <a href="/Weixin/index.php?m=Store&amp;a=index"><li><img src="<?php echo env('APP_URL'); ?>/images/weixin/brand_icon.png"><p>分类</p></li></a>	
-        <a href="/Weixin/index.php?m=Cart&amp;a=index"><li><img src="<?php echo env('APP_URL'); ?>/images/weixin/car_icon.png"><p>购物车</p></li></a>	
-        <a href="/Weixin/index.php?m=User&amp;a=index"><li><img src="<?php echo env('APP_URL'); ?>/images/weixin/center_icon.png"><p>个人中心</p></li></a></ul>
-        <div class="cl"></div>
-    </div>
-</div>
+
+@include('weixin.common.headerNav')
 
 <div class="cl search_pl">
     <form method="get" action="<?php echo route('weixin_goods_list'); ?>" id="sourch_form">
@@ -29,28 +21,27 @@
 </div>
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/layer/layer.js"></script>
 <script>
-    function ajaxsecrch(){
-        if($.trim($('#keyword').val()) != ''){
-            $("#sourch_form").submit();
-        }else{
-            layer.msg('请输入搜索关键字', {
-                time: 3000, //3s后自动关闭
-            });
-        }
+function ajaxsecrch()
+{
+    if($.trim($('#keyword').val()) != '')
+    {
+        $("#sourch_form").submit();
     }
+    else
+    {
+        layer.msg('请输入搜索关键字', {
+            time: 3000, //3s后自动关闭
+        });
+    }
+}
 </script>
 
 <div class="hot_keyword_box">
     <div class="tit_18 mt10 mb10">
         <span>热门搜索</span>
     </div>
-    <div class="hot_keyword">
-        <a href="/index.php/mobile/Goods/search/q/%E6%89%8B%E6%9C%BA.html" class="ht">手机</a>
-        <a href="/index.php/mobile/Goods/search/q/%E5%B0%8F%E7%B1%B3.html">小米</a>
-        <a href="/index.php/mobile/Goods/search/q/iphone.html">iphone</a>
-        <a href="/index.php/mobile/Goods/search/q/%E4%B8%89%E6%98%9F.html">三星</a>
-        <a href="/index.php/mobile/Goods/search/q/%E5%8D%8E%E4%B8%BA.html">华为</a>
-        <a href="/index.php/mobile/Goods/search/q/%E5%86%B0%E7%AE%B1.html">冰箱</a>
+    <div class="hot_keyword"><?php if($goods_searchword_list){foreach($goods_searchword_list as $v){ ?>
+        <a href="<?php echo route('weixin_goods_list',array('keyword'=>$v['name'])); ?>" class="ht"><?php echo $v['name'] ?></a><?php }} ?>
     </div>
 </div>
 

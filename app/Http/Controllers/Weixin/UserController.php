@@ -27,6 +27,8 @@ class UserController extends CommonController
 		$res = curl_request($url,$postdata,'GET');
         $data['user_info'] = $res['data'];
         
+        if($res['code'] != ReturnCode::SUCCESS_CODE){unset($_SESSION['weixin_user_info']);$this->error_jump('请先登录',route('weixin_login'));}
+        
 		return view('weixin.user.index', $data);
 	}
     
@@ -514,8 +516,7 @@ class UserController extends CommonController
             header('Location: '.route('weixin_user'));exit;
         }
         
-        $data['isWechatBrowser'] = Helper::isWechatBrowser();
-        return view('weixin.user.login',$data);
+        return view('weixin.user.login');
 	}
     
     //注册

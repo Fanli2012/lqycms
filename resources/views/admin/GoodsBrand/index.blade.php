@@ -18,10 +18,10 @@
 <?php if($posts){foreach($posts as $row){ ?>
 <tr>
   <td><?php echo $row["id"]; ?></td>
-  <td><a href="/fladmin/goodsbrand/edit?id=<?php echo $row["id"]; ?>"><?php echo $row["title"]; ?></a></td>
-  <td><?php if(){echo $row["filename"];} ?></td>
-  <td><?php echo date('Y-m-d',$row["pubdate"]); ?></td>
-  <td><a target="_blank" href="<?php echo get_front_url(array("type"=>"page","pagename"=>$row["filename"])); ?>">预览</a>&nbsp;<a href="/fladmin/goodsbrand/edit?id=<?php echo $row["id"]; ?>">修改</a>&nbsp;<a onclick="delconfirm('/fladmin/goodsbrand/del?id=<?php echo $row["id"]; ?>')" href="javascript:;">删除</a></td>
+  <td><a href="<?php echo route('admin_goodsbrand_edit',array('id'=>$row["id"])); ?>"><?php echo $row["title"]; ?></a></td>
+  <td><?php if($row['status']==0){echo "是";}else{echo "<font color=red>否</font>";} ?></td>
+  <td><?php echo date('Y-m-d',$row["add_time"]); ?></td>
+  <td><a href="<?php echo route('admin_goodsbrand_edit',array('id'=>$row["id"])); ?>">修改</a>&nbsp;<a onclick="delconfirm('<?php echo route('admin_goodsbrand_del',array('id'=>$row["id"])); ?>')" href="javascript:;">删除</a></td>
 </tr>
 <?php }} ?>
 </tbody>
