@@ -46,6 +46,56 @@ class UserController extends CommonController
 		return view('weixin.user.userinfo', $data);
 	}
     
+    //我的分销
+    public function userDistribution(Request $request)
+	{
+        //获取会员信息
+        $postdata = array(
+            'access_token' => $_SESSION['weixin_user_info']['access_token']
+		);
+        $url = env('APP_API_URL')."/user_info";
+		$res = curl_request($url,$postdata,'GET');
+        $data['user_info'] = $res['data'];
+        
+        //获取直属下级会员列表
+        $pagesize = 10;
+        $offset = 0;
+        if(isset($_REQUEST['page'])){$offset = ($_REQUEST['page']-1)*$pagesize;}
+        
+        $postdata = array(
+            'limit'  => $pagesize,
+            'offset' => $offset,
+            'parent_id' => $_SESSION['weixin_user_info']['id'],
+            'access_token' => $_SESSION['weixin_user_info']['access_token']
+		);
+        $url = env('APP_API_URL')."/user_list";
+		$res = curl_request($url,$postdata,'GET');
+        $data['list'] = $res['data']['list'];
+        
+        $data['totalpage'] = ceil($res['data']['count']/$pagesize);
+        
+        if(isset($_REQUEST['page_ajax']) && $_REQUEST['page_ajax']==1)
+        {
+    		$html = '';
+            
+            if($res['data']['list'])
+            {
+                foreach($res['data']['list'] as $k => $v)
+                {
+                    $html .= '<li><span class="goods_thumb" style="width:72px;height:72px;"><img style="width:72px;height:72px;" alt="'.$v['user_name'].'" src="'.$v['head_img'].'"></span>';
+                    $html .= '<div class="goods_info"><p class="goods_tit">'.$v['user_name'].'</p>';
+                    $html .= '<p style="line-height:24px;">佣金：'.$v['commission'].'</p>';
+                    $html .= '<p style="line-height:24px;">注册时间：'.date('Y-m-d',$v['add_time']).'</p>';
+                    $html .= '</div></li>';
+                }
+            }
+            
+    		exit(json_encode($html));
+    	}
+        
+		return view('weixin.user.userDistribution', $data);
+	}
+    
     //资金管理
     public function userAccount(Request $request)
 	{
@@ -260,7 +310,7 @@ class UserController extends CommonController
     public function userBonusList(Request $request)
 	{
         //商品列表
-        $pagesize = 1;
+        $pagesize = 10;
         $offset = 0;
         if(isset($_REQUEST['page'])){$offset = ($_REQUEST['page']-1)*$pagesize;}
         

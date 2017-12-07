@@ -1,31 +1,40 @@
 <!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html;charset=utf-8"/>
-<title>我的优惠券</title><meta name="keywords" content=""><meta name="description" content=""><meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport">
+<title>我的分销</title><meta name="keywords" content="关键词"><meta name="description" content="描述"><meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport">
 <link href="<?php echo env('APP_URL'); ?>/css/weixin/style.css" type="text/css" rel="stylesheet">
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/jquery.min.js"></script>
-<script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/weixin/mobile.js"></script></head><body style="background-color:#f1f1f1;">
+<script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/weixin/mobile.js"></script>
+<link href="<?php echo env('APP_URL'); ?>/css/font-awesome.min.css" type="text/css" rel="stylesheet"></head><body>
 <div class="classreturn loginsignup">
     <div class="ds-in-bl return"><a href="javascript:history.back(-1);"><img src="<?php echo env('APP_URL'); ?>/images/weixin/return.png" alt="返回"></a></div>
-    <div class="ds-in-bl tit center"><span>我的优惠券</span></div>
-    <div class="ds-in-bl nav_menu"><a href="<?php echo route('weixin_bonus_list'); ?>" style="color:#999;">领券</a></div>
+    <div class="ds-in-bl tit center"><span>我的分销</span></div>
 </div>
 
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/layer/mobile/layer.js"></script>
 <style>
-.bonus_list .flow-have-adr{padding:10px;margin:10px;background-color:#fff;}
-.bonus_list .f-h-adr-title .ect-colory{color:#f45239;font-size:32px;}
-.bonus_list .f-h-adr-title label{font-size:18px;color:#2e2e2e;margin-right:5px;}
-.bonus_list .f-h-adr-con{color:#616161;margin-top:5px;margin-bottom:5px;font-size:14px;}
-.bonus_list .adr-edit-del{margin-top:10px;padding-top:8px;border-top:1px dashed #ddd;line-height:22px;color:#a0a0a0;font-size:14px;}
+.account{text-align:center;margin-top:30px;}
+.account .icon{color:#FFCC00;font-size:100px;}
+.account .money{color:#353535;font-size:36px;}
+.account .tit{color:#000;font-size:18px;}
+.banner_tit{font-size:18px;font-weight:400;background-color:#fff;color:#f23030;height:46px;line-height:46px;padding-left:10px;padding-right:10px;border-bottom:1px solid #eee;text-align:center;}
 </style>
-
-<div class="bonus_list">
-<?php if($list){foreach($list as $k=>$v){ ?>
-<div class="flow-have-adr">
-	<p class="f-h-adr-title"><label><?php echo $v['bonus']['name']; ?></label><span class="ect-colory fr"><small>￥</small><?php echo $v['bonus']['money']; ?></span><div class="cl"></div></p>
-	<p class="f-h-adr-con">有效期至<?php echo $v['bonus']['end_time']; ?> <span class="fr">满<?php echo $v['bonus']['min_amount']; ?>可用</span></p>
-    <!-- <div class="adr-edit-del">说明</div> -->
+<div class="floor account">
+    <div class="icon"><i class="fa fa-diamond"></i></div>
+    <div class="tit">累积佣金</div>
+    <div class="money"><small>￥</small><?php echo $user_info['commission']; ?></div>
 </div>
-<?php }}else{ ?>
+<div class="floor">
+<div class="banner_tit">- 我的推荐 -</div>
+<?php if($list){ ?>
+    <ul class="goods_list_s cl">
+        <?php foreach($list as $k=>$v){ ?>
+        <li><span class="goods_thumb" style="width:72px;height:72px;"><img style="width:72px;height:72px;" alt="<?php echo $v['user_name']; ?>" src="<?php echo $v['head_img']; ?>"></span>
+        <div class="goods_info"><p class="goods_tit"><?php echo $v['user_name']; ?></p>
+        <p style="line-height:24px;">佣金：<?php echo $v['commission']; ?></p>
+        <p style="line-height:24px;">注册时间：<?php echo date('Y-m-d',$v['add_time']); ?></p>
+        </div></li>
+        <?php } ?>
+    </ul>
+<?php }else{ ?>
     <div style="text-align:center;line-height:40px;color:#999;">暂无记录</div>
 <?php } ?>
 </div>
@@ -42,7 +51,7 @@ $(function(){
     
     $(window).scroll(function ()
     {
-        var listheight = $(".bonus_list").outerHeight(); 
+        var listheight = $(".goods_list_s").outerHeight(); 
         
         if ($(document).scrollTop() + $(window).height() >= listheight)
         {
@@ -63,7 +72,7 @@ $(function(){
                 {
                     if(res)
                     {
-                        $(".bonus_list").append(res);
+                        $(".goods_list_s").append(res);
                         startpage++;
                         
                         if(startpage >= totalpage)

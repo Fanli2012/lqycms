@@ -87,6 +87,7 @@ Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin', 'middleware' => ['w
     Route::get('/user_money_list', 'UserController@userMoneyList')->name('weixin_user_money_list');
     Route::get('/user_point_list', 'UserController@userPointList')->name('weixin_user_point_list');
     Route::get('/user_message_list', 'UserController@userMessageList')->name('weixin_user_message_list');
+    Route::get('/user_distribution', 'UserController@userDistribution')->name('weixin_user_distribution');
     //用户充值
     Route::get('/user_recharge', 'UserController@userRecharge')->name('weixin_user_recharge');
     Route::get('/user_recharge_order', 'UserController@userRechargeOrder')->name('weixin_user_recharge_order');
@@ -145,6 +146,8 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
 	Route::post('/wx_register', 'UserController@wxRegister'); //注册
     Route::post('/wx_login', 'UserController@wxLogin'); //登录
     Route::post('/wx_oauth_register', 'UserController@wxOauthRegister'); //微信授权注册登录
+    //可用的优惠券列表
+    Route::get('/bonus_list', 'BonusController@bonusList'); //可用获取的优惠券列表
 });
 
 //API接口路由，需token验证
@@ -200,7 +203,6 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     Route::get('/user_available_bonus_list', 'UserBonusController@userAvailableBonusList'); //用户结算时获取可用优惠券列表
     Route::get('/user_bonus_list', 'UserBonusController@userBonusList'); //用户优惠券列表
     Route::post('/user_bonus_add', 'UserBonusController@userBonusAdd'); //用户获取优惠券
-    Route::get('/bonus_list', 'BonusController@bonusList'); //可用获取的优惠券列表
     Route::post('/bonus_add', 'BonusController@bonusAdd'); //添加优惠券
     Route::post('/bonus_update', 'BonusController@bonusUpdate'); //修改优惠券
     Route::post('/bonus_delete', 'BonusController@bonusDelete'); //删除优惠券

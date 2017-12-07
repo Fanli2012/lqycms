@@ -20,8 +20,7 @@ class BonusController extends CommonController
         
         $postdata = array(
             'limit'  => $pagesize,
-            'offset' => $offset,
-            'access_token' => $_SESSION['weixin_user_info']['access_token']
+            'offset' => $offset
 		);
         $url = env('APP_API_URL')."/bonus_list";
 		$res = curl_request($url,$postdata,'GET');

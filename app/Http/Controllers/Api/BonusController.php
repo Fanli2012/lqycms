@@ -21,7 +21,6 @@ class BonusController extends CommonController
         //参数
         $data['limit'] = $request->input('limit', 10);
         $data['offset'] = $request->input('offset', 0);
-        $data['user_id'] = Token::$uid;
         
         $res = Bonus::getList($data);
 		if(!$res)

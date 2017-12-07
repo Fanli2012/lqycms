@@ -50,25 +50,27 @@ class User extends BaseModel
     {
         extract($param); //参数：limit，offset
         
-        $where = '';
         $limit  = isset($limit) ? $limit : 10;
         $offset = isset($offset) ? $offset : 0;
         
         $model = new User;
         
         if(isset($group_id)){$where['group_id'] = $group_id;}
+        if(isset($parent_id)){$where['parent_id'] = $parent_id;}
         
-        if($where != '')
-        {
-            $model = $model->where($where);
-        }
+        if(isset($where)){$model = $model->where($where);}
         
         $res['count'] = $model->count();
         $res['list'] = array();
         
 		if($res['count']>0)
         {
-            $res['list']  = $model->select('id','user_name','email','sex','money','point','mobile','nickname','add_time')->skip($offset)->take($limit)->orderBy('id','desc')->get()->toArray();
+            $res['list'] = $model->select('id','user_name','email','sex','money','commission','point','mobile','nickname','head_img','add_time')->skip($offset)->take($limit)->orderBy('id','desc')->get();
+            
+            foreach($res['list'] as $k=>$v)
+            {
+                $res['list'][$k]['user_name'] = !empty($res['list'][$k]['mobile']) ? $res['list'][$k]['mobile'] : $res['list'][$k]['user_name'];
+            }
         }
         else
         {

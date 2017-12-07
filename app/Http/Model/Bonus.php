@@ -30,16 +30,20 @@ class Bonus extends BaseModel
         
         $model = $model->where($where);
         
+        $model = $model->where(function ($query) {
+            $query->where('num', '=', -1)->orWhere('num', '>', 0);
+        });
+        
+        $model = $model->where(function ($query) {
+            $query->where('start_time', '<', date('Y-m-d H:i:s'))->where('end_time', '>', date('Y-m-d H:i:s'));
+        });
+        
         $res['count'] = $model->count();
         $res['list'] = array();
         
 		if($res['count']>0)
         {
-            $res['list']  = $model->skip($offset)->take($limit)->orderBy('id','desc')->get()->toArray();
-        }
-        else
-        {
-            return false;
+            $res['list']  = $model->skip($offset)->take($limit)->orderBy('money','desc')->get();
         }
         
         return $res;
@@ -47,7 +51,7 @@ class Bonus extends BaseModel
     
     public static function getOne($id)
     {
-        return self::where('id', $id)->first()->toArray();
+        return self::where('id', $id)->first();
     }
     
     public static function add(array $data)

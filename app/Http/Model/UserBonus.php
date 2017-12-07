@@ -63,7 +63,10 @@ class UserBonus extends BaseModel
     
     public static function add(array $data)
     {
-        if(!Bonus::where(['id'=>$data['bonus_id']])->where('num',-1)->first() && !Bonus::where(['id'=>$data['bonus_id']])->where('num','>',0)->first())
+        $bonus1 = Bonus::where(['id'=>$data['bonus_id']])->where('num',-1)->first();
+        $bonus2 = Bonus::where(['id'=>$data['bonus_id']])->where('num','>',0)->first();
+        
+        if(!$bonus1 && !$bonus2)
         {
             return ReturnData::create(ReturnData::PARAMS_ERROR,null,'亲，您来晚了啦，已被抢光了');
         }
@@ -73,7 +76,7 @@ class UserBonus extends BaseModel
         $data['get_time'] = time(); //优惠券获取时间
         if ($id = self::insertGetId($data))
         {
-            DB::table('bonus')->where(array('id'=>$data['bonus_id']))->decrement('num', 1);
+            if(!$bonus1){DB::table('bonus')->where(array('id'=>$data['bonus_id']))->decrement('num', 1);}
             
             return ReturnData::create(ReturnData::SUCCESS,$id);
         }

@@ -105,6 +105,10 @@ class UserController extends CommonController
         $data['limit'] = $request->input('limit', 10);
         $data['offset'] = $request->input('offset', 0);
         
+        if($request->input('parent_id', '')!=''){$data['parent_id'] = $request->input('parent_id');}
+        if($request->input('group_id', '')!=''){$data['group_id'] = $request->input('group_id');}
+        if($request->input('sex', '')!=''){$data['sex'] = $request->input('sex');}
+        
         $res = User::getList($data);
 		if(!$res)
 		{

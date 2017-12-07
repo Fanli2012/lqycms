@@ -137,22 +137,22 @@
         <!--资金管理-e-->
 
         <div class="floor list7 mt10">
-                                <div class="myorder p">
-                    <div class="content30">
-                        <a href="javascript:void(0);" onclick="alert('请购买商业正版哦!');">
-                            <div class="order">
-                                <div class="fl">
-                                    <img src="<?php echo env('APP_URL'); ?>/images/weixin/w1.png">
-                                    <span>我的分销</span>
-                                </div>
-                                <div class="fr">
-                                    <i class="Mright"></i>
-                                </div>
+            <div class="myorder p">
+                <div class="content30">
+                    <a href="<?php echo route('weixin_user_distribution'); ?>">
+                        <div class="order">
+                            <div class="fl">
+                                <img src="<?php echo env('APP_URL'); ?>/images/weixin/w1.png">
+                                <span>我的分销</span>
                             </div>
-                        </a>
-                    </div>
+                            <div class="fr">
+                                <i class="Mright"></i>
+                            </div>
+                        </div>
+                    </a>
                 </div>
-                            <div class="myorder p">
+            </div>
+            <div class="myorder p">
                 <div class="content30">
                     <a href="/index.php/Mobile/User/comment/status/1.html">
                         <div class="order">
@@ -167,7 +167,7 @@
                     </a>
                 </div>
             </div>
-            <div class="myorder p">
+            <!-- <div class="myorder p">
                 <div class="content30">
                     <a href="/index.php/Mobile/Goods/integralMall.html">
                         <div class="order">
@@ -181,10 +181,10 @@
                         </div>
                     </a>
                 </div>
-            </div>
+            </div> -->
             <div class="myorder p">
                 <div class="content30">
-                    <a href="/index.php/Mobile/Activity/coupon_list.html">
+                    <a href="<?php echo route('weixin_bonus_list',array('parent_id'=>$_SESSION['weixin_user_info']['id'])); ?>">
                         <div class="order">
                             <div class="fl">
                                 <img src="<?php echo env('APP_URL'); ?>/images/weixin/w7.png">
