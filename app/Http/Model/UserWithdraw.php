@@ -23,13 +23,15 @@ class UserWithdraw extends BaseModel
     {
         extract($param); //参数：limit，offset
         
-        $where['user_id'] = Token::$uid;
         $limit  = isset($limit) ? $limit : 10;
         $offset = isset($offset) ? $offset : 0;
+        $where['user_id'] = $user_id;
+        $where['is_delete'] = 0;
         
-        $model = new UserWithdraw;
+        $model = new self;
         
-        if(isset($type)){$where['type'] = $type;}
+        if(isset($status) && !empty($status)){if($status==-1){}else{$where['status'] = $status;}}
+        if(isset($method)){$where['method'] = $method;}
         
         $model = $model->where($where);
         
@@ -38,7 +40,7 @@ class UserWithdraw extends BaseModel
         
 		if($res['count']>0)
         {
-            $res['list']  = $model->skip($offset)->take($limit)->orderBy('id','desc')->get()->toArray();
+            $res['list']  = $model->skip($offset)->take($limit)->orderBy('id','desc')->get();
         }
         else
         {
@@ -48,9 +50,14 @@ class UserWithdraw extends BaseModel
         return $res;
     }
     
-    public static function getOne($id)
+    public static function getOne(array $param)
     {
-        return self::where('id', $id)->first()->toArray();
+        extract($param);
+        
+        $where['id'] = $id;
+        $where['is_delete'] = 0;
+        
+        return self::where($where)->first();
     }
     
     public static function add(array $data)
@@ -74,9 +81,9 @@ class UserWithdraw extends BaseModel
     }
     
     //删除一条记录
-    public static function remove($id)
+    public static function remove($id,$user_id)
     {
-        if (!self::whereIn('id', explode(',', $id))->delete())
+        if (!self::whereIn('id', explode(',', $id))->where('user_id',$user_id)->update(array('is_delete'=>1)))
         {
             return false;
         }
