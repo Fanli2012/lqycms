@@ -109,6 +109,64 @@ class UserController extends CommonController
         return view('weixin.user.userAccount', $data);
     }
     
+    //提现
+    public function userWithdraw(Request $request)
+	{
+        $postdata = array(
+            'access_token' => $_SESSION['weixin_user_info']['access_token']
+		);
+        $url = env('APP_API_URL')."/user_info";
+		$res = curl_request($url,$postdata,'GET');
+        $data['user_info'] = $res['data'];
+        $data['is_withdraw'] = 0; //是否达到可提现要求，0否
+        $data['min_withdraw_money'] = sysconfig('CMS_MIN_WITHDRAWAL_MONEY'); //最低可提现金额
+        
+        if($data['user_info']['money']>=$data['min_withdraw_money']){$data['is_withdraw'] = 1;}
+        
+        return view('weixin.user.userWithdraw', $data);
+    }
+    
+    //提现明细
+    public function userWithdrawList(Request $request)
+	{
+        $pagesize = 10;
+        $offset = 0;
+        if(isset($_REQUEST['page'])){$offset = ($_REQUEST['page']-1)*$pagesize;}
+        
+        $postdata = array(
+            'limit'  => $pagesize,
+            'offset' => $offset,
+            'access_token' => $_SESSION['weixin_user_info']['access_token']
+		);
+        $url = env('APP_API_URL')."/user_withdraw_list";
+		$res = curl_request($url,$postdata,'GET');
+        $data['list'] = $res['data']['list'];
+        
+        $data['totalpage'] = ceil($res['data']['count']/$pagesize);
+        
+        if(isset($_REQUEST['page_ajax']) && $_REQUEST['page_ajax']==1)
+        {
+    		$html = '';
+            
+            if($res['data']['list'])
+            {
+                foreach($res['data']['list'] as $k => $v)
+                {
+                    $html .= '<li>';
+                    $html .= '<span class="green">- '.$v['money'].'</span>';
+                    $html .= '<div class="info"><p class="tit">提现</p>';
+                    $html .= '<p class="des">收款账号:'.$v['name'].' ,提现方式:'.$v['method'].' ,姓名:'.$v['name'].'<br>状态:<font color="red">'.$v['status_text'].'</font></p>';
+                    $html .= '<p class="time">'.date('Y-m-d H:i:s',$v['add_time']).'</p></div>';
+                    $html .= '</li>';
+                }
+            }
+            
+    		exit(json_encode($html));
+    	}
+        
+        return view('weixin.user.userWithdrawList', $data);
+    }
+    
     //用户充值
     public function userRecharge(Request $request)
 	{
@@ -169,15 +227,15 @@ class UserController extends CommonController
 		);
         $url = env('APP_API_URL')."/user_recharge_detail";
 		$res = curl_request($url,$postdata,'GET');
-        $data['post'] = $res['data'];
+        $user_recharge = $data['post'] = $res['data'];
         
         //微信支付-start
         require_once(resource_path('org/wxpay/WxPayConfig.php')); // 导入微信配置类
         require_once(resource_path('org/wxpay/WxPayPubHelper.class.php')); // 导入微信支付类
         
 		$body = '充值';//订单详情
-		$out_trade_no = '20177878738';//订单号
-		$total_fee = floatval(0.01*100);//价格0.01
+		$out_trade_no = $user_recharge['recharge_sn'];//订单号
+		$total_fee = floatval($user_recharge['money']*100);//价格0.01
         $attach = 'pay_type=1'; //pay_type=1充值支付
 		$notify_url = route('weixin_wxpay_notify');//通知地址
 		$wxconfig= \WxPayConfig::wxconfig();

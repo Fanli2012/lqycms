@@ -13,7 +13,7 @@
 @include('weixin.common.headerNav')
 
 <div class="orderdetail-des">
-    <p><?php echo $post['order_status_text']; ?></p>
+    <p>订单状态：<?php echo $post['order_status_text']; ?></p>
 </div>
 <style>
 .orderdetail-des{background:#ea5a3d;padding:20px 10px;color:#fff;font-size:18px;}
@@ -44,7 +44,7 @@
 </ul>
 
 <p class="des">合计: ￥<?php echo $post['order_amount']; ?> <small>(含运费:￥<?php echo $post['shipping_fee']; ?>)</small></p>
-<div class="tag"><a href="" class="activate">我要付款</a><a href="">评价</a></div>
+<div class="tag"><?php if($post['order_status_num']==4 || $post['order_status_num']==6 || $post['order_status_num']==7){ ?><a href="javascript:del_order(<?php echo $post['id']; ?>);">删除</a><?php } ?><?php if($post['order_status_num']==1){ ?><a href="javascript:cancel_order(<?php echo $post['id']; ?>);">取消订单</a><?php } ?><?php if($post['order_status_num']==1){ ?><a href="<?php echo route('weixin_order_pay',array('id'=>$post['id'])); ?>">付款</a><?php } ?><?php if($post['order_status_num']==3){ ?><a href="http://m.kuaidi100.com/index_all.html?type=<?php echo $post['shipping_name']; ?>&postid=<?php echo $post['shipping_sn']; ?>#result">查看物流</a><?php } ?><?php if($post['order_status_num']==3 || $post['order_status_num']==2){ ?><a href="javascript:done_order(<?php echo $post['id']; ?>);">确认收货</a><?php } ?><?php if($post['order_status_num']==4){ ?><a class="activate" href="<?php echo route('weixin_order_comment',array('id'=>$post['id'])); ?>">评价</a><?php } ?></div>
 </div>
 <style>
 .goodslist{background-color:#fbfbfb;}
@@ -71,5 +71,102 @@
 .order_expand{background-color:#fff;padding:10px;font-size:14px;color:#666;}
 </style>
 
+<script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/layer/mobile/layer.js"></script>
+<script>
+var access_token = '<?php echo $_SESSION['weixin_user_info']['access_token']; ?>';
+
+//取消订单
+function cancel_order(order_id)
+{
+    //询问框
+    layer.open({
+        content: '确定要取消该订单吗？'
+        ,btn: ['确定', '取消']
+        ,yes: function(){
+            var url = '<?php echo env('APP_API_URL')."/order_status_update"; ?>';
+            $.post(url,{access_token:access_token,id:order_id,type:2},function(res)
+            {
+                //提示
+                layer.open({
+                    content: res.msg
+                    ,skin: 'msg'
+                    ,time: 2 //2秒后自动关闭
+                });
+                
+                if(res.code==0)
+                {
+                    location.reload();
+                }
+                else
+                {
+                    
+                }
+            },'json');
+        }
+    });
+}
+
+//确认收货
+function done_order(order_id)
+{
+    //询问框
+    layer.open({
+        content: '确定要这样操作吗？'
+        ,btn: ['确定', '取消']
+        ,yes: function(){
+            var url = '<?php echo env('APP_API_URL')."/order_status_update"; ?>';
+            $.post(url,{access_token:access_token,id:order_id,type:3},function(res)
+            {
+                //提示
+                layer.open({
+                    content: res.msg
+                    ,skin: 'msg'
+                    ,time: 2 //2秒后自动关闭
+                });
+                
+                if(res.code==0)
+                {
+                    location.reload();
+                }
+                else
+                {
+                    
+                }
+            },'json');
+        }
+    });
+}
+
+//删除订单
+function del_order(order_id)
+{
+    //询问框
+    layer.open({
+        content: '确定要删除该订单吗？'
+        ,btn: ['确定', '取消']
+        ,yes: function(){
+            var url = '<?php echo env('APP_API_URL')."/order_status_update"; ?>';
+            $.post(url,{access_token:access_token,id:order_id,type:5},function(res)
+            {
+                //提示
+                layer.open({
+                    content: res.msg
+                    ,skin: 'msg'
+                    ,time: 2 //2秒后自动关闭
+                });
+                
+                if(res.code==0)
+                {
+                    location.reload();
+                }
+                else
+                {
+                    
+                }
+            },'json');
+        }
+    });
+}
+</script>
 @include('weixin.common.footer')
 </body></html>

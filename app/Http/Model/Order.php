@@ -73,8 +73,8 @@ class Order extends BaseModel
                 foreach($order_list as $k=>$v)
                 {
                     $order_status_arr = self::getOrderStatusText($v);
-                    $order_list[$k]['order_status_text'] = $order_status_arr['text'];
-                    $order_list[$k]['order_status_num'] = $order_status_arr['num'];
+                    $order_list[$k]['order_status_text'] = $order_status_arr?$order_status_arr['text']:'';
+                    $order_list[$k]['order_status_num'] = $order_status_arr?$order_status_arr['num']:'';
                     
                     $order_goods = OrderGoods::where(array('order_id'=>$v['id']))->get();
                     $order_list[$k]['goods_list'] = $order_goods;
@@ -223,12 +223,12 @@ class Order extends BaseModel
     
     public static function modify($where, array $data)
     {
-        if (self::where($where)->update($data))
+        if (self::where($where)->update($data) === false)
         {
-            return true;
+            return false;
         }
         
-        return false;
+        return true;
     }
     
     //删除一条记录
@@ -243,7 +243,7 @@ class Order extends BaseModel
         return true;
     }
     
-    //获取订单状态文字，1待付款，2待发货,3待收货,4待评价(确认收货，交易成功),5退款/售后
+    //获取订单状态文字:1待付款，2待发货,3待收货,4待评价(确认收货，交易成功),5退款/售后,6已取消,7无效
     public static function getOrderStatusText($where)
     {
         $res = '';
@@ -259,13 +259,21 @@ class Order extends BaseModel
         {
             $res = array('text'=>'待收货','num'=>3);
         }
-        elseif($where['order_status'] == 3 && $where['refund_status'] == 0 && $where['shipping_status'] == 2 && $where['is_comment'] == 0)
+        elseif($where['order_status'] == 3 && $where['refund_status'] == 0)
         {
             $res = array('text'=>'交易成功','num'=>4);
         }
         elseif($where['order_status'] == 3 && $where['refund_status'] == 1)
         {
             $res = array('text'=>'售后','num'=>5);
+        }
+        elseif($where['order_status'] == 1)
+        {
+            $res = array('text'=>'已取消','num'=>6);
+        }
+        elseif($where['order_status'] == 2)
+        {
+            $res = array('text'=>'无效','num'=>7);
         }
         
         return $res;

@@ -18,7 +18,6 @@ if (! function_exists('curl_request'))
             case 'POST' :
                 curl_setopt($curl, CURLOPT_POST, TRUE);
                 curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
-
                 break;
             case 'PUT' :
                 curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT');

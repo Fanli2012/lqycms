@@ -3,6 +3,7 @@ namespace App\Http\Model;
 
 use App\Common\Token;
 use DB;
+use App\Common\ReturnData;
 
 class UserWithdraw extends BaseModel
 {
@@ -41,6 +42,11 @@ class UserWithdraw extends BaseModel
 		if($res['count']>0)
         {
             $res['list']  = $model->skip($offset)->take($limit)->orderBy('id','desc')->get();
+            
+            foreach($res['list'] as $k=>$v)
+            {
+                $res['list'][$k]['status_text'] = self::getStatusText($v);
+            }
         }
         else
         {
@@ -62,12 +68,26 @@ class UserWithdraw extends BaseModel
     
     public static function add(array $data)
     {
+        $user = User::where(array('id'=>$data['user_id'],'pay_password'=>$data['pay_password']))->first();
+        if(!$user){return ReturnData::create(ReturnData::PARAMS_ERROR,null,'支付密码错误');}
+        unset($data['pay_password']);
+        
+        $min_withdraw_money = sysconfig('CMS_MIN_WITHDRAWAL_MONEY'); //最低可提现金额
+        if($user['money']<$data['money']){return ReturnData::create(ReturnData::PARAMS_ERROR,null,'余额不足');}
+        if($user['money']<$min_withdraw_money){return ReturnData::create(ReturnData::PARAMS_ERROR,null,'用户金额小于最小提现金额');}
+        if($data['money']<$min_withdraw_money){return ReturnData::create(ReturnData::PARAMS_ERROR,null,'提现金额不得小于最小提现金额');}
+        
         if ($id = self::insertGetId($data))
         {
-            return $id;
+            //扣除用户余额
+            DB::table('user')->where(array('id'=>$data['user_id']))->decrement('money', $data['money']);
+            //增加用户余额记录
+            DB::table('user_money')->insert(array('user_id'=>$data['user_id'],'type'=>1,'money'=>$data['money'],'des'=>'提现','user_money'=>DB::table('user')->where(array('id'=>$data['user_id']))->value('money'),'add_time'=>time()));
+            
+            return ReturnData::create(ReturnData::SUCCESS,$id);
         }
 
-        return false;
+        return ReturnData::create(ReturnData::SYSTEM_FAIL);
     }
     
     public static function modify($where, array $data)
@@ -89,5 +109,33 @@ class UserWithdraw extends BaseModel
         }
         
         return true;
+    }
+    
+    //获取提现状态文字:0未处理,1处理中,2成功,3取消，4拒绝
+    public static function getStatusText($where)
+    {
+        $res = '';
+        if($where['status'] == 0)
+        {
+            $res = '未处理';
+        }
+        elseif($where['status'] == 1)
+        {
+            $res = '处理中';
+        }
+        elseif($where['status'] == 2)
+        {
+            $res = '成功';
+        }
+        elseif($where['status'] == 3)
+        {
+            $res = '取消';
+        }
+        elseif($where['status'] == 4)
+        {
+            $res = '拒绝';
+        }
+        
+        return $res;
     }
 }

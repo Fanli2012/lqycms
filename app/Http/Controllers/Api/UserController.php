@@ -34,12 +34,13 @@ class UserController extends CommonController
 		if($request->input('user_name', null)!==null)
         {
             $data['user_name'] = $request->input('user_name');
-
+            
             if(User::getOneUser($data))
             {
                 return ReturnData::create(ReturnData::PARAMS_ERROR,null,'用户名已存在');
             }
         }
+        
 		if($request->input('email', null)!==null){$data['email'] = $request->input('email');}
 		if($request->input('sex', null)!==null){$data['sex'] = $request->input('sex');}
         if($request->input('birthday', null)!==null){$data['birthday'] = $request->input('birthday');}
@@ -63,7 +64,26 @@ class UserController extends CommonController
 		
 		return ReturnData::create(ReturnData::SUCCESS);
     }
-
+    
+    //修改用户余额
+	public function userMoneyUpdate(Request $request)
+	{
+        $data['money'] = $request->input('money','');
+        
+        if($data['money'] == '' || $data['money'] <= 0)
+        {
+            return ReturnData::create(ReturnData::PARAMS_ERROR);
+        }
+        
+        $user = User::getOneUser(array('id'=>Token::$uid));
+        $data['money'] = $user['money'] - $data['money'];
+        
+        if(User::modify(array('id'=>Token::$uid),$data))
+        {
+            return ReturnData::create(ReturnData::SUCCESS);
+        }
+    }
+    
     //修改用户密码、支付密码
     public function userPasswordUpdate(Request $request)
     {

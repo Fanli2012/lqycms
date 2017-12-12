@@ -88,6 +88,8 @@ Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin', 'middleware' => ['w
     Route::get('/user_point_list', 'UserController@userPointList')->name('weixin_user_point_list');
     Route::get('/user_message_list', 'UserController@userMessageList')->name('weixin_user_message_list');
     Route::get('/user_distribution', 'UserController@userDistribution')->name('weixin_user_distribution');
+    Route::any('/user_withdraw', 'UserController@userWithdraw')->name('weixin_user_withdraw');
+    Route::get('/user_withdraw_list', 'UserController@userWithdrawList')->name('weixin_user_withdraw_list');
     //用户充值
     Route::get('/user_recharge', 'UserController@userRecharge')->name('weixin_user_recharge');
     Route::get('/user_recharge_order', 'UserController@userRechargeOrder')->name('weixin_user_recharge_order');
@@ -110,6 +112,7 @@ Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin', 'middleware' => ['w
     Route::get('/order_detail', 'OrderController@orderDetail')->name('weixin_order_detail'); //订单详情
     Route::get('/order_wxpay', 'OrderController@orderWxpay')->name('weixin_order_wxpay'); //订单微信支付
     Route::get('/order_yuepay', 'OrderController@orderYuepay')->name('weixin_order_yuepay'); //订单余额支付
+    Route::any('/order_comment', 'OrderController@orderComment')->name('weixin_order_comment'); //订单评价
     //收货地址
     Route::get('/user_address', 'AddressController@index')->name('weixin_user_address_list');
     Route::get('/user_address_add', 'AddressController@userAddressAdd')->name('weixin_user_address_add');
@@ -158,6 +161,7 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     Route::post('/user_info_update', 'UserController@userInfoUpdate'); //修改用户信息
     Route::post('/user_password_update', 'UserController@userPasswordUpdate'); //修改用户密码、支付密码
     Route::get('/user_list', 'UserController@userList'); //用户列表
+    Route::post('/user_money_update', 'UserController@userMoneyUpdate'); //修改用户余额
     //用户充值
     Route::post('/user_recharge_add', 'UserRechargeController@userRechargeAdd');
     Route::get('/user_recharge_detail', 'UserRechargeController@userRechargeDetail');
@@ -169,22 +173,29 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     Route::get('/user_message_list', 'UserMessageController@userMessageList');
     Route::post('/user_message_add', 'UserMessageController@userMessageAdd');
     Route::post('/user_message_update', 'UserMessageController@userMessageUpdate');
+    //用户提现
+    Route::get('/user_withdraw_list', 'UserWithdrawController@userWithdrawList');
+    Route::post('/user_withdraw_add', 'UserWithdrawController@userWithdrawAdd');
+    Route::post('/user_withdraw_update', 'UserWithdrawController@userWithdrawUpdate');
     //浏览记录
     Route::get('/user_goods_history_list', 'UserGoodsHistoryController@userGoodsHistoryList'); //我的足迹列表
     Route::post('/user_goods_history_delete', 'UserGoodsHistoryController@userGoodsHistoryDelete'); //我的足迹删除一条
     Route::post('/user_goods_history_clear', 'UserGoodsHistoryController@userGoodsHistoryClear'); //我的足迹清空
     Route::post('/user_goods_history_add', 'UserGoodsHistoryController@userGoodsHistoryAdd'); //我的足迹添加
-    //商品评价
-    Route::get('/goods_comment_list', 'CommentController@goodsCommentList'); //商品评价列表
-    Route::post('/goods_comment_add', 'CommentController@goodsCommentAdd'); //商品评价添加
-    Route::post('/goods_comment_update', 'CommentController@goodsCommentUpdate'); //商品评价修改
-    Route::post('/goods_comment_delete', 'CommentController@goodsCommentDelete'); //商品评价删除
+    //评价
+    Route::get('/comment_list', 'CommentController@commentList'); //商品评价列表
+    Route::post('/comment_add', 'CommentController@commentAdd'); //商品评价添加
+    Route::post('/comment_batch_add', 'CommentController@commentBatchAdd'); //商品评价添加
+    Route::post('/comment_update', 'CommentController@commentUpdate'); //商品评价修改
+    Route::post('/comment_delete', 'CommentController@commentDelete'); //商品评价删除
     //商品收藏
     Route::get('/collect_goods_list', 'CollectGoodsController@collectGoodsList'); //收藏商品列表
     Route::post('/collect_goods_add', 'CollectGoodsController@collectGoodsAdd'); //收藏商品
     Route::post('/collect_goods_delete', 'CollectGoodsController@collectGoodsDelete'); //取消收藏商品
     //订单
     Route::post('/order_add', 'OrderController@orderAdd'); //生成订单
+    Route::post('/order_update', 'OrderController@orderUpdate'); //订单修改
+    Route::post('/order_status_update', 'OrderController@orderStatusUpdate'); //订单修改
     Route::get('/order_list', 'OrderController@orderList'); //订单列表
     Route::get('/order_detail', 'OrderController@orderDetail'); //订单详情
     //购物车

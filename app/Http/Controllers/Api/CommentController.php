@@ -15,17 +15,19 @@ class CommentController extends CommonController
         parent::__construct();
     }
     
-    public function goodsCommentList(Request $request)
+    public function commentList(Request $request)
 	{
         //参数
         $data['limit'] = $request->input('limit', 10);
         $data['offset'] = $request->input('offset', 0);
         $data['user_id'] = Token::$uid;
         $data['comment_type'] = $request->input('comment_type', 0); //0商品评价，1文章评价
-        if($request->input('comment_rank', null) !== null){$data['comment_rank'] = $request->input('comment_rank');}
+        if($request->input('comment_rank', '') != ''){$data['comment_rank'] = $request->input('comment_rank');}
+        if($request->input('id_value', '') != ''){$data['id_value'] = $request->input('id_value');}
+        if($request->input('parent_id', '') != ''){$data['parent_id'] = $request->input('parent_id');}
         
         $res = Comment::getList($data);
-		if($res !== true)
+		if($res === false)
 		{
 			return ReturnData::create(ReturnData::SYSTEM_FAIL,null,$res);
 		}
@@ -33,16 +35,14 @@ class CommentController extends CommonController
 		return ReturnData::create(ReturnData::SUCCESS,$res);
     }
     
-    //添加评价
-    public function goodsCommentAdd(Request $request)
+    //添加一条评价
+    public function commentAdd(Request $request)
 	{
         //参数
         $data['comment_type'] = $request->input('comment_type',0);
         $data['id_value'] = $request->input('id_value',null);
         $data['content'] = $request->input('content',null);
         $data['comment_rank'] = $request->input('comment_rank',null);
-        if($request->input('email', null) !== null){$data['email'] = $request->input('email');}
-        if($request->input('user_name', null) !== null){$data['user_name'] = $request->input('user_name');}
         if($request->input('ip_address', null) !== null){$data['ip_address'] = $request->input('ip_address');}
         if($request->input('parent_id', null) !== null){$data['parent_id'] = $request->input('parent_id');}
         $data['add_time'] = time();
@@ -54,47 +54,50 @@ class CommentController extends CommonController
             return ReturnData::create(ReturnData::PARAMS_ERROR);
         }
         
-        $res = Comment::add($data);
-		if($res !== true)
-		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL,null,$res);
-		}
-        
-		return ReturnData::create(ReturnData::SUCCESS,$res);
+        return Comment::add($data);
     }
     
-    public function goodsCommentUpdate(Request $request)
+    //评价批量添加
+    public function commentBatchAdd(Request $request)
+	{
+        if($request->input('comment',null)===null){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $comment = json_decode($request->input('comment'),true);
+        foreach($comment as $k=>$v)
+        {
+            $comment[$k]['user_id'] = Token::$uid;
+            $comment[$k]['ip_address'] = Helper::getRemoteIp();
+            $comment[$k]['add_time'] = time();
+        }
+        
+        return Comment::batchAdd($comment);
+    }
+    
+    public function commentUpdate(Request $request)
 	{
         //参数
         $id = $request->input('id',null);
-        $data['comment_type'] = $request->input('comment_type',0);
-        $data['id_value'] = $request->input('id_value',null);
-        $data['content'] = $request->input('content',null);
-        $data['comment_rank'] = $request->input('comment_rank',null);
-        if($request->input('email', null) !== null){$data['email'] = $request->input('email');}
-        if($request->input('user_name', null) !== null){$data['user_name'] = $request->input('user_name');}
+        if($request->input('content', null) !== null){$data['content'] = $request->input('content');}
+        if($request->input('comment_rank', null) !== null){$data['comment_rank'] = $request->input('comment_rank');}
         if($request->input('ip_address', null) !== null){$data['ip_address'] = $request->input('ip_address');}
         if($request->input('parent_id', null) !== null){$data['parent_id'] = $request->input('parent_id');}
-        $data['add_time'] = time();
-        $data['user_id'] = Token::$uid;
-        $data['ip_address'] = Helper::getRemoteIp();
+        
         
         if($id===null)
 		{
             return ReturnData::create(ReturnData::PARAMS_ERROR);
         }
         
-        $res = Comment::modify(array('id'=>$id),$data);
-		if($res !== true)
-		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL,null,$res);
-		}
+        if(isset($data))
+        {
+            $data['user_id'] = Token::$uid;
+            Comment::modify(array('id'=>$id),$data);
+        }
         
-		return ReturnData::create(ReturnData::SUCCESS,$res);
+		return ReturnData::create(ReturnData::SUCCESS);
     }
     
     //删除评价
-    public function goodsCommentDelete(Request $request)
+    public function commentDelete(Request $request)
 	{
         //参数
         $data['comment_type'] = $request->input('comment_type',null);
@@ -107,7 +110,7 @@ class CommentController extends CommonController
         }
         
         $res = Comment::remove($data);
-		if($res !== true)
+		if($res === false)
 		{
 			return ReturnData::create(ReturnData::SYSTEM_FAIL,null,$res);
 		}

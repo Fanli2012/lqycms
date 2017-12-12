@@ -40,14 +40,16 @@ class UserWithdrawController extends CommonController
         $data['method'] = $request->input('method','');
         $data['money'] = $request->input('money','');
         $data['account'] = $request->input('account','');
+        $data['name'] = $request->input('name','');
         if($request->input('note', '') != ''){$data['note'] = $request->input('note');}
         if($request->input('status', '') != ''){$data['status'] = $request->input('status');}
         if($request->input('bank_name', '') != ''){$data['bank_name'] = $request->input('bank_name');}
         if($request->input('bank_place', '') != ''){$data['bank_place'] = $request->input('bank_place');}
         $data['add_time'] = time();
         $data['user_id'] = Token::$uid;
+        $data['pay_password'] = $request->input('pay_password','');
         
-        if($data['method']=='' || $data['money']=='' || $data['account']=='')
+        if($data['method']=='' || $data['money']=='' || $data['account']=='' || $data['name']=='' || $data['pay_password']=='')
 		{
             return ReturnData::create(ReturnData::PARAMS_ERROR);
         }
@@ -57,13 +59,7 @@ class UserWithdrawController extends CommonController
             return ReturnData::create(ReturnData::PARAMS_ERROR);
         }
         
-        $res = UserWithdraw::add($data);
-		if(!$res)
-		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
-		}
-        
-		return ReturnData::create(ReturnData::SUCCESS,$res);
+        return UserWithdraw::add($data);
     }
     
     //修改提现

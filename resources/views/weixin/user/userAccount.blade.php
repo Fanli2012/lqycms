@@ -23,7 +23,7 @@
     <div class="money"><small>￥</small><?php echo $user_info['money']; ?></div>
     <br>
     <a style="margin:10px;background-color:#1aad19;text-align:center;color:white;border:1px solid #179e16;" class="bottoma" href="<?php echo route('weixin_user_recharge'); ?>">充值</a>
-    <a style="margin:0 10px 10px 10px;background-color:#f1f1f1;text-align:center;color:#000;border:1px solid #bfbfbf;" class="bottoma" href="javascript:tixian();">提现</a>
+    <a style="margin:0 10px 10px 10px;background-color:#f1f1f1;text-align:center;color:#000;border:1px solid #bfbfbf;" class="bottoma" href="<?php echo route('weixin_user_withdraw'); ?>">提现</a>
 </div>
 
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/layer/mobile/layer.js"></script>

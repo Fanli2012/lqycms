@@ -51,7 +51,7 @@ var swiper = new Swiper('.swiper-nav', {
 </a>
 
 <p class="des">合计: ￥<?php echo $value['order_amount']; ?> <small>(含运费:￥<?php echo $value['shipping_fee']; ?>)</small></p>
-<div class="tag"><?php if($value['order_status_num']==1){ ?><a href="<?php echo route('weixin_order_pay',array('id'=>$value['id'])); ?>">我要付款</a><?php } ?><a href="" class="activate">评价</a></div>
+<div class="tag"><?php if($value['order_status_num']==4 || $value['order_status_num']==6 || $value['order_status_num']==7){ ?><a href="javascript:del_order(<?php echo $value['id']; ?>);">删除</a><?php } ?><?php if($value['order_status_num']==1){ ?><a href="javascript:cancel_order(<?php echo $value['id']; ?>);">取消订单</a><?php } ?><?php if($value['order_status_num']==1){ ?><a href="<?php echo route('weixin_order_pay',array('id'=>$value['id'])); ?>">付款</a><?php } ?><?php if($value['order_status_num']==3){ ?><a href="http://m.kuaidi100.com/index_all.html?type=<?php echo $value['shipping_name']; ?>&postid=<?php echo $value['shipping_sn']; ?>#result">查看物流</a><?php } ?><?php if($value['order_status_num']==3 || $value['order_status_num']==2){ ?><a href="javascript:done_order(<?php echo $value['id']; ?>);">确认收货</a><?php } ?><?php if($value['order_status_num']==4){ ?><a class="activate" href="<?php echo route('weixin_order_comment',array('id'=>$value['id'])); ?>">评价</a><?php } ?></div>
 </div>
 <?php }}else{ ?>
     <div style="text-align:center;line-height:40px;color:#999;">暂无记录</div>
@@ -72,4 +72,102 @@ var swiper = new Swiper('.swiper-nav', {
 .tag a{color:#666;background-color:#fff;border:1px solid #ddd;border-radius:5px;font-size:14px;padding:2px 6px;display:inline-block;margin-right:10px;}
 .tag a.activate{color:#ea6f5a;border:1px solid #ea6f5a;}
 </style>
+
+<script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/layer/mobile/layer.js"></script>
+<script>
+var access_token = '<?php echo $_SESSION['weixin_user_info']['access_token']; ?>';
+
+//取消订单
+function cancel_order(order_id)
+{
+    //询问框
+    layer.open({
+        content: '确定要取消该订单吗？'
+        ,btn: ['确定', '取消']
+        ,yes: function(){
+            var url = '<?php echo env('APP_API_URL')."/order_status_update"; ?>';
+            $.post(url,{access_token:access_token,id:order_id,type:2},function(res)
+            {
+                //提示
+                layer.open({
+                    content: res.msg
+                    ,skin: 'msg'
+                    ,time: 2 //2秒后自动关闭
+                });
+                
+                if(res.code==0)
+                {
+                    location.reload();
+                }
+                else
+                {
+                    
+                }
+            },'json');
+        }
+    });
+}
+
+//确认收货
+function done_order(order_id)
+{
+    //询问框
+    layer.open({
+        content: '确定要这样操作吗？'
+        ,btn: ['确定', '取消']
+        ,yes: function(){
+            var url = '<?php echo env('APP_API_URL')."/order_status_update"; ?>';
+            $.post(url,{access_token:access_token,id:order_id,type:3},function(res)
+            {
+                //提示
+                layer.open({
+                    content: res.msg
+                    ,skin: 'msg'
+                    ,time: 2 //2秒后自动关闭
+                });
+                
+                if(res.code==0)
+                {
+                    location.reload();
+                }
+                else
+                {
+                    
+                }
+            },'json');
+        }
+    });
+}
+
+//删除订单
+function del_order(order_id)
+{
+    //询问框
+    layer.open({
+        content: '确定要删除该订单吗？'
+        ,btn: ['确定', '取消']
+        ,yes: function(){
+            var url = '<?php echo env('APP_API_URL')."/order_status_update"; ?>';
+            $.post(url,{access_token:access_token,id:order_id,type:5},function(res)
+            {
+                //提示
+                layer.open({
+                    content: res.msg
+                    ,skin: 'msg'
+                    ,time: 2 //2秒后自动关闭
+                });
+                
+                if(res.code==0)
+                {
+                    location.reload();
+                }
+                else
+                {
+                    
+                }
+            },'json');
+        }
+    });
+}
+</script>
 </body></html>

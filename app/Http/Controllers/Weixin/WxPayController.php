@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Weixin;
 
 use App\Http\Controllers\Weixin\CommonController;
 use Illuminate\Http\Request;
+use DB;
 
 class WxPayController extends CommonController
 {
@@ -30,10 +31,52 @@ class WxPayController extends CommonController
         
         if($post_data['result_code'] == 'SUCCESS')
         {
+            $pay_money = $post_data['total_fee']/100;
+            $pay_time_timestamp = strtotime(date_format(date_create($post_data['time_end']),"Y-m-d H:i:s"));
             //$post_data['out_trade_no']
             //$post_data['transaction_id']
-            //$post_data['total_fee']
-            file_put_contents("2.txt",$post_data['total_fee'].'--'.$post_data['out_trade_no'].'--'.$post_data['attach']);
+            
+            //附加参数pay_type:1充值支付,2订单支付
+            if($post_data['pay_type'] == 1)
+            {
+                //获取充值支付记录
+                $user_recharge = DB::table('user_recharge')->where(array('recharge_sn'=>$post_data['out_trade_no'],'status'=>0))->first();
+                if(!$user_recharge){exit;}
+                if($pay_money < $user_recharge->money){exit;} //如果支付金额小于要充值的金额
+                
+                //更新充值支付记录状态
+                DB::table('user_recharge')->where(array('recharge_sn'=>$post_data['out_trade_no'],'status'=>0))->update(array('pay_time'=>$pay_time_timestamp,'pay_type'=>1,'status'=>1,'trade_no'=>$post_data['transaction_id'],'pay_money'=>$pay_money));
+                //增加用户余额
+                DB::table('user')->where(array('id'=>$user_recharge->user_id))->decrement('money', $pay_money);
+                //添加用户余额记录
+                DB::table('user_money')->insert(array('user_id'=>$user_recharge->user_id,'type'=>0,'money'=>$pay_money,'des'=>'充值','user_money'=>DB::table('user')->where(array('id'=>$user_recharge->user_id))->value('money'),'add_time'=>time()));
+            }
+            if($post_data['pay_type'] == 2)
+            {
+                //获取订单记录
+                $order = DB::table('order')->where(array('order_sn'=>$post_data['out_trade_no'],'order_status'=>0,'pay_status'=>0))->first();
+                if(!$order){exit;}
+                if($pay_money < $order->order_amount){exit;} //如果支付金额小于订单金额
+                
+                //修改订单状态
+                $order_update_data['pay_status'] = 1;
+                $order_update_data['pay_money'] = $pay_money; //支付金额
+                $order_update_data['pay_id'] = 2;
+                $order_update_data['pay_time'] = $pay_time_timestamp;
+                $order_update_data['pay_name'] = '微信';
+                $order_update_data['out_trade_no'] = $post_data['transaction_id'];
+                DB::table('order')->where(array('order_sn'=>$post_data['out_trade_no'],'order_status'=>0,'pay_status'=>0))->update($order_update_data);
+            }
+            if($post_data['pay_type'] == 3)
+            {
+                
+            }
+            if($post_data['pay_type'] == 4)
+            {
+                
+            }
+            
+            file_put_contents("2.txt",$post_data['total_fee'].'--'.$post_data['out_trade_no'].'--'.$post_data['attach'].'--'.$post_data['pay_type']);
             echo "SUCCESS";
 		}
         else
