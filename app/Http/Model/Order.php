@@ -149,7 +149,7 @@ class Order extends BaseModel
         
         //构造订单字段
 		$order_info = array(
-            'order_sn'     => date('YmdHis'.rand(1000,9999)),
+            'order_sn'     => date('YmdHis').rand(1000,9999),
             'add_time'     => time(),
             'pay_status'   => $pay_status,
             'user_id'      => $user_id,

@@ -52,7 +52,7 @@ class UserRecharge extends BaseModel
     
     public static function add(array $data)
     {
-        $data['recharge_sn'] = date('YmdHis'.rand(1000,9999));
+        $data['recharge_sn'] = date('YmdHis').rand(1000,9999);
         
         if ($id = self::insertGetId($data))
         {

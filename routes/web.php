@@ -295,6 +295,11 @@ Route::group(['prefix' => 'fladmin', 'namespace' => 'Admin', 'middleware' => ['w
 	Route::get('/goodstype/edit', 'GoodsTypeController@edit')->name('admin_goodstype_edit');
 	Route::post('/goodstype/doedit', 'GoodsTypeController@doedit')->name('admin_goodstype_doedit');
 	Route::get('/goodstype/del', 'GoodsTypeController@del')->name('admin_goodstype_del');
+    //订单
+	Route::get('/order', 'OrderController@index')->name('admin_order');
+	Route::get('/order/edit', 'OrderController@edit')->name('admin_order_edit');
+	Route::post('/order/doedit', 'OrderController@doedit')->name('admin_order_doedit');
+	Route::get('/order/del', 'OrderController@del')->name('admin_order_del');
     //商品品牌
 	Route::get('/goodsbrand', 'GoodsBrandController@index')->name('admin_goodsbrand');
 	Route::get('/goodsbrand/add', 'GoodsBrandController@add')->name('admin_goodsbrand_add');
