@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Admin\CommonController;
 use DB;
+use App\Http\Model\User;
 
 class UserController extends CommonController
 {
@@ -15,9 +16,40 @@ class UserController extends CommonController
     {
         $posts = parent::pageList('user');
 		
-        $data['posts'] = $posts;
+        if($posts)
+        {
+            foreach($posts as $k=>$v)
+            {
+                $posts[$k]->sex_text = User::getSexText(['sex'=>$v->sex]);
+                $posts[$k]->status_text = User::getStatusText(['status'=>$v->status]);
+            }
+        }
         
+        $data['posts'] = $posts;
         return view('admin.user.index', $data);
+    }
+    
+    //会员账户记录
+    public function money()
+    {
+        $where = '';
+        if(isset($_REQUEST["user_id"]))
+        {
+            $where['user_id'] = $_REQUEST["user_id"];
+        }
+        
+        $posts = parent::pageList('user_money',$where);
+		
+        if($posts)
+        {
+            foreach($posts as $k=>$v)
+            {
+                $posts[$k]->user = DB::table('user')->where('id', $v->user_id)->first();
+            }
+        }
+        
+        $data['posts'] = $posts;
+        return view('admin.user.money', $data);
     }
     
     public function add()
@@ -68,7 +100,7 @@ class UserController extends CommonController
     {
         if(!empty($_GET["id"])){$id = $_GET["id"];}else{error_jump('删除失败！请重新提交');}
 		
-		if(DB::table('user')->whereIn("id", explode(',', $id))->delete())
+		if(DB::table('user')->whereIn("id", explode(',', $id))->update(['status' => 2]))
         {
             success_jump('删除成功');
         }

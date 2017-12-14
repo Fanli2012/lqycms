@@ -5,7 +5,7 @@
 <h2 class="sub-header">管理员列表</h2>[ <a href="<?php echo route('admin_admin_add'); ?>">添加管理员</a> ]<br><br>
 
 <form name="listarc"><div class="table-responsive"><table class="table table-striped table-hover">
-<thead><tr>
+<thead><tr class="info">
 <th>ID</th>
 <th>用户名</th>
 <th>邮箱</th>

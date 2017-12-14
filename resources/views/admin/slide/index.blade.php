@@ -4,8 +4,8 @@
 @section('content')
 <h2 class="sub-header">轮播图管理</h2>[ <a href="/fladmin/slide/add">添加轮播图</a> ]<br><br>
 
-<form name="listarc"><div class="table-responsive"><table class="table table-striped table-hover">
-<thead><tr>
+<form name="listarc"><div class="table-responsive"><table class="table table-hover">
+<thead><tr class="info">
 <th>图片</th>
 <th>标题</th>
 <th>链接网址</th>

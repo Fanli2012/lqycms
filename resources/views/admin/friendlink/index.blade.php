@@ -5,7 +5,7 @@
 <h2 class="sub-header">友情链接管理</h2>[ <a href="/fladmin/friendlink/add">添加友情链接</a> ]<br><br>
 
 <form name="listarc"><div class="table-responsive"><table class="table table-striped table-hover">
-<thead><tr>
+<thead><tr class="info">
 <th>编号</th>
 <th>链接名称</th>
 <th>链接网址</th>

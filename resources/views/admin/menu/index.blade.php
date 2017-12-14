@@ -5,7 +5,7 @@
 <h2 class="sub-header">菜单管理</h2>[ <a href="/fladmin/menu/add">菜单添加</a> ]<br><br>
 
 <form name="listarc"><div class="table-responsive"><table class="table table-striped table-hover">
-<thead><tr>
+<thead><tr class="info">
 <th>ID</th>
 <th>菜单名称</th>
 <th>操作方法</th>

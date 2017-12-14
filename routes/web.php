@@ -346,6 +346,13 @@ Route::group(['prefix' => 'fladmin', 'namespace' => 'Admin', 'middleware' => ['w
 	Route::get('/sysconfig/edit', 'SysconfigController@edit')->name('admin_sysconfig_edit');
 	Route::post('/sysconfig/doedit', 'SysconfigController@doedit')->name('admin_sysconfig_doedit');
 	Route::get('/sysconfig/del', 'SysconfigController@del')->name('admin_sysconfig_del');
+    //意见反馈
+	Route::get('/feedback', 'FeedbackController@index')->name('admin_feedback');
+	Route::get('/feedback/add', 'FeedbackController@add')->name('admin_feedback_add');
+	Route::post('/feedback/doadd', 'FeedbackController@doadd')->name('admin_feedback_doadd');
+	Route::get('/feedback/edit', 'FeedbackController@edit')->name('admin_feedback_edit');
+	Route::post('/feedback/doedit', 'FeedbackController@doedit')->name('admin_feedback_doedit');
+	Route::get('/feedback/del', 'FeedbackController@del')->name('admin_feedback_del');
     //会员管理
 	Route::get('/user', 'UserController@index')->name('admin_user');
 	Route::get('/user/add', 'UserController@add')->name('admin_user_add');
@@ -353,6 +360,11 @@ Route::group(['prefix' => 'fladmin', 'namespace' => 'Admin', 'middleware' => ['w
 	Route::get('/user/edit', 'UserController@edit')->name('admin_user_edit');
 	Route::post('/user/doedit', 'UserController@doedit')->name('admin_user_doedit');
 	Route::get('/user/del', 'UserController@del')->name('admin_user_del');
+    Route::get('/user/money', 'UserController@money')->name('admin_user_money'); //会员账户记录
+    //提现申请
+	Route::get('/userwithdraw', 'UserWithdrawController@index')->name('admin_userwithdraw');
+	Route::get('/userwithdraw/edit', 'UserWithdrawController@edit')->name('admin_userwithdraw_edit');
+	Route::post('/userwithdraw/doedit', 'UserWithdrawController@doedit')->name('admin_userwithdraw_doedit');
 	//管理员管理
 	Route::get('/admin', 'AdminController@index')->name('admin_admin');
 	Route::get('/admin/add', 'AdminController@add')->name('admin_admin_add');

@@ -5,7 +5,7 @@
 <h2 class="sub-header">角色管理</h2>[ <a href="<?php echo route('admin_adminrole_add'); ?>">添加角色</a> ]<br><br>
 
 <form name="listarc"><div class="table-responsive"><table class="table table-striped table-hover">
-<thead><tr>
+<thead><tr class="info">
 <th>ID</th>
 <th>角色名称</th>
 <th>角色描述</th>

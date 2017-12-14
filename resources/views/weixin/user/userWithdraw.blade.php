@@ -17,7 +17,7 @@
 .bottoma{display:block;font-size:18px;padding:10px;color:white;background-color:#f23030;text-align:center;}
 .yongjin_tip{padding:10px;background-color:#FFC;color:#666;border-bottom:1px solid #DDD;font-size:14px;}.yongjin_tip b{color:red;}
 </style>
-<div class="yongjin_tip">余额：<b>￥<?php echo $user_info['money']; ?></b>，手续费率：<b>0.5%</b>，最少金额：<b>￥<?php echo $min_withdraw_money; ?></b></div>
+<div class="yongjin_tip">余额：<b>￥<?php echo $user_info['money']; ?></b>，最少金额：<b>￥<?php echo $min_withdraw_money; ?></b></div>
 <div class="adr_add">
 <div class="adr-form-group">
   <label><font color="red">*</font>收款人姓名</label>

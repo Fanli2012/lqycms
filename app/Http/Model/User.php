@@ -223,4 +223,44 @@ class User extends BaseModel
         
 		return $res;
     }
+    
+    //获取性别文字：0未知,1男,2女
+    public static function getSexText($where)
+    {
+        $res = '';
+        if($where['sex'] === 0)
+        {
+            $res = '未知';
+        }
+        elseif($where['sex'] === 1)
+        {
+            $res = '男';
+        }
+        elseif($where['sex'] === 2)
+        {
+            $res = '女';
+        }
+        
+        return $res;
+    }
+    
+    //获取用户状态文字：1正常 2 删除 3锁定
+    public static function getStatusText($where)
+    {
+        $res = '';
+        if($where['status'] === 1)
+        {
+            $res = '正常';
+        }
+        elseif($where['status'] === 2)
+        {
+            $res = '删除';
+        }
+        elseif($where['status'] === 3)
+        {
+            $res = '锁定';
+        }
+        
+        return $res;
+    }
 }

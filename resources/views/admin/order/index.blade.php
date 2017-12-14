@@ -9,11 +9,11 @@
     <div class="form-inline" style="display:inline;float:left;">
         <div class="form-group">
             <label for="order_sn">订单号:</label>
-            <input type="text" class="form-control" id="order_sn" name="order_sn" placeholder="">
+            <input size="15" type="text" class="form-control" id="order_sn" name="order_sn" placeholder="">
         </div>
         <div class="form-group">
             <label for="name">收货人:</label>
-            <input type="text" class="form-control" id="name" name="name" placeholder="">
+            <input size="5" type="text" class="form-control" id="name" name="name" placeholder="">
         </div>
         <button type="submit" class="btn btn-success">查询</button>
         <button class="btn btn-warning" onclick="show_search()">高级</button>
@@ -22,10 +22,10 @@
     <div class="form-inline" style="display:inline;float:right;">
         <div class="form-group">
             <label for="min_addtime">导出列表:</label>
-            <input onclick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})" type="text" class="form-control" id="min_addtime" name="min_addtime" placeholder="开始时间">
+            <input size="15" onclick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})" type="text" class="form-control" id="min_addtime" name="min_addtime" placeholder="开始时间">
         </div>
         <div class="form-group">
-            <input onclick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})" type="text" class="form-control" id="max_addtime" name="max_addtime" placeholder="结束时间">
+            <input size="15" onclick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})" type="text" class="form-control" id="max_addtime" name="max_addtime" placeholder="结束时间">
         </div>
         <button onclick="javascript:output();" class="btn btn-success">导出</button>
     </div>

@@ -15,7 +15,7 @@
 .account .icon{color:#FFCC00;font-size:100px;}
 .account .money{color:#353535;font-size:36px;}
 .account .tit{color:#000;font-size:18px;}
-.banner_tit{font-size:18px;font-weight:400;background-color:#fff;color:#f23030;height:46px;line-height:46px;padding-left:10px;padding-right:10px;border-bottom:1px solid #eee;text-align:center;}
+.banner_tit{font-size:18px;font-weight:400;background-color:#fff;color:#f23030;height:46px;line-height:46px;padding-left:10px;padding-right:10px;border-bottom:1px solid #eee;border-top:10px solid #f1f1f1;text-align:center;}
 </style>
 <div class="floor account">
     <div class="icon"><i class="fa fa-diamond"></i></div>
@@ -23,7 +23,7 @@
     <div class="money"><small>￥</small><?php echo $user_info['commission']; ?></div>
 </div>
 <div class="floor">
-<div class="banner_tit">- 我的推荐 -</div>
+<div class="banner_tit mt10">- 我的推荐 -</div>
 <?php if($list){ ?>
     <ul class="goods_list_s cl">
         <?php foreach($list as $k=>$v){ ?>

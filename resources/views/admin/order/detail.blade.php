@@ -10,8 +10,9 @@
             当前可执行操作：
         </div>
         <button class="btn btn-info" onclick="show_search()">发货</button>
-        <button class="btn btn-success">设为付款</button>
+        <button class="btn btn-success">设为已付款</button>
         <button class="btn btn-danger" onclick="show_search()">设为无效</button>
+        <button class="btn btn-warning" onclick="javascript:history.back(-1);">返回</button>
     </div>
     <div style="clear:both;"></div>
 </div>

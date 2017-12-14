@@ -6,7 +6,7 @@
 
 <form name="listarc"><div class="table-responsive">
 <table class="table table-striped table-hover">
-<thead><tr><th>ID</th><th>名称</th><th>文章数</th><th>别名</th><th>更新时间</th><th>操作</th></tr></thead>
+<thead><tr class="info"><th>ID</th><th>名称</th><th>文章数</th><th>别名</th><th>更新时间</th><th>操作</th></tr></thead>
 <tbody id="cat-list">
 <?php if($catlist){foreach($catlist as $row){ ?>
 <tr id="cat-<?php echo $row["id"]; ?>">
