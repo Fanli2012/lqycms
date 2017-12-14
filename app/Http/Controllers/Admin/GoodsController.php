@@ -153,7 +153,7 @@ class GoodsController extends CommonController
     {
 		if(!empty($_GET["id"])){$id = $_GET["id"];}else{error_jump('删除失败！请重新提交');}
 		
-		if(DB::table('goods')->whereIn("id", explode(',', $id))->delete())
+		if(DB::table('goods')->whereIn("id", explode(',', $id))->update(['status' => 1]))
         {
             success_jump("$id ,删除成功");
         }

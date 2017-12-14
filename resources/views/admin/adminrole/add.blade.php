@@ -2,9 +2,9 @@
 @section('title', '添加角色')
 
 @section('content')
-<h5 class="sub-header"><a href="/fladmin/userrole">角色列表</a> > 添加角色</h5>
+<h5 class="sub-header"><a href="<?php echo route('admin_adminrole'); ?>">角色列表</a> > 添加角色</h5>
 
-<form id="addarc" method="post" action="/fladmin/userrole/doadd" role="form" enctype="multipart/form-data" class="table-responsive">{{ csrf_field() }}
+<form id="addarc" method="post" action="<?php echo route('admin_adminrole_doadd'); ?>" role="form" enctype="multipart/form-data" class="table-responsive">{{ csrf_field() }}
 <table class="table table-striped table-bordered">
 <tbody>
     <tr>

@@ -20,4 +20,28 @@ class OrderGoods extends BaseModel
      * @var bool
      */
     public $timestamps = false;
+    
+    //获取退货状态文字：0无退货，1退款中，2退款成功，3不同意退款
+    public static function getRefundStatusText($where)
+    {
+        $res = '';
+        if($where['refund_status'] == 0)
+        {
+            $res = '无退货';
+        }
+        elseif($where['refund_status'] == 1)
+        {
+            $res = '退款中';
+        }
+        elseif($where['refund_status'] == 2)
+        {
+            $res = '退款成功';
+        }
+        elseif($where['refund_status'] == 3)
+        {
+            $res = '不同意退款';
+        }
+        
+        return $res;
+    }
 }

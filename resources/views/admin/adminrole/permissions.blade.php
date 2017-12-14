@@ -2,9 +2,9 @@
 @section('title', '角色权限设置')
 
 @section('content')
-<h2 class="sub-header">角色权限设置</h2>[ <a href="<?php echo route('admin_userrole'); ?>">角色列表</a> ]<br><br>
+<h2 class="sub-header">角色权限设置</h2>[ <a href="<?php echo route('admin_adminrole'); ?>">角色列表</a> ]<br><br>
 
-<form method="post" action="<?php echo route('admin_userrole_dopermissions'); ?>" role="form" enctype="multipart/form-data" class="table-responsive"><div class="table-responsive">{{ csrf_field() }}
+<form method="post" action="<?php echo route('admin_adminrole_dopermissions'); ?>" role="form" enctype="multipart/form-data" class="table-responsive"><div class="table-responsive">{{ csrf_field() }}
 <input style="display:none;" name="role_id" type="text" id="role_id" value="<?php echo $role_id; ?>">
 <ul class="list-group">
 <?php if($menus){foreach($menus as $row){ ?>

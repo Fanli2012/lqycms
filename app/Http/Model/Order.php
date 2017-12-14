@@ -24,7 +24,7 @@ class Order extends BaseModel
         $limit  = isset($limit) ? $limit : 10;
         $offset = isset($offset) ? $offset : 0;
         
-        $where['user_id'] = $user_id;
+        if(isset($user_id)){$where['user_id'] = $user_id;}
         $where['is_delete'] = 0;
         
         //0或者不传表示全部，1待付款，2待发货,3待收货,4待评价(确认收货，交易成功),5退款/售后
@@ -75,6 +75,10 @@ class Order extends BaseModel
                     $order_status_arr = self::getOrderStatusText($v);
                     $order_list[$k]['order_status_text'] = $order_status_arr?$order_status_arr['text']:'';
                     $order_list[$k]['order_status_num'] = $order_status_arr?$order_status_arr['num']:'';
+                    
+                    $order_list[$k]['province_name'] = Region::getRegionName($v['province']);
+                    $order_list[$k]['city_name'] = Region::getRegionName($v['city']);
+                    $order_list[$k]['district_name'] = Region::getRegionName($v['district']);
                     
                     $order_goods = OrderGoods::where(array('order_id'=>$v['id']))->get();
                     $order_list[$k]['goods_list'] = $order_goods;
@@ -274,6 +278,50 @@ class Order extends BaseModel
         elseif($where['order_status'] == 2)
         {
             $res = array('text'=>'无效','num'=>7);
+        }
+        
+        return $res;
+    }
+    
+    //获取发票类型文字：0不索要发票，1个人，2企业
+    public static function getInvoiceText($where)
+    {
+        $res = '';
+        if($where['invoice'] == 0)
+        {
+            $res = '不索要发票';
+        }
+        elseif($where['invoice'] == 1)
+        {
+            $res = '个人';
+        }
+        elseif($where['invoice'] == 2)
+        {
+            $res = '企业';
+        }
+        
+        return $res;
+    }
+    
+    //获取订单来源文字：1pc，2weixin，3app，4wap
+    public static function getPlaceTypeText($where)
+    {
+        $res = '';
+        if($where['place_type'] === 1)
+        {
+            $res = 'pc';
+        }
+        elseif($where['place_type'] === 2)
+        {
+            $res = 'weixin';
+        }
+        elseif($where['place_type'] === 3)
+        {
+            $res = 'app';
+        }
+        elseif($where['place_type'] === 4)
+        {
+            $res = 'wap';
         }
         
         return $res;

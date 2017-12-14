@@ -36,16 +36,16 @@ class LoginController extends BaseController
         if(!empty($_POST["username"])){$username = $_POST["username"];}else{$username='';exit;}//用户名
         if(!empty($_POST["pwd"])){$pwd = md5($_POST["pwd"]);}else{$pwd='';exit;}//密码
 		
-        $admin_user = DB::table('admin_user')->where(array('username' => $username, 'pwd' => $pwd))->orWhere(array('email' => $username, 'pwd' => $pwd))->first();
+        $admin_user = DB::table('admin')->where(array('username' => $username, 'pwd' => $pwd))->orWhere(array('email' => $username, 'pwd' => $pwd))->first();
 		
         if($admin_user)
         {
 			$admin_user_info = object_to_array($admin_user, 1);
-			$admin_user_info['rolename'] = DB::table('admin_user_role')->where(array('id'=>$admin_user->role_id))->value('name');
+			$admin_user_info['rolename'] = DB::table('admin_role')->where(array('id'=>$admin_user->role_id))->value('name');
 			
 			$_SESSION['admin_user_info'] = $admin_user_info;
 			
-			DB::table('admin_user')->where(array('id'=>$admin_user->role_id))->update(array('logintime' => time()));
+			DB::table('admin')->where(array('id'=>$admin_user->role_id))->update(array('logintime' => time()));
 			
 			return redirect()->route('admin');
         }
@@ -69,7 +69,7 @@ class LoginController extends BaseController
         $data["username"] = "admin888";
         $data["pwd"] = "21232f297a57a5a743894a0e4a801fc3";
         
-        if(DB::table('admin_user')->where('id', 1)->update($data))
+        if(DB::table('admin')->where('id', 1)->update($data))
         {
             success_jump('密码恢复成功！', route('admin_login'));
         }
@@ -94,7 +94,7 @@ class LoginController extends BaseController
 			return 0;
 		}
         
-        return DB::table("admin_user")->where($map)->count();
+        return DB::table("admin")->where($map)->count();
     }
 	
 	//测试

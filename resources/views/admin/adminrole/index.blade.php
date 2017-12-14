@@ -2,7 +2,7 @@
 @section('title', '角色管理')
 
 @section('content')
-<h2 class="sub-header">角色管理</h2>[ <a href="/fladmin/userrole/add">添加角色</a> ]<br><br>
+<h2 class="sub-header">角色管理</h2>[ <a href="<?php echo route('admin_adminrole_add'); ?>">添加角色</a> ]<br><br>
 
 <form name="listarc"><div class="table-responsive"><table class="table table-striped table-hover">
 <thead><tr>
@@ -18,7 +18,7 @@
 <td><?php echo $row->name; ?></td>
 <td><?php echo $row->des; ?></td>
 <td><?php if($row->status==0){echo '启用';}else{echo '禁用';} ?></td>
-<td><?php if($row->id<>1){ ?><a href="/fladmin/userrole/permissions?id=<?php echo $row->id; ?>">权限设置</a> | <?php } ?><a href="/fladmin/userrole/edit?id=<?php echo $row->id; ?>">修改</a><?php if($row->id<>1){ ?> | <a onclick="delconfirm('/fladmin/userrole/del?id=<?php echo $row->id; ?>')" href="javascript:;">删除</a><?php } ?></td>
+<td><?php if($row->id<>1){ ?><a href="<?php echo route('admin_adminrole_permissions'); ?>?id=<?php echo $row->id; ?>">权限设置</a> | <?php } ?><a href="<?php echo route('admin_adminrole_edit'); ?>?id=<?php echo $row->id; ?>">修改</a><?php if($row->id<>1){ ?> | <a onclick="delconfirm('<?php echo route('admin_adminrole_del'); ?>?id=<?php echo $row->id; ?>')" href="javascript:;">删除</a><?php } ?></td>
 </tr><?php }} ?>
 </tbody></table></div><!-- 表格结束 --></form><!-- 表单结束 -->
 

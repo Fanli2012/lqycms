@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Admin\CommonController;
 use DB;
 
-class UserRoleController extends CommonController
+class AdminRoleController extends CommonController
 {
     public function __construct()
     {
@@ -13,24 +13,24 @@ class UserRoleController extends CommonController
 	
     public function index()
     {
-		$posts = parent::pageList('admin_user_role', '', ['listorder','desc']);
+		$posts = parent::pageList('admin_role', '', ['listorder','desc']);
 		
         $data['posts'] = $posts;
         
-        return view('admin.userrole.index', $data);
+        return view('admin.adminrole.index', $data);
     }
     
     public function add()
     {
-        return view('admin.userrole.add');
+        return view('admin.adminrole.add');
     }
     
     public function doadd()
     {
 		unset($_POST["_token"]);
-		if(DB::table('admin_user_role')->insert($_POST))
+		if(DB::table('admin_role')->insert($_POST))
         {
-            success_jump('添加成功！', route('admin_userrole'));
+            success_jump('添加成功！', route('admin_adminrole'));
         }
 		else
 		{
@@ -44,9 +44,9 @@ class UserRoleController extends CommonController
         if(preg_match('/[0-9]*/',$id)){}else{exit;}
         
         $data['id'] = $id;
-		$data['post'] = object_to_array(DB::table('admin_user_role')->where('id', $id)->first(), 1);
+		$data['post'] = object_to_array(DB::table('admin_role')->where('id', $id)->first(), 1);
         
-        return view('admin.userrole.edit', $data);
+        return view('admin.adminrole.edit', $data);
     }
     
     public function doedit()
@@ -54,9 +54,9 @@ class UserRoleController extends CommonController
         if(!empty($_POST["id"])){$id = $_POST["id"];unset($_POST["id"]);}else {$id="";exit;}
         
 		unset($_POST["_token"]);
-		if(DB::table('admin_user_role')->where('id', $id)->update($_POST))
+		if(DB::table('admin_role')->where('id', $id)->update($_POST))
         {
-            success_jump('修改成功！', route('admin_userrole'));
+            success_jump('修改成功！', route('admin_adminrole'));
         }
 		else
 		{
@@ -68,7 +68,7 @@ class UserRoleController extends CommonController
     {
 		if(!empty($_GET["id"])){$id = $_GET["id"];}else{error_jump('删除失败！请重新提交');}
 		
-		if(DB::table('admin_user_role')->whereIn("id", explode(',', $id))->delete())
+		if(DB::table('admin_role')->whereIn("id", explode(',', $id))->delete())
         {
             success_jump('删除成功');
         }
@@ -104,7 +104,7 @@ class UserRoleController extends CommonController
 			}
 		}
 		
-		return view('admin.userrole.permissions', $data);
+		return view('admin.adminrole.permissions', $data);
     }
 	
 	//角色权限设置

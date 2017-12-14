@@ -297,6 +297,7 @@ Route::group(['prefix' => 'fladmin', 'namespace' => 'Admin', 'middleware' => ['w
 	Route::get('/goodstype/del', 'GoodsTypeController@del')->name('admin_goodstype_del');
     //订单
 	Route::get('/order', 'OrderController@index')->name('admin_order');
+    Route::get('/order/detail', 'OrderController@detail')->name('admin_order_detail');
 	Route::get('/order/edit', 'OrderController@edit')->name('admin_order_edit');
 	Route::post('/order/doedit', 'OrderController@doedit')->name('admin_order_doedit');
 	Route::get('/order/del', 'OrderController@del')->name('admin_order_del');
@@ -345,22 +346,29 @@ Route::group(['prefix' => 'fladmin', 'namespace' => 'Admin', 'middleware' => ['w
 	Route::get('/sysconfig/edit', 'SysconfigController@edit')->name('admin_sysconfig_edit');
 	Route::post('/sysconfig/doedit', 'SysconfigController@doedit')->name('admin_sysconfig_doedit');
 	Route::get('/sysconfig/del', 'SysconfigController@del')->name('admin_sysconfig_del');
-	//用户管理
+    //会员管理
 	Route::get('/user', 'UserController@index')->name('admin_user');
 	Route::get('/user/add', 'UserController@add')->name('admin_user_add');
 	Route::post('/user/doadd', 'UserController@doadd')->name('admin_user_doadd');
 	Route::get('/user/edit', 'UserController@edit')->name('admin_user_edit');
 	Route::post('/user/doedit', 'UserController@doedit')->name('admin_user_doedit');
 	Route::get('/user/del', 'UserController@del')->name('admin_user_del');
+	//管理员管理
+	Route::get('/admin', 'AdminController@index')->name('admin_admin');
+	Route::get('/admin/add', 'AdminController@add')->name('admin_admin_add');
+	Route::post('/admin/doadd', 'AdminController@doadd')->name('admin_admin_doadd');
+	Route::get('/admin/edit', 'AdminController@edit')->name('admin_admin_edit');
+	Route::post('/admin/doedit', 'AdminController@doedit')->name('admin_admin_doedit');
+	Route::get('/admin/del', 'AdminController@del')->name('admin_admin_del');
 	//角色管理
-	Route::get('/userrole', 'UserRoleController@index')->name('admin_userrole');
-	Route::get('/userrole/add', 'UserRoleController@add')->name('admin_userrole_add');
-	Route::post('/userrole/doadd', 'UserRoleController@doadd')->name('admin_userrole_doadd');
-	Route::get('/userrole/edit', 'UserRoleController@edit')->name('admin_userrole_edit');
-	Route::post('/userrole/doedit', 'UserRoleController@doedit')->name('admin_userrole_doedit');
-	Route::get('/userrole/del', 'UserRoleController@del')->name('admin_userrole_del');
-	Route::get('/userrole/permissions', 'UserRoleController@permissions')->name('admin_userrole_permissions'); //权限设置
-	Route::post('/userrole/dopermissions', 'UserRoleController@dopermissions')->name('admin_userrole_dopermissions');
+	Route::get('/adminrole', 'AdminRoleController@index')->name('admin_adminrole');
+	Route::get('/adminrole/add', 'AdminRoleController@add')->name('admin_adminrole_add');
+	Route::post('/adminrole/doadd', 'AdminRoleController@doadd')->name('admin_adminrole_doadd');
+	Route::get('/adminrole/edit', 'AdminRoleController@edit')->name('admin_adminrole_edit');
+	Route::post('/adminrole/doedit', 'AdminRoleController@doedit')->name('admin_adminrole_doedit');
+	Route::get('/adminrole/del', 'AdminRoleController@del')->name('admin_adminrole_del');
+	Route::get('/adminrole/permissions', 'AdminRoleController@permissions')->name('admin_adminrole_permissions'); //权限设置
+	Route::post('/adminrole/dopermissions', 'AdminRoleController@dopermissions')->name('admin_adminrole_dopermissions');
 	//菜单管理
 	Route::get('/menu', 'MenuController@index')->name('admin_menu');
 	Route::get('/menu/add', 'MenuController@add')->name('admin_menu_add');
