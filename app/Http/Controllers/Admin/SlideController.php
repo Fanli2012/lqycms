@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Admin\CommonController;
 use DB;
+use App\Http\Model\Slide;
 
 class SlideController extends CommonController
 {
@@ -13,8 +14,16 @@ class SlideController extends CommonController
     
     public function index()
     {
-        $data['posts'] = parent::pageList('slide', '', [['is_show', 'asc'], ['rank', 'desc']]);
+        $data['posts'] = parent::pageList('slide', '', [['is_show', 'asc'], ['listorder', 'asc']]);
 		
+        if($data['posts'])
+        {
+            foreach($data['posts'] as $k=>$v)
+            {
+                $data['posts'][$k]->type_text = Slide::getTypeText(array('type'=>$v->type));
+            }
+        }
+        
 		return view('admin.slide.index', $data);
     }
     

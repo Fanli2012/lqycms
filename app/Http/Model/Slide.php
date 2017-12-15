@@ -80,4 +80,28 @@ class Slide extends Model
         
         return true;
     }
+    
+    //获取显示平台文字：0pc，1weixin，2app，3wap
+    public static function getTypeText($where)
+    {
+        $res = '';
+        if($where['type'] === 0)
+        {
+            $res = 'pc';
+        }
+        elseif($where['type'] === 1)
+        {
+            $res = 'weixin';
+        }
+        elseif($where['type'] === 2)
+        {
+            $res = 'app';
+        }
+        elseif($where['type'] === 3)
+        {
+            $res = 'wap';
+        }
+        
+        return $res;
+    }
 }

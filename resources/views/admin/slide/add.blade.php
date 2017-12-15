@@ -23,6 +23,15 @@
 		</td>
     </tr>
     <tr>
+        <td align="right">显示平台：</td>
+        <td>
+			<input type="radio" value='0' name="type" checked />&nbsp;pc&nbsp;&nbsp;
+			<input type="radio" value='1' name="type" />&nbsp;weixin&nbsp;&nbsp;
+			<input type="radio" value='2' name="type" />&nbsp;app&nbsp;&nbsp;
+			<input type="radio" value='3' name="type" />&nbsp;wap
+		</td>
+    </tr>
+    <tr>
         <td align="right">是否显示：</td>
         <td>
 			<input type="radio" value='0' name="is_show" checked />&nbsp;是&nbsp;&nbsp;
@@ -32,13 +41,13 @@
     <tr>
         <td align="right">排序：</td>
         <td>
-			<input name="rank" type="text" id="rank" value="" size="3" />
+			<input name="listorder" type="text" id="listorder" value="50" size="3" />
 		</td>
     </tr>
     <tr>
         <td align="right">所属的组：</td>
         <td>
-			<input name="group_id" type="text" id="group_id" value="" size="3" />
+			<input name="group_id" type="text" id="group_id" value="0" size="3" />
 		</td>
     </tr>
     <tr>

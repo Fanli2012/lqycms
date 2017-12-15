@@ -3,6 +3,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Admin\CommonController;
 use DB;
+use Illuminate\Http\Request;
+use App\Http\Requests\ArticleRequest;
+use Validator;
 
 class ArticleController extends CommonController
 {
@@ -78,6 +81,16 @@ class ArticleController extends CommonController
     
     public function add()
     {
+        $validate = new ArticleRequest();
+        $validator = Validator::make($_REQUEST, $validate->getSceneRules('add'), $validate->getSceneRulesMessages());
+        
+        if ($validator->fails())
+        {
+            //$validator->errors()->first();
+            //$validator->errors()->all();
+            error_jump('参数错误');
+        }
+        
 		$data = '';
 		if(!empty($_REQUEST["catid"])){$data['catid'] = $_REQUEST["catid"];}else{$data['catid'] = 0;}
 		

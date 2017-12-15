@@ -23,6 +23,15 @@
 		</td>
     </tr>
     <tr>
+        <td align="right">显示平台：</td>
+        <td>
+			<input type="radio" value='0' name="type" <?php if(isset($post['type']) && $post['type']==0){echo 'checked';} ?> />&nbsp;pc&nbsp;&nbsp;
+			<input type="radio" value='1' name="type" <?php if(isset($post['type']) && $post['type']==1){echo 'checked';} ?> />&nbsp;weixin&nbsp;&nbsp;
+			<input type="radio" value='2' name="type" <?php if(isset($post['type']) && $post['type']==2){echo 'checked';} ?> />&nbsp;app&nbsp;&nbsp;
+			<input type="radio" value='3' name="type" <?php if(isset($post['type']) && $post['type']==3){echo 'checked';} ?> />&nbsp;wap
+		</td>
+    </tr>
+    <tr>
         <td align="right">是否显示：</td>
         <td>
 			<input type="radio" value='0' name="is_show" <?php if(isset($post['is_show']) && $post['is_show']==0){echo 'checked';} ?> />&nbsp;是&nbsp;&nbsp;
@@ -32,7 +41,7 @@
     <tr>
         <td align="right">排序：</td>
         <td>
-			<input name="rank" type="text" id="rank" value="<?php echo $post['rank']; ?>" size="3" />
+			<input name="listorder" type="text" id="listorder" value="<?php echo $post['listorder']; ?>" size="3" />
 		</td>
     </tr>
     <tr>

@@ -19,7 +19,7 @@ class IndexController extends CommonController
     }
 	
 	//首页
-    public function index()
+    public function index(Request $request)
 	{
         //分享到首页，把推荐id存下来
         if(isset($_REQUEST['invite_code']) && !empty($_REQUEST['invite_code']))

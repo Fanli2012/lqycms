@@ -365,6 +365,7 @@ Route::group(['prefix' => 'fladmin', 'namespace' => 'Admin', 'middleware' => ['w
 	Route::get('/userwithdraw', 'UserWithdrawController@index')->name('admin_userwithdraw');
 	Route::get('/userwithdraw/edit', 'UserWithdrawController@edit')->name('admin_userwithdraw_edit');
 	Route::post('/userwithdraw/doedit', 'UserWithdrawController@doedit')->name('admin_userwithdraw_doedit');
+    Route::post('/userwithdraw/change_status', 'UserWithdrawController@changeStatus')->name('admin_userwithdraw_change_status');
 	//管理员管理
 	Route::get('/admin', 'AdminController@index')->name('admin_admin');
 	Route::get('/admin/add', 'AdminController@add')->name('admin_admin_add');

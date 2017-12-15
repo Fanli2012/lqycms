@@ -32,7 +32,7 @@
     <div style="clear:both;"></div>
 </div>
 
-<div class="table-responsive"><table class="table table-striped table-hover">
+<div class="table-responsive"><table class="table table-hover">
 <thead><tr>
 <th>订单编号SN-ID</th>
 <th>支付信息</th>
