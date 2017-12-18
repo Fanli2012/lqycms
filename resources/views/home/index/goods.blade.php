@@ -99,7 +99,7 @@
 </div>
 
 <div class="recom-list"><ul><?php if($tj_list){foreach($tj_list as $k=>$v){ ?>
-<li class="tab-pannel" style="float: none; overflow: hidden; height: 222px; display: block;"><a target="_blank" href="<?php echo route('home_goods',array('id'=>$v['id'])); ?>"><img src="<?php echo $v['litpic']; ?>" alt="<?php echo $v["title"]; ?>"><div class="look-price"><div>¥<?php echo $v["price"]; ?></div><p><?php echo $v["title"]; ?></p></div></a></li>
+<li class="tab-pannel" style="float: none; overflow: hidden; height: 222px; display: block;"><a href="<?php echo route('home_goods',array('id'=>$v['id'])); ?>"><img src="<?php echo $v['litpic']; ?>" alt="<?php echo $v["title"]; ?>"><div class="look-price"><div>¥<?php echo $v["price"]; ?></div><p><?php echo $v["title"]; ?></p></div></a></li>
 <?php }} ?></ul></div>
 </div>
 
