@@ -1,0 +1,104 @@
+/* GLOBAL STYLES
+-------------------------------------------------- */
+/* Padding below the footer and lighter body text */
+
+body {color: #5a5a5a;}
+.lead{margin-bottom:20px;font-size:16px;font-weight:300;line-height:1.4;}
+.bs-docs-featurette-title{margin-bottom:10px;font-size:30px;font-weight:400;color:#333;}
+.half-rule{width:100px;margin:40px auto;}
+.bs-docs-featurette{padding-top:40px;padding-bottom:40px;font-size:16px;line-height:1.5;color:#555;text-align:center;}
+.projects-header{width:60%;text-align:center;margin:60px 0 10px;font-weight:200;margin-bottom:40px;display:block;margin-left:auto;margin-right:auto}
+.projects-header h2{font-size:30px;letter-spacing:1px}
+@media screen and (min-width:768px){
+.projects-header h2{font-size:36px}
+}
+/* CUSTOMIZE THE NAVBAR
+-------------------------------------------------- */
+
+/* Special class on .container surrounding .navbar, used for positioning it into place. */
+.navbar-wrapper {position: absolute;top: 0;right: 0;left: 0;z-index: 20;}
+
+/* Flip around the padding for proper display in narrow viewports */
+.navbar-wrapper > .container {padding-right: 0;padding-left: 0;}
+.navbar-wrapper .navbar {padding-right: 15px;padding-left: 15px;}
+.navbar-wrapper .navbar .container {width: auto;}
+
+/* CUSTOMIZE THE CAROUSEL
+-------------------------------------------------- */
+
+/* Carousel base class */
+.carousel {height: 500px;margin-bottom: 60px;}
+/* Since positioning the image, we need to help out the caption */
+.carousel-caption {z-index: 10;}
+
+/* Declare heights because of positioning of img element */
+.carousel .item {height: 500px;background-color: #777;}
+.carousel-inner > .item > img {position: absolute;top: 0;left: 0;min-width: 100%;height: 500px;}
+
+/* MARKETING CONTENT
+-------------------------------------------------- */
+
+/* Center align the text within the three columns below the carousel */
+.marketing .col-lg-4 {margin-bottom: 20px;text-align: center;}
+.marketing h2 {font-weight: normal;}
+.marketing .col-lg-4 p {margin-right: 10px;margin-left: 10px;}
+
+
+/* Featurettes
+------------------------- */
+
+.featurette-divider {margin: 80px 0; /* Space out the Bootstrap <hr> more */}
+
+/* Thin out the marketing headings */
+.featurette-heading {font-weight: 300;line-height: 1;letter-spacing: -1px;}
+
+/* RESPONSIVE CSS
+-------------------------------------------------- */
+
+@media (min-width: 768px) {
+/* Navbar positioning foo */
+.navbar-wrapper {margin-top: 20px;}
+.navbar-wrapper .container {padding-right: 15px;padding-left: 15px;}
+.navbar-wrapper .navbar {padding-right: 0;padding-left: 0;}
+
+/* The navbar becomes detached from the top, so we round the corners */
+.navbar-wrapper .navbar {border-radius: 4px;}
+
+/* Bump up size of carousel content */
+.carousel-caption p {margin-bottom: 20px;font-size: 21px;line-height: 1.4;}
+
+.featurette-heading {font-size: 50px;}
+.bs-docs-featurette-title{font-size:36px;}
+.bs-docs-featurette .lead{max-width:80%;margin-right:auto;margin-left:auto;}
+.lead{font-size:21px;}
+.bs-docs-featurette{padding-top:80px;padding-bottom:80px;}
+}
+
+@media (min-width: 992px) {
+.featurette-heading {margin-top: 120px;}
+}
+img:hover{filter:alpha(opacity=90);opacity:0.9;}
+.cl{clear:both;}.fl,.mfl{float:left;}.fr,.mfr{float:right;}.m-auto{margin:0 auto;}
+
+.list{padding:20px 0;border-bottom:1px solid #e5e5e5;}
+.tit{display:block;font-weight:normal;font-size:24px;line-height:1.3;}
+.list p{margin-top:10px;word-break:break-all;color:#999;font-size:14px;line-height:1.5;}.list p a{color:#e74c3c;}.list p:after{content:"..";}
+.info{margin-top:8px;color:#bbb;font-size:12px;}.info a{color:#ea5a3d;margin-right:8px;}.info .fr{color:#444;}
+.list .limg{width:169px;height:119px;float:left;margin-right:20px;}.list .limg img{width:169px;height:119px;vertical-align:top;}
+
+.page,.pages{text-align:center;padding:15px 0px;}.page a:hover{background:#FF5E52;color:#fff;}
+.page a{display:inline-block;height:32px;line-height:32px;padding:0 45px;font-size:14px;color:#fff;background:#ea5a3d;margin-right:8px;border-radius:3px;box-shadow:1px 1px 2px #eee;}
+
+.pages li a{color:#808080;}.pages li{display:inline-block;height:35px;line-height:35px;text-align:center;font-size:14px;color:#808080;background-color:#f4f4f4;padding-right:15px;padding-left:15px;margin-right:1px;}
+.pages .thisclass{background-color:#ea5a3d;}.pages .thisclass a{color:#fff;}
+.pages li:hover,.pages li:hover a{background-color:#ea5a3d;color:#fff;}
+
+.content{margin-bottom:15px;font-size:16px;}
+.content p{margin-bottom:0;}.content u{color:red;text-decoration:none;}
+.content img{max-width:100%;height:auto;}
+.content blockquote{padding:.6em 1em;border-left:.4em solid #cad4f2;background:#f0f0f0;}
+
+.banner{text-align:center;padding-top:100px;color: #fff;background:url(../images/banner.jpg);}
+.imgzsy{width:100%;/* height:14vw; */}
+footer{margin-top:40px;}
+footer p{text-align:center;}

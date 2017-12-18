@@ -1,0 +1,1 @@
+<footer><p><?php echo sysconfig('CMS_POWERBY'); ?></p></footer>

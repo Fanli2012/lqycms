@@ -22,7 +22,6 @@ Route::group(['domain' => env('APP_SUBDOMAIN'), 'namespace' => 'Wap'], function 
 	Route::get('/tag{tag}', 'IndexController@tag')->name('wap_tag');            //标签页
 	Route::get('/page/{id}', 'IndexController@page')->name('wap_singlepage');   //单页
 	Route::get('/goods/{id}', 'IndexController@goods')->name('wap_goods');      //商品详情页
-	Route::get('/goodstype{cat}/{page}', 'IndexController@goodstype');          //产品分类页，分页
 	Route::get('/goodstype{cat}', 'IndexController@goodstype')->name('wap_goodstype'); //产品分类页
 	Route::get('/sitemap.xml', 'IndexController@sitemap')->name('wap_sitemap'); //sitemap
 });
@@ -41,8 +40,7 @@ Route::group(['namespace' => 'Home'], function () {
 	Route::get('/tag{tag}', 'IndexController@tag')->name('home_tag');           //标签页
 	Route::get('/page/{id}', 'IndexController@page')->name('home_singlepage');  //单页
 	Route::get('/goods/{id}', 'IndexController@goods')->name('home_goods');     //商品详情页
-	Route::get('/goodstype{cat}/{page}', 'IndexController@goodstype');          //产品分类页，分页
-	Route::get('/goodstype{cat}', 'IndexController@goodstype')->name('home_goodstype'); //产品分类页
+	Route::get('/goodslist', 'IndexController@goodslist')->name('home_goodslist'); //产品分类页
 	Route::get('/sitemap.xml', 'IndexController@sitemap')->name('home_sitemap');//sitemap
 	
 	Route::get('/test', 'IndexController@test')->name('home_test');             //测试

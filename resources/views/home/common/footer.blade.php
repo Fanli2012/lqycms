@@ -1,1 +1,1 @@
-<footer><p><?php echo sysconfig('CMS_POWERBY'); ?></p></footer>
+<div id="footer" class="box">&copy;丽杭汽车网 部分文章来源于网络，如果侵犯了您的权益，请<a href="http://www.bnbni.com/contact.html">联系我们</a>。<a target="_blank" href="http://www.bnbni.com/sitemap.xml">网站地图</a><div class="m-auto"><script>count_js();</script></div></div>

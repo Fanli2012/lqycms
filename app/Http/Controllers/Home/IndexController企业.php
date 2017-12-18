@@ -191,7 +191,7 @@ class IndexController extends CommonController
     }
 	
 	//商品列表页
-    public function goodslist($cat, $page=0)
+    public function goodstype($cat, $page=0)
 	{
         $pagenow = $page;
         
@@ -231,17 +231,22 @@ class IndexController extends CommonController
 	{
         if(empty($id) || !preg_match('/[0-9]+/',$id)){return redirect()->route('page404');}
 		
-		$post = object_to_array(DB::table('goods')->where(['id'=>$id,'status'=>0])->first(), 1);if(empty($post)){return redirect()->route('page404');}$post['type_name'] = DB::table('goods_type')->where('id', $post['typeid'])->value('name');
+		$post = object_to_array(DB::table('goods')->where('id', $id)->first(), 1);if(empty($post)){return redirect()->route('page404');}$post['name'] = DB::table('goods_type')->where('id', $post['typeid'])->value('name');
 		if($post)
         {
+			$cat = $post['typeid'];
+            if(!empty($post['writer'])){$post['writertitle']=$post['title'].' '.$post['writer'];}
+            
 			$data['post'] = $post;
+            $data['pre'] = get_article_prenext(array('aid'=>$post["id"],'typeid'=>$post["typeid"],'type'=>"pre"));
         }
         else
         {
             return redirect()->route('page404');
         }
         
-        $data['tj_list'] = object_to_array(DB::table('goods')->where(['tuijian'=>1,'status'=>0])->get());
+		$post = object_to_array(DB::table('goods_type')->where('id', $cat)->first(), 1);
+        
         return view('home.index.goods', $data);
     }
 	
