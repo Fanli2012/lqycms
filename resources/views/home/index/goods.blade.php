@@ -1,7 +1,8 @@
 <!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 <title><?php echo $post["title"]; ?>_<?php echo sysconfig('CMS_WEBNAME'); ?></title><meta name="keywords" content="{dede:field.keywords/}" /><meta name="description" content="{dede:field.description function='html2text(@me)'/}" /><link rel="stylesheet" href="<?php echo sysconfig('CMS_BASEHOST'); ?>/css/style.css"><script type="text/javascript" src="<?php echo sysconfig('CMS_BASEHOST'); ?>/js/ad.js"></script></head><body>
 @include('home.common.header')
-
+<script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/jquery.min.js"></script>
+<script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/layer/layer.js"></script>
 <style>
 .detail-main {margin-top:15px;padding: 10px;position: relative;color: #626262;background: #fff;}
 .detail-main .header {height: 28px;line-height: 28px;padding-bottom:8px;border-bottom: 1px dashed #ececec;font-size: 16px;}
@@ -34,7 +35,7 @@
         <span class="arrow"><small></small></span>
         <li><a href="<?php echo route('home_goodslist',array('id'=>$post['id'])); ?>"><?php echo $post['type_name']; ?></a></li>
     </ul>
-    <a class="bookMark" href="">查看更多同类商品<span></span></a>
+    <a class="bookMark" href="<?php echo route('home_goodslist',array('id'=>$post['id'])); ?>">查看更多同类商品<span></span></a>
 </div>
     
 <div class="clearfix">
@@ -59,12 +60,26 @@
 <div class="stock_bg" style="margin-top:10px;margin-bottom:30px;">
 &nbsp;&nbsp;库存: <?php echo $post['goods_number']; ?>
 </div>
-<div class="details_join"><a href="javascript:asas();">立即抢购</a></div>
+<div class="details_join"><a href="javascript:submit();">立即抢购</a></div>
 </div>
 <div class="cl"></div></div>
 </div>
 </div>
 </div>
+<script>
+function submit()
+{
+    //自定页
+    layer.open({
+        type: 1,
+        title: '请用【微信扫一扫】下单',
+        closeBtn: 0, //不显示关闭按钮
+        anim: 2,
+        shadeClose: true, //开启遮罩关闭
+        content: '<img src="<?php echo get_erweima(route('weixin_goods_detail',array('id'=>$post['id'])),360); ?>">'
+    });
+}
+</script>
 <style>
 .widget-box {border: 1px solid #d9d9d9;background: #fff;position: relative;margin-bottom: 10px;}
 .widget-box .tit.none {border: none;}

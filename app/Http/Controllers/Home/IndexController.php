@@ -30,6 +30,11 @@ class IndexController extends CommonController
 	{
         $cat = $request->input('id', '');
         $page = $request->input('page', '');
+        
+        //推荐
+        $tuijian = $request->input('tuijian', '');
+        if($tuijian){$where['tuijian'] = $tuijian;}
+        
         $pagenow = $page;
         $post = '';
         
@@ -56,10 +61,10 @@ class IndexController extends CommonController
 		$data['counts'] = $counts;
 		$start = $page*$pagesize;
 		
-        $posts = $goods->get();
+        $posts = object_to_array($goods->skip($start)->take($pagesize)->get());
         
 		$data['posts'] = $posts; //获取列表
-        $data['pagenav'] = '';if($nextpage<=$pages && $nextpage>0){$data['pagenav'] = $this->listpageurl('http://'.$_SERVER['HTTP_HOST'],$_SERVER['QUERY_STRING'],$nextpage);}
+        $data['pagenav'] = '';if($nextpage<=$pages && $nextpage>0){$data['pagenav'] = $this->listpageurl(route('home_goodslist'),$_SERVER['QUERY_STRING'],$nextpage);}
 		
         $data['goods_type_list'] = object_to_array(DB::table('goods_type')->where(['pid'=>0,'status'=>1])->select('id','name')->take(30)->orderBy('listorder','asc')->get());
         $data['id'] = $cat;
@@ -92,8 +97,11 @@ class IndexController extends CommonController
         $res = '';
         foreach(explode("&",$query_string) as $row)
         {
-            $canshu = explode("=",$row);
-            $res[$canshu[0]] = $canshu[1];
+            if($row)
+            {
+                $canshu = explode("=",$row);
+                $res[$canshu[0]] = $canshu[1];
+            }
         }
         
         if(isset($res['page']))

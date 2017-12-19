@@ -14,9 +14,10 @@
 <div class="box">
 <div class="cat-menu-h">
 <ul class="clearfix">
+<li><a href="<?php echo route('home_goodslist'); ?>">全部</a></li>
 <?php if($goods_type_list){foreach($goods_type_list as $k=>$v){ ?>
 <li><a<?php if($v['id']==$id){echo ' class="hover"';} ?> href="<?php echo route('home_goodslist',array('id'=>$v['id'])); ?>"><?php echo $v['name']; ?></a></li><?php }} ?>
-<li><a class="forecast" target="_blank" href="//ju.taobao.com/tg/forecast.htm"> [明日预告] </a></li>
+<li><a class="forecast" href="<?php echo route('home_goodslist',array('tuijian'=>1)); ?>"> [推荐] </a></li>
 </ul>
 
 <form method="get" target="_blank" class="m-sch fr" name="formsearch" action="/plus/search.php"><input class="sch-txt" name="q" type="text" value="搜索 按Enter键" onfocus="if(value=='搜索 按Enter键') {value=''}" onblur="if(value=='') {value='搜索 按Enter键'}"></form>
@@ -29,7 +30,7 @@
 <?php if($posts){foreach($posts as $k=>$v){ ?>
 <li><a href="<?php echo route('home_goods',array('id'=>$v['id'])); ?>" target="_blank"><img src="<?php echo $v['litpic']; ?>" alt="<?php echo $v['title']; ?>">
 <p class="title"><?php echo $v['title']; ?></p>
-<p class="desc"><span class="price-point"><i></i>库存(<?php echo $v['goods_number']; ?>)</span> <?php echo $v['title']; ?>撒个地方官发个话说得好电话公司电话</p>
+<p class="desc"><span class="price-point"><i></i>库存(<?php echo $v['goods_number']; ?>)</span> <?php echo $v['description']; ?></p>
 <div class="item-prices red"><div class="item-link">立即<br>抢购</div><div class="item-info"><div class="price"><i>¥</i><em class="J_actPrice"><span class="yen"><?php echo $v['price']; ?></span></em></div>
 <div class="dock"><div class="dock-price"><del class="orig-price">¥<?php echo $v['market_price']; ?></del> <span class="benefit">退货赔运费</span></div><div class="prompt"><div class="sold-num"><em><?php echo $v['sale']; ?></em> 件已付款</div></div></div>
 </div></div>
@@ -37,7 +38,7 @@
 <?php }} ?>
 </ul></div>
 
-<div class="pages"><ul><?php echo $pagenav; ?></ul><div class="cl"></div></div>
+<?php if($pagenav){ ?><div class="pages"><ul><li style="width:180px;"><a href="<?php echo $pagenav; ?>">获取更多</a></li></ul><div class="cl"></div></div><?php } ?>
 
 </div><!-- box end -->@include('home.common.footer')
 <script>//图片幻灯
