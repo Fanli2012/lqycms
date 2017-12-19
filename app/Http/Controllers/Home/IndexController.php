@@ -31,20 +31,21 @@ class IndexController extends CommonController
         $cat = $request->input('id', '');
         $page = $request->input('page', '');
         $pagenow = $page;
+        $post = '';
         
-		if(empty($cat) || !preg_match('/[0-9]+/',$cat)){return redirect()->route('page404');}
+		if($cat)
+        {
+            $where['typeid'] = $cat;
+            $post = object_to_array(DB::table('goods_type')->where('id', $cat)->first(), 1);
+        }
         
-		$post = object_to_array(DB::table('goods_type')->where('id', $cat)->first(), 1);if(empty($post)){return redirect()->route('page404');}
         $data['post'] = $post;
         
-		$subcat="";
-		$post2 = object_to_array(DB::table('goods_type')->select('id')->where('pid', $cat)->get());
-		if(!empty($post2)){foreach($post2 as $row){$subcat=$subcat."typeid=".$row["id"]." or ";}}
-		$subcat=$subcat."typeid=".$cat;
-		$data['sql'] = $subcat;
-		
-		$counts = DB::table("goods")->whereRaw($subcat)->count();
-		if($counts>sysconfig('CMS_MAXARC')){$counts=sysconfig('CMS_MAXARC');dd($counts);}
+        $goods = DB::table("goods");
+        if(isset($where)){$goods = $goods->where($where);}
+        
+		$counts = $goods->count();
+		if($counts>sysconfig('CMS_MAXARC')){$counts=sysconfig('CMS_MAXARC');}
 		$pagesize = sysconfig('CMS_PAGESIZE');$page=0;
 		if($counts % $pagesize){//取总数据量除以每页数的余数
 		$pages = intval($counts/$pagesize) + 1; //如果有余数，则页数等于总数据量除以每页数的结果取整再加一,如果没有余数，则页数等于总数据量除以每页数的结果
@@ -55,9 +56,11 @@ class IndexController extends CommonController
 		$data['counts'] = $counts;
 		$start = $page*$pagesize;
 		
-		$data['posts'] = arclist(array("table"=>"goods","sql"=>$subcat, "limit"=>"$start,$pagesize")); //获取列表
-		$data['pagenav'] = get_listnav(array("counts"=>$counts,"pagesize"=>$pagesize,"pagenow"=>$page+1,"catid"=>$cat,"urltype"=>"goods")); //获取分页列表
+        $posts = $goods->get();
         
+		$data['posts'] = $posts; //获取列表
+        $data['pagenav'] = '';if($nextpage<=$pages && $nextpage>0){$data['pagenav'] = $this->listpageurl('http://'.$_SERVER['HTTP_HOST'],$_SERVER['QUERY_STRING'],$nextpage);}
+		
         $data['goods_type_list'] = object_to_array(DB::table('goods_type')->where(['pid'=>0,'status'=>1])->select('id','name')->take(30)->orderBy('listorder','asc')->get());
         $data['id'] = $cat;
         
@@ -81,6 +84,26 @@ class IndexController extends CommonController
         
         $data['tj_list'] = object_to_array(DB::table('goods')->where(['tuijian'=>1,'status'=>0])->get());
         return view('home.index.goods', $data);
+    }
+    
+    //网址组装
+    public function listpageurl($http_host,$query_string,$page=0)
+	{
+        $res = '';
+        foreach(explode("&",$query_string) as $row)
+        {
+            $canshu = explode("=",$row);
+            $res[$canshu[0]] = $canshu[1];
+        }
+        
+        if(isset($res['page']))
+        {
+            unset($res['page']);
+        }
+        
+        if($page==1 || $page==0){}else{$res['page'] = $page;}
+        
+        return $http_host.'?'.http_build_query($res);
     }
 	
     //列表页

@@ -42,14 +42,14 @@
 <li><a href="<?php echo route('home_goods',array('id'=>$v['id'])); ?>" target="_blank"><img src="<?php echo $v['litpic']; ?>" alt="<?php echo $v['title']; ?>">
 <p class="title"><?php echo $v['title']; ?></p>
 <p class="desc"><span class="price-point"><i></i>库存(<?php echo $v['goods_number']; ?>)</span> <?php echo $v['title']; ?>撒个地方官发个话说得好电话公司电话</p>
-<div class="item-prices red"><div class="item-link">立即<br>抢购</div><div class="item-info"><div class="price"><i>¥</i><em class="J_actPrice"><span class="yen"><?php echo $v['price']; ?></span></em></div>
+<div class="item-prices red"><div class="item-link">立即<br>抢购</div><div class="item-info"><div class="price"><i>¥</i><em class="J_actPrice"><span class="yen"><?php echo ceil($v['price']); ?></span></em></div>
 <div class="dock"><div class="dock-price"><del class="orig-price">¥<?php echo $v['market_price']; ?></del> <span class="benefit">退货赔运费</span></div><div class="prompt"><div class="sold-num"><em><?php echo $v['sale']; ?></em> 件已付款</div></div></div>
 </div></div>
 </a></li>
 <?php }} ?>
 </ul></div>
 
-<div class="pages"><ul><li>共100页</li><li class="thisclass">1</li><li><a href="http://www.bnbni.com/jtbz/">2</a></li><li><a href="http://www.bnbni.com/gaizhuang/">3</a></li><li><a href="http://www.bnbni.com/car/fours/">4</a></li><li><a href="http://www.bnbni.com/car/jiaxiao/">5</a></li><li><a href="http://www.bnbni.com/qiche/list_1_2.html">下一页</a></li></ul><div class="cl"></div></div><div id="lad3"><script>ljs3();</script></div>
+<div class="pages"><ul><li style="width:180px;"><a href="<?php echo $pagenav; ?>">获取更多</a></li></ul><div class="cl"></div></div><div id="lad3"><script>ljs3();</script></div>
 
 </div><!-- box end -->@include('home.common.footer')
 <script>//图片幻灯
