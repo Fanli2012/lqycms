@@ -21,7 +21,7 @@ class UserWithdrawController extends CommonController
         {
             foreach($posts as $k=>$v)
             {
-                $posts[$k]->user = DB::table('user')->where('id', $v->id)->first();
+                $posts[$k]->user = DB::table('user')->where('id', $v->user_id)->first();
                 $posts[$k]->status_text = UserWithdraw::getStatusText(['status'=>$v->status]);
             }
         }
@@ -72,16 +72,22 @@ class UserWithdrawController extends CommonController
         {
             $data['status'] = 4;
             
-            
+            //增加用户余额
+            DB::table('user')->where(array('id'=>$user_withdraw->user_id))->increment('money', $user_withdraw->money);
+            //添加用户余额记录
+            DB::table('user_money')->insert(array('user_id'=>$user_withdraw->user_id,'type'=>0,'money'=>$user_withdraw->money,'des'=>'提现失败-返余额','user_money'=>DB::table('user')->where(array('id'=>$user_withdraw->user_id))->value('money'),'add_time'=>time()));
         }
         elseif($_POST["type"]==1)
         {
             $data['status'] = 2;
         }
         
-        if(!isset($data)){$res = DB::table('user_withdraw')->where('id', $id)->update($data);}
-        
-        if(!isset($res)){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
+        if(isset($data))
+        {
+            $res = DB::table('user_withdraw')->where('id', $id)->update($data);
+            
+            if(!$res){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
+        }
         
 		return ReturnData::create(ReturnData::SUCCESS);
     }

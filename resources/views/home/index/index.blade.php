@@ -32,11 +32,54 @@
 <li><a class="forecast" href="<?php echo route('home_goodslist',array('tuijian'=>1)); ?>"> [推荐] </a></li>
 </ul>
 
-<form method="get" target="_blank" class="m-sch fr" name="formsearch" action="/plus/search.php"><input class="sch-txt" name="q" type="text" value="搜索 按Enter键" onfocus="if(value=='搜索 按Enter键') {value=''}" onblur="if(value=='') {value='搜索 按Enter键'}"></form>
+<form method="get" class="m-sch fr" name="formsearch" action="<?php echo route('home_goodslist'); ?>"><input class="sch-txt" name="keyword" type="text" value="搜索 按Enter键" onfocus="if(value=='搜索 按Enter键') {value=''}" onblur="if(value=='') {value='搜索 按Enter键'}"></form>
 <div class="cl"></div></div>
 </div>
+<style>
+.brandul{margin-right:-10px;}
+.brandul li{margin: 0 10px 10px 0;-webkit-box-shadow: 0 1px 0 rgba(0,0,0,.1);-moz-box-shadow: 0 1px 0 rgba(0,0,0,.1);box-shadow: 0 1px 0 rgba(0,0,0,.1);float: left;}
+.brandul li a{display: block;overflow: hidden;width: 100%;height: 100%;text-decoration: none;}
+.brandul li .brand-pic{width: 475px;height: 186px;}
+.brandul .brand-des{vertical-align: top;line-height: 26px;height: 26px;padding-left: 10px;border-left: 1px solid #F3F3F3;border-right: 1px solid #F3F3F3;color: #000;}
+.brandul .brand-des em{color:#e61414;}
+.brandul .brand-des .fl{margin-left:10px;}
+.brandul .brand-des .fr{margin-right:20px;}
+</style>
+<div class="box" style="margin-bottom:5px;">
+<ul class="brandul">
+<li>
+<a href="http://ju.taobao.com/tg/brand_items.htm?act_sign_id=28794165&amp;seller_id=880734502" target="_blank">
+<img class="brand-pic" src="/images/3.jpg">
+<div class="brand-des"><span class="fl"></span>
+<span class="fr"><em>234100</em>件已付款 &nbsp; <em>仅剩1天</em></span></div></a>
+</li>
+<li>
+<a href="http://ju.taobao.com/tg/brand_items.htm?act_sign_id=28794165&amp;seller_id=880734502" target="_blank">
+<img class="brand-pic" src="/images/3.jpg">
+<div class="brand-des"><span class="fl"></span>
+<span class="fr"><em>234100</em>件已付款 &nbsp; <em>仅剩1天</em></span></div></a>
+</li>
+<li>
+<a href="http://ju.taobao.com/tg/brand_items.htm?act_sign_id=28794165&amp;seller_id=880734502" target="_blank">
+<img class="brand-pic" src="/images/3.jpg">
+<div class="brand-des"><span class="fl"></span>
+<span class="fr"><em>234100</em>件已付款 &nbsp; <em>仅剩1天</em></span></div></a>
+</li>
+<li>
+<a href="http://ju.taobao.com/tg/brand_items.htm?act_sign_id=28794165&amp;seller_id=880734502" target="_blank">
+<img class="brand-pic" src="/images/3.jpg">
+<div class="brand-des"><span class="fl"></span>
+<span class="fr"><em>234100</em>件已付款 &nbsp; <em>仅剩1天</em></span></div></a>
+</li>
+<li>
+<a href="http://ju.taobao.com/tg/brand_items.htm?act_sign_id=28794165&amp;seller_id=880734502" target="_blank">
+<img class="brand-pic" src="/images/3.jpg">
+<div class="brand-des"><span class="fl"></span>
+<span class="fr"><em>234100</em>件已付款 &nbsp; <em>仅剩1天</em></span></div></a>
+</li>
+</ul>
+</div>
 
-<div style="background-color:#f6f6f6;padding:15px 0;">
 <div class="box">
 <ul class="pul">
 <?php if($goods_list){foreach($goods_list as $k=>$v){ ?>
@@ -44,13 +87,12 @@
 <p class="title"><?php echo $v['title']; ?></p>
 <p class="desc"><span class="price-point"><i></i>库存(<?php echo $v['goods_number']; ?>)</span> <?php echo $v['description']; ?></p>
 <div class="item-prices red"><div class="item-link">立即<br>抢购</div><div class="item-info"><div class="price"><i>¥</i><em class="J_actPrice"><span class="yen"><?php echo ceil($v['price']); ?></span></em></div>
-<div class="dock"><div class="dock-price"><del class="orig-price">¥<?php echo $v['market_price']; ?></del> <span class="benefit">退货赔运费</span></div><div class="prompt"><div class="sold-num"><em><?php echo $v['sale']; ?></em> 件已付款</div></div></div>
+<div class="dock"><div class="dock-price"><del class="orig-price">¥<?php echo $v['market_price']; ?></del> <span class="benefit">包邮</span></div><div class="prompt"><div class="sold-num"><em><?php echo $v['sale']; ?></em> 件已付款</div></div></div>
 </div></div>
 </a></li>
 <?php }} ?>
 </ul></div>
-
-</div><!-- box end -->@include('home.common.footer')
+@include('home.common.footer')
 <script>//图片幻灯
 var glide =new function(){
 	function $id(id){return document.getElementById(id);};

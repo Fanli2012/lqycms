@@ -25,22 +25,15 @@
         </ul>
     </div>
 </div>
-<div class="ju-naver">             
+<div class="ju-naver">
     <div class="box">
-        <h1 class="logo mouseleave"><a class="ju-logo ju-logo-show" href="<?php echo route('home'); ?>" title="聚划算"><img src="https://img.alicdn.com/tfs/TB1gFOyJVXXXXXLXpXXXXXXXXXX-150-118.png"></a></h1>             
+        <h1 class="logo mouseleave"><a class="ju-logo ju-logo-show" href="<?php echo route('home'); ?>" title="logo"><img src="<?php echo env('APP_URL'); ?>/images/logo.png"></a></h1>             
         <ul id="J_NavMenu" class="nav-menu">  
-            <li class="menu-home"><a class="menu-link" href="<?php echo route('home'); ?>">首页</a></li>                           
-            <li class="menu-brands">
-            <a class="menu-link" href="//ju.taobao.com/tg/brand.htm">品牌团</a>
-            </li>
-            <li class="menu-fcdp">
-            <a class="menu-link" href="//ju.taobao.com/jusp/nv/fcdppc/tp.htm">非常大牌</a>
-            </li>
-            <li class="menu-jump">
-            <a class="menu-link" href="//ju.taobao.com/jusp/other/mingpin/tp.htm">聚名品</a>
-            </li>
+            <li class="menu-home"><a class="menu-link" href="<?php echo route('home'); ?>">首页</a></li>
+            <li class="menu-brands"><a class="menu-link" href="<?php echo route('home_brandlist'); ?>">品牌团</a></li>
+            <li class="menu-goodslist"><a class="menu-link" href="<?php echo route('home_goodslist'); ?>">每日上新</a></li>
             <li class="menu-qqjx">
-            <a class="menu-link" href="">动态</a>
+            <a class="menu-link" href="<?php echo route('home_arclist'); ?>">动态</a>
             </li>
             <li class="menu-liangfan">
             <a class="menu-link" href="<?php echo route('home_singlepage',array('id'=>'about')); ?>">关于我们</a>

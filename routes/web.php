@@ -36,11 +36,13 @@ Route::group(['namespace' => 'Home'], function () {
 	Route::get('/p/{id}', 'IndexController@detail')->name('home_detail');       //详情页
 	Route::get('/cat{cat}/{page}', 'IndexController@category');                 //分类页，分页
 	Route::get('/cat{cat}', 'IndexController@category')->name('home_category'); //分类页
+    Route::get('/arclist', 'IndexController@arclist')->name('home_arclist');    //文章列表
 	Route::get('/tag{tag}/{page}', 'IndexController@tag');                      //标签页，分页
 	Route::get('/tag{tag}', 'IndexController@tag')->name('home_tag');           //标签页
 	Route::get('/page/{id}', 'IndexController@page')->name('home_singlepage');  //单页
 	Route::get('/goods/{id}', 'IndexController@goods')->name('home_goods');     //商品详情页
 	Route::get('/goodslist', 'IndexController@goodslist')->name('home_goodslist'); //产品分类页
+    Route::get('/brandlist', 'IndexController@brandList')->name('home_brandlist'); //品牌列表
 	Route::get('/sitemap.xml', 'IndexController@sitemap')->name('home_sitemap');//sitemap
 	
 	Route::get('/test', 'IndexController@test')->name('home_test');             //测试
@@ -355,10 +357,15 @@ Route::group(['prefix' => 'fladmin', 'namespace' => 'Admin', 'middleware' => ['w
 	Route::get('/user', 'UserController@index')->name('admin_user');
 	Route::get('/user/add', 'UserController@add')->name('admin_user_add');
 	Route::post('/user/doadd', 'UserController@doadd')->name('admin_user_doadd');
-	Route::get('/user/edit', 'UserController@edit')->name('admin_user_edit');
-	Route::post('/user/doedit', 'UserController@doedit')->name('admin_user_doedit');
+	Route::any('/user/edit', 'UserController@edit')->name('admin_user_edit');
 	Route::get('/user/del', 'UserController@del')->name('admin_user_del');
     Route::get('/user/money', 'UserController@money')->name('admin_user_money'); //会员账户记录
+    Route::any('/user/manual_recharge', 'UserController@manualRecharge')->name('admin_user_manual_recharge'); //人工充值
+    //会员管理
+	Route::get('/userrank', 'UserRankController@index')->name('admin_userrank');
+	Route::any('/userrank/add', 'UserRankController@add')->name('admin_userrank_add');
+	Route::any('/userrank/edit', 'UserRankController@edit')->name('admin_userrank_edit');
+	Route::get('/userrank/del', 'UserRankController@del')->name('admin_userrank_del');
     //提现申请
 	Route::get('/userwithdraw', 'UserWithdrawController@index')->name('admin_userwithdraw');
 	Route::get('/userwithdraw/edit', 'UserWithdrawController@edit')->name('admin_userwithdraw_edit');

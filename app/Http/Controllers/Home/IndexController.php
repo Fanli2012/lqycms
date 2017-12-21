@@ -28,26 +28,28 @@ class IndexController extends CommonController
 	//商品列表页
     public function goodslist(Request $request)
 	{
-        $cat = $request->input('id', '');
+        $typeid = $request->input('id', '');
         $page = $request->input('page', '');
         
         //推荐
-        $tuijian = $request->input('tuijian', '');
-        if($tuijian){$where['tuijian'] = $tuijian;}
+        if($request->input('tuijian', '') != ''){$where['tuijian'] = $request->input('tuijian');}
+        if($request->input('brand_id', '') != ''){$where['brand_id'] = $request->input('brand_id');}
         
         $pagenow = $page;
         $post = '';
         
-		if($cat)
+		if($typeid)
         {
-            $where['typeid'] = $cat;
-            $post = object_to_array(DB::table('goods_type')->where('id', $cat)->first(), 1);
+            $where['typeid'] = $typeid;
+            $post = object_to_array(DB::table('goods_type')->where('id', $typeid)->first(), 1);
         }
         
         $data['post'] = $post;
         
         $goods = DB::table("goods");
         if(isset($where)){$goods = $goods->where($where);}
+        
+        if($request->input('keyword', '') != ''){$goods = $goods->where('title', 'like', '%'.$request->input('keyword').'%');}
         
 		$counts = $goods->count();
 		if($counts>sysconfig('CMS_MAXARC')){$counts=sysconfig('CMS_MAXARC');}
@@ -67,7 +69,7 @@ class IndexController extends CommonController
         $data['pagenav'] = '';if($nextpage<=$pages && $nextpage>0){$data['pagenav'] = $this->listpageurl(route('home_goodslist'),$_SERVER['QUERY_STRING'],$nextpage);}
 		
         $data['goods_type_list'] = object_to_array(DB::table('goods_type')->where(['pid'=>0,'status'=>1])->select('id','name')->take(30)->orderBy('listorder','asc')->get());
-        $data['id'] = $cat;
+        $data['id'] = $typeid;
         
 		return view('home.index.goodslist', $data);
 	}
@@ -111,7 +113,9 @@ class IndexController extends CommonController
         
         if($page==1 || $page==0){}else{$res['page'] = $page;}
         
-        return $http_host.'?'.http_build_query($res);
+        if($res){$res = $http_host.'?'.http_build_query($res);}
+        
+        return $res;
     }
 	
     //列表页
@@ -149,6 +153,49 @@ class IndexController extends CommonController
         if($post['templist']=='category2'){if(!empty($pagenow)){return redirect()->route('page404');}}
         
 		return view('home.index.'.$post['templist'], $data);
+	}
+    
+    //文章列表页
+    public function arclist(Request $request)
+	{
+        $cat = $request->input('id', '');
+        $page = $request->input('page', '');
+        
+        $pagenow = $page;
+        $post = '';
+        
+		if($cat)
+        {
+            $where['typeid'] = $cat;
+            $post = object_to_array(DB::table('arctype')->where('id', $cat)->first(), 1);
+        }
+        
+        $data['post'] = $post;
+        
+        $article = DB::table("article");
+        if(isset($where)){$article = $article->where($where);}
+        
+		$counts = $article->count();
+		if($counts>sysconfig('CMS_MAXARC')){$counts=sysconfig('CMS_MAXARC');dd($counts);}
+		$pagesize = sysconfig('CMS_PAGESIZE');$page=0;
+		if($counts % $pagesize){//取总数据量除以每页数的余数
+		$pages = intval($counts/$pagesize) + 1; //如果有余数，则页数等于总数据量除以每页数的结果取整再加一,如果没有余数，则页数等于总数据量除以每页数的结果
+		}else{$pages = $counts/$pagesize;}
+		if(!empty($pagenow)){if($pagenow==1 || $pagenow>$pages){return redirect()->route('page404');}$page = $pagenow-1;$nextpage=$pagenow+1;$previouspage=$pagenow-1;}else{$page = 0;$nextpage=2;$previouspage=0;}
+		$data['page'] = $page;
+		$data['pages'] = $pages;
+		$data['counts'] = $counts;
+		$start = $page*$pagesize;
+		
+        $posts = object_to_array($article->skip($start)->take($pagesize)->get());
+        
+		$data['posts'] = $posts; //获取列表
+        $data['pagenav'] = '';if($nextpage<=$pages && $nextpage>0){$data['pagenav'] = $this->listpageurl(route('home_arclist'),$_SERVER['QUERY_STRING'],$nextpage);}
+		
+        $data['arctype_list'] = object_to_array(DB::table('arctype')->where(['pid'=>0,'is_show'=>0])->select('id','name')->take(30)->orderBy('listorder','asc')->get());
+        $data['id'] = $cat;
+        
+		return view('home.index.arclist', $data);
 	}
     
     //文章详情页

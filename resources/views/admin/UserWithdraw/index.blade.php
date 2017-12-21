@@ -19,7 +19,7 @@
 <tbody>
 <?php if($posts){foreach($posts as $row){ ?><tr>
 <td><?php echo $row->id; ?></td>
-<td><?php echo $row->user->user_name; ?><br><?php if($row->user->mobile){echo 'TEL:'.$row->user->mobile;} ?></td>
+<td><?php echo $row->user->user_name; ?><?php if($row->user->mobile){echo '<br>TEL:'.$row->user->mobile;} ?></td>
 <td><font color="red"><?php echo $row->money; ?></font></td>
 <td><?php echo $row->name; ?></td>
 <td><?php echo $row->method; ?></td>

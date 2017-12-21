@@ -47,7 +47,7 @@ class WxPayController extends CommonController
                 //更新充值支付记录状态
                 DB::table('user_recharge')->where(array('recharge_sn'=>$post_data['out_trade_no'],'status'=>0))->update(array('pay_time'=>$pay_time_timestamp,'pay_type'=>1,'status'=>1,'trade_no'=>$post_data['transaction_id'],'pay_money'=>$pay_money));
                 //增加用户余额
-                DB::table('user')->where(array('id'=>$user_recharge->user_id))->decrement('money', $pay_money);
+                DB::table('user')->where(array('id'=>$user_recharge->user_id))->increment('money', $pay_money);
                 //添加用户余额记录
                 DB::table('user_money')->insert(array('user_id'=>$user_recharge->user_id,'type'=>0,'money'=>$pay_money,'des'=>'充值','user_money'=>DB::table('user')->where(array('id'=>$user_recharge->user_id))->value('money'),'add_time'=>time()));
             }

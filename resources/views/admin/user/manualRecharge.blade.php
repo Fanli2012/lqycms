@@ -1,24 +1,22 @@
 @extends('admin.layouts.app')
-@section('title', '会员信息修改')
+@section('title', '人工充值')
 
 @section('content')
-<h5 class="sub-header"><a href="<?php echo route('admin_user'); ?>">会员列表</a> > 会员信息修改</h5>
+<h2 class="sub-header">人工充值</h2>
 
 <form id="addarc" method="post" action="" role="form" enctype="multipart/form-data" class="table-responsive">{{ csrf_field() }}
-<input style="display:none;" type="text" name="id" id="id" value="<?php echo $id; ?>">
 <table class="table table-striped table-bordered">
 <tbody>
     <tr>
-        <td align="right">昵称：</td>
-        <td><input name="nickname" type="text" id="nickname" value="<?php echo $post["nickname"]; ?>" style="width:30%"></td>
+        <td colspan="2">当前充值用户：<?php if($user['user_name']){echo $user['user_name'];}else{echo $user['mobile'];} ?>，账户余额<font color="red"><?php echo $user['money']; ?></font>元</td>
     </tr>
     <tr>
-        <td align="right">性别：</td>
+        <td colspan="2">说明：正数为增加，负数为扣除</td>
+    </tr>
+    <tr>
+        <td align="right" width="150px">充值金额：</td>
         <td>
-		<select name="sex" id="sex">
-            <option<?php if($post["sex"]==1){ echo ' selected'; } ?> value="1">男</option>
-            <option<?php if($post["sex"]==2){ echo ' selected'; } ?> value="2">女</option>
-		</select>
+			<input name="money" class="required" type="text" id="money" value="" /><input name="id" type="hidden" value="<?php echo $user['id']; ?>" />
 		</td>
     </tr>
     <tr>

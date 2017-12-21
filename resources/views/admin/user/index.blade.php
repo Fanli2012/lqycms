@@ -2,7 +2,7 @@
 @section('title', '会员列表')
 
 @section('content')
-<h2 class="sub-header">会员列表</h2>[ <a href="<?php echo route('admin_user_add'); ?>">添加会员</a> ] [ <a href="<?php echo route('admin_user_money'); ?>">账户记录</a> ]<br><br>
+<h2 class="sub-header">会员列表</h2>[ <a href="<?php echo route('admin_user_add'); ?>">添加会员</a> ] [ <a href="<?php echo route('admin_user_money'); ?>">账户记录</a> ] [ <a href="<?php echo route('admin_userrank'); ?>">会员等级</a> ]<br><br>
 
 <form name="listarc"><div class="table-responsive"><table class="table table-hover">
 <thead><tr class="info">
@@ -28,7 +28,7 @@
 <td><font color="red"><?php echo $row->commission; ?></font></td>
 <td><?php echo date('Y-m-d H:i:s',$row->add_time); ?></td>
 <td><?php echo $row->status_text; ?></td>
-<td><a href="">人工充值</a> | <a href="<?php echo route('admin_user_money',array('user_id'=>$row->id)); ?>">帐户记录</a> | <a href="<?php echo route('admin_user_edit'); ?>?id=<?php echo $row->id; ?>">修改</a><?php if($row->id<>1){ ?> | <a onclick="delconfirm('<?php echo route('admin_user_del'); ?>?id=<?php echo $row->id; ?>')" href="javascript:;">删除</a><?php } ?></td>
+<td><a href="<?php echo route('admin_user_manual_recharge',array('user_id'=>$row->id)); ?>">人工充值</a> | <a href="<?php echo route('admin_user_money',array('user_id'=>$row->id)); ?>">帐户记录</a> | <a href="<?php echo route('admin_user_edit'); ?>?id=<?php echo $row->id; ?>">修改</a><?php if($row->status==1){ ?> | <a onclick="delconfirm('<?php echo route('admin_user_del'); ?>?id=<?php echo $row->id; ?>')" href="javascript:;">删除</a><?php } ?></td>
 </tr><?php }} ?>
 </tbody></table></div><!-- 表格结束 --></form><!-- 表单结束 -->
 
