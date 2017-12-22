@@ -3,10 +3,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Admin\CommonController;
 use DB;
-use App\Http\Model\UserRank;
+use App\Http\Model\Bonus;
 use App\Common\Helper;
 
-class UserRankController extends CommonController
+class BonusController extends CommonController
 {
     public function __construct()
     {
@@ -15,17 +15,17 @@ class UserRankController extends CommonController
     
     public function index()
     {
-        $data['posts'] = parent::pageList('user_rank', '', [['listorder', 'asc']]);
+        $data['posts'] = parent::pageList('bonus', '', [['status', 'asc'], ['listorder', 'asc']]);
 		
         if($data['posts'])
         {
             foreach($data['posts'] as $k=>$v)
             {
-                
+                $data['posts'][$k]->status_text = Bonus::getStatusText(array('status'=>$v->status));
             }
         }
         
-		return view('admin.userrank.index', $data);
+		return view('admin.bonus.index', $data);
     }
     
     public function add()
@@ -35,12 +35,9 @@ class UserRankController extends CommonController
             if(isset($_POST['editorValue'])){unset($_POST['editorValue']);}
             unset($_POST["_token"]);
             
-            if(DB::table('user_rank')->where('rank', $_POST["rank"])->first()){error_jump('等级已经存在');}
-            if(DB::table('user_rank')->where('title', $_POST["title"])->first()){error_jump('等级名称已经存在');}
-            
-            if(DB::table('user_rank')->insert(array_filter($_POST)))
+            if(DB::table('bonus')->insert(array_filter($_POST)))
             {
-                success_jump('添加成功！', route('admin_userrank'));
+                success_jump('添加成功！', route('admin_bonus'));
             }
             else
             {
@@ -48,7 +45,7 @@ class UserRankController extends CommonController
             }
         }
         
-        return view('admin.userrank.add');
+        return view('admin.bonus.add');
     }
     
     public function edit()
@@ -60,12 +57,9 @@ class UserRankController extends CommonController
             if(isset($_POST['editorValue'])){unset($_POST['editorValue']);}
             unset($_POST["_token"]);
             
-            if(DB::table('user_rank')->where(['rank'=>$_POST["rank"],'id'=>['<>',$id]])->first()){error_jump('等级已经存在');}
-            if(DB::table('user_rank')->where(['title'=>$_POST["title"],'id'=>['<>',$id]])->first()){error_jump('等级名称已经存在');}
-            
-            if(DB::table('user_rank')->where('id', $id)->update($_POST) !== false)
+            if(DB::table('bonus')->where('id', $id)->update($_POST))
             {
-                success_jump('修改成功！', route('admin_userrank'));
+                success_jump('修改成功！', route('admin_bonus'));
             }
             else
             {
@@ -77,16 +71,16 @@ class UserRankController extends CommonController
         if(preg_match('/[0-9]*/',$id)){}else{exit;}
         
         $data['id'] = $id;
-		$data['post'] = object_to_array(DB::table('user_rank')->where('id', $id)->first(), 1);
+		$data['post'] = object_to_array(DB::table('bonus')->where('id', $id)->first(), 1);
         
-        return view('admin.userrank.edit', $data);
+        return view('admin.bonus.edit', $data);
     }
     
     public function del()
     {
 		if(!empty($_GET["id"])){$id = $_GET["id"];}else{error_jump('删除失败！请重新提交');}
 		
-		if(DB::table('user_rank')->whereIn("id", explode(',', $id))->delete())
+		if(DB::table('bonus')->whereIn("id", explode(',', $id))->delete())
         {
             success_jump('删除成功');
         }

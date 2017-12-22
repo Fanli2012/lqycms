@@ -301,6 +301,16 @@ Route::group(['prefix' => 'fladmin', 'namespace' => 'Admin', 'middleware' => ['w
 	Route::get('/order/edit', 'OrderController@edit')->name('admin_order_edit');
 	Route::post('/order/doedit', 'OrderController@doedit')->name('admin_order_doedit');
 	Route::get('/order/del', 'OrderController@del')->name('admin_order_del');
+    //快递管理
+	Route::get('/kuaidi', 'KuaidiController@index')->name('admin_kuaidi');
+	Route::any('/kuaidi/add', 'KuaidiController@add')->name('admin_kuaidi_add');
+	Route::any('/kuaidi/edit', 'KuaidiController@edit')->name('admin_kuaidi_edit');
+	Route::get('/kuaidi/del', 'KuaidiController@del')->name('admin_kuaidi_del');
+    //优惠券管理
+	Route::get('/bonus', 'BonusController@index')->name('admin_bonus');
+	Route::any('/bonus/add', 'BonusController@add')->name('admin_bonus_add');
+	Route::any('/bonus/edit', 'BonusController@edit')->name('admin_bonus_edit');
+	Route::get('/bonus/del', 'BonusController@del')->name('admin_bonus_del');
     //商品品牌
 	Route::get('/goodsbrand', 'GoodsBrandController@index')->name('admin_goodsbrand');
 	Route::get('/goodsbrand/add', 'GoodsBrandController@add')->name('admin_goodsbrand_add');
@@ -355,8 +365,7 @@ Route::group(['prefix' => 'fladmin', 'namespace' => 'Admin', 'middleware' => ['w
 	Route::get('/feedback/del', 'FeedbackController@del')->name('admin_feedback_del');
     //会员管理
 	Route::get('/user', 'UserController@index')->name('admin_user');
-	Route::get('/user/add', 'UserController@add')->name('admin_user_add');
-	Route::post('/user/doadd', 'UserController@doadd')->name('admin_user_doadd');
+	Route::any('/user/add', 'UserController@add')->name('admin_user_add');
 	Route::any('/user/edit', 'UserController@edit')->name('admin_user_edit');
 	Route::get('/user/del', 'UserController@del')->name('admin_user_del');
     Route::get('/user/money', 'UserController@money')->name('admin_user_money'); //会员账户记录

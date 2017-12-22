@@ -93,20 +93,28 @@ class UserController extends CommonController
     
     public function add()
     {
-        return view('admin.user.add');
-    }
-    
-    public function doadd()
-    {
-		unset($_POST["_token"]);
-        if(DB::table('user')->insert($_POST))
+        if(Helper::isPostRequest())
         {
-            success_jump('添加成功！', route('admin_user'));
+            unset($_POST["_token"]);
+            
+            if(DB::table('user')->where('user_name', $_POST["user_name"])->first()){error_jump('用户名已经存在');}
+            if(DB::table('user')->where('mobile', $_POST["mobile"])->first()){error_jump('手机号已经存在');}
+            $_POST['password'] = md5($_POST['password']);
+            $_POST['add_time'] = time();
+            
+            if(DB::table('user')->insert($_POST))
+            {
+                success_jump('添加成功！', route('admin_user'));
+            }
+            else
+            {
+                error_jump('添加失败！请修改后重新添加');
+            }
         }
-		else
-		{
-			error_jump('添加失败！请修改后重新添加');
-		}
+        
+        $data['user_rank'] = DB::table('user_rank')->orderBy('rank', 'asc')->get();
+        
+        return view('admin.user.add',$data);
     }
     
     public function edit()
