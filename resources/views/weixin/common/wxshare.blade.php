@@ -4,7 +4,7 @@ $jssdk = new \JSSDK(sysconfig('CMS_WX_APPID'), sysconfig('CMS_WX_APPSECRET'));
 $signPackage = $jssdk->GetSignPackage();
 ?>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
-<script type="text/javascript">	
+<script type="text/javascript">
 /*
  * 注意：
  * 1. 所有的JS接口只能在公众号绑定的域名下调用，公众号开发者需要先登录微信公众平台进入“公众号设置”的“功能设置”里填写“JS接口安全域名”。

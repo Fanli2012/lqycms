@@ -1,21 +1,92 @@
 @extends('admin.layouts.app')
-@section('title', '订单列表')
+@section('title', '订单详情')
 
 @section('content')
 <script language="javascript" type="text/javascript" src="http://<?php echo env('APP_DOMAIN'); ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script language="javascript" type="text/javascript" src="http://<?php echo env('APP_DOMAIN'); ?>/js/layer/layer.js"></script>
 
 <div class="bg-info" style="margin:10px 0;padding:10px;">
     <div class="form-inline">
         <div class="form-group">
             当前可执行操作：
         </div>
-        <button class="btn btn-info" onclick="show_search()">发货</button>
-        <button class="btn btn-success">设为已付款</button>
-        <button class="btn btn-danger" onclick="show_search()">设为无效</button>
+        <?php if($post['order_status'] == 0 && $post['shipping_status'] == 0 && $post['pay_status'] == 1){ ?><button class="btn btn-info" onclick="fahuo_layer(<?php echo $post['id']; ?>)">发货</button><?php } ?>
+        <?php if($post['order_status'] == 0 && $post['pay_status'] == 0){ ?><button class="btn btn-success" onclick="change_status(<?php echo $post['id']; ?>,2)">设为已付款</button><?php } ?>
+        <?php if($post['order_status'] == 0 && $post['refund_status'] == 0 && $post['shipping_status'] == 1 && $post['pay_status'] == 1){ ?><button class="btn btn-primary" onclick="change_status(<?php echo $post['id']; ?>,4)">设为已收货</button><?php } ?>
+        <?php if($post['order_status'] == 0 && $post['pay_status'] == 0){ ?><button class="btn btn-danger" onclick="change_status(<?php echo $post['id']; ?>,7)">设为无效</button><?php } ?>
+        <?php if($post['order_status'] == 3 && $post['refund_status'] == 1){ ?><button class="btn btn-danger" onclick="change_status(<?php echo $post['id']; ?>,8)">设为已退货</button><?php } ?>
         <button class="btn btn-warning" onclick="javascript:history.back(-1);">返回</button>
     </div>
     <div style="clear:both;"></div>
 </div>
+<script>
+function fahuo_layer(order_id)
+{
+    //自定页
+    layer.open({
+        title: '发货管理',
+        shadeClose: true, //开启遮罩关闭
+        content: '快递方式：<select name="shipping_id" id="shipping_id"><option value="0">无须物流</option><?php if($kuaidi){foreach($kuaidi as $k=>$v){ ?><option value="<?php echo $v->id ?>"><?php echo $v->name ?></option><?php }} ?></select><br>快递单号：<input size="30" type="text" name="shipping_sn" id="shipping_sn" placeholder="">'
+        ,btn: ['确认', '取消']
+        ,yes: function(index, layero){
+            var shipping_id = $("#shipping_id").val();
+            var shipping_sn = $("#shipping_sn").val();
+            
+            if(shipping_id!=0){if(shipping_sn==''){layer.msg('请填写快递单号');return false;}}
+            
+            $.post('<?php echo route('admin_order_change_shipping'); ?>',{id:order_id,shipping_id:shipping_id,shipping_sn:shipping_sn},function(res)
+            {
+                if(res.code==0)
+                {
+                    $.post('<?php echo route('admin_order_change_status'); ?>',{id:order_id,status:3},function(res)
+                    {
+                        if(res.code==0)
+                        {
+                            layer.msg('操作成功');
+                            window.location.reload();
+                        }
+                        else
+                        {
+                            layer.msg('操作失败');
+                            return false;
+                        }
+                    },'json');
+                }
+                else
+                {
+                    layer.msg('操作失败');
+                    return false;
+                }
+            },'json');
+            
+            layer.close(index);
+        }
+        ,btn2: function(index, layero){
+            
+        }
+        ,cancel: function(){
+            //右上角关闭回调
+        }
+    });
+}
+
+function change_status(order_id,status)
+{
+    $.post('<?php echo route('admin_order_change_status'); ?>',{id:order_id,status:status},function(res)
+    {
+        if(res.code==0)
+        {
+            layer.msg('操作成功');
+            window.location.reload();
+        }
+        else
+        {
+            layer.msg('操作失败');
+            return false;
+        }
+    },'json');
+}
+</script>
 
 <h3 class="sub-header">基本信息</h3>
 <!-- 表格开始 -->

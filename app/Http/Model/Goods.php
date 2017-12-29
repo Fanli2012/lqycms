@@ -272,9 +272,10 @@ class Goods extends BaseModel
     //增加或减少商品库存
     public static function changeGoodsStock(array $param)
     {
+        //$param['type']=1减库存
         extract($param);
         
-        if(isset($type))
+        if(isset($type) && $type==1)
         {
             //增加库存
             DB::table('goods')->where(array('id'=>$goods_id))->increment('goods_number', $goods_number);

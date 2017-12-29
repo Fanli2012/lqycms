@@ -66,8 +66,22 @@ class WechatAuth
         return json_decode($info_data, true);
     }
     
+    /**
+     * 获取用户基本信息（包括UnionID机制）
+     * 
+     * @param string $access_token
+     * @param string $open_id
+     */
+    public function get_user_unionid($access_token = '', $open_id = '')
+    {
+        $info_url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token={$access_token}&openid={$open_id}&lang=zh_CN";
+        $info_data = $this->http($info_url);
+        
+        return json_decode($info_data, true);
+    }
+    
     // cURL函数简单封装
-    function http($url, $data = null)
+    public function http($url, $data = null)
     {
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);

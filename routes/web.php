@@ -301,6 +301,9 @@ Route::group(['prefix' => 'fladmin', 'namespace' => 'Admin', 'middleware' => ['w
 	Route::get('/order/edit', 'OrderController@edit')->name('admin_order_edit');
 	Route::post('/order/doedit', 'OrderController@doedit')->name('admin_order_doedit');
 	Route::get('/order/del', 'OrderController@del')->name('admin_order_del');
+    Route::any('/order/output_excel', 'OrderController@outputExcel')->name('admin_order_output_excel');
+    Route::post('/order/change_shipping', 'OrderController@changeShipping')->name('admin_order_change_shipping');
+    Route::post('/order/change_status', 'OrderController@changeStatus')->name('admin_order_change_status');
     //快递管理
 	Route::get('/kuaidi', 'KuaidiController@index')->name('admin_kuaidi');
 	Route::any('/kuaidi/add', 'KuaidiController@add')->name('admin_kuaidi_add');

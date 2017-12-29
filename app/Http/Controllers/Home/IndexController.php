@@ -33,7 +33,7 @@ class IndexController extends CommonController
         
         //推荐
         if($request->input('tuijian', '') != ''){$where['tuijian'] = $request->input('tuijian');}
-        if($request->input('brand_id', '') != ''){$where['brand_id'] = $request->input('brand_id');}
+        if($request->input('brand_id', '') != ''){$where['brand_id'] = $request->input('brand_id');DB::table('goods_brand')->where(array('id'=>$where['brand_id']))->increment('click', 1);}
         
         $pagenow = $page;
         $post = '';
@@ -90,7 +90,17 @@ class IndexController extends CommonController
         }
         
         $data['tj_list'] = object_to_array(DB::table('goods')->where(['tuijian'=>1,'status'=>0])->get());
+        
+        DB::table('goods')->where(array('id'=>$id))->increment('click', 1);
         return view('home.index.goods', $data);
+    }
+    
+    //商品列表页
+    public function brandList(Request $request)
+	{
+        $data['brand_list'] = object_to_array(DB::table('goods_brand')->where(['status'=>0])->take(30)->orderBy('listorder','asc')->get());
+        
+        return view('home.index.brandList', $data);
     }
     
     //网址组装

@@ -15,13 +15,13 @@ class BonusController extends CommonController
     
     public function index()
     {
-        $data['posts'] = parent::pageList('bonus', '', [['status', 'asc'], ['listorder', 'asc']]);
+        $data['posts'] = parent::pageList('bonus', '', [['status', 'asc']]);
 		
         if($data['posts'])
         {
             foreach($data['posts'] as $k=>$v)
             {
-                $data['posts'][$k]->status_text = Bonus::getStatusText(array('status'=>$v->status));
+                
             }
         }
         
@@ -34,6 +34,8 @@ class BonusController extends CommonController
         {
             if(isset($_POST['editorValue'])){unset($_POST['editorValue']);}
             unset($_POST["_token"]);
+            
+            if($_POST["start_time"]>=$_POST["end_time"]){error_jump('参数错误');}
             
             if(DB::table('bonus')->insert(array_filter($_POST)))
             {
@@ -56,6 +58,8 @@ class BonusController extends CommonController
         
             if(isset($_POST['editorValue'])){unset($_POST['editorValue']);}
             unset($_POST["_token"]);
+            
+            if($_POST["start_time"]>=$_POST["end_time"]){error_jump('参数错误');}
             
             if(DB::table('bonus')->where('id', $id)->update($_POST))
             {

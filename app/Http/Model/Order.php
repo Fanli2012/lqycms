@@ -24,6 +24,8 @@ class Order extends BaseModel
         $limit  = isset($limit) ? $limit : 10;
         $offset = isset($offset) ? $offset : 0;
         
+        $model = new self();
+        
         if(isset($user_id)){$where['user_id'] = $user_id;}
         $where['is_delete'] = 0;
         
@@ -56,10 +58,10 @@ class Order extends BaseModel
         elseif($status == 5)
         {
             $where['order_status'] = 3;
-            $where['refund_status'] = 1;
+            $model = $model->where('refund_status','<>',0);
         }
         
-        $model = self::where($where);
+        $model = $model->where($where);
         
         $res['count'] = $model->count();
         $res['list'] = array();
@@ -203,7 +205,7 @@ class Order extends BaseModel
                 );
                 array_push($order_goods_list,$temp_order_goods);
                 
-                //订单商品直行减库存操作
+                //订单商品直接减库存操作
 				Goods::changeGoodsStock(array('goods_id'=>$v['goods_id'],'goods_number'=>$v['goods_number']));
             }
             $result = DB::table('order_goods')->insert($order_goods_list);
@@ -269,7 +271,7 @@ class Order extends BaseModel
         }
         elseif($where['order_status'] == 3 && $where['refund_status'] == 1)
         {
-            $res = array('text'=>'售后','num'=>5);
+            $res = array('text'=>'售后中','num'=>5);
         }
         elseif($where['order_status'] == 1)
         {
@@ -278,6 +280,10 @@ class Order extends BaseModel
         elseif($where['order_status'] == 2)
         {
             $res = array('text'=>'无效','num'=>7);
+        }
+        elseif($where['order_status'] == 3 && $where['refund_status'] == 2)
+        {
+            $res = array('text'=>'退款成功','num'=>8);
         }
         
         return $res;
@@ -325,5 +331,32 @@ class Order extends BaseModel
         }
         
         return $res;
+    }
+    
+    //根据订单id返库存
+    public static function returnStock($order_id)
+    {
+        $order_goods = OrderGoods::where(array('order_id'=>$order_id))->get();
+        if(!$order_goods){return false;}
+        
+        foreach($order_goods as $k=>$v)
+        {
+            //订单商品直接返库存
+            Goods::changeGoodsStock(array('goods_id'=>$v['goods_id'],'goods_number'=>$v['goods_number'],'type'=>1));
+        }
+        
+        return true;
+    }
+    
+    //订单超时，设为无效
+    public static function orderSetInvalid($order_id)
+    {
+        $order = self::where(array('id'=>$order_id,'order_status'=>0,'pay_status'=>0))->update(['order_status'=>2]);
+        if(!$order){return false;}
+        
+        //返库存
+        self::returnStock($order_id);
+        
+        return true;
     }
 }

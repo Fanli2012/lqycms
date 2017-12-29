@@ -174,7 +174,6 @@ class OrderController extends CommonController
             //判断订单是否存在或本人
             $where['order_status'] = 3;
             $where['refund_status'] = 0;
-            $where['shipping_status'] = 2;
             $order = Order::where($where)->first();
             if(!$order){return ReturnData::create(ReturnData::PARAMS_ERROR,null,'订单不存在');}
             
