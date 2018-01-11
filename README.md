@@ -2,6 +2,9 @@
 基于laravel框架的开源cms管理系统，git clone https://github.com/Fanli2012/lqycms.git
 
 ![alt text](/public/images/screenshots.png "网站截图")
+![alt text](/public/images/wscscreenshots.png "微商城截图")
+![alt text](/public/images/wapscreenshots.png "手机站截图")
+
 
 # 说明
 
@@ -12,6 +15,22 @@
 3、后台登录：/fladmin/login，账号：admin888，密码：admin
 
 4、恢复后台默认账号密码：/fladmin/recoverpwd
+
+5、LQYCMS适用于微商城、企业建站(展示型)等二次开发，微商城入口http://+域名+/weixin，支付仅支持微信支付。
+
+6、后台功能
+1) 文章管理：增删改查，栏目管理
+2) 单页管理
+3) RBAC权限管理，角色管理
+4) 商品管理：商品品牌，商品分类
+5) 订单管理
+6) 会员管理，会员等级管理
+7) 轮播图
+8) 友情链接
+9) 意见反馈
+10) 优惠券管理
+11) 系统参数配置
+12) 微信自定义菜单
 
 
 # 安装
