@@ -1,9 +1,15 @@
 # lqycms
 基于laravel框架的开源cms管理系统，git clone https://github.com/Fanli2012/lqycms.git
 
-![alt text](/public/images/screenshots.png "网站截图")
-![alt text](/public/images/wscscreenshots.png "微商城截图")
+PC端
+![alt text](/public/images/screenshots.jpg "网站截图")
+
+WAP端
 ![alt text](/public/images/wapscreenshots.png "手机站截图")
+
+微商城
+![alt text](/public/images/wscscreenshots.jpg "微商城截图")
+![alt text](/public/images/wscmyscreenshots.png "微商城个人中心截图")
 
 
 # 说明
@@ -31,6 +37,29 @@
 10) 优惠券管理
 11) 系统参数配置
 12) 微信自定义菜单
+
+7、前台功能
+
+PC端
+1) 公司介绍
+2) 产品中心
+3) 新闻动态
+4) 联系我们
+5) 友情链接
+
+微商城
+1) 首页
+2) 产品列表
+3) 产品详情
+4) 购物车
+5) 个人中心
+6) 我的收藏
+7) 我的订单
+8) 资金管理
+9) 优惠券
+10) 地址管理
+11) 浏览记录
+12) 文章资讯
 
 
 # 安装
