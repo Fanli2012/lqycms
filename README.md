@@ -2,12 +2,15 @@
 基于laravel框架的开源cms管理系统，git clone https://github.com/Fanli2012/lqycms.git
 
 PC端
+
 ![alt text](/public/images/screenshots.jpg "网站截图")
 
 WAP端
+
 ![alt text](/public/images/wapscreenshots.png "手机站截图")
 
 微商城
+
 ![alt text](/public/images/wscscreenshots.jpg "微商城截图")
 ![alt text](/public/images/wscmyscreenshots.png "微商城个人中心截图")
 
@@ -18,11 +21,17 @@ WAP端
 
 2、PHP+Mysql
 
-3、后台登录：/fladmin/login，账号：admin888，密码：admin
+3、后台登录：http://www.lqycms.com/fladmin/login，账号：admin888，密码：admin
 
-4、恢复后台默认账号密码：/fladmin/recoverpwd
+4、恢复后台默认账号密码：http://www.lqycms.com/fladmin/recoverpwd
 
-5、LQYCMS适用于微商城、企业建站(展示型)等二次开发，微商城入口http://+域名+/weixin，支付仅支持微信支付。
+5、LQYCMS适用于微商城、企业建站(展示型)等二次开发。
+
+注意：PC端跟微商城的域名是同一个域名，WAP端的域名通常是PC端的子域名，这里的案例PC端的域名是www.lqycms.com，WAP端的域名是m.lqycms.com
+
+PC入口：http://+PC域名+/
+WAP入口：http://+WAP域名+/，WAP域名解析与PC域名一致，都是指向同一目录下
+微商城入口：http://+PC域名+/weixin，支付仅支持微信支付。
 
 6、后台功能
 1) 文章管理：增删改查，栏目管理
@@ -40,14 +49,14 @@ WAP端
 
 7、前台功能
 
-PC端
+<strong>PC端</strong>
 1) 公司介绍
 2) 产品中心
 3) 新闻动态
 4) 联系我们
 5) 友情链接
 
-微商城
+<strong>微商城</strong>
 1) 首页
 2) 产品列表
 3) 产品详情
@@ -68,7 +77,7 @@ PC端
 1) 打开根目录下的lqycms.sql文件，将 http://www.lqycms.com 改成自己的站点根网址，格式：http://+域名
 2) 导入数据库
 
-2、 复制.env.example重命名成.env，修改相应配置APP_DOMAIN、APP_SUBDOMAIN及数据库配置
+2、 复制.env.example重命名成.env，修改相应配置APP_DOMAIN、APP_SUBDOMAIN及数据库配置，APP_SUBDOMAIN表示WAP端的域名
 
 3、 
 php composer.phar install
@@ -76,7 +85,7 @@ php composer.phar install
 php artisan key:generate
 
 
-4、 登录后台：/fladmin/login.php，账号：admin888，密码：admin
+4、 登录后台：http://www.lqycms.com/fladmin/login，账号：admin888，密码：admin
 
 顶部按钮，更新缓存
 
