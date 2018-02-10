@@ -44,6 +44,7 @@ class ArticleController extends CommonController
         //参数
         $data['id'] = $request->input('id');
         $data['ischeck'] = Article::IS_CHECK;
+        if($data['id']==''){return ReturnData::create(ReturnData::PARAMS_ERROR);}
         
         $res = Article::getOne($data);
 		if($res === false)

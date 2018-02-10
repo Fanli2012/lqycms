@@ -185,7 +185,7 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     //评价
     Route::get('/comment_list', 'CommentController@commentList'); //商品评价列表
     Route::post('/comment_add', 'CommentController@commentAdd'); //商品评价添加
-    Route::post('/comment_batch_add', 'CommentController@commentBatchAdd'); //商品评价添加
+    Route::post('/comment_batch_add', 'CommentController@commentBatchAdd'); //商品评价批量添加
     Route::post('/comment_update', 'CommentController@commentUpdate'); //商品评价修改
     Route::post('/comment_delete', 'CommentController@commentDelete'); //商品评价删除
     //商品收藏
@@ -195,7 +195,7 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     //订单
     Route::post('/order_add', 'OrderController@orderAdd'); //生成订单
     Route::post('/order_update', 'OrderController@orderUpdate'); //订单修改
-    Route::post('/order_status_update', 'OrderController@orderStatusUpdate'); //订单修改
+    Route::post('/order_status_update', 'OrderController@orderStatusUpdate'); //订单状态修改
     Route::get('/order_list', 'OrderController@orderList'); //订单列表
     Route::get('/order_detail', 'OrderController@orderDetail'); //订单详情
     //购物车
@@ -229,6 +229,7 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     Route::get('/payment_list', 'PaymentController@paymentList'); //支付方式列表
     //图片上传
     Route::post('/image_upload', 'ImageController@imageUpload'); //普通文件/图片上传
+    Route::post('/multiple_file_upload', 'ImageController@multipleFileUpload'); //多文件上传
     //二维码
     Route::get('/create_simple_qrcode', 'QrcodeController@createSimpleQrcode');
     //收货地址

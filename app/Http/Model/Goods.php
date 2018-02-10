@@ -98,7 +98,7 @@ class Goods extends BaseModel
                     $model = $model->orderBy('price','asc'); //价格从低到高
                     break;
                 default:
-                    $model = $model->orderBy('pubdate','desc'); //价格从低到高
+                    $model = $model->orderBy('pubdate','desc'); //最新
             }
         }
         

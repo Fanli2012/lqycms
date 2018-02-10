@@ -30,8 +30,11 @@ WAP端
 注意：PC端跟微商城的域名是同一个域名，WAP端的域名通常是PC端的子域名，这里的案例PC端的域名是www.lqycms.com，WAP端的域名是m.lqycms.com
 
 PC入口：http://+PC域名+/
+
 WAP入口：http://+WAP域名+/，WAP域名解析与PC域名一致，都是指向同一目录下
+
 微商城入口：http://+PC域名+/weixin，支付仅支持微信支付。
+
 
 6、后台功能
 1) 文章管理：增删改查，栏目管理

@@ -43,11 +43,10 @@ class CommentController extends CommonController
         $data['id_value'] = $request->input('id_value',null);
         $data['content'] = $request->input('content',null);
         $data['comment_rank'] = $request->input('comment_rank',null);
-        if($request->input('ip_address', null) !== null){$data['ip_address'] = $request->input('ip_address');}
+        if($request->input('ip_address', null) !== null){$data['ip_address'] = $request->input('ip_address');}else{$data['ip_address'] = Helper::getRemoteIp();}
         if($request->input('parent_id', null) !== null){$data['parent_id'] = $request->input('parent_id');}
         $data['add_time'] = time();
         $data['user_id'] = Token::$uid;
-        $data['ip_address'] = Helper::getRemoteIp();
         
         if($data['comment_type']===null || $data['id_value']===null || $data['content']===null || $data['comment_rank']===null)
 		{

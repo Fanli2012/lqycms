@@ -17,8 +17,16 @@ class QrcodeController extends CommonController
     public function createSimpleQrcode(Request $request)
 	{
         //参数
-        $url = $request->input('url');
+        $url = $request->input('url','');
         $size = $request->input('size', 150);
+        $is_binary = $request->input('is_binary',0); //0表示不是二进制，1表示二进制流base64
+        
+        if($url=='')
+		{
+            return ReturnData::create(ReturnData::PARAMS_ERROR);
+        }
+        
+        if($is_binary==1){return Helper::qrcode($url,$size);}
         
 		return '<img src="'.Helper::qrcode($url,$size).'">';
     }

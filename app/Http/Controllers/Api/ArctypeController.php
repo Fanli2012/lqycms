@@ -41,8 +41,9 @@ class ArctypeController extends CommonController
     public function arctypeDetail(Request $request)
 	{
         //参数
-        $data['id'] = $request->input('id');
+        $data['id'] = $request->input('id','');
         $data['is_show'] = Arctype::IS_SHOW;
+        if($data['id']==''){return ReturnData::create(ReturnData::PARAMS_ERROR);}
         
         $res = Arctype::getOne($data);
 		if($res === false)

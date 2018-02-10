@@ -1138,6 +1138,7 @@ function get_table_columns($table, $field='')
 	return $res;
 }
 
+//获取http(s)://+域名
 function http_host($flag=true)
 {
     $res = '';
