@@ -159,6 +159,8 @@ class IndexController extends CommonController
             
             if($post)
             {
+                $post['body'] = preg_replace('/src=\"\/uploads\/allimg/',"src=\"".env('APP_URL')."/uploads/allimg",$post['body']);
+                $post['pubdate'] = date('Y-m-d',$post['pubdate']);
                 $data['post'] = $post;
             }
             else

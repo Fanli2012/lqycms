@@ -48,7 +48,7 @@
     <a style="margin:10px;background-color:#1aad19;text-align:center;color:white;border:1px solid #179e16;" class="bottoma" href="javascript:submit();">提交</a>
 </div>
 <div class="box reg">
-<a style="float:left;" href="<?php echo route('weixin_login'); ?>">已有账号</a> <span style="float:right;"><a href="<?php echo route('weixin_login'); ?>">注册协议</a></span>
+<a style="float:left;" href="<?php echo route('weixin_login'); ?>">已有账号</a> <span style="float:right;"><a href="<?php echo route('weixin_singlepage',array('id'=>'agreement')); ?>">注册协议</a></span>
 </div><br><br>
 
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/md5.min.js"></script>
