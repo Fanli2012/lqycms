@@ -65,14 +65,14 @@ background:none;
 .banner_tit img{width:100%;}
 .goods_list{overflow:hidden;background-color:#f1f1f1;}.goods_list .goods_info{padding:5px 10px 5px 10px;}
 .goods_list li{margin-bottom:4px;width:50%;float:left;overflow:hidden;}
-.goods_list li a{display:block;font-size:0.875em;margin-right:2px;background-color:#fff;}.goods_list .goods_tit{overflow:hidden;white-space:nowrap;color:#000}
-.goods_list li img{width:100%;height:48vw;}.goods_list li .goods_price{color:#f23030;}.goods_list li .goods_price b{font-size:1rem;font-weight:normal;}
+.goods_list li a{display:block;margin-right:2px;background-color:#fff;}.goods_list .goods_tit{overflow:hidden;white-space:nowrap;color:#000}
+.goods_list li img{width:100%;height:48vw;}.goods_list li .goods_price{color:#f23030;}.goods_list li .goods_price b{font-size:1rem;font-weight:normal;}.goods_list li .goods_price span{color:#999;font-size:14px;}
 .goods_list li:nth-child(even) a{margin-right:0;margin-left:2px;}
 
 .goods_list_small{overflow:hidden;background-color:#f1f1f1;margin-left:4px;}.goods_list_small .goods_info{padding:5px 10px 5px 10px;}
 .goods_list_small li{margin-bottom:4px;width:50%;float:left;overflow:hidden;}
-.goods_list_small li a{display:block;font-size:0.875em;margin-right:2px;background-color:#fff;}.goods_list_small .goods_tit{overflow:hidden;white-space:nowrap;color:#000}
-.goods_list_small li img{width:100%;height:auto;}.goods_list_small li .goods_price{color:#f23030;}.goods_list_small li .goods_price b{font-size:1rem;font-weight:normal;}
+.goods_list_small li a{display:block;margin-right:2px;background-color:#fff;}.goods_list_small .goods_tit{overflow:hidden;white-space:nowrap;color:#000}
+.goods_list_small li img{width:100%;height:auto;}.goods_list_small li .goods_price{color:#f23030;}.goods_list_small li .goods_price b{font-size:1rem;font-weight:normal;}.goods_list_small li .goods_price span{color:#999;font-size:14px;}
 .goods_list_small li:nth-child(even) a{margin-right:0;margin-left:2px;}
 
 .goods_list_s li{color:#333;border-bottom:1px solid #eee;overflow:hidden;margin-left:10px;margin-right:10px;padding:15px 5px 15px 5px;}
@@ -925,6 +925,9 @@ top: 0;
     font-size: 16px;
 }
 
+.banner_headline{height:30px;overflow:hidden;background-color:#f1f1f1;padding-bottom:20px;}
+.banner_headline .tit{border-top:1px dashed #dedede;text-align:center;margin:25px 0;}
+.banner_headline .tit h4{color:#666;background-color:#f1f1f1;font-size:18px;font-weight:normal;position:relative;top:-14px;display:inline;padding:0 20px;}
 
-
+.badge_comm{padding:0 3px;border-radius:2px;color:#fff;background-color:#f74c31;display:inline-block;text-align:center;font-size:12px;background-clip:padding-box;-webkit-appearance:none;}
 

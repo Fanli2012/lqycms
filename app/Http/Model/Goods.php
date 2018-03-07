@@ -36,7 +36,7 @@ class Goods extends BaseModel
         'id', 'typeid', 'tuijian', 'click', 'title', 'sn', 'price','litpic', 'pubdate', 'add_time', 'market_price', 'goods_number', 'sale', 'comments','promote_start_date','promote_price','promote_end_date','goods_img','spec','point'
     );
     
-    const STATUS = 0; //商品是否删除，0未删除
+    const STATUS = 0; //商品状态 0正常 1已删除 2下架 3申请上架
     
 	/**
      * 获取关联到产品的分类
@@ -61,6 +61,7 @@ class Goods extends BaseModel
         if(isset($typeid)){$where['typeid'] = $typeid;}
         if(isset($tuijian)){$where['tuijian'] = $tuijian;}
         if(isset($status)){$where['status'] = $status;}else{$where['status'] = self::STATUS;}
+        if(isset($brand_id)){$where['brand_id'] = $brand_id;}
         
         if($where !== '')
         {
@@ -97,6 +98,10 @@ class Goods extends BaseModel
                 case 4:
                     $model = $model->orderBy('price','asc'); //价格从低到高
                     break;
+                case 5:
+                    $timestamp = time();
+                    $model = $model->where('promote_start_date','<=',$timestamp)->where('promote_end_date','>=',$timestamp); //促销商品
+                    break;
                 default:
                     $model = $model->orderBy('pubdate','desc'); //最新
             }
@@ -111,6 +116,8 @@ class Goods extends BaseModel
                 foreach($res['list'] as $k=>$v)
                 {
                     $res['list'][$k]->goods_detail_url = route('weixin_goods_detail',array('id'=>$v->id));
+                    $res['list'][$k]->price = self::get_final_price($v->id);
+                    $res['list'][$k]->is_promote_goods = self::bargain_price($v->promote_price,$v->promote_start_date,$v->promote_end_date); //is_promote_goods等于0，说明不是促销商品
                 }
             }
         }
@@ -135,6 +142,7 @@ class Goods extends BaseModel
         {
             $goods['goods_detail_url'] = route('weixin_goods_detail',array('id'=>$goods->id));
             $goods['price'] = self::get_final_price($id);
+            $goods['is_promote_goods'] = self::bargain_price($goods->promote_price,$goods->promote_start_date,$goods->promote_end_date); //is_promote_goods等于0，说明不是促销商品
         }
         
         return $goods;
@@ -264,6 +272,9 @@ class Goods extends BaseModel
             $where2['status'] = Comment::SHOW_COMMENT;
             $where2['id_value'] = $id;
             $res->goods_comments_num = Comment::where($where2)->count();
+            
+            $res->price = self::get_final_price($res->id); //商品最终价格
+            $res->is_promote_goods = self::bargain_price($res->promote_price,$res->promote_start_date,$res->promote_end_date); //is_promote_goods等于0，说明不是促销商品
         }
         
         return $res;

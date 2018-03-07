@@ -24,7 +24,7 @@ function output_excel()
 {
     layer.open({
         title: '导出EXCEL',
-        area: ['400px', '360px'],
+        area: ['460px', '360px'],
         shadeClose: true, //开启遮罩关闭
         content: '<form id="output-excel" action="<?php echo route('admin_order_output_excel'); ?>" method="get"><div class="form-inline"><div class="form-group"><label for="min_addtime">时　间：</label><input size="18" onclick="WdatePicker({el:this,dateFmt:\'yyyy-MM-dd HH:mm:ss\'})" type="text" class="form-control" id="min_addtime" name="min_addtime" placeholder="开始时间"></div> - <div class="form-group"><input size="18" onclick="WdatePicker({el:this,dateFmt:\'yyyy-MM-dd HH:mm:ss\'})" type="text" class="form-control" id="max_addtime" name="max_addtime" placeholder="结束时间"></div></div><div class="form-inline mt10"><div class="form-group"><label for="num">数　量：</label><input size="4" type="text" class="form-control" id="num" name="num" value="100" placeholder=""></div></div><div class="form-inline mt10"><div class="form-group"><label for="status">订单状态：</label><select id="status" class="form-control" name="status"><option value ="0">全部</option><option value ="1">待付款</option><option value="2">待发货</option><option value="3">待收货</option><option value="4">交易成功</option><option value="5">退款中</option></select></div></div><div class="form-inline mt10"><div class="form-group"><label for="name">收货人：</label><input size="8" type="text" class="form-control" id="name" name="name" placeholder=""></div></div><div class="form-inline mt10"><div class="form-group"><label for="order_sn">订单号：</label><input size="20" type="text" class="form-control" id="order_sn" name="order_sn" placeholder=""></div></div></form>'
         ,btn: ['导出', '取消']

@@ -51,7 +51,7 @@ var swiper = new Swiper('.swiper-container', {
 <!--顶部滚动广告栏-end-->
 
 <!--导航左右滑动-start-->
-<div class="swiper-nav">
+<!--<div class="swiper-nav">
     <div class="swiper-wrapper">
         <div class="swiper-slide">新闻</div>
         <div class="swiper-slide">音乐</div>
@@ -78,31 +78,23 @@ var swiper = new Swiper('.swiper-container', {
 var swiper = new Swiper('.swiper-nav', {
     slidesPerView: 4 //一行4列显示
 });
-</script>
+</script>-->
 <!--导航左右滑动-end-->
 
 <!--菜单-start-->
-<div class="floor home_menu">
+<div class="floor home_menu" style="border-bottom:1px solid #f0f0f0;border-top:1px solid #f0f0f0;">
     <nav>
         <a href="<?php echo route('weixin_category_goods_list'); ?>">
-                <img src="<?php echo env('APP_URL'); ?>/images/weixin/icon_03.png" alt="全部分类" />
+                <img src="<?php echo env('APP_URL'); ?>/images/weixin/icon_05.png" alt="全部分类" />
                 <span>全部分类</span>
         </a>
-        <a href="http://www.shop.com/index.php/mobile/Goods/integralMall.html">
-                <img src="<?php echo env('APP_URL'); ?>/images/weixin/icon_05.png" alt="积分商城" />
-                <span>积分商城</span>
-        </a>
-        <a href="http://www.shop.com/index.php/mobile/Goods/brandstreet.html">
+        <a href="<?php echo route('weixin_brand_list'); ?>">
                 <img src="<?php echo env('APP_URL'); ?>/images/weixin/icon_07.png" alt="品牌街" />
                 <span>品牌街</span>
         </a>
-        <a href="http://www.shop.com/index.php/mobile/Activity/promote_goods.html">
-                <img src="<?php echo env('APP_URL'); ?>/images/weixin/icon_09.png" alt="优惠活动" />
-                <span>优惠活动</span>
-        </a>
-        <a href="http://www.shop.com/index.php/mobile/Activity/group_list.html">
-                <img src="<?php echo env('APP_URL'); ?>/images/weixin/icon_15.png" alt="团购" />
-                <span>团购</span>
+        <a href="<?php echo route('weixin_goods_list',array('orderby'=>5)); ?>">
+                <img src="<?php echo env('APP_URL'); ?>/images/weixin/icon_15.png" alt="优惠商品" />
+                <span>优惠商品</span>
         </a>
         <a href="<?php echo route('weixin_order_list'); ?>">
                 <img src="<?php echo env('APP_URL'); ?>/images/weixin/icon_16.png" alt="我的订单" />
@@ -116,13 +108,17 @@ var swiper = new Swiper('.swiper-nav', {
                 <img src="<?php echo env('APP_URL'); ?>/images/weixin/icon_19.png" alt="个人中心" />
                 <span>个人中心</span>
         </a>
+        <a href="javascript:;">
+                <img src="<?php echo env('APP_URL'); ?>/images/weixin/icon_03.png" alt="敬请期待" />
+                <span>敬请期待</span>
+        </a>
     </nav>
 </div>
 <!--菜单-end-->
 
 <!--资讯头条-start-->
 <div class="bggrey">
-<div class="home_toutiao">
+<div class="home_toutiao" style="border-bottom:1px solid #f0f0f0;">
     <div class="home_toutiao_tit"><img src="<?php echo env('APP_URL'); ?>/images/weixin/ad_tit.png"></div>
     <div class="home_toutiao_box">
         <ul>
@@ -137,11 +133,27 @@ var swiper = new Swiper('.swiper-nav', {
 
 <!--猜您喜欢-start-->
 <div class="floor guesslike">
-    <div class="banner_tit">- 精品推荐 -</div>
+    <div class="banner_tit">购·畅销</div>
+    <ul class="goods_list_s cl">
+    <?php if($goods_sale_list){foreach($goods_sale_list as $k=>$v){ ?>
+        <a href="<?php echo $v['goods_detail_url']; ?>"><li><span class="goods_thumb"><img alt="<?php echo $v['title']; ?>" src="<?php echo $v['litpic']; ?>"></span>
+        <div class="goods_info"><p class="goods_tit"><?php echo $v['title']; ?></p>
+        <p class="goods_price">￥<b><?php echo $v['price']; ?></b></p>
+        <p class="goods_des">已售：<?php echo $v['sale']; ?><a href="<?php echo $v['goods_detail_url']; ?>"><span class="buy fr">立即抢购</span></a></p>
+        </div>
+        </li></a>
+    <?php }} ?>
+    </ul>
+</div>
+<!--猜您喜欢-end-->
+
+<!--猜您喜欢-start-->
+<div class="floor guesslike">
+    <div class="banner_headline"><div class="tit"><h4>购·精选</h4></div></div>
     <div class="likeshop">
         <ul class="goods_list" id="goods_list">
         <?php if($goods_recommend_list){foreach($goods_recommend_list as $k=>$v){ ?>
-            <li><a href="<?php echo $v['goods_detail_url']; ?>"><img alt="<?php echo $v['title']; ?>" src="<?php echo $v['litpic']; ?>"><div class="goods_info"><p class="goods_tit"><?php echo $v['title']; ?></p><div class="goods_price">￥<b><?php echo $v['price']; ?></b></div></div></a></li>
+            <li><a href="<?php echo $v['goods_detail_url']; ?>"><img alt="<?php echo $v['title']; ?>" src="<?php echo $v['litpic']; ?>"><div class="goods_info"><p class="goods_tit"><?php if($v['is_promote_goods']>0){ ?><span class="badge_comm" style="background-color:#f23030;">Hot</span> <?php } ?><?php echo $v['title']; ?></p><div class="goods_price">￥<b><?php echo $v['price']; ?></b><span class="fr"><?php echo $v['sale']; ?>人付款</span></div></div></a></li>
         <?php }} ?>
         </ul>
     </div>
@@ -150,18 +162,46 @@ var swiper = new Swiper('.swiper-nav', {
 
 <!--猜您喜欢-start-->
 <div class="floor guesslike">
-    <div class="banner_tit">- 新品 -</div>
-    <ul class="goods_list_s cl">
+    <div class="banner_headline" style="margin-top:-4px;"><div class="tit"><h4>购·优惠</h4></div></div>
+    <div class="likeshop">
+        <ul class="goods_list" id="goods_list">
+        <?php if($goods_promote_list){foreach($goods_promote_list as $k=>$v){ ?>
+            <li><a href="<?php echo $v['goods_detail_url']; ?>"><img alt="<?php echo $v['title']; ?>" src="<?php echo $v['litpic']; ?>"><div class="goods_info"><p class="goods_tit"><?php if($v['is_promote_goods']>0){ ?><span class="badge_comm" style="background-color:#f23030;">Hot</span> <?php } ?><?php echo $v['title']; ?></p><div class="goods_price">￥<b><?php echo $v['price']; ?></b><span class="fr"><?php echo $v['sale']; ?>人付款</span></div></div></a></li>
+        <?php }} ?>
+        </ul>
+    </div>
+</div>
+<!--猜您喜欢-end-->
+
+<!--猜您喜欢-start-->
+<div class="floor guesslike">
+    <div class="banner_headline"><div class="tit"><h4>购·新品</h4></div></div>
+    <div class="likeshop">
+        <ul class="goods_list" id="goods_list">
+        <?php if($goods_list){foreach($goods_list as $k=>$v){ ?>
+            <li><a href="<?php echo $v['goods_detail_url']; ?>"><img alt="<?php echo $v['title']; ?>" src="<?php echo $v['litpic']; ?>"><div class="goods_info"><p class="goods_tit"><?php if($v['is_promote_goods']>0){ ?><span class="badge_comm" style="background-color:#f23030;">Hot</span> <?php } ?><?php echo $v['title']; ?></p><div class="goods_price">￥<b><?php echo $v['price']; ?></b><span class="fr"><?php echo $v['sale']; ?>人付款</span></div></div></a></li>
+        <?php }} ?>
+        </ul>
+    </div>
+</div>
+<!--猜您喜欢-end-->
+
+<!--猜您喜欢-start-->
+<!-- <div class="floor guesslike">
+    <ul class="goodslist_limg" id="goods_list">
     <?php if($goods_list){foreach($goods_list as $k=>$v){ ?>
-        <a href="<?php echo $v['goods_detail_url']; ?>"><li><span class="goods_thumb"><img alt="<?php echo $v['title']; ?>" src="<?php echo $v['litpic']; ?>"></span>
-        <div class="goods_info"><p class="goods_tit"><?php echo $v['title']; ?></p>
-        <p class="goods_price">￥<b><?php echo $v['price']; ?></b></p>
-        <p class="goods_des">库存：<?php echo $v['goods_number']; ?><a href="<?php echo $v['goods_detail_url']; ?>"><span class="buy fr">立即抢购</span></a></p>
-        </div>
-        </li></a>
+        <li><a href="<?php echo $v['goods_detail_url']; ?>"><img alt="<?php echo $v['title']; ?>" src="<?php echo $v['litpic']; ?>"><div class="goods_info"><p class="goods_tit"><?php if($v['is_promote_goods']>0){ ?><span class="badge_comm" style="background-color:#f23030;">Hot</span> <?php } ?><?php echo $v['title']; ?></p><div class="goods_price">￥<b><?php echo $v['price']; ?></b><span class="fr"><?php echo $v['sale']; ?>人付款</span></div></div></a></li>
     <?php }} ?>
     </ul>
-</div>
+</div> -->
+<style>
+.goodslist_limg li{border-bottom:10px solid #f0f0f0;}
+.goodslist_limg li img{width: 100%;height: auto;display: block;}
+.goodslist_limg li .goods_info{padding:15px;}
+.goodslist_limg li .goods_tit{line-height:1.5;font-size:20px;color:#333;}
+.goodslist_limg li .goods_price{font-size:24px;color:#fe3939;}
+.goodslist_limg li .fr{font-size:16px;color:#999;}
+</style>
 <!--猜您喜欢-end-->
 <style>
 .banner_tit{font-size:18px;font-weight:400;background-color:#fff;color:#f23030;height:46px;line-height:46px;padding-left:10px;padding-right:10px;border-bottom:1px solid #eee;text-align:center;}

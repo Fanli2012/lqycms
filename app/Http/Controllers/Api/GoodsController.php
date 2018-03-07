@@ -42,6 +42,7 @@ class GoodsController extends CommonController
         if($request->input('min_price', '') != ''){$data['min_price'] = $request->input('min_price');}
         if($request->input('max_price', '') != ''){$data['max_price'] = $request->input('max_price');}
         if($request->input('orderby', '') != ''){$data['orderby'] = $request->input('orderby');}
+        if($request->input('brand_id', '') != ''){$data['brand_id'] = $request->input('brand_id');}
         
         $res = Goods::getList($data);
 		

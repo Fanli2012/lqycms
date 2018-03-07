@@ -64,7 +64,9 @@ Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin'], function () {
 	Route::get('/tag{tag}', 'IndexController@tag')->name('weixin_tag');         //标签页
 	Route::get('/page/{id}', 'IndexController@page')->name('weixin_singlepage');//单页
 	Route::get('/goods/{id}', 'GoodsController@goodsDetail')->name('weixin_goods_detail'); //商品详情页
-	Route::get('/goodslist', 'GoodsController@goodsList')->name('weixin_goods_list'); //产品分类页
+	Route::get('/goodslist', 'GoodsController@goodsList')->name('weixin_goods_list'); //商品筛选列表
+    Route::get('/brandlist', 'GoodsBrandController@brandList')->name('weixin_brand_list'); //品牌列表
+    Route::get('/brand_detail/{id}', 'GoodsBrandController@brandDetail')->name('weixin_brand_detail'); //品牌详情
     
     Route::get('/bonus_list', 'BonusController@bonusList')->name('weixin_bonus_list');
     Route::any('/wxpay_notify', 'WxPayController@wxpayNotify')->name('weixin_wxpay_notify'); //微信回调
@@ -142,6 +144,8 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     Route::get('/goods_list', 'GoodsController@goodsList'); //商品列表
     Route::get('/goodstype_list', 'GoodsTypeController@goodsTypeList'); //商品分类列表
     Route::get('/goods_searchword_list', 'GoodsController@goodsSearchwordList'); //商品搜索词列表
+    Route::get('/goodsbrand_detail', 'GoodsBrandController@goodsBrandDetail'); //商品品牌详情
+    Route::get('/goodsbrand_list', 'GoodsBrandController@goodsBrandList'); //商品品牌列表
     //地区，省市区
 	Route::get('/region_list', 'RegionController@regionList');
     Route::get('/region_detail', 'RegionController@regionDetail');

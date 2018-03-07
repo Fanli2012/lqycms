@@ -45,9 +45,9 @@ class IndexController extends CommonController
 		$res = curl_request($url,$postdata,'GET');
         $data['article_list'] = $res['data']['list'];
         
-        //商品列表
+        //最新商品列表
         $postdata = array(
-            'limit'  => 10,
+            'limit'  => 8,
             'offset' => 0
 		);
         $url = env('APP_API_URL')."/goods_list";
@@ -57,12 +57,32 @@ class IndexController extends CommonController
         //商品推荐
         $postdata = array(
             'tuijian'=> 1,
-            'limit'  => 4,
+            'limit'  => 6,
             'offset' => 0
 		);
         $url = env('APP_API_URL')."/goods_list";
 		$res = curl_request($url,$postdata,'GET');
         $data['goods_recommend_list'] = $res['data']['list'];
+        
+        //畅销商品列表
+        $postdata = array(
+            'orderby'=> 1,
+            'limit'  => 6,
+            'offset' => 0
+		);
+        $url = env('APP_API_URL')."/goods_list";
+		$res = curl_request($url,$postdata,'GET');
+        $data['goods_sale_list'] = $res['data']['list'];
+        
+        //促销、优惠商品列表
+        $postdata = array(
+            'orderby'=> 5,
+            'limit'  => 4,
+            'offset' => 0
+		);
+        $url = env('APP_API_URL')."/goods_list";
+		$res = curl_request($url,$postdata,'GET');
+        $data['goods_promote_list'] = $res['data']['list'];
         
         return view('weixin.index.index',$data);
     }

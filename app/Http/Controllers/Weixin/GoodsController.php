@@ -49,6 +49,7 @@ class GoodsController extends CommonController
         if($request->input('orderby', '') != ''){$param['orderby'] = $request->input('orderby');}
         if($request->input('max_price', '') != ''){$param['max_price'] = $request->input('max_price');}else{$param['max_price'] = 99999;}
         if($request->input('min_price', '') != ''){$param['min_price'] = $request->input('min_price');}else{$param['min_price'] = 0;}
+        if($request->input('brand_id', '') != ''){$param['brand_id'] = $request->input('brand_id');}
         
         //商品列表
         $postdata = $param;

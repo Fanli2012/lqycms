@@ -23,7 +23,7 @@
     <div class="money"><small>￥</small><?php echo $user_info['commission']; ?></div>
 </div>
 <div class="floor">
-<div class="banner_tit mt10">- 我的推荐 -</div>
+<div class="banner_tit mt10">我的推荐</div>
 <?php if($list){ ?>
     <ul class="goods_list_s cl">
         <?php foreach($list as $k=>$v){ ?>

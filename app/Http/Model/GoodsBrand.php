@@ -21,10 +21,7 @@ class GoodsBrand extends BaseModel
         $limit  = isset($limit) ? $limit : 10;
         $offset = isset($offset) ? $offset : 0;
         
-        $where['status'] = self::IS_SHOW;
         $model = new self;
-        
-        if($where){$model = $model->where($where);}
         
         $res['count'] = $model->count();
         $res['list'] = array();

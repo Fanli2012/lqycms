@@ -24,7 +24,7 @@
         <td align="right">上架：</td>
         <td>
 			<input type="radio" value='0' name="status" <?php if($post['status']==0){echo 'checked';} ?> />&nbsp;是&nbsp;&nbsp;
-			<input type="radio" value='1' name="status" <?php if($post['status']==1){echo 'checked';} ?> />&nbsp;否
+			<input type="radio" value='2' name="status" <?php if($post['status']==2){echo 'checked';} ?> />&nbsp;否
 		</td>
     </tr>
     <tr>

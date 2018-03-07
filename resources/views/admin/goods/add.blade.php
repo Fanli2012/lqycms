@@ -24,7 +24,7 @@
         <td align="right">上架：</td>
         <td>
 			<input type="radio" value='0' name="status" checked />&nbsp;是&nbsp;&nbsp;
-			<input type="radio" value='1' name="status" />&nbsp;否
+			<input type="radio" value='2' name="status" />&nbsp;否
 		</td>
     </tr>
     <tr>

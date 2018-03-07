@@ -30,11 +30,13 @@
 </nav>
 
 <div class="floor">
+    <?php if($goods_list){ ?>
     <ul class="goods_list" id="goods_list">
     <?php foreach($goods_list as $k=>$v){ ?>
-        <li><a href="<?php echo $v['goods_detail_url']; ?>"><img alt="<?php echo $v['title']; ?>" src="<?php echo $v['litpic']; ?>"><div class="goods_info"><p class="goods_tit"><?php echo $v['title']; ?></p><div class="goods_price">￥<b><?php echo $v['price']; ?></b></div></div></a></li>
+        <li><a href="<?php echo $v['goods_detail_url']; ?>"><img alt="<?php echo $v['title']; ?>" src="<?php echo $v['litpic']; ?>"><div class="goods_info"><p class="goods_tit"><?php if($v['is_promote_goods']>0){ ?><span class="badge_comm" style="background-color:#f23030;">Hot</span> <?php } ?><?php echo $v['title']; ?></p><div class="goods_price">￥<b><?php echo $v['price']; ?></b><span class="fr"><?php echo $v['sale']; ?>人付款</span></div></div></a></li>
     <?php } ?>
-    </ul>
+    </ul><?php }else{ ?>
+    <div style="text-align:center;line-height:40px;color:#999;">暂无记录</div><?php } ?>
 </div>
 
 @include('weixin.common.footer')
