@@ -70,25 +70,55 @@ class GoodsController extends CommonController
         $data['typeid'] = 0;
         if($request->input('typeid', '') != ''){$data['typeid'] = $request->input('typeid');}
         
+        $pagesize = 10;
+        $offset = 0;
+        if(isset($_REQUEST['page'])){$offset = ($_REQUEST['page']-1)*$pagesize;}
+        
+        //商品列表
+        $postdata = array(
+            'typeid' => $data['typeid'],
+            'limit'  => $pagesize,
+            'offset' => $offset
+		);
+        $url = env('APP_API_URL')."/goods_list";
+		$res = curl_request($url,$postdata,'GET');
+        $data['list'] = $res['data']['list'];
+        
+        $data['totalpage'] = ceil($res['data']['count']/$pagesize);
+        
+        if(isset($_REQUEST['page_ajax']) && $_REQUEST['page_ajax']==1)
+        {
+    		$html = '';
+            
+            if($res['data']['list'])
+            {
+                foreach($res['data']['list'] as $k => $v)
+                {
+                    $html .= '<li>';
+                    $html .= '<a href="'.$v['goods_detail_url'].'"><img alt="'.$v['title'].'" src="'.$v['litpic'].'"><div class="goods_info"><p class="goods_tit">';
+                    
+                    if($v['is_promote_goods']>0)
+                    {
+                        $html .= '<span class="badge_comm" style="background-color:#f23030;">Hot</span>';
+                    }
+                    
+                    $html .= $v['title'].'</p><div class="goods_price">￥<b>'.$v['price'].'</b><span class="fr">'.$v['sale'].'人付款</span></div></div></a>';
+                    $html .= '</li>';
+                }
+            }
+            
+    		exit(json_encode($html));
+    	}
+        
         //商品分类列表
         $postdata = array(
             'pid'    => 0,
-            'limit'  => 100,
+            'limit'  => 15,
             'offset' => 0
 		);
         $url = env('APP_API_URL')."/goodstype_list";
 		$res = curl_request($url,$postdata,'GET');
         $data['goodstype_list'] = $res['data']['list'];
-        
-       //商品列表
-        $postdata = array(
-            'typeid' => $data['typeid'],
-            'limit'  => 100,
-            'offset' => 0
-		);
-        $url = env('APP_API_URL')."/goods_list";
-		$res = curl_request($url,$postdata,'GET');
-        $data['goods_list'] = $res['data']['list'];
         
 		return view('weixin.goods.categoryGoodsList', $data);
 	}

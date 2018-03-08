@@ -27,7 +27,7 @@
 <style>
 .swiper-nav{width:100%;height:46px;line-height:46px;border-bottom:1px solid #efefef;background:#fff;}
 .swiper-slide{text-align:center;font-size:18px;background:#fff;}.swiper-slide a{color:#666;}
-.swiper-slide-activate{color:#f23030;border-bottom:2px solid #f23030;}.swiper-slide-activate a{color:#f23030;}
+.swiper-slide-activate{color:#f23030;border-bottom:1px solid #f23030;}.swiper-slide-activate a{color:#f23030;}
 </style>
 <script>
 var swiper = new Swiper('.swiper-nav', {

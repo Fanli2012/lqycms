@@ -14,6 +14,7 @@
 <!--顶部搜索栏-end-->
 
 <!--顶部滚动广告栏-start-->
+<?php if($slide_list){ ?>
 <div class="tbanner">
     <!-- Swiper -->
     <div class="swiper-container">
@@ -26,13 +27,14 @@
         <div class="swiper-pagination swiper-pagination-white"></div>
     </div>
 </div>
+<?php } ?>
 <link rel="stylesheet" href="<?php echo env('APP_URL'); ?>/css/swiper.min.css">
+<script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/swiper.min.js"></script>
 <style>
 .swiper-container{width:100%;height:auto;}
 .swiper-slide{text-align:center;font-size:18px;background:#fff;}
 .swiper-slide img{width:100%;height:40vw;}
 </style>
-<script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/swiper.min.js"></script>
 <script>
 //Swiper轮播
 var swiper = new Swiper('.swiper-container', {
@@ -58,22 +60,9 @@ var swiper = new Swiper('.swiper-container', {
         <div class="swiper-slide">Slide 3</div>
         <div class="swiper-slide">Slide 4</div>
         <div class="swiper-slide">Slide 5</div>
-        <div class="swiper-slide">Slide 6</div>
-        <div class="swiper-slide">Slide 7</div>
-        <div class="swiper-slide">Slide 8</div>
-        <div class="swiper-slide">Slide 9</div>
-        <div class="swiper-slide">Slide 10</div>
-        <div class="swiper-slide">Slide 3</div>
-        <div class="swiper-slide">Slide 4</div>
-        <div class="swiper-slide">Slide 5</div>
-        <div class="swiper-slide">Slide 6</div>
-        <div class="swiper-slide">Slide 7</div>
-        <div class="swiper-slide">Slide 8</div>
-        <div class="swiper-slide">Slide 9</div>
-        <div class="swiper-slide">Slide 10</div>
     </div>
 </div>
-<style>.swiper-nav {width: 100%;height: 50px;line-height:50px;border-bottom:1px solid #efefef;}</style>
+<style>.swiper-nav{width: 100%;height: 50px;line-height:50px;border-bottom:1px solid #efefef;background-color:#fff;}</style>
 <script>
 var swiper = new Swiper('.swiper-nav', {
     slidesPerView: 4 //一行4列显示
@@ -186,23 +175,6 @@ var swiper = new Swiper('.swiper-nav', {
 </div>
 <!--猜您喜欢-end-->
 
-<!--猜您喜欢-start-->
-<!-- <div class="floor guesslike">
-    <ul class="goodslist_limg" id="goods_list">
-    <?php if($goods_list){foreach($goods_list as $k=>$v){ ?>
-        <li><a href="<?php echo $v['goods_detail_url']; ?>"><img alt="<?php echo $v['title']; ?>" src="<?php echo $v['litpic']; ?>"><div class="goods_info"><p class="goods_tit"><?php if($v['is_promote_goods']>0){ ?><span class="badge_comm" style="background-color:#f23030;">Hot</span> <?php } ?><?php echo $v['title']; ?></p><div class="goods_price">￥<b><?php echo $v['price']; ?></b><span class="fr"><?php echo $v['sale']; ?>人付款</span></div></div></a></li>
-    <?php }} ?>
-    </ul>
-</div> -->
-<style>
-.goodslist_limg li{border-bottom:10px solid #f0f0f0;}
-.goodslist_limg li img{width: 100%;height: auto;display: block;}
-.goodslist_limg li .goods_info{padding:15px;}
-.goodslist_limg li .goods_tit{line-height:1.5;font-size:20px;color:#333;}
-.goodslist_limg li .goods_price{font-size:24px;color:#fe3939;}
-.goodslist_limg li .fr{font-size:16px;color:#999;}
-</style>
-<!--猜您喜欢-end-->
 <style>
 .banner_tit{font-size:18px;font-weight:400;background-color:#fff;color:#f23030;height:46px;line-height:46px;padding-left:10px;padding-right:10px;border-bottom:1px solid #eee;text-align:center;}
 </style>
