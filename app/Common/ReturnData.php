@@ -105,19 +105,20 @@ class ReturnData
             $msg = self::$codeTexts[$code];
         }
         
-        return array('code' => $code, 'msg' => $msg, 'data' => $data);
+        return self::custom($code, $msg, $data);
     }
-    
+
     public static function success($data = null, $msg = '')
     {
+        
         if (empty($msg) && isset(self::$codeTexts[self::SUCCESS]))
 		{
             $msg = self::$codeTexts[self::SUCCESS];
         }
 		
-        return array('code' => self::SUCCESS, 'msg' => $msg, 'data' => $data);
+        return self::custom(self::SUCCESS, $msg, $data);
     }
-    
+
     public static function error($code, $data = null, $msg = '')
     {
         if (empty($msg) && isset(self::$codeTexts[$code]))
@@ -131,11 +132,19 @@ class ReturnData
             $msg  = '系统错误';
         }
 		
-        return array('code' => $code, 'msg' => $msg, 'data' => $data);
+        return self::custom($code, $msg, $data);
     }
     
     public static function custom($code, $msg = '', $data = null)
     {
         return array('code' => $code, 'msg' => $msg, 'data' => $data);
+    }
+    
+    //判断是否成功
+    public static function checkSuccess($data)
+    {
+        if ($data['code'] == self::SUCCESS){return true;}
+        
+        return false;
     }
 }

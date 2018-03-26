@@ -264,9 +264,11 @@ CREATE TABLE `fl_cart` (
   `type` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '购物车商品类型;0普通;1团够;2拍卖;3夺宝奇兵',
   `add_time` int(11) DEFAULT '0' COMMENT '添加时间',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 /*Data for the table `fl_cart` */
+
+insert  into `fl_cart`(`id`,`user_id`,`goods_id`,`shop_id`,`goods_number`,`goods_attr`,`type`,`add_time`) values (9,3,2,0,1,NULL,0,1520569330);
 
 /*Table structure for table `fl_collect_goods` */
 
@@ -387,7 +389,7 @@ CREATE TABLE `fl_goods` (
 
 /*Data for the table `fl_goods` */
 
-insert  into `fl_goods`(`id`,`typeid`,`tuijian`,`click`,`title`,`body`,`sn`,`price`,`litpic`,`pubdate`,`add_time`,`keywords`,`seotitle`,`description`,`status`,`shipping_fee`,`market_price`,`goods_number`,`user_id`,`sale`,`cost_price`,`goods_weight`,`point`,`comments`,`promote_start_date`,`promote_price`,`promote_end_date`,`goods_img`,`warn_number`,`spec`,`listorder`,`brand_id`) values (1,2,1,5672,'示例产品一','<p>是的发生</p>','sn123456','45000.00','/uploads/2017/06/201706041951031181.jpg',1512273964,1496577749,'示例,产品,一','','是的发生',0,'0.00','50000.00',99,1,0,'0.00','0.00',NULL,NULL,0,'0.00',0,'/uploads/2017/06/201706041951031181.jpg',NULL,NULL,50,0),(2,1,1,30,'示例产品二','说的是','sn987','1.00','/uploads/2017/06/201706042011354141.jpg',1496578330,1496578313,'产品,示例,二','','',0,'3.00','2.00',106,1,3,'0.00','0.00',NULL,NULL,NULL,'0.00',NULL,'/uploads/2017/06/201706042011354141.jpg',NULL,NULL,50,0),(3,1,0,37,'示例产品三','是的发生','sn232143','5.10','/uploads/2017/06/201706042012428057.jpg',1496578380,1496578380,'示例,产品,三','','',0,'3.00','4.00',103,1,1,'0.00','0.00',NULL,NULL,NULL,'0.00',NULL,'/uploads/2017/06/201706042012428057.jpg',NULL,NULL,50,1),(4,1,0,106,'示例产品四2','<p>电热熔</p>','sn9809702','5.00','/uploads/2017/06/201706042013331349.jpg',1519736409,1496578429,'示例,产品,四','','电热熔',0,'3.00','6.00',91,1,4,'0.00','0.00',NULL,NULL,1518435963,'2.00',1519905139,'/uploads/2017/06/201706042013331349.jpg',NULL,NULL,50,0);
+insert  into `fl_goods`(`id`,`typeid`,`tuijian`,`click`,`title`,`body`,`sn`,`price`,`litpic`,`pubdate`,`add_time`,`keywords`,`seotitle`,`description`,`status`,`shipping_fee`,`market_price`,`goods_number`,`user_id`,`sale`,`cost_price`,`goods_weight`,`point`,`comments`,`promote_start_date`,`promote_price`,`promote_end_date`,`goods_img`,`warn_number`,`spec`,`listorder`,`brand_id`) values (1,2,1,5672,'示例产品一','<p>是的发生</p>','sn123456','45000.00','/uploads/2017/06/201706041951031181.jpg',1512273964,1496577749,'示例,产品,一','','是的发生',0,'0.00','50000.00',99,1,0,'0.00','0.00',NULL,NULL,0,'0.00',0,'/uploads/2017/06/201706041951031181.jpg',NULL,NULL,50,0),(2,1,1,32,'示例产品二','说的是','sn987','1.00','/uploads/2017/06/201706042011354141.jpg',1496578330,1496578313,'产品,示例,二','','',0,'3.00','2.00',106,1,3,'0.00','0.00',NULL,NULL,NULL,'0.00',NULL,'/uploads/2017/06/201706042011354141.jpg',NULL,NULL,50,0),(3,1,0,37,'示例产品三','是的发生','sn232143','5.10','/uploads/2017/06/201706042012428057.jpg',1496578380,1496578380,'示例,产品,三','','',0,'3.00','4.00',103,1,1,'0.00','0.00',NULL,NULL,NULL,'0.00',NULL,'/uploads/2017/06/201706042012428057.jpg',NULL,NULL,50,1),(4,1,0,107,'示例产品四2','<p>电热熔</p>','sn9809702','5.00','/uploads/2017/06/201706042013331349.jpg',1519736409,1496578429,'示例,产品,四','','电热熔',0,'3.00','6.00',91,1,4,'0.00','0.00',NULL,NULL,1518435963,'2.00',1519905139,'/uploads/2017/06/201706042013331349.jpg',NULL,NULL,50,0);
 
 /*Table structure for table `fl_goods_brand` */
 
@@ -669,20 +671,19 @@ DROP TABLE IF EXISTS `fl_payment`;
 CREATE TABLE `fl_payment` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `pay_code` varchar(20) NOT NULL DEFAULT '' COMMENT '支付方式的英文缩写',
-  `pay_name` varchar(120) NOT NULL DEFAULT '' COMMENT '支付方式名称',
+  `pay_name` varchar(100) NOT NULL DEFAULT '' COMMENT '支付方式名称',
   `pay_fee` varchar(10) NOT NULL DEFAULT '0' COMMENT '支付费用',
   `pay_des` text NOT NULL COMMENT '支付方式描述',
-  `pay_order` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '支付方式在页面的显示顺序',
   `pay_config` text NOT NULL COMMENT '支付方式的配置信息,包括商户号和密钥什么的',
   `status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否可用;0否;1是',
   `listorder` smallint(5) NOT NULL DEFAULT '0' COMMENT '排序',
   PRIMARY KEY (`id`),
   UNIQUE KEY `pay_code` (`pay_code`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='支付方式表';
 
 /*Data for the table `fl_payment` */
 
-insert  into `fl_payment`(`id`,`pay_code`,`pay_name`,`pay_fee`,`pay_des`,`pay_order`,`pay_config`,`status`,`listorder`) values (1,'balance','余额支付','0','使用帐户余额支付。只有会员才能使用，通过设置信用额度，可以透支。',0,'a:0:{}',1,0),(2,'weixin','微信','0','微信',0,'a:0:{}',1,0),(3,'alipay','支付宝','0','支付宝',0,'a:0:{}',1,0),(4,'cod','货到付款','0','开通城市：×××\r\n货到付款区域：×××',0,'a:0:{}',0,0),(5,'bank','银行汇款/转帐','0','银行名称\r\n收款人信息：全称 ××× ；帐号或地址 ××× ；开户行 ×××。\r\n注意事项：办理电汇时，请在电汇单“汇款用途”一栏处注明您的订单号。',0,'a:0:{}',0,0);
+insert  into `fl_payment`(`id`,`pay_code`,`pay_name`,`pay_fee`,`pay_des`,`pay_config`,`status`,`listorder`) values (1,'balance','余额支付','0','使用帐户余额支付。只有会员才能使用，通过设置信用额度，可以透支。','a:0:{}',1,0),(2,'weixin','微信','0','微信','a:0:{}',1,0),(3,'alipay','支付宝','0','支付宝','a:0:{}',1,0),(4,'cod','货到付款','0','开通城市：×××\r\n货到付款区域：×××','a:0:{}',0,0),(5,'bank','银行汇款/转帐','0','银行名称\r\n收款人信息：全称 ××× ；帐号或地址 ××× ；开户行 ×××。\r\n注意事项：办理电汇时，请在电汇单“汇款用途”一栏处注明您的订单号。','a:0:{}',0,0);
 
 /*Table structure for table `fl_refund` */
 
@@ -775,6 +776,19 @@ CREATE TABLE `fl_searchword` (
 /*Data for the table `fl_searchword` */
 
 insert  into `fl_searchword`(`id`,`name`,`title`,`description`,`content`,`pubdate`,`keywords`,`click`,`litpic`,`template`,`filename`) values (1,'百度金融2','百度金融title2','百度金融description2','<p>百度金融content2</p>',1496229526,'百度金融keywords2',250,'/uploads/2017/05/201705311643481302.png','tag2','bdjr2'),(2,'李彦宏','李彦宏title','李彦宏description','<p>李彦宏content</p>',1484910609,'李彦宏keywords',361,'','tag','leo'),(3,'asd','asd','asd','<p>asdsa</p>',1496229768,'asd',209,'','tag','asd');
+
+/*Table structure for table `fl_session` */
+
+DROP TABLE IF EXISTS `fl_session`;
+
+CREATE TABLE `fl_session` (
+  `session_id` varchar(255) NOT NULL,
+  `session_expire` int(11) NOT NULL DEFAULT '0',
+  `session_data` blob,
+  UNIQUE KEY `session_id` (`session_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+/*Data for the table `fl_session` */
 
 /*Table structure for table `fl_slide` */
 
@@ -932,11 +946,11 @@ CREATE TABLE `fl_token` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `expired_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='token表';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='token表';
 
 /*Data for the table `fl_token` */
 
-insert  into `fl_token`(`id`,`token`,`type`,`uid`,`data`,`created_at`,`expired_at`) values (1,'72d623d26a1a6d61186a97f9ccf752f7',1,1,NULL,'2017-08-07 13:29:01','2018-05-22 11:15:27');
+insert  into `fl_token`(`id`,`token`,`type`,`uid`,`data`,`created_at`,`expired_at`) values (1,'72d623d26a1a6d61186a97f9ccf752f7',1,1,NULL,'2017-08-07 13:29:01','2018-05-22 11:15:27'),(2,'70a0c1ba8fb4a4c394dd2bdf7d6106ec',2,3,'','2018-03-09 12:22:03','2018-04-08 12:22:03');
 
 /*Table structure for table `fl_user` */
 
