@@ -56,6 +56,8 @@ class UserController extends CommonController
         if($request->input('group_id', null)!==null){$data['group_id'] = $request->input('group_id');}
         if($request->input('password', null)!==null){$data['password'] = $request->input('password');}
         if($request->input('head_img', null)!==null){$data['head_img'] = $request->input('head_img');}
+        if($request->input('refund_account', null)!==null){$data['refund_account'] = $request->input('refund_account');}
+        if($request->input('refund_name', null)!==null){$data['refund_name'] = $request->input('refund_name');}
         
         if (isset($data))
 		{

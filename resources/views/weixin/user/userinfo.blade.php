@@ -252,6 +252,71 @@ function qrcode_layer()
     });
 }
 </script>
+    <a href="javascript:update_refund_account();"><li>
+        <div class="ui-list-info">
+            <h4 class="ui-nowrap">退款账户</h4>
+            <div class="ui-txt-info"> &nbsp;</div>
+        </div>
+        <i class="fa fa-angle-right" aria-hidden="true"></i>
+    </li></a>
+<script>
+function update_refund_account()
+{
+    //询问框
+    layer.open({
+        title: [
+          '退款账户管理',
+          'background-color: #FF4351; color:#fff;'
+        ]
+        ,content: '<div class="adr-form-group"><input style="margin-bottom:5px;" type="text" name="refund_account" class="" id="refund_account" placeholder="支付宝账号" value="<?php if($user_info['refund_account']){echo $user_info['refund_account'];} ?>"><input type="text" name="refund_name" class="" id="refund_name" placeholder="姓名" value="<?php if($user_info['refund_name']){echo $user_info['refund_name'];} ?>"></div>'
+        ,btn: ['确定', '取消']
+        ,yes: function(index){
+            var refund_account = $("#refund_account").val();
+            var refund_name = $("#refund_name").val();
+            
+            if(refund_account == '' || refund_name == '')
+            {
+                /* layer.open({
+                    content: '账户/姓名不能为空'
+                    ,skin: 'msg'
+                    ,time: 2 //2秒后自动关闭
+                }); */
+                
+                alert('账户/姓名不能为空');
+                
+                return false;
+            }
+            else
+            {
+                $.post('<?php echo env('APP_API_URL').'/user_info_update'; ?>',{refund_account:refund_account,refund_name:refund_name,access_token:'<?php echo $_SESSION['weixin_user_info']['access_token']; ?>'},function(res)
+                {
+                    if(res.code==0)
+                    {
+                        //提示
+                        layer.open({
+                            content: '操作成功'
+                            ,skin: 'msg'
+                            ,time: 2 //2秒后自动关闭
+                        });
+                    }
+                    else
+                    {
+                        layer.open({
+                            content: res.msg
+                            ,skin: 'msg'
+                            ,time: 2 //2秒后自动关闭
+                        });
+                    }
+                },'json');
+                
+                window.location.reload();
+            }
+            
+            layer.close(index);
+        }
+    });
+}
+</script>
 </ul>
 
 <ul class="fui-list mt10">
