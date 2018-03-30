@@ -119,6 +119,8 @@ Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin', 'middleware' => ['w
     Route::get('/user_address', 'AddressController@index')->name('weixin_user_address_list');
     Route::get('/user_address_add', 'AddressController@userAddressAdd')->name('weixin_user_address_add');
     Route::get('/user_address_update', 'AddressController@userAddressUpdate')->name('weixin_user_address_update');
+    //意见反馈
+    Route::get('/user_feedback_add', 'FeedbackController@userFeedbackAdd')->name('weixin_user_feedback_add');
 });
 
 

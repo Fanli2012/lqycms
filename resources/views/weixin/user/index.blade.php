@@ -3,16 +3,14 @@
 <link href="<?php echo env('APP_URL'); ?>/css/weixin/style.css" type="text/css" rel="stylesheet">
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/jquery.min.js"></script>
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/weixin/mobile.js"></script></head><body>
-<div class="myhearder">
+<div class="myhearder" style="background:#ec5151;color:#fff;">
     <div class="person">
         <a href="<?php echo route('weixin_userinfo'); ?>">
-            <div class="fl personicon">
-                <div class="personicon">
-                    <img src="<?php echo $user_info['head_img']; ?>" onerror="this.src='<?php echo env('APP_URL'); ?>/images/weixin/no_user.jpg'">
-                </div>
+            <div class="personicon">
+                <img src="<?php echo $user_info['head_img']; ?>" onerror="this.src='<?php echo env('APP_URL'); ?>/images/weixin/no_user.jpg'">
             </div>
-            <div class="fl lors">
-                <span><?php if($user_info['user_name']){echo $user_info['user_name'];}else{echo $user_info['mobile'];} ?></span>
+            <div class="lors">
+                <?php if($user_info['user_name']){echo $user_info['user_name'];}else{echo $user_info['mobile'];} ?>
             </div>
         </a>
     </div>
@@ -20,9 +18,9 @@
         <!--设置-->
         <a class="setting" href="<?php echo route('weixin_userinfo'); ?>"><i></i></a>
         <!--我的留言-->
-        <a class="massage" href="<?php echo route('weixin_user_message_list'); ?>"><i></i></a>
+        <!--<a class="massage" href="<?php echo route('weixin_user_message_list'); ?>"><i></i></a>-->
     </div>
-    <div class="scgz">
+    <!-- <div class="scgz">
         <ul>
             <li>
                 <a href="<?php echo route('weixin_user_collect_goods'); ?>">
@@ -38,13 +36,13 @@
             </li>
         </ul>
     </div>
-    <img src="<?php echo env('APP_URL'); ?>/images/weixin/bjm.jpg" width="100%" height="100%" class="user_bg">
+    <img src="<?php echo env('APP_URL'); ?>/images/weixin/bjm.jpg" width="100%" height="100%" class="user_bg"> -->
 </div>
 
 <div class="floor my g4">
     <div class="content">
         <!--订单管理模块-s-->
-        <div class="floor myorder mt10">
+        <div class="floor myorder">
             <div class="content30">
                 <div class="order">
                     <div class="fl">
@@ -152,6 +150,97 @@
                     </a>
                 </div>
             </div>
+            <div class="myorder p">
+                <div class="content30">
+                    <a href="<?php echo route('weixin_user_collect_goods'); ?>">
+                        <div class="order">
+                            <div class="fl">
+                                <img src="<?php echo env('APP_URL'); ?>/images/weixin/w9.png">
+                                <span>我的收藏</span>
+                            </div>
+                            <div class="fr">
+                                <i class="Mright"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="myorder p">
+                <div class="content30">
+                    <a href="<?php echo route('weixin_user_goods_history'); ?>">
+                        <div class="order">
+                            <div class="fl">
+                                <img src="<?php echo env('APP_URL'); ?>/images/weixin/w3.png">
+                                <span>我的足迹</span>
+                            </div>
+                            <div class="fr">
+                                <i class="Mright"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="myorder p">
+                <div class="content30">
+                    <a href="<?php echo route('weixin_user_address_list'); ?>">
+                        <div class="order">
+                            <div class="fl">
+                                <img src="<?php echo env('APP_URL'); ?>/images/weixin/w10.png">
+                                <span>地址管理</span>
+                            </div>
+                            <div class="fr">
+                                <i class="Mright"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="myorder p">
+                <div class="content30">
+                    <a href="">
+                        <div class="order">
+                            <div class="fl">
+                                <img src="<?php echo env('APP_URL'); ?>/images/weixin/w11.png"/>
+                                <span>推介赚钱</span>
+                            </div>
+                            <div class="fr">
+                                <i class="Mright"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="myorder p">
+                <div class="content30">
+                    <a href="">
+                        <div class="order">
+                            <div class="fl">
+                                <img src="<?php echo env('APP_URL'); ?>/images/weixin/w6.png"/>
+                                <span>帮助中心</span>
+                            </div>
+                            <div class="fr">
+                                <i class="Mright"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="myorder p">
+                <div class="content30">
+                    <a href="<?php echo route('weixin_user_feedback_add'); ?>">
+                        <div class="order">
+                            <div class="fl">
+                                <img src="<?php echo env('APP_URL'); ?>/images/weixin/w7.png"/>
+                                <span>意见反馈</span>
+                            </div>
+                            <div class="fr">
+                                <i class="Mright"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            
             <!-- <div class="myorder p">
                 <div class="content30">
                     <a href="/index.php/Mobile/User/comment/status/1.html">
@@ -182,7 +271,7 @@
                     </a>
                 </div>
             </div> -->
-            <div class="myorder p">
+            <!-- <div class="myorder p">
                 <div class="content30">
                     <a href="<?php echo route('weixin_bonus_list',array('parent_id'=>$_SESSION['weixin_user_info']['id'])); ?>">
                         <div class="order">
@@ -197,38 +286,6 @@
                     </a>
                 </div>
             </div>
-            <div class="myorder p">
-                <div class="content30">
-                    <a href="<?php echo route('weixin_user_goods_history'); ?>">
-                        <div class="order">
-                            <div class="fl">
-                                <img src="<?php echo env('APP_URL'); ?>/images/weixin/w3.png">
-                                <span>我的足迹</span>
-                            </div>
-                            <div class="fr">
-                                <i class="Mright"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div class="myorder p">
-                <div class="content30">
-                    <a href="<?php echo route('weixin_user_address_list'); ?>">
-                        <div class="order">
-                            <div class="fl">
-                                <img src="<?php echo env('APP_URL'); ?>/images/weixin/w8.png">
-                                <span>地址管理</span>
-                            </div>
-                            <div class="fr">
-                                <i class="Mright"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-
-            <!--
             <div class="myorder p">
                 <div class="content30">
                     <a href="">
@@ -251,36 +308,6 @@
                             <div class="fl">
                                 <img src="images/w4.png"/>
                                 <span>我的拼团</span>
-                            </div>
-                            <div class="fr">
-                                <i class="Mright"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div class="myorder p">
-                <div class="content30">
-                    <a href="">
-                        <div class="order">
-                            <div class="fl">
-                                <img src="images/w6.png"/>
-                                <span>帮助中心</span>
-                            </div>
-                            <div class="fr">
-                                <i class="Mright"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div class="myorder p">
-                <div class="content30">
-                    <a href="">
-                        <div class="order">
-                            <div class="fl">
-                                <img src="images/w7.png"/>
-                                <span>意见反馈</span>
                             </div>
                             <div class="fr">
                                 <i class="Mright"></i>

@@ -80,4 +80,11 @@ class UserMoney extends BaseModel
         
         return true;
     }
+    
+    //描述-文字
+    public function getDesAttr($data)
+    {
+        $arr = [0 => '不限', 1 => '黑色', 2 => '白色', 3 => '银色', 4 => '橙色', 5 => '绿色', 6 => '红色', 7 => '蓝色', 8 => '紫色', 9 => '黄色', 10 => '香槟色', 11 => '咖啡色'];
+        return $arr[$data['des']];
+    }
 }

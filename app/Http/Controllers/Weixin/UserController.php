@@ -568,10 +568,11 @@ class UserController extends CommonController
         
         $postdata = array(
             'openid' => $_SESSION['weixin_oauth']['token']['openid'],
+            'unionid' => isset($_SESSION['weixin_oauth']['userinfo']['unionid']) ? $_SESSION['weixin_oauth']['userinfo']['unionid'] : '',
             'nickname' => $_SESSION['weixin_oauth']['userinfo']['nickname'],
             'sex' => $_SESSION['weixin_oauth']['userinfo']['sex'],
             'head_img' => $_SESSION['weixin_oauth']['userinfo']['headimgurl'],
-            'parent_id' => '',
+            'parent_id' => isset($_SESSION['weixin_user_invite_code']) ? $_SESSION['weixin_user_invite_code'] : '',
             'parent_mobile' => '',
             'mobile' => ''
         );

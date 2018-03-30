@@ -7,6 +7,7 @@ use App\Common\ReturnData;
 use App\Common\Token;
 use App\Common\Helper;
 use App\Http\Model\User;
+use DB;
 
 class UserController extends CommonController
 {
@@ -182,14 +183,14 @@ class UserController extends CommonController
         $data['user_name'] = $request->input('user_name','');
         $data['password'] = $request->input('password','');
         $data['parent_id'] = $request->input('parent_id','');
-        $parent_mobile = $request->input('parent_mobile','');
+        $parent_mobile = $request->input('parent_mobile',null);
         
         if (($data['mobile']=='' && $data['user_name']=='') || $data['password']=='')
 		{
             return ReturnData::create(ReturnData::PARAMS_ERROR);
         }
         
-        if ($parent_mobile!='')
+        if ($parent_mobile!=null)
 		{
             if($user = User::getOneUser(array('mobile'=>$parent_mobile)))
             {
@@ -232,6 +233,7 @@ class UserController extends CommonController
     public function wxOauthRegister(Request $request)
 	{
         $data['openid'] = $request->input('openid','');
+        $data['unionid'] = $request->input('unionid','');
         $data['sex'] = $request->input('sex','');
         $data['head_img'] = $request->input('head_img','');
         $data['nickname'] = $request->input('nickname','');
@@ -239,6 +241,7 @@ class UserController extends CommonController
         $parent_mobile = $request->input('parent_mobile','');
         $data['mobile'] = $request->input('mobile','');
         $data['user_name'] = date('YmdHis').dechex(rand(1000,9999));
+        $data['password'] = md5('123456');
         
         if ($data['openid']=='')
 		{
@@ -280,6 +283,10 @@ class UserController extends CommonController
         {
             return ReturnData::create(ReturnData::SYSTEM_FAIL);
         }
+        
+        //更新用户名user_name，微信登录没有用户名
+        $uid = DB::table('user')->where(array('openid'=>$data['openid']))->value('id');
+        if($uid){User::modify(array('openid'=>$data['openid']),array('user_name'=>'a'.$uid));}
         
         return ReturnData::create(ReturnData::SUCCESS,User::wxLogin(array('openid'=>$data['openid'])));
     }

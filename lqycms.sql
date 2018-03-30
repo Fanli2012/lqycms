@@ -325,14 +325,16 @@ CREATE TABLE `fl_feedback` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `content` text NOT NULL COMMENT '意见反馈内容',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '添加时间',
-  `user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
-  `title` varchar(150) NOT NULL DEFAULT '' COMMENT '标题',
+  `user_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
+  `title` varchar(150) NOT NULL DEFAULT '' COMMENT '标题，选填',
+  `mobile` varchar(20) NOT NULL DEFAULT '' COMMENT '手机号码，选填',
+  `type` varchar(20) NOT NULL DEFAULT '' COMMENT '意见反馈类型，选填',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='意见反馈表';
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 /*Data for the table `fl_feedback` */
 
-insert  into `fl_feedback`(`id`,`content`,`created_at`,`user_id`,`title`) values (1,'发过火对光反射','2017-07-27 14:13:31',127,''),(3,'content六角恐龙','2017-08-08 15:46:49',1,'title螺丝款计划');
+insert  into `fl_feedback`(`id`,`content`,`created_at`,`user_id`,`title`,`mobile`,`type`) values (1,'发过火对光反射','2017-07-27 14:13:31',127,'','',''),(3,'content六角恐龙','2017-08-08 15:46:49',1,'title螺丝款计划','',''),(4,'asfa','2018-03-30 11:40:44',3,'','',''),(5,'sdgsd','2018-03-30 11:43:06',3,'','15280719685','积分/优惠券'),(6,'dgsg','2018-03-30 11:43:33',3,'','','购物流程');
 
 /*Table structure for table `fl_friendlink` */
 
@@ -876,11 +878,11 @@ CREATE TABLE `fl_sysconfig` (
   `is_show` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否显示，默认0显示，让客户看不到',
   PRIMARY KEY (`id`),
   UNIQUE KEY `varname` (`varname`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='系统参数配置表';
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='系统参数配置表';
 
 /*Data for the table `fl_sysconfig` */
 
-insert  into `fl_sysconfig`(`id`,`varname`,`info`,`value`,`is_show`) values (1,'CMS_WEBNAME','网站名称','LQYCMS企业建站系统',0),(2,'CMS_BASEHOST','站点根网址','http://www.lqycms.com',0),(3,'CMS_UPLOADS','图片/上传文件默认路径','/uploads',0),(4,'CMS_CSS','css默认存放路径','/css',0),(5,'CMS_JS','js默认存放路径','/js',0),(6,'CMS_INDEXNAME','主页链接名','首页',0),(7,'CMS_POWERBY','网站版权信息','Copyright &copy; LQYCMS 版权所有',0),(8,'CMS_IMGWIDTH','缩略图默认宽度','240',0),(9,'CMS_IMGHEIGHT','缩略图默认高度','180',0),(10,'CMS_SEOTITLE','网站seotitle','lqycms是一套完全免费、开源、无授权限制的网站管理系统',0),(11,'CMS_KEYWORDS','网站关键词Keywords','lqycms,无授权限制网站系统cms,免费cms系统,开源网站管理系统,开源cms',0),(12,'CMS_DESCRIPTION','网站描述','lqycms完全免费、开源、无授权限制，您可以使用lqycms在任何商业或者非商业网站上使用而不必支付任何费用，系统采用主流的mvc架构开发，更加容易进行二次开发。',0),(13,'CMS_ISCACHE','是否开启缓存，1开启，0关闭','1',0),(14,'CMS_MAXARC','最大返回列表结果数，默认300','300',0),(15,'CMS_PAGESIZE','列表每页显示的数量，默认15','15',0),(16,'CMS_SIGN_POINT','签到积分','5',0),(17,'CMS_WX_APPID','微信appid','wx2ac97c40c4050e24',0),(18,'CMS_WX_APPSECRET','微信appsecret','a0aad71844bbacbe8928447741c82a43',0),(19,'CMS_WX_MCHID','微信支付商户号','1331184301',0),(20,'CMS_WXSHAER_TITLE','微信分享标题','微信分享测试-标题',0),(21,'CMS_WXSHAER_DESC','微信分享描述','微信分享描述',0),(22,'CMS_WXSHAER_LINK','微信分享链接','http://www.lqycms.com/weixin',0),(23,'CMS_WXSHAER_IMGURL','微信分享图标','http://www.lqycms.com/images/weixin/no_user.jpg',0),(24,'CMS_MIN_WITHDRAWAL_MONEY','最低提现金额(元)','100',0),(25,'CMS_SHOPPING_POINT','购物赠送积分','10',0);
+insert  into `fl_sysconfig`(`id`,`varname`,`info`,`value`,`is_show`) values (1,'CMS_WEBNAME','网站名称','LQYCMS企业建站系统',0),(2,'CMS_BASEHOST','站点根网址','http://www.lqycms.com',0),(3,'CMS_UPLOADS','图片/上传文件默认路径','/uploads',0),(4,'CMS_CSS','css默认存放路径','/css',0),(5,'CMS_JS','js默认存放路径','/js',0),(6,'CMS_INDEXNAME','主页链接名','首页',0),(7,'CMS_POWERBY','网站版权信息','Copyright &copy; LQYCMS 版权所有',0),(8,'CMS_IMGWIDTH','缩略图默认宽度','240',0),(9,'CMS_IMGHEIGHT','缩略图默认高度','180',0),(10,'CMS_SEOTITLE','网站seotitle','lqycms是一套完全免费、开源、无授权限制的网站管理系统',0),(11,'CMS_KEYWORDS','网站关键词Keywords','lqycms,无授权限制网站系统cms,免费cms系统,开源网站管理系统,开源cms',0),(12,'CMS_DESCRIPTION','网站描述','lqycms完全免费、开源、无授权限制，您可以使用lqycms在任何商业或者非商业网站上使用而不必支付任何费用，系统采用主流的mvc架构开发，更加容易进行二次开发。',0),(13,'CMS_ISCACHE','是否开启缓存，1开启，0关闭','1',0),(14,'CMS_MAXARC','最大返回列表结果数，默认300','300',0),(15,'CMS_PAGESIZE','列表每页显示的数量，默认15','15',0),(16,'CMS_SIGN_POINT','签到积分','5',0),(17,'CMS_WX_APPID','微信appid','wx2ac97c40c4050e24',0),(18,'CMS_WX_APPSECRET','微信appsecret','a0aad71844bbacbe8928447741c82a43',0),(19,'CMS_WX_MCHID','微信支付商户号','1331184301',0),(20,'CMS_WXSHAER_TITLE','微信分享标题','微信分享测试-标题',0),(21,'CMS_WXSHAER_DESC','微信分享描述','微信分享描述',0),(22,'CMS_WXSHAER_LINK','微信分享链接','http://www.lqycms.com/weixin',0),(23,'CMS_WXSHAER_IMGURL','微信分享图标','http://www.lqycms.com/images/weixin/no_user.jpg',0),(24,'CMS_MIN_WITHDRAWAL_MONEY','最低提现金额(元)','100',0),(25,'CMS_SHOPPING_POINT','购物赠送积分','10',0),(26,'CMS_COMMISSION_PERCENT','推介赚钱计划-提成比例(5%)','0.05',0);
 
 /*Table structure for table `fl_tagindex` */
 
@@ -934,11 +936,11 @@ CREATE TABLE `fl_token` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `expired_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='token表';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='token表';
 
 /*Data for the table `fl_token` */
 
-insert  into `fl_token`(`id`,`token`,`type`,`uid`,`data`,`created_at`,`expired_at`) values (1,'72d623d26a1a6d61186a97f9ccf752f7',1,1,'','2017-08-07 13:29:01','2018-05-22 11:15:27'),(2,'70a0c1ba8fb4a4c394dd2bdf7d6106ec',2,3,'','2018-03-09 12:22:03','2018-04-08 12:22:03');
+insert  into `fl_token`(`id`,`token`,`type`,`uid`,`data`,`created_at`,`expired_at`) values (1,'72d623d26a1a6d61186a97f9ccf752f7',1,1,'','2017-08-07 13:29:01','2018-05-22 11:15:27'),(2,'70a0c1ba8fb4a4c394dd2bdf7d6106ec',2,3,'','2018-03-09 12:22:03','2018-04-08 12:22:03'),(3,'0ecd2dd522d64f10d39ba95d4fb6adc2',2,3,'','2018-03-30 14:38:19','2018-04-29 14:38:19');
 
 /*Table structure for table `fl_user` */
 
@@ -969,7 +971,7 @@ CREATE TABLE `fl_user` (
   `updated_at` timestamp NULL DEFAULT NULL COMMENT '更新时间',
   `signin_time` timestamp NULL DEFAULT NULL COMMENT '签到时间',
   `openid` varchar(100) NOT NULL DEFAULT '' COMMENT 'openid',
-  `unionid` varchar(100) NOT NULL DEFAULT '' COMMENT 'unionid',
+  `unionid` varchar(128) NOT NULL DEFAULT '' COMMENT 'unionid',
   `push_id` varchar(30) NOT NULL DEFAULT '' COMMENT '推送id',
   `refund_account` varchar(30) NOT NULL DEFAULT '' COMMENT '退款账户，支付宝账号',
   `refund_name` varchar(20) NOT NULL DEFAULT '' COMMENT '退款姓名',
@@ -1073,7 +1075,7 @@ CREATE TABLE `fl_user_money` (
   `type` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0增加,1减少',
   `money` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '金额',
   `add_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '添加时间',
-  `des` varchar(250) NOT NULL DEFAULT '' COMMENT '描述',
+  `des` varchar(100) NOT NULL DEFAULT '' COMMENT '描述',
   `user_money` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '余额，每次增减后面的金额记录',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='用户余额明细';

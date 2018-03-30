@@ -35,6 +35,8 @@ class FeedBackController extends CommonController
         //参数
         $data['content'] = $request->input('content',null);
         if($request->input('title', null) !== null){$data['title'] = $request->input('title');}
+        if($request->input('mobile', null) !== null){$data['mobile'] = $request->input('mobile');}
+        if($request->input('type', null) !== null){$data['type'] = $request->input('type');}
         $data['user_id'] = Token::$uid;
         
         if($data['content']===null)

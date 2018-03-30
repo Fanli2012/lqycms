@@ -253,451 +253,415 @@ margin:5px 0
 .signup-find span,.radio span {font-size:24px;cursor: pointer}
 
 .sc_list {
-    padding:10px;
-    overflow: hidden;
-    border-bottom: 1px solid #f8f8f8
+padding:10px;
+overflow: hidden;
+border-bottom: 1px solid #f8f8f8
 }
 .sc_list .radio-img{
-    width:120px;
-    height:80px;
-    float: left;
-    margin-right:5px;
-    display: block;
+width:120px;
+height:80px;
+float: left;
+margin-right:5px;
+display: block;
 }
 .sc_list .radio {
-    padding-top:24px;
-    margin-right:10px;
+padding-top:24px;
+margin-right:10px;
 }
 
 .sc_list .shopimg img {
-    width:80px;
-    height:80px;
+width:80px;
+height:80px;
 }
 
 .sc_list .deleshow .deletes {
-    position: relative;
+position: relative;
 }
 .sc_list .deleshow .deletes .tit{
-    padding-right:28px;
-    font-size: 1rem;
-    height:28px;overflow: hidden;
-    line-height:28px;
+padding-right:28px;
+font-size: 1rem;
+height:28px;overflow: hidden;
+line-height:28px;
 }
 
 .sc_list .deleshow .deletes a.delescj {
-    position: absolute;
-    top:4px;
-    right:0;
+position: absolute;
+top:4px;
+right:0;
 }
 
 .sc_list .deleshow .deletes a.delescj img {
-    width:18px;
-    height:18px;
+width:18px;
+height:18px;
 }
 
 .sc_list .deleshow .weight {
-    font-size:16px;
-    color:#999999
+font-size:16px;
+color:#999999
 }
 
 .sc_list .deleshow .prices {
-    overflow: hidden;
-    margin-top:8px;
+overflow: hidden;
+margin-top:8px;
 }
 
 .sc_list .deleshow .prices .sc_pri {
-    color: #f23030;
-    font-size:18px;
+color: #f23030;
+font-size:18px;
 }
 
 .plus span {
-    width:28px;
-    height:28px;
-    line-height:28px;
-    font-size:16px;
-    display: block;
-    float: left;
-    border: 1px solid #f1f1f1;
-    margin-left: -1px;
-    text-align:center;
-    color: #686868;
-    cursor: pointer
+width:28px;
+height:28px;
+line-height:28px;
+font-size:16px;
+display: block;
+float: left;
+border: 1px solid #f1f1f1;
+margin-left: -1px;
+text-align:center;
+color: #686868;
+cursor: pointer
 }
 
 .plus span input {
-    font-size:14px;
-    outline: none;
-    border: 0;
-    color: #686868;
-    width: 100%;
-    text-align: center
+font-size:14px;
+outline: none;
+border: 0;
+color: #686868;
+width: 100%;
+text-align: center
 }
 
 .payallb {
-    position: fixed;
-    z-index: 99;
-    bottom: 0;
-    background-color: #f3f5f7
+position: fixed;
+z-index: 99;
+bottom: 0;
+background-color: #f3f5f7
 }
 
 .payallb .radio {
-    padding-top:14px;
-    margin-right:8px;
+padding-top:14px;
+margin-right:8px;
 }
 
 .payallb .radio .all {
-    font-size:14px;
-    position: relative;
-    top:-12px;
-    margin-left:6px
+font-size:14px;
+position: relative;
+top:-12px;
+margin-left:6px
 }
 
 .payallb .youbia {
-    overflow: hidden;line-height:52px;
+overflow: hidden;line-height:52px;
 }
 
 .payallb .youbia p {
-    text-align: right;margin-right:10px;
+text-align: right;margin-right:10px;
 }
 .payit {border-top:1px solid #efefef;
-    height:52px;width:100%;
-    background-color: white;
-    overflow: hidden;
-    padding-left:10px;
+height:52px;width:100%;
+background-color: white;
+overflow: hidden;
+padding-left:10px;
 }
 
 .payit .fl {
-    line-height:40px;
+line-height:40px;
 }
 
 .payit .youbia p {
-    font-size:16px;
-    color: #f23030
+font-size:16px;
+color: #f23030
 }
 
 .payit .youbia p .pmo {
-    color: #222222
+color: #222222
 }
 
 .payit .youbia .lastime {
-    color: #666666
+color: #666666
 }
 
 .payit .fr {
-    width:120px;
+width:120px;
 }
 
 .payit .fr a {
-    color: white;
-    font-size:18px;
-    text-align: center;
-    background-color: #f23030;
-    display: block;
-    height:52px;line-height:52px;
+color: white;
+font-size:18px;
+text-align: center;
+background-color: #f23030;
+display: block;
+height:52px;line-height:52px;
 }
 
 .myhearder {
-    position: relative;
-    height:180px;
+position: relative;
+/* height:180px; */
 }
 .myhearder .user_bg{position: absolute;left: 0;top: 0;z-index:-999;}
 
 .myhearder .person {
-    position: absolute;
-    top:40px;
-    left:20px
+text-align:center;
 }
 
 .myhearder .person .personicon {
-    -moz-border-radius: 50%;
-    -webkit-border-radius: 50%;
-    border-radius: 50%;
-    overflow: hidden;
-    width:72px;
-    height:72px;
+
 }
 
 .myhearder .person .personicon img {
-    width:72px;
-    height:72px;
+width:72px;
+height:72px;margin-bottom:10px;margin-top:50px;
+-moz-border-radius: 50%;
+-webkit-border-radius: 50%;
+border-radius: 50%;
 }
 
-.myhearder .person .lors {
-    margin-top:10px;
-    margin-left:8px;
-    color: #fff;
-    font-size:18px;
-    width: 220px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis
+.myhearder .person .lors{
+color:#fff;
+font-size:16px;
+padding-bottom:25px;
 }
 
 .myhearder .set {
-    position: absolute;
-    right:15px;
-    top:15px
+position: absolute;
+right:15px;
+top:15px
 }
 
 .myhearder .set a {
-    display: block;
-    float: left
+display: block;
+float: left
 }
 
 .myhearder .set a i {
-    background-image: url("../../images/weixin/set.png");
-    background-repeat: no-repeat;
-    background-size: cover;
-    width:28px;
-    height:28px;
-    display: block;
+background-image: url("../../images/weixin/set.png");
+background-repeat: no-repeat;
+background-size: cover;
+width:28px;
+height:28px;
+display: block;
 }
 
 .myhearder .set .setting i {
-    background-position: 0 0
+background-position: 0 0
 }
 
 .myhearder .set .massage {
-    margin-left:15px;
+margin-left:15px;
 }
 
 .myhearder .set .massage i {
-    background-position: -38px 0;
+background-position: -38px 0;
 }
 
 .myhearder .scgz {
-    position: absolute;
-    bottom: 0;
-    width: 100%
+position: absolute;
+bottom: 0;
+width: 100%
 }
 
 .myhearder .scgz ul li {
-    float: left;
-    text-align: center;
-    width: 50%
+float: left;
+text-align: center;
+width: 50%
 }
 
 .myhearder .scgz ul li a h2 {
-    font-size:18px;
-    font-weight: normal;
-    height:24px;
-    line-height:24px;
-    color: #fff
+font-size:18px;
+font-weight: normal;
+height:24px;
+line-height:24px;
+color: #fff
 }
 
 .myhearder .scgz ul li a p {
-    font-size:14px;
-    color: #fff;
-    margin-bottom:5px;
+font-size:14px;
+color: #fff;
+margin-bottom:5px;
 }
 
 .bankhearder {
-    background-image: url(../../images/zjgl.jpg);
-    height: 11.73333rem
+background-image: url(../../images/zjgl.jpg);
+height: 11.73333rem
 }
 
 .bankhearder .hh {
-    color: white;
-    text-align: center;
-    padding-top: 3.2rem
+color: white;
+text-align: center;
+padding-top: 3.2rem
 }
 
 .bankhearder .hh h2 {
-    font-size: .64rem;
-    font-weight: normal
+font-size: .64rem;
+font-weight: normal
 }
 
 .bankhearder .hh h1 {
-    font-size: .768rem;
-    font-weight: normal
+font-size: .768rem;
+font-weight: normal
 }
 
 .bankhearder .scgz ul li {
-    position: relative;
-    top: -.64rem
+position: relative;
+top: -.64rem
 }
 
 .bankhearder .scgz ul li a img {
-    display: inline-block;
-    width: .59733rem;
-    height: .59733rem
+display: inline-block;
+width: .59733rem;
+height: .59733rem
 }
 
 .bankhearder .scgz ul li a p {
-    display: inline-block;
-    position: relative;
-    top: .10667rem
+display: inline-block;
+position: relative;
+top: .10667rem
 }
 .myorder {
-    padding:0 20px;
-    height:44px;
-    line-height:44px;
-    background-color: #fff;
-    border-bottom: 1px solid #f4f4f4
+padding:0 20px;
+height:44px;
+line-height:44px;
+background-color: #fff;
+border-bottom: 1px solid #f4f4f4
 }
 
 .myorder a {
-    overflow: hidden;
-    display: block
+overflow: hidden;
+display: block
 }
 
-.myorder .order {
-    overflow: hidden
-}
+.myorder .order {overflow: hidden}
 
-.myorder .order .fl img {
-    width:20px;
-    height:22px;
-    vertical-align: middle
-}
+.myorder .order .fl img {width:20px;/* height:22px; */height:20px;vertical-align: middle}
 
-.myorder .order .fl span {
-    font-size:18px;
-    vertical-align: middle;
-    font-weight: normal;
-    margin-left:5px
-}
+.myorder .order .fl span {font-size:18px;vertical-align: middle;font-weight: normal;margin-left:5px}
 
-.myorder .order .fr a {
-    display: block;
-    overflow: hidden
-}
-
-.myorder .order .fr span {
-    font-size:14px;
-    color: #4c4c4c;
-    float: left;
-}
-
-.myorder .order .fr i {
-    margin-top:14px;
-    margin-left:8px
-}
+.myorder .order .fr a {display:block;overflow:hidden}
+.myorder .order .fr span {font-size:14px;color:#9b9b9b;/* color: #4c4c4c; */float:left;}
+.myorder .order .fr i {margin-top:14px;margin-left:8px}
 .list7 .myorder {
-    height:50px;
-    line-height:50px;
+height:50px;
+line-height:50px;
 }
 .list7 .myorder .fr i {
-    margin-top:18px;
+margin-top:18px;
 }
 .Mright {
-    background-image: url(../../images/weixin/yr.png);
-    background-repeat: no-repeat;
-    background-size: cover;
-    width:8px;
-    height:15px;
-    display: block;
-    float: left;
+background-image: url(../../images/weixin/yr.png);
+background-repeat: no-repeat;
+background-size: cover;
+width:8px;
+height:15px;
+display: block;
+float: left;
 }
 .my {background-color: #f1f1f1;}
-
-.my .content {
-    margin: 0
-}
-
+.my .content {margin: 0}
 .my .content .floor {
-    background-color: #fff
+background-color: #fff
 }
 
 .my .content .floor ul .fr {
-    float: right
+float: right
 }
 
 .my .content .floor ul li.br {
-    border-left: 0 !important
+border-left: 0 !important
 }
 
 .my .content .floor ul li.br:before {
-    content: "";
-    background-image: inherit !important
+content: "";
+background-image: inherit !important
 }
 
 .my .content .floor ul li {
-    position: relative;
-    float: left;
-    width: 25%;
-    text-align: center
+position: relative;
+float: left;
+width: 25%;
+text-align: center
 }
 
 .my .content .floor ul li a {
-    padding:15px 0 20px 0;
-    display: block
+padding:15px 0 20px 0;
+display: block
 }
 
 .my .content .floor ul li a span {
-    background-color: rgba(217,81,99,0.9);
-    border-radius: 50%;
-    font-size:14px;
-    width:24px;
-    height:24px;
-    display: block;
-    line-height:24px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    position: absolute;
-    right:15px;
-    top:8px;
-    color: white
+background-color: rgba(217,81,99,0.9);
+border-radius: 50%;
+font-size:14px;
+width:24px;
+height:24px;
+display: block;
+line-height:24px;
+overflow: hidden;
+white-space: nowrap;
+text-overflow: ellipsis;
+position: absolute;
+right:15px;
+top:8px;
+color: white
 }
 
 .my .content .floor ul li a img {
-    height:36px
+height:36px
 }
 
 .my .content .floor ul li a .tit{
-    font-size:18px;
-    font-weight: normal;
-    height:32px;
-    line-height:32px;
-    color: #e3110b
+font-size:18px;
+font-weight: normal;
+height:32px;
+line-height:32px;
+color: #e3110b
 }
 
 .my .content .floor ul li a p {
-    font-size:12px;
-    margin-top:2px;
-    color: #4c4c4c;
-    font-weight: normal
+font-size:12px;
+margin-top:2px;
+color: #4c4c4c;
+font-weight: normal
 }
 
 .my .content .floor ul li a p.or:after {
-    content: "";
-    background-image: url(../../images/weixin/or.png);
-    width: .17067rem;
-    height: .29867rem;
-    background-repeat: no-repeat;
-    position: absolute;
-    margin-top: .08533rem;
-    margin-left: .04267rem;
-    background-size: .17067rem
+content: "";
+background-image: url(../../images/weixin/or.png);
+width: .17067rem;
+height: .29867rem;
+background-repeat: no-repeat;
+position: absolute;
+margin-top: .08533rem;
+margin-left: .04267rem;
+background-size: .17067rem
 }
 
 .my .content .w3 {
-    width: inherit
+width: inherit
 }
 
 .my .content .w3 ul li {
-    width: 33.33333%
+width: 33.33333%
 }
 
 .my .content .action {
-    background-image: url(../../images/weixin/rb.png);
-    background-repeat: no-repeat;
-    background-position: 0 1.96267rem;
-    width: 100%;
-    background-size: 16rem
+background-image: url(../../images/weixin/rb.png);
+background-repeat: no-repeat;
+background-position: 0 1.96267rem;
+width: 100%;
+background-size: 16rem
 }
 
 .my .content .action ul li {
-    width: 25%
+width: 25%
 }
 
 .my .content .tyby {
-    background-image: inherit
+background-image: inherit
 }
 
 .setting .close {
-    margin:15px 20px
+margin:15px 20px
 }
 
 .setting .close a{display: block;background: #ec5151;text-align: center;padding:10px;color: #fff;font-size:18px;border-radius:2px;}
@@ -722,89 +686,89 @@ h1.arc_tit, h2.arc_tit{font-weight: normal;font-size: 1.4em;padding: 10px;}
 
 /*商品详情*/
 .goods-header {
-    display: block;
-    height: auto;
-    padding: 10px 0 0;
-    -webkit-tap-highlight-color: transparent;
-    border-top: 1px solid #f2f2f2;
-    background-color: #fff;
-    margin-bottom: 10px;
-    position: relative;
+display: block;
+height: auto;
+padding: 10px 0 0;
+-webkit-tap-highlight-color: transparent;
+border-top: 1px solid #f2f2f2;
+background-color: #fff;
+margin-bottom: 10px;
+position: relative;
 }
 .goods-header .title {
-    font-weight: normal;
-    padding: 0 10px;
-    font-size:18px;
-    line-height: 1.3;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
+font-weight: normal;
+padding: 0 10px;
+font-size:18px;
+line-height: 1.3;
+display: -webkit-box;
+-webkit-line-clamp: 2;
+-webkit-box-orient: vertical;
 }
 .goods-header .wish-add {
-    position: relative;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    color:#ea6f5a;
-    background-color: transparent;
-    border: 1px solid #ea6f5a;
-    border-radius:2px;
-    font-size:14px;
-    padding:0 3px;
-    display: inline-block;
-    margin-right:10px;
+position: relative;
+-webkit-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+color:#ea6f5a;
+background-color: transparent;
+border: 1px solid #ea6f5a;
+border-radius:2px;
+font-size:14px;
+padding:0 3px;
+display: inline-block;
+margin-right:10px;
 }
 .goods-header .wish-add-activate{color:#fff;background-color:#ea6f5a;}
 .goods-header .goods-price {
-    padding: 10px 10px 2px;
-    text-align: left;
+padding: 10px 10px 2px;
+text-align: left;
 }
 .goods-header .current-price {
-    color: #f60;
-    display: inline-block;
+color: #f60;
+display: inline-block;
 }
 .goods-header .current-price span {
-    font-size: 16px;
-    display: inline-block;
-    vertical-align: middle;
+font-size: 16px;
+display: inline-block;
+vertical-align: middle;
 }
 .goods-header .current-price .price {
-    display: inline-block;
-    vertical-align: middle;
-    font-size: 20px;
+display: inline-block;
+vertical-align: middle;
+font-size: 20px;
 }
 .goods-header .btn-retail {
-    padding: 0 3px;
-    border-radius:2px;
-    color: #fff;
-    background-color: #1cbb7f;
-    display: inline-block;
-    text-align: center;
-    font-size: 12px;
-    cursor: pointer;
-    line-height: 1.5;
-    -webkit-appearance: none;
+padding: 0 3px;
+border-radius:2px;
+color: #fff;
+background-color: #1cbb7f;
+display: inline-block;
+text-align: center;
+font-size: 12px;
+cursor: pointer;
+line-height: 1.5;
+-webkit-appearance: none;
 }
 .goods-header .stock-detail {
-    position: relative;
-    line-height:1.5;
-    color: #999;
-    background-color: #fff;
-    padding:5px 10px;
+position: relative;
+line-height:1.5;
+color: #999;
+background-color: #fff;
+padding:5px 10px;
 }
 .goods-header .stock-detail dl {display:table-cell;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    font-size: 14px;
-    zoom: 1;
+margin-top: 10px;
+margin-bottom: 10px;
+font-size: 14px;
+zoom: 1;
 }
 .goods-header .stock-detail dt {
-    display: inline-block;
+display: inline-block;
 }
 .goods-header .stock-detail dd {
-    display: inline-block;
-    word-wrap: break-word;
+display: inline-block;
+word-wrap: break-word;
 }
 .goods-header .goods-comment{margin-top:10px;border-top:10px solid #f1f1f1;height: 44px;line-height: 44px;padding: 0 10px 0 10px;}
 .goods-header .goods-comment span{float:right;color:#999;}
@@ -879,57 +843,57 @@ top: 0;
 
 .cart_sum{color:#ff5000; font-size:16px; font-weight:700;}
 .goods_type {
-    display: block;
-    line-height: 20px;
-    color: #999;
-    margin: 0;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
+display: block;
+line-height: 20px;
+color: #999;
+margin: 0;
+white-space: nowrap;
+text-overflow: ellipsis;
+overflow: hidden;
 }
 .pop_num {
-    margin-left: 10px;margin-right: 10px;
-    height: 48px;
-    display: block;
-    border-bottom: 1px solid #e1e1e1;border-top: 1px solid #e1e1e1;
+margin-left: 10px;margin-right: 10px;
+height: 48px;
+display: block;
+border-bottom: 1px solid #e1e1e1;border-top: 1px solid #e1e1e1;
 }
 .pop_num span{ color:#999; display:inline-block; float:left; line-height:48px;}
 .pop_sum{ display:inline-block; float:left; margin-left:15px; margin-top:5px; position:relative !important;}
 .pop_btn{ margin-top:10px; margin-bottom:10px;}
 .cart_num_control {
-    border: 1px solid #DADADA;
-    height: 24px;
-    display: inline-block;
-    margin: 7px 0px;
+border: 1px solid #DADADA;
+height: 24px;
+display: inline-block;
+margin: 7px 0px;
 }
 .cart_num_button {
-    width: 24px;
-    height: 24px;
-    display: inline-block;
-    border: 0px solid #DADADA;
-    text-decoration: none;
-    color: #585858;
-    font-size: 16px;
-    background-color: #f0f0f0;
+width: 24px;
+height: 24px;
+display: inline-block;
+border: 0px solid #DADADA;
+text-decoration: none;
+color: #585858;
+font-size: 16px;
+background-color: #f0f0f0;
 }
 .cart_num_text {
-    width: 24px;
-    text-align: center;
-    font-size: 12px;
-    height: 16px;
-    display: inline-block;
-    border: 0px solid #DADADA;
+width: 24px;
+text-align: center;
+font-size: 12px;
+height: 16px;
+display: inline-block;
+border: 0px solid #DADADA;
 }
 .registered_btn {
-    display: block;
-    margin:10px;
-    height: 42px;
-    line-height: 42px;
-    background-color: #ff5000;
-    text-align: center;
-    border-radius:2px;
-    color: #fff;
-    font-size: 16px;
+display: block;
+margin:10px;
+height: 42px;
+line-height: 42px;
+background-color: #ff5000;
+text-align: center;
+border-radius:2px;
+color: #fff;
+font-size: 16px;
 }
 
 .banner_headline{height:30px;overflow:hidden;background-color:#f1f1f1;padding-bottom:20px;}

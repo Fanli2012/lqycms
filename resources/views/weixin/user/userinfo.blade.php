@@ -248,7 +248,7 @@ function qrcode_layer()
 {
     //询问框
     layer.open({
-        content: '<div><div><img style="width:100%;" class="imgzsy" src="<?php echo get_erweima(route('weixin',array('invite_code'=>$_SESSION['weixin_user_info']['mobile'])),240); ?>"></div><p style="color:#999;">扫一扫，你懂得</p></div>'
+        content: '<div><div><img style="width:100%;" class="imgzsy" src="<?php echo get_erweima(route('weixin',array('invite_code'=>$_SESSION['weixin_user_info']['id'])),240); ?>"></div><p style="color:#999;">扫一扫，你懂得</p></div>'
     });
 }
 </script>

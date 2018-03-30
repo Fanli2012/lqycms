@@ -184,6 +184,7 @@ class User extends BaseModel
         if(isset($password)){$data['password'] = $password;} //md5加密
         if(isset($parent_id) && !empty($parent_id)){$data['parent_id'] = $parent_id;}
         if(isset($openid)){$data['openid'] = $openid;}
+        if(isset($unionid)){$data['unionid'] = $unionid;}
         if(isset($sex)){$data['sex'] = $sex;}
         if(isset($head_img)){$data['head_img'] = $head_img;}
         if(isset($nickname)){$data['nickname'] = $nickname;}
@@ -242,6 +243,13 @@ class User extends BaseModel
         }
         
         return $res;
+    }
+    
+    //描述-文字
+    public function getSexAttr($data)
+    {
+        $arr = [0 => '不限', 1 => '黑色', 2 => '白色', 3 => '银色', 4 => '橙色', 5 => '绿色', 6 => '红色', 7 => '蓝色', 8 => '紫色', 9 => '黄色', 10 => '香槟色', 11 => '咖啡色'];
+        return $arr[$data['des']];
     }
     
     //获取用户状态文字：1正常 2 删除 3锁定

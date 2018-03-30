@@ -41,7 +41,7 @@
             <input type="password" name="re_password" class="" id="re_password" placeholder="确认密码">
         </div>
         <div class="adr-form-group">
-            <input value="<?php if(isset($_SESSION['weixin_user_invite_code'])){echo $_SESSION['weixin_user_invite_code'];} ?>" type="text" name="parent_mobile" class="" id="parent_mobile" placeholder="请输入推荐人手机号，选填">
+            <input value="<?php if(isset($_SESSION['weixin_user_invite_code'])){echo $_SESSION['weixin_user_invite_code'];} ?>" type="text" name="parent_id" class="" id="parent_id" placeholder="请输入推荐码，选填">
         </div>
     </div>
     </form>
@@ -60,7 +60,7 @@ function submit()
     var mobile = $("#mobile").val();
     var password = $("#password").val();
     var re_password = $("#re_password").val();
-    var parent_mobile = $("#parent_mobile").val();
+    var parent_id = $("#parent_id").val();
     
     if(user_name == '')
     {
@@ -118,7 +118,7 @@ function submit()
     }
     
     //$("#login").submit();
-    $.post('<?php echo env('APP_API_URL').'/wx_register'; ?>',{user_name:user_name,mobile:mobile,parent_mobile:parent_mobile,password:md5(password)},function(res)
+    $.post('<?php echo env('APP_API_URL').'/wx_register'; ?>',{user_name:user_name,mobile:mobile,parent_id:parent_id,password:md5(password)},function(res)
 	{
 		if(res.code==0)
 		{
