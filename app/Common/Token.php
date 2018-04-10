@@ -29,7 +29,7 @@ class Token
      */
     public static function checkToken($token)
     {
-        $token = DB::table('token')->where('token', $token)->first();
+        $token = DB::table('token')->where(array('token'=>$token))->first();
 		
         if ($token)
 		{

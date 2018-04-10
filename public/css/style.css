@@ -64,6 +64,7 @@ a{color:#313131;text-decoration:none;}a:hover{text-decoration:none;color:#22ac38
 .ju-naver .nav-menu li {display: inline-block;position: relative;margin-right: 2px;}
 .ju-naver .nav-menu a {color: #4A4A4A;font-size: 16px;position: relative;padding:2px 6px;-webkit-border-radius: 3px;-webkit-background-clip: padding-box;-moz-border-radius: 3px;-moz-background-clip: padding;border-radius: 3px;background-clip: padding-box;}
 .ju-naver .nav-menu a:hover {background-color: #EDEDED;}
+.ju-naver .nav-menu .current a, .ju-naver .nav-menu .current a:hover{background-color: #E61414;color: #fff;}
 
 #slideBox{width:740px;height:347px;overflow:hidden;position:relative;}
 #slideBox ul#show_pic{margin:0;padding:0;list-style:none;width:7400px;height:347px;position:absolute;}

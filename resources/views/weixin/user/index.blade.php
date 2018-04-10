@@ -5,14 +5,12 @@
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/weixin/mobile.js"></script></head><body>
 <div class="myhearder" style="background:#ec5151;color:#fff;">
     <div class="person">
-        <a href="<?php echo route('weixin_userinfo'); ?>">
-            <div class="personicon">
-                <img src="<?php echo $user_info['head_img']; ?>" onerror="this.src='<?php echo env('APP_URL'); ?>/images/weixin/no_user.jpg'">
-            </div>
-            <div class="lors">
-                <?php if($user_info['user_name']){echo $user_info['user_name'];}else{echo $user_info['mobile'];} ?>
-            </div>
-        </a>
+        <div class="personicon">
+            <a href="<?php echo route('weixin_userinfo'); ?>"><img src="<?php echo $user_info['head_img']; ?>" onerror="this.src='<?php echo env('APP_URL'); ?>/images/weixin/no_user.jpg'"></a>
+        </div>
+        <div class="lors">
+            <a style="color:#fff;" href="<?php echo route('weixin_userinfo'); ?>"><?php if($user_info['user_name']){echo $user_info['user_name'];}else{echo $user_info['mobile'];} ?></a>
+        </div>
     </div>
     <div class="set">
         <!--设置-->

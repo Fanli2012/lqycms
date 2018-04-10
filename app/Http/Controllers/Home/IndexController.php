@@ -63,6 +63,32 @@ class IndexController extends CommonController
 		$data['counts'] = $counts;
 		$start = $page*$pagesize;
 		
+        //排序
+        if($request->input('orderby', null) != null)
+        {
+            switch ($request->input('orderby'))
+            {
+                case 1:
+                    $goods = $goods->orderBy('sale','desc'); //销量从高到低
+                    break;
+                case 2:
+                    $goods = $goods->orderBy('comments','desc'); //评论从高到低
+                    break;
+                case 3:
+                    $goods = $goods->orderBy('price','desc'); //价格从高到低
+                    break;
+                case 4:
+                    $goods = $goods->orderBy('price','asc'); //价格从低到高
+                    break;
+                case 5:
+                    $timestamp = time();
+                    $goods = $goods->where('promote_start_date','<=',$timestamp)->where('promote_end_date','>=',$timestamp); //促销商品
+                    break;
+                default:
+                    $goods = $goods->orderBy('pubdate','desc'); //最新
+            }
+        }
+        
         $posts = object_to_array($goods->skip($start)->take($pagesize)->get());
         
 		$data['posts'] = $posts; //获取列表
