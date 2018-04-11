@@ -35,6 +35,13 @@ class ArticleController extends CommonController
 		);
         $url = env('APP_API_URL')."/article_list";
 		$res = curl_request($url,$postdata2,'GET');
+        if($res['data']['list'])
+        {
+            foreach($res['data']['list'] as $k => $v)
+            {
+                $res['data']['list'][$k]['pubdate'] = date("Y-m-d H:i",$v['pubdate']);
+            }
+        }
         $data['list'] = $res['data']['list'];
         
         $data['totalpage'] = ceil($res['data']['count']/$pagesize);

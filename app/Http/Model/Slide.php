@@ -26,6 +26,7 @@ class Slide extends Model
         $model = new Slide;
         
         if(isset($group_id)){$where['group_id'] = $group_id;}
+        if(isset($type)){$where['type'] = $type;}
         
         if($where){$model = $model->where($where);}
         

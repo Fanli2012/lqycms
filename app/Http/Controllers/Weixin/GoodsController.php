@@ -41,15 +41,15 @@ class GoodsController extends CommonController
     //商品列表
     public function goodsList(Request $request)
 	{
-        if($request->input('typeid', '') != ''){$param['typeid'] = $request->input('typeid');}
-        if($request->input('tuijian', '') != ''){$param['tuijian'] = $request->input('tuijian');}
-        if($request->input('keyword', '') != ''){$param['keyword'] = $request->input('keyword');}
-        if($request->input('status', '') != ''){$param['status'] = $request->input('status');}
-        if($request->input('is_promote', '') != ''){$param['is_promote'] = $request->input('is_promote');}
-        if($request->input('orderby', '') != ''){$param['orderby'] = $request->input('orderby');}
-        if($request->input('max_price', '') != ''){$param['max_price'] = $request->input('max_price');}else{$param['max_price'] = 99999;}
-        if($request->input('min_price', '') != ''){$param['min_price'] = $request->input('min_price');}else{$param['min_price'] = 0;}
-        if($request->input('brand_id', '') != ''){$param['brand_id'] = $request->input('brand_id');}
+        if($request->input('typeid', null) != null){$param['typeid'] = $request->input('typeid');}
+        if($request->input('tuijian', null) != null){$param['tuijian'] = $request->input('tuijian');}
+        if($request->input('keyword', null) != null){$param['keyword'] = $request->input('keyword');}
+        if($request->input('status', null) != null){$param['status'] = $request->input('status');}
+        if($request->input('is_promote', null) != null){$param['is_promote'] = $request->input('is_promote');}
+        if($request->input('orderby', null) != null){$param['orderby'] = $request->input('orderby');}
+        if($request->input('max_price', null) != null){$param['max_price'] = $request->input('max_price');}else{$param['max_price'] = 99999;}
+        if($request->input('min_price', null) != null){$param['min_price'] = $request->input('min_price');}else{$param['min_price'] = 0;}
+        if($request->input('brand_id', null) != null){$param['brand_id'] = $request->input('brand_id');}
         
         //商品列表
         $postdata = $param;
@@ -68,7 +68,7 @@ class GoodsController extends CommonController
     public function categoryGoodsList(Request $request)
 	{
         $data['typeid'] = 0;
-        if($request->input('typeid', '') != ''){$data['typeid'] = $request->input('typeid');}
+        if($request->input('typeid', null) != null){$data['typeid'] = $request->input('typeid');}
         
         $pagesize = 10;
         $offset = 0;

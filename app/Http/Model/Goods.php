@@ -33,7 +33,7 @@ class Goods extends BaseModel
 	
     //常用字段
     protected static $common_field = array(
-        'id', 'typeid', 'tuijian', 'click', 'title', 'sn', 'price','litpic', 'pubdate', 'add_time', 'market_price', 'goods_number', 'sale', 'comments','promote_start_date','promote_price','promote_end_date','goods_img','spec','point'
+        'id', 'typeid', 'tuijian', 'click', 'title', 'description', 'sn', 'price','litpic', 'pubdate', 'add_time', 'market_price', 'goods_number', 'sale', 'comments','promote_start_date','promote_price','promote_end_date','goods_img','spec','point'
     );
     
     const STATUS = 0; //商品状态 0正常 1已删除 2下架 3申请上架

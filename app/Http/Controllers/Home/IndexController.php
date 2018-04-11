@@ -16,11 +16,67 @@ class IndexController extends CommonController
     public function index()
 	{
         //商品列表
-        $where['status'] = 0;
-        $data['goods_list'] = object_to_array(DB::table('goods')->where($where)->select('id','title','price','litpic','description','shipping_fee','market_price','goods_number','sale')->take(30)->orderBy('pubdate','desc')->get());
-        $data['goods_type_list'] = object_to_array(DB::table('goods_type')->where(['pid'=>0,'status'=>1])->select('id','name')->take(30)->orderBy('listorder','asc')->get());
-        $data['slide_list'] = object_to_array(DB::table('slide')->where(['group_id'=>0,'type'=>0,'is_show'=>0])->take(30)->orderBy('listorder','asc')->get());
-        $data['ztad_list'] = object_to_array(DB::table('slide')->where(['group_id'=>1,'type'=>0,'is_show'=>0])->take(30)->orderBy('listorder','asc')->get());
+        $pagesize = 15;
+        $offset = 0;
+        if(isset($_REQUEST['page'])){$offset = ($_REQUEST['page']-1)*$pagesize;}
+        
+        $postdata = array(
+            'status' => 0,
+            'limit'  => $pagesize,
+            'offset' => $offset
+		);
+        $url = env('APP_API_URL')."/goods_list";
+		$res = curl_request($url,$postdata,'GET');
+        $data['list'] = $res['data']['list'];
+        
+        $data['totalpage'] = ceil($res['data']['count']/$pagesize);
+        
+        if(isset($_REQUEST['page_ajax']) && $_REQUEST['page_ajax']==1)
+        {
+    		$html = '';
+            
+            if($res['data']['list'])
+            {
+                foreach($res['data']['list'] as $k => $v)
+                {
+                    $html .= '<li><a href="'.route('home_goods',array('id'=>$v['id'])).'" target="_blank"><img src="'.$v['litpic'].'" alt="'.$v['title'].'">';
+                    $html .= '<p class="title">'.$v['title'].'</p>';
+                    $html .= '<p class="desc"><span class="price-point"><i></i>库存('.$v['goods_number'].')</span> '.$v['description'].'</p>';
+                    $html .= '<div class="item-prices red"><div class="item-link">立即<br>抢购</div><div class="item-info"><div class="price"><i>¥</i><em class="J_actPrice"><span class="yen">'.ceil($v['price']).'</span></em></div>';
+                    $html .= '<div class="dock"><div class="dock-price"><del class="orig-price">¥'.$v['market_price'].'</del> <span class="benefit">包邮</span></div><div class="prompt"><div class="sold-num"><em>'.$v['sale'].'</em> 件已付款</div></div></div></div></div></a></li>';
+                    
+                    /* if($v['is_promote_goods']>0)
+                    {
+                        $html .= '<span class="badge_comm" style="background-color:#f23030;">Hot</span>';
+                    }
+                    
+                    $html .= $v['title'].'</p><div class="goods_price">￥<b>'.$v['price'].'</b><span class="fr">'.$v['sale'].'人付款</span></div></div></a>';
+                    $html .= '</li>'; */
+                }
+            }
+            
+    		exit(json_encode($html));
+    	}
+        
+        //商品分类列表
+        $postdata = array(
+            'pid'    => 0,
+            'limit'  => 15,
+            'offset' => 0
+		);
+        $url = env('APP_API_URL')."/goodstype_list";
+		$res = curl_request($url,$postdata,'GET');
+        $data['goodstype_list'] = $res['data']['list'];
+        
+        //banner轮播图
+        $postdata = array(
+            'type'   => 0,
+            'limit'  => 5,
+            'offset' => 0
+		);
+        $url = env('APP_API_URL')."/slide_list";
+		$res = curl_request($url,$postdata,'GET');
+        $data['slide_list'] = $res['data']['list'];
         
         return view('home.index.index',$data);
     }
@@ -28,74 +84,61 @@ class IndexController extends CommonController
 	//商品列表页
     public function goodslist(Request $request)
 	{
-        $typeid = $request->input('id', '');
-        $page = $request->input('page', '');
+        $data['typeid'] = 0;
+        if($request->input('typeid', null) != null){$data['typeid'] = $request->input('typeid');}
         
-        //推荐
-        if($request->input('tuijian', '') != ''){$where['tuijian'] = $request->input('tuijian');}
-        if($request->input('brand_id', '') != ''){$where['brand_id'] = $request->input('brand_id');DB::table('goods_brand')->where(array('id'=>$where['brand_id']))->increment('click', 1);}
+        $pagesize = 15;
+        $offset = 0;
+        if(isset($_REQUEST['page'])){$offset = ($_REQUEST['page']-1)*$pagesize;}
         
-        $pagenow = $page;
-        $post = '';
+        //商品列表
+        $postdata = array(
+            'typeid' => $data['typeid'],
+            'limit'  => $pagesize,
+            'offset' => $offset
+		);
+        $url = env('APP_API_URL')."/goods_list";
+		$res = curl_request($url,$postdata,'GET');
+        $data['list'] = $res['data']['list'];
         
-		if($typeid)
+        $data['totalpage'] = ceil($res['data']['count']/$pagesize);
+        
+        if(isset($_REQUEST['page_ajax']) && $_REQUEST['page_ajax']==1)
         {
-            $where['typeid'] = $typeid;
-            $post = object_to_array(DB::table('goods_type')->where('id', $typeid)->first(), 1);
-        }
-        
-        $data['post'] = $post;
-        
-        $goods = DB::table("goods");
-        if(isset($where)){$goods = $goods->where($where);}
-        
-        if($request->input('keyword', '') != ''){$goods = $goods->where('title', 'like', '%'.$request->input('keyword').'%');}
-        
-		$counts = $goods->count();
-		if($counts>sysconfig('CMS_MAXARC')){$counts=sysconfig('CMS_MAXARC');}
-		$pagesize = sysconfig('CMS_PAGESIZE');$page=0;
-		if($counts % $pagesize){//取总数据量除以每页数的余数
-		$pages = intval($counts/$pagesize) + 1; //如果有余数，则页数等于总数据量除以每页数的结果取整再加一,如果没有余数，则页数等于总数据量除以每页数的结果
-		}else{$pages = $counts/$pagesize;}
-		if(!empty($pagenow)){if($pagenow==1 || $pagenow>$pages){return redirect()->route('page404');}$page = $pagenow-1;$nextpage=$pagenow+1;$previouspage=$pagenow-1;}else{$page = 0;$nextpage=2;$previouspage=0;}
-		$data['page'] = $page;
-		$data['pages'] = $pages;
-		$data['counts'] = $counts;
-		$start = $page*$pagesize;
-		
-        //排序
-        if($request->input('orderby', null) != null)
-        {
-            switch ($request->input('orderby'))
+    		$html = '';
+            
+            if($res['data']['list'])
             {
-                case 1:
-                    $goods = $goods->orderBy('sale','desc'); //销量从高到低
-                    break;
-                case 2:
-                    $goods = $goods->orderBy('comments','desc'); //评论从高到低
-                    break;
-                case 3:
-                    $goods = $goods->orderBy('price','desc'); //价格从高到低
-                    break;
-                case 4:
-                    $goods = $goods->orderBy('price','asc'); //价格从低到高
-                    break;
-                case 5:
-                    $timestamp = time();
-                    $goods = $goods->where('promote_start_date','<=',$timestamp)->where('promote_end_date','>=',$timestamp); //促销商品
-                    break;
-                default:
-                    $goods = $goods->orderBy('pubdate','desc'); //最新
+                foreach($res['data']['list'] as $k => $v)
+                {
+                    $html .= '<li><a href="'.route('home_goods',array('id'=>$v['id'])).'" target="_blank"><img src="'.$v['litpic'].'" alt="'.$v['title'].'">';
+                    $html .= '<p class="title">'.$v['title'].'</p>';
+                    $html .= '<p class="desc"><span class="price-point"><i></i>库存('.$v['goods_number'].')</span> '.$v['description'].'</p>';
+                    $html .= '<div class="item-prices red"><div class="item-link">立即<br>抢购</div><div class="item-info"><div class="price"><i>¥</i><em class="J_actPrice"><span class="yen">'.ceil($v['price']).'</span></em></div>';
+                    $html .= '<div class="dock"><div class="dock-price"><del class="orig-price">¥'.$v['market_price'].'</del> <span class="benefit">包邮</span></div><div class="prompt"><div class="sold-num"><em>'.$v['sale'].'</em> 件已付款</div></div></div></div></div></a></li>';
+                    
+                    /* if($v['is_promote_goods']>0)
+                    {
+                        $html .= '<span class="badge_comm" style="background-color:#f23030;">Hot</span>';
+                    }
+                    
+                    $html .= $v['title'].'</p><div class="goods_price">￥<b>'.$v['price'].'</b><span class="fr">'.$v['sale'].'人付款</span></div></div></a>';
+                    $html .= '</li>'; */
+                }
             }
-        }
+            
+    		exit(json_encode($html));
+    	}
         
-        $posts = object_to_array($goods->skip($start)->take($pagesize)->get());
-        
-		$data['posts'] = $posts; //获取列表
-        $data['pagenav'] = '';if($nextpage<=$pages && $nextpage>0){$data['pagenav'] = $this->listpageurl(route('home_goodslist'),$_SERVER['QUERY_STRING'],$nextpage);}
-		
-        $data['goods_type_list'] = object_to_array(DB::table('goods_type')->where(['pid'=>0,'status'=>1])->select('id','name')->take(30)->orderBy('listorder','asc')->get());
-        $data['id'] = $typeid;
+        //商品分类列表
+        $postdata = array(
+            'pid'    => 0,
+            'limit'  => 15,
+            'offset' => 0
+		);
+        $url = env('APP_API_URL')."/goodstype_list";
+		$res = curl_request($url,$postdata,'GET');
+        $data['goodstype_list'] = $res['data']['list'];
         
 		return view('home.index.goodslist', $data);
 	}
@@ -155,81 +198,113 @@ class IndexController extends CommonController
     }
 	
     //列表页
-    public function category($cat, $page=0)
+    public function category(Request $request)
 	{
-        $pagenow = $page;
+        $pagesize = 10;
+        $offset = 0;
         
-		if(empty($cat) || !preg_match('/[0-9]+/',$cat)){return redirect()->route('page404');}
+        //文章分类
+        $postdata = array(
+            'id'  => $cat
+		);
+        $url = env('APP_API_URL')."/arctype_detail";
+		$arctype_detail = curl_request($url,$postdata,'GET');
+        $data['post'] = $arctype_detail['data'];
+        dd($data['post']);
+        if(isset($_REQUEST['page'])){$offset = ($_REQUEST['page']-1)*$pagesize;}
         
-		if(cache("catid$cat")){$post = cache("catid$cat");}else{$post = object_to_array(DB::table('arctype')->where('id', $cat)->first(), 1);if(empty($post)){return redirect()->route('page404');} cache(["catid$cat"=>$post], \Carbon\Carbon::now()->addMinutes(2592000));}
-        $data['post'] = $post;
+        //文章列表
+        $postdata2 = array(
+            'limit'  => $pagesize,
+            'offset' => $offset
+		);
+        if($request->input('typeid', null) != null){$postdata2['typeid'] = $request->input('typeid');}
         
-		$subcat="";$sql="";
-		$post2 = object_to_array(DB::table('arctype')->select('id')->where('pid', $cat)->get());
-		if(!empty($post2)){foreach($post2 as $row){$subcat=$subcat."typeid=".$row["id"]." or ";}}
-		$subcat=$subcat."typeid=".$cat;
-		$sql=$subcat." or typeid2 in (".$cat.")";//echo $subcat2;exit;
-		$data['sql'] = $sql;
-		
-		$counts = DB::table("article")->whereRaw($sql)->count();
-		if($counts>sysconfig('CMS_MAXARC')){$counts=sysconfig('CMS_MAXARC');dd($counts);}
-		$pagesize = sysconfig('CMS_PAGESIZE');$page=0;
-		if($counts % $pagesize){//取总数据量除以每页数的余数
-		$pages = intval($counts/$pagesize) + 1; //如果有余数，则页数等于总数据量除以每页数的结果取整再加一,如果没有余数，则页数等于总数据量除以每页数的结果
-		}else{$pages = $counts/$pagesize;}
-		if(!empty($pagenow)){if($pagenow==1 || $pagenow>$pages){return redirect()->route('page404');}$page = $pagenow-1;$nextpage=$pagenow+1;$previouspage=$pagenow-1;}else{$page = 0;$nextpage=2;$previouspage=0;}
-		$data['page'] = $page;
-		$data['pages'] = $pages;
-		$data['counts'] = $counts;
-		$start = $page*$pagesize;
-		
-		$data['posts'] = arclist(array("sql"=>$sql, "limit"=>"$start,$pagesize")); //获取列表
-		$data['pagenav'] = get_listnav(array("counts"=>$counts,"pagesize"=>$pagesize,"pagenow"=>$page+1,"catid"=>$cat)); //获取分页列表
+        $url = env('APP_API_URL')."/article_list";
+		$res = curl_request($url,$postdata2,'GET');
+        $data['list'] = $res['data']['list'];
         
-        if($post['templist']=='category2'){if(!empty($pagenow)){return redirect()->route('page404');}}
+        $data['totalpage'] = ceil($res['data']['count']/$pagesize);
         
-		return view('home.index.'.$post['templist'], $data);
+        if(isset($_REQUEST['page_ajax']) && $_REQUEST['page_ajax']==1)
+        {
+    		$html = '';
+            
+            if($res['data']['list'])
+            {
+                foreach($res['data']['list'] as $k => $v)
+                {
+                    $html .= '<li><a href="'.$v['article_detail_url'].'">'.$v['title'].'</a><p>'.$v['pubdate'].'</p></li>';
+                }
+            }
+            
+    		exit(json_encode($html));
+    	}
+        
+		return view('home.index.'.$data['post']['templist'], $data);
 	}
     
     //文章列表页
     public function arclist(Request $request)
-	{
-        $cat = $request->input('id', '');
-        $page = $request->input('page', '');
+    {
+        $pagesize = 10;
+        $offset = 0;
         
-        $pagenow = $page;
-        $post = '';
-        
-		if($cat)
+        //文章分类
+        if($request->input('typeid', null) != null)
         {
-            $where['typeid'] = $cat;
-            $post = object_to_array(DB::table('arctype')->where('id', $cat)->first(), 1);
+            $postdata = array(
+                'id'  => $request->input('typeid')
+            );
+            $url = env('APP_API_URL')."/arctype_detail";
+            $arctype_detail = curl_request($url,$postdata,'GET');
+            $data['post'] = $arctype_detail['data'];
         }
         
-        $data['post'] = $post;
+        if(isset($_REQUEST['page'])){$offset = ($_REQUEST['page']-1)*$pagesize;}
         
-        $article = DB::table("article");
-        if(isset($where)){$article = $article->where($where);}
+        //文章列表
+        $postdata2 = array(
+            'limit'  => $pagesize,
+            'offset' => $offset
+		);
+        if($request->input('typeid', null) != null){$postdata2['typeid'] = $request->input('typeid');}
         
-		$counts = $article->count();
-		if($counts>sysconfig('CMS_MAXARC')){$counts=sysconfig('CMS_MAXARC');dd($counts);}
-		$pagesize = sysconfig('CMS_PAGESIZE');$page=0;
-		if($counts % $pagesize){//取总数据量除以每页数的余数
-		$pages = intval($counts/$pagesize) + 1; //如果有余数，则页数等于总数据量除以每页数的结果取整再加一,如果没有余数，则页数等于总数据量除以每页数的结果
-		}else{$pages = $counts/$pagesize;}
-		if(!empty($pagenow)){if($pagenow==1 || $pagenow>$pages){return redirect()->route('page404');}$page = $pagenow-1;$nextpage=$pagenow+1;$previouspage=$pagenow-1;}else{$page = 0;$nextpage=2;$previouspage=0;}
-		$data['page'] = $page;
-		$data['pages'] = $pages;
-		$data['counts'] = $counts;
-		$start = $page*$pagesize;
-		
-        $posts = object_to_array($article->skip($start)->take($pagesize)->get());
+        $url = env('APP_API_URL')."/article_list";
+		$res = curl_request($url,$postdata2,'GET');
+        $data['list'] = $res['data']['list'];
         
-		$data['posts'] = $posts; //获取列表
-        $data['pagenav'] = '';if($nextpage<=$pages && $nextpage>0){$data['pagenav'] = $this->listpageurl(route('home_arclist'),$_SERVER['QUERY_STRING'],$nextpage);}
-		
-        $data['arctype_list'] = object_to_array(DB::table('arctype')->where(['pid'=>0,'is_show'=>0])->select('id','name')->take(30)->orderBy('listorder','asc')->get());
-        $data['id'] = $cat;
+        $data['totalpage'] = ceil($res['data']['count']/$pagesize);
+        
+        if(isset($_REQUEST['page_ajax']) && $_REQUEST['page_ajax']==1)
+        {
+    		$html = '';
+            
+            if($res['data']['list'])
+            {
+                foreach($res['data']['list'] as $k => $v)
+                {
+                    $html .= '<div class="list">';
+                    if(!empty($v['litpic']))
+                    {
+                        $html .= '<a class="limg" href="'.get_front_url(array("id"=>$v['id'],"catid"=>$v['typeid'],"type"=>'content')).'"><img alt="'.$v['title'].'" src="'.$v['litpic'].'"></a>';
+                    }
+                    $html .= '<strong class="tit"><a href="'.get_front_url(array("id"=>$v['id'],"catid"=>$v['typeid'],"type"=>'content')).'">'.$v['title'].'</a></strong><p>'.mb_strcut($v['description'],0,150,'UTF-8').'..</p>';
+                    $html .= '<div class="info"><span class="fl">';
+                    $taglist=taglist($v['id']);
+                    if($taglist)
+                    {
+                        foreach($taglist as $row)
+                        {
+                            $html .= '<a href="'.get_front_url(array("tagid"=>$row['id'],"type"=>'tags')).'">'.$row['tag'].'</a>';
+                        }
+                    }
+                    $html .= '<em>'.date("m-d H:i",$v['pubdate']).'</em></span><span class="fr"><em>'.$v['click'].'</em>人阅读</span></div><div class="cl"></div></div>';
+                }
+            }
+            
+    		exit(json_encode($html));
+    	}
         
 		return view('home.index.arclist', $data);
 	}

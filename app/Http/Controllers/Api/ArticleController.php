@@ -31,8 +31,6 @@ class ArticleController extends CommonController
         
         foreach($res['list'] as $k=>$v)
         {
-            $res['list'][$k]->pubdate = date('Y-m-d H:i',$v->pubdate);
-            $res['list'][$k]->addtime = date('Y-m-d H:i',$v->addtime);
             $res['list'][$k]->article_detail_url = route('weixin_article_detail',array('id'=>$v->id));
         }
         

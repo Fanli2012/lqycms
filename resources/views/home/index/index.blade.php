@@ -5,15 +5,47 @@
 .main-theme .item{width: 33.3%;width: 33.3% !important;height:120px;float: left;overflow: hidden;-webkit-transition: width .3s ease;-moz-transition: width .3s ease;-o-transition: width .3s ease;transition: width .3s ease;}
 .main-theme .item img{width:100%;height:100%;}
 </style>
-<div class="box hdp" style="margin-top:5px;"><div class="fl"><div id="slideBox"><ul style="left: 0px;" id="show_pic">
-<?php if($slide_list){foreach($slide_list as $k=>$v){ ?><li><a href="<?php echo $v['url']; ?>" target="_blank"><img width="740px" height="347px" alt="<?php echo $v['title']; ?>" src="<?php echo $v['pic']; ?>"></a></li><?php }} ?></ul><div id="slideText"></div><ul id="iconBall"><?php if($slide_list){$i=1;foreach($slide_list as $k=>$v){ ?><li><?php echo $i;$i=$i+1; ?></li><?php }} ?></ul>
-<ul id="textBall"><?php if($slide_list){foreach($slide_list as $k=>$v){ ?><li><a href="javascript:void(0)"><?php echo $v['title']; ?></a></li><?php }} ?></ul></div>
 
-<div class="iztad"><div class="main-theme">
-<?php if($ztad_list){foreach($ztad_list as $k=>$v){ ?><a class="item on" target="_blank" href="<?php echo $v['url']; ?>"><img class="img" src="<?php echo $v['pic']; ?>"></a><?php }} ?>
-</div></div></div>
-<div class="fr"><img src="images/3.jpg"></div></div>
+<!--顶部滚动广告栏-start-->
+<?php if($slide_list){ ?>
+<div class="box" style="margin-top:10px;margin-bottom:10px;">
+    <!-- Swiper -->
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+        <?php foreach($slide_list as $k=>$v){ ?>
+            <div class="swiper-slide"><a href="<?php echo $v['url']; ?>"><img src="<?php echo $v['pic']; ?>" alt="<?php echo $v['title']; ?>"></a></div>
+        <?php } ?>
+        </div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination swiper-pagination-white"></div>
+    </div>
+</div>
+<?php } ?>
+<link rel="stylesheet" href="<?php echo env('APP_URL'); ?>/css/swiper.min.css">
+<script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/swiper.min.js"></script>
+<style>
+.swiper-container{width:100%;height:auto;}
+.swiper-slide{text-align:center;font-size:18px;background:#fff;}
+.swiper-slide img{width:100%;height:320px;}
+</style>
+<script>
+//Swiper轮播
+var swiper = new Swiper('.swiper-container', {
+    pagination: '.swiper-pagination',
+    paginationClickable: true,
+    autoHeight: true, //enable auto height
+    slidesPerView: 1,
+    paginationClickable: true,
+    spaceBetween: 30,
+    loop: true,
+    centeredSlides: true,
+    autoplay: 3000,
+    autoplayDisableOnInteraction: false
+});
+</script>
+<!--顶部滚动广告栏-end-->
 
+<!--导航栏-start-->
 <style>
 .cat-menu-h {padding:8px 0;margin-bottom:10px;background-color: #fff;border-bottom: 1px dotted #ccc;border-top: 1px dotted #ccc;}
 .cat-menu-h ul {font-size: 14px;}
@@ -26,15 +58,17 @@
 <div class="box">
 <div class="cat-menu-h">
 <ul class="clearfix">
-<li><a href="<?php echo route('home_goodslist'); ?>">全部</a></li>
-<?php if($goods_type_list){foreach($goods_type_list as $k=>$v){ ?>
-<li><a href="<?php echo route('home_goodslist',array('id'=>$v['id'])); ?>"><?php echo $v['name']; ?></a></li><?php }} ?>
+<li><a<?php if(route('home_goodslist') == url()->full()){echo ' class="hover"';} ?> href="<?php echo route('home_goodslist'); ?>">全部</a></li>
+<?php if($goodstype_list){foreach($goodstype_list as $k=>$v){ ?>
+<li><a<?php if(route('home_goodslist',array('typeid'=>$v['id'])) == url()->full()){echo ' class="hover"';} ?> href="<?php echo route('home_goodslist',array('typeid'=>$v['id'])); ?>"><?php echo $v['name']; ?></a></li><?php }} ?>
 <li><a class="forecast" href="<?php echo route('home_goodslist',array('tuijian'=>1)); ?>"> [推荐] </a></li>
 </ul>
 
 <form method="get" class="m-sch fr" name="formsearch" action="<?php echo route('home_goodslist'); ?>"><input class="sch-txt" name="keyword" type="text" value="搜索 按Enter键" onfocus="if(value=='搜索 按Enter键') {value=''}" onblur="if(value=='') {value='搜索 按Enter键'}"></form>
 <div class="cl"></div></div>
 </div>
+<!--导航栏-end-->
+
 <style>
 .brandul{margin-right:-10px;}
 .brandul li{margin: 0 10px 10px 0;-webkit-box-shadow: 0 1px 0 rgba(0,0,0,.1);-moz-box-shadow: 0 1px 0 rgba(0,0,0,.1);box-shadow: 0 1px 0 rgba(0,0,0,.1);float: left;}
@@ -45,8 +79,7 @@
 .brandul .brand-des .fl{margin-left:10px;}
 .brandul .brand-des .fr{margin-right:20px;}
 </style>
-<div class="box" style="margin-bottom:5px;">
-<ul class="brandul">
+<div class="box" style="margin-bottom:5px;"><ul class="brandul">
 <li>
 <a href="http://ju.taobao.com/tg/brand_items.htm?act_sign_id=28794165&amp;seller_id=880734502" target="_blank">
 <img class="brand-pic" src="/images/3.jpg">
@@ -71,18 +104,11 @@
 <div class="brand-des"><span class="fl"></span>
 <span class="fr"><em>234100</em>件已付款 &nbsp; <em>仅剩1天</em></span></div></a>
 </li>
-<li>
-<a href="http://ju.taobao.com/tg/brand_items.htm?act_sign_id=28794165&amp;seller_id=880734502" target="_blank">
-<img class="brand-pic" src="/images/3.jpg">
-<div class="brand-des"><span class="fl"></span>
-<span class="fr"><em>234100</em>件已付款 &nbsp; <em>仅剩1天</em></span></div></a>
-</li>
-</ul>
-</div>
+</ul></div>
 
 <div class="box">
-<ul class="pul">
-<?php if($goods_list){foreach($goods_list as $k=>$v){ ?>
+<ul class="pul" id="goods_list">
+<?php if($list){foreach($list as $k=>$v){ ?>
 <li><a href="<?php echo route('home_goods',array('id'=>$v['id'])); ?>" target="_blank"><img src="<?php echo $v['litpic']; ?>" alt="<?php echo $v['title']; ?>">
 <p class="title"><?php echo $v['title']; ?></p>
 <p class="desc"><span class="price-point"><i></i>库存(<?php echo $v['goods_number']; ?>)</span> <?php echo $v['description']; ?></p>
@@ -92,89 +118,67 @@
 </a></li>
 <?php }} ?>
 </ul></div>
-@include('home.common.footer')
-<script>//图片幻灯
-var glide =new function(){
-	function $id(id){return document.getElementById(id);};
-	this.layerGlide=function(auto,oEventCont,oTxtCont,oSlider,sSingleSize,second,fSpeed,point){
-		var oSubLi = $id(oEventCont).getElementsByTagName('li');
-		var oTxtLi = $id(oTxtCont).getElementsByTagName('li');
-		var interval,timeout,oslideRange;
-		var time=1; 
-		var speed = fSpeed 
-		var sum = oSubLi.length;
-		var a=0;
-		var delay=second * 1000; 
-		var setValLeft=function(s){
-			return function(){
-				oslideRange = Math.abs(parseInt($id(oSlider).style[point]));	
-				$id(oSlider).style[point] =-Math.floor(oslideRange+(parseInt(s*sSingleSize) - oslideRange)*speed) +'px';		
-				if(oslideRange==[(sSingleSize * s)]){
-					clearInterval(interval);
-					a=s;
-				}
-			}
-		};
-		var setValRight=function(s){
-			return function(){	 	
-				oslideRange = Math.abs(parseInt($id(oSlider).style[point]));							
-				$id(oSlider).style[point] =-Math.ceil(oslideRange+(parseInt(s*sSingleSize) - oslideRange)*speed) +'px';
-				if(oslideRange==[(sSingleSize * s)]){
-					clearInterval(interval);
-					a=s;
-				}
-			}
-		}
-		
-		function autoGlide(){
-			for(var c=0;c<sum;c++){oSubLi[c].className='';oTxtLi[c].className='';};
-			clearTimeout(interval);
-			if(a==(parseInt(sum)-1)){
-				for(var c=0;c<sum;c++){oSubLi[c].className='';oTxtLi[c].className='';};
-				a=0;
-				oSubLi[a].className="active";
-				oTxtLi[a].className = "active";
-				interval = setInterval(setValLeft(a),time);
-				timeout = setTimeout(autoGlide,delay);
-			}else{
-				a++;
-				oSubLi[a].className="active";
-				oTxtLi[a].className = "active";
-				interval = setInterval(setValRight(a),time);	
-				timeout = setTimeout(autoGlide,delay);
-			}
-		}
-	
-		if(auto){timeout = setTimeout(autoGlide,delay);};
-		for(var i=0;i<sum;i++){	
-			oSubLi[i].onmouseover = (function(i){
-				return function(){
-					for(var c=0;c<sum;c++){oSubLi[c].className='';oTxtLi[c].className='';};
-					clearTimeout(timeout);
-					clearInterval(interval);
-					oSubLi[i].className = "active";
-					oTxtLi[i].className = "active";
-					if(Math.abs(parseInt($id(oSlider).style[point]))>[(sSingleSize * i)]){
-						interval = setInterval(setValLeft(i),time);
-						this.onmouseout=function(){if(auto){timeout = setTimeout(autoGlide,delay);};};
-					}else if(Math.abs(parseInt($id(oSlider).style[point]))<[(sSingleSize * i)]){
-							interval = setInterval(setValRight(i),time);
-						this.onmouseout=function(){if(auto){timeout = setTimeout(autoGlide,delay);};};
-					}
-				}
-			})(i)			
-		}
-	}
-}
 
-//调用语句
-glide.layerGlide(
-	true,         //设置是否自动滚动
-	'iconBall',   //对应索引按钮
-	'textBall',   //标题内容文本
-	'show_pic',   //焦点图片容器
-	740,          //设置滚动图片位移像素
-	2,			  //设置滚动时间2秒 
-	0.1,          //设置过渡滚动速度
-	'left'		  //设置滚动方向“向左”
-);</script></body></html>
+<script>
+$(function(){
+    var ajaxload  = false;
+    var maxpage   = false;
+    var startpage = 1;
+    var totalpage = <?php echo $totalpage; ?>;
+    
+    var tmp_url   = window.location.href;
+    msg = tmp_url.split("#");
+    tmp_url = msg[0];
+    
+    $(window).scroll(function ()
+    {
+        var listheight = $("#goods_list").outerHeight(); 
+        
+        if ($(document).scrollTop() + $(window).height() >= listheight)
+        {
+            if(startpage >= totalpage)
+            {
+                //$("#submit_bt_one").html("已是最后一页，没有更多数据！");
+                return false;
+            }
+            
+            if(!ajaxload && !maxpage)
+            {
+                ajaxload = true;
+                //$("#submit_bt_one").html("努力加载中...");
+                var url = tmp_url;
+                var nextpage = startpage+1;
+                
+                $.get(url,{page_ajax:1,page:nextpage},function(res)
+                {
+                    if(res)
+                    {
+                        $("#goods_list").append(res);
+                        startpage++;
+                        
+                        if(startpage >= totalpage)
+                        {
+                            maxpage = true;
+                            //$("#submit_bt_one").html("已是最后一页，没有更多数据！");
+                        }
+                        else
+                        {
+                            //$("#submit_bt_one").html("点击加载更多");
+                        }
+                        
+                        ajaxload = false;
+                    }
+                    else
+                    {
+                        //$("#submit_bt_one").html("请求失败，请稍候再试！");
+                        ajaxload = false;
+                    }
+                },'json');
+            }
+        }
+    });
+});
+</script>
+
+@include('home.common.footer')
+</body></html>

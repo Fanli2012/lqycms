@@ -1,1 +1,1 @@
-<div id="footer" class="box">&copy;<?php echo sysconfig('CMS_WEBNAME'); ?> 部分文章来源于网络，如果侵犯了您的权益，请联系我们。<div class="m-auto"><script>count_js();</script></div></div>
+<div id="footer"><div class="box">&copy;<?php echo sysconfig('CMS_WEBNAME'); ?> 部分文章来源于网络，如果侵犯了您的权益，请联系我们。<div class="m-auto"><script>count_js();</script></div></div></div>

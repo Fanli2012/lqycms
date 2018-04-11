@@ -29,6 +29,7 @@ class IndexController extends CommonController
         
         //banner轮播图
         $postdata = array(
+            'type'  => 1,
             'limit'  => 5,
             'offset' => 0
 		);

@@ -20,6 +20,7 @@ class SlideController extends CommonController
         $data['limit'] = $request->input('limit', 10);
         $data['offset'] = $request->input('offset', 0);
         if($request->input('group_id', null) !== null){$data['group_id'] = $request->input('group_id');}
+        if($request->input('type', null) !== null){$data['type'] = $request->input('type');}
         
         $res = Slide::getList($data);
 		if($res == false)
