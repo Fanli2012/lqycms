@@ -15,6 +15,17 @@ class IndexController extends CommonController
 	//首页
     public function index()
 	{
+        //推荐商品列表
+        $postdata = array(
+            'tuijian' => 1,
+            'status' => 0,
+            'limit'  => 6,
+            'offset' => 0
+		);
+        $url = env('APP_API_URL')."/goods_list";
+		$res = curl_request($url,$postdata,'GET');
+        $data['tjlist'] = $res['data']['list'];
+        
         //商品列表
         $pagesize = 15;
         $offset = 0;

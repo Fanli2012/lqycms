@@ -37,6 +37,9 @@
 </a></li>
 <?php }} ?>
 </ul></div>
+
+<div class="box nomore" style="text-align:center;line-height:46px;font-size:18px;color:#999;display:none;">没有更多数据了</div>
+
 <script>
 $(function(){
     var ajaxload  = false;
@@ -57,6 +60,7 @@ $(function(){
             if(startpage >= totalpage)
             {
                 //$("#submit_bt_one").html("已是最后一页，没有更多数据！");
+                $(".nomore").show();
                 return false;
             }
             
@@ -77,6 +81,7 @@ $(function(){
                         if(startpage >= totalpage)
                         {
                             maxpage = true;
+                            $(".nomore").show();
                             //$("#submit_bt_one").html("已是最后一页，没有更多数据！");
                         }
                         else

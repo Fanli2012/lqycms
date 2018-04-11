@@ -13,7 +13,7 @@
     <div class="swiper-container">
         <div class="swiper-wrapper">
         <?php foreach($slide_list as $k=>$v){ ?>
-            <div class="swiper-slide"><a href="<?php echo $v['url']; ?>"><img src="<?php echo $v['pic']; ?>" alt="<?php echo $v['title']; ?>"></a></div>
+            <div class="swiper-slide"><a href="<?php if($v['url']){echo $v['url'];}else{echo 'javascript:;';} ?>"><img src="<?php echo $v['pic']; ?>" alt="<?php echo $v['title']; ?>"></a></div>
         <?php } ?>
         </div>
         <!-- Add Pagination -->
@@ -92,21 +92,24 @@ var swiper = new Swiper('.swiper-container', {
 <div class="brand-des"><span class="fl"></span>
 <span class="fr"><em>234100</em>件已付款 &nbsp; <em>仅剩1天</em></span></div></a>
 </li>
-<li>
-<a href="http://ju.taobao.com/tg/brand_items.htm?act_sign_id=28794165&amp;seller_id=880734502" target="_blank">
-<img class="brand-pic" src="/images/3.jpg">
-<div class="brand-des"><span class="fl"></span>
-<span class="fr"><em>234100</em>件已付款 &nbsp; <em>仅剩1天</em></span></div></a>
-</li>
-<li>
-<a href="http://ju.taobao.com/tg/brand_items.htm?act_sign_id=28794165&amp;seller_id=880734502" target="_blank">
-<img class="brand-pic" src="/images/3.jpg">
-<div class="brand-des"><span class="fl"></span>
-<span class="fr"><em>234100</em>件已付款 &nbsp; <em>仅剩1天</em></span></div></a>
-</li>
 </ul></div>
 
 <div class="box">
+<p style="font-weight:bold;font-size:24px;color:#333;margin-top:30px;margin-bottom:20px;">编辑推荐</p>
+<ul class="pul">
+<?php if($tjlist){foreach($tjlist as $k=>$v){ ?>
+<li><a href="<?php echo route('home_goods',array('id'=>$v['id'])); ?>" target="_blank"><img src="<?php echo $v['litpic']; ?>" alt="<?php echo $v['title']; ?>">
+<p class="title"><?php echo $v['title']; ?></p>
+<p class="desc"><span class="price-point"><i></i>库存(<?php echo $v['goods_number']; ?>)</span> <?php echo $v['description']; ?></p>
+<div class="item-prices red"><div class="item-link">立即<br>抢购</div><div class="item-info"><div class="price"><i>¥</i><em class="J_actPrice"><span class="yen"><?php echo ceil($v['price']); ?></span></em></div>
+<div class="dock"><div class="dock-price"><del class="orig-price">¥<?php echo $v['market_price']; ?></del> <span class="benefit">包邮</span></div><div class="prompt"><div class="sold-num"><em><?php echo $v['sale']; ?></em> 件已付款</div></div></div>
+</div></div>
+</a></li>
+<?php }} ?>
+</ul></div>
+
+<div class="box">
+<p style="font-weight:bold;font-size:24px;color:#333;margin-top:30px;margin-bottom:20px;">热门商品</p>
 <ul class="pul" id="goods_list">
 <?php if($list){foreach($list as $k=>$v){ ?>
 <li><a href="<?php echo route('home_goods',array('id'=>$v['id'])); ?>" target="_blank"><img src="<?php echo $v['litpic']; ?>" alt="<?php echo $v['title']; ?>">
@@ -118,6 +121,8 @@ var swiper = new Swiper('.swiper-container', {
 </a></li>
 <?php }} ?>
 </ul></div>
+
+<div class="box nomore" style="text-align:center;line-height:46px;font-size:18px;color:#999;margin-bottom:10px;display:none;">没有更多数据了</div>
 
 <script>
 $(function(){
@@ -139,6 +144,7 @@ $(function(){
             if(startpage >= totalpage)
             {
                 //$("#submit_bt_one").html("已是最后一页，没有更多数据！");
+                $(".nomore").show();
                 return false;
             }
             
@@ -159,6 +165,7 @@ $(function(){
                         if(startpage >= totalpage)
                         {
                             maxpage = true;
+                            $(".nomore").show();
                             //$("#submit_bt_one").html("已是最后一页，没有更多数据！");
                         }
                         else

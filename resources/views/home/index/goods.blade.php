@@ -19,19 +19,22 @@
 .normal-pic .item-pic-wrap {position: relative;}
 .normal-pic-wrapper .item-pic-wrap .pic {background-size: cover;background-position: center center;background-repeat: no-repeat;height: 360px;width: 360px;}
 .detail-main .main-box {float: right;width: 560px;_width: 545px;margin-right: 5px;_display: inline;}
-.detail-main .main-box .title {margin:8px 0;color: #3C3C3C;font-size: 18px;line-height: 28px;overflow: hidden;text-align: justify;}
-.detail-main .main-box .description {color: #aaa;font-size: 14px;line-height: 20px;word-break: break-all;margin-bottom:10px;}
-.price_bg {color: #6c6c6c;padding:15px;background-color:#FFF2E8;}
-.details_join a {text-align: center;padding:10px 40px;font-size: 16px;color: #fff;border-radius: 2px;background: #e61414;float:left;}
+.detail-main .main-box .title {margin:8px 0;color:#333;font-size:24px;line-height:34px;font-weight: normal;text-align: justify;}
+.detail-main .main-box .description {color:#999;font-size: 14px;line-height: 20px;word-break: break-all;}
+.detail-main .price {margin: 20px 0;font-size: 14px;}
+.detail-main .price .rmb {font-size: 30px;margin-right: 3px;color: #d33a31;}
+.detail-main .price em {margin-right: 4px;font-size: 30px;color: #d33a31;}
+.detail-main .price .dis {margin-left: 16px;font-size: 16px;color: #999;text-decoration: line-through;}
+.detail-main .price sub {position: relative;top: -5px;font-size: 14px;color: #cb3b3b;}
 </style>
 <div style="background-color:#f3f3f3;padding-bottom:10px;">
 <div class="box">
 <div class="detail-main  clearfix">
 <div class="header clearfix">
     <ul class="crumbs">
-        <li><a href="https://ju.taobao.com/tg/today_items.htm">今日团购</a></li>
+        <li><a href="<?php echo route('home'); ?>">首页</a></li>
         <span class="arrow"><small></small></span>
-        <li><a href="https://ju.taobao.com/tg/today_items.htm?stype=default&amp;page=1&amp;type=0">商品团</a></li>
+        <li><a href="<?php echo route('home_goodslist'); ?>">所有商品</a></li>
         <span class="arrow"><small></small></span>
         <li><a href="<?php echo route('home_goodslist',array('id'=>$post['id'])); ?>"><?php echo $post['type_name']; ?></a></li>
     </ul>
@@ -42,7 +45,7 @@
 <div class="main-pic">
     <div class="normal-pic-wrapper clearfix" data-spm="ne">
         <div class="normal-pic ">
-            <a href="https://detail.tmall.com/item.htm?id=523987525652&amp;tracelog=jubuybigpic" target="_blank" class="piclink">
+            <a href="javascript:;" target="_blank" class="piclink">
                 <div class="item-pic-wrap">
                 <div class="J_zoom pic " style="background-image: url(<?php echo $post['litpic']; ?>);"></div>
                 </div>
@@ -53,14 +56,9 @@
 
 <div class="main-box J_mainBox avil">
 <h2 class="title"><?php echo $post['title']; ?></h2>
-<div class="description"><?php echo $post['description']; ?></div>
-<div class="price_bg">
-价格: <b class="price" style="margin-left:10px;margin-right:10px;font-size:28px;font-style:normal;color:#f40;"><?php echo $post["price"]; ?></b> 邮费：0.00
-</div>
-<div class="stock_bg" style="margin-top:10px;margin-bottom:30px;">
-&nbsp;&nbsp;库存: <?php echo $post['goods_number']; ?>
-</div>
-<div class="details_join"><a href="javascript:submit();">立即抢购</a></div>
+<?php if($post['description']){ ?><div class="description"><?php echo $post['description']; ?></div><?php } ?>
+<p class="price "><span class="rmb">¥</span><em class="j-flag"><?php echo $post["price"]; ?></em><sub class="dis">¥<span class="j-flag j-original"><?php echo $post["market_price"]; ?></span></sub></p>
+<p class="buyorjoin j-flag f-cb"><a style="box-sizing: border-box;line-height: 47px;width: 170px;height: 50px;margin-top:10px;font-size: 18px;border: 2px solid #d33a31;color: #d33a31;background-color: white;display: inline-block;text-align: center;margin-right: 10px;" href="javascript:submit();">立即购买</a><a style="width: 188px;height: 50px;line-height: 50px;margin-top:10px;font-size: 18px;background-color: #d33a31;display: inline-block;text-align: center;color: #fff;" href="javascript:submit();">加入购物车</a></p>
 </div>
 <div class="cl"></div></div>
 </div>

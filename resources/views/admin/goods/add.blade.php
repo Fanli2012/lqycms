@@ -87,6 +87,42 @@ function upImage()
 </script>
 <script type="text/plain" id="ueditorimg"></script>
     <tr>
+        <td align="right" style="vertical-align:middle;">商品图片：</td>
+        <td style="vertical-align:middle;" id="duotulist"><button type="button" onclick="upImage2();">选择图片</button></td>
+    </tr>
+<script type="text/javascript">
+var _editor2;
+$(function() {
+    //重新实例化一个编辑器，防止在上面的editor编辑器中显示上传的图片或者文件
+    _editor2 = UE.getEditor('ueditordimg');
+    _editor2.ready(function () {
+        //设置编辑器不可用
+        _editor2.setDisabled('insertimage');
+        //隐藏编辑器，因为不会用到这个编辑器实例，所以要隐藏
+        _editor2.hide();
+        //侦听图片上传
+        _editor2.addListener('beforeInsertImage', function (t, arg) {
+            $("#duotulist").html('<button type="button" onclick="upImage2();">选择图片</button>');
+            for (var i=0;i<arg.length;i++)
+            {
+                if(i<8)
+                {
+                    $("#duotulist").append('<img style="margin-left:10px;" src="'+arg[i].src+'" width="120" height="80"><input name="goods_img[]" type="text" value="'+arg[i].src+'" style="display:none;">');
+                }
+            }
+        })
+    });
+});
+//弹出图片上传的对话框
+function upImage2()
+{
+    var myImage = _editor2.getDialog("insertimage");
+	myImage.render();
+    myImage.open();
+}
+</script>
+<script type="text/plain" id="ueditordimg"></script>
+    <tr>
         <td align="right">商品类目：</td>
         <td>
             <select name="typeid" id="typeid">

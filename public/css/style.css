@@ -94,5 +94,5 @@ a{color:#313131;text-decoration:none;}a:hover{text-decoration:none;color:#22ac38
 .titem{padding-bottom:10px;border-bottom:1px dotted #e0e0e0;margin-bottom:10px;}
 .iztad{height:120px;overflow:hidden;margin-top:5px;}
 
-#footer{color:#fafafa;font-size:12px;background:#161616;padding:15px 0;text-align:center;}
+#footer{color:#666;font-size:12px;background:#f2f2f2;padding:15px 0;text-align:center;}
 .tm{overflow:hidden;position:fixed;left:1px;bottom:15px;z-index:999;_position:absolute;}
