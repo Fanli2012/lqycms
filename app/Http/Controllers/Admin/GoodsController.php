@@ -82,9 +82,25 @@ class GoodsController extends CommonController
 		if(isset($_POST['promote_start_date'])){$_POST['promote_start_date'] = strtotime($_POST['promote_start_date']);}
         if(isset($_POST['promote_end_date'])){$_POST['promote_end_date'] = strtotime($_POST['promote_end_date']);}
         if(empty($_POST['promote_price'])){unset($_POST['promote_price']);}
-        
-		if(DB::table('goods')->insert(array_filter($_POST)))
+        if(!empty($_POST['goods_img']))
         {
+            $goods_img = $_POST['goods_img'];
+            $_POST['goods_img'] = $_POST['goods_img'][0];
+        }
+        
+		if($goods_id = DB::table('goods')->insertGetId(array_filter($_POST)))
+        {
+            if(isset($goods_img))
+            {
+                $tmp = [];
+                foreach($goods_img as $k=>$v)
+                {
+                    $tmp[] = ['url'=>$v,'goods_id'=>$goods_id,'add_time'=>time()];
+                }
+                
+                DB::table('goods_img')->insert($tmp);
+            }
+            
             success_jump('添加成功！', route('admin_goods'));
         }
 		else
@@ -104,6 +120,7 @@ class GoodsController extends CommonController
         
 		$data['post'] = object_to_array($goods, 1);
         $data['goodsbrand_list'] = object_to_array(DB::table('goods_brand')->where('status', 0)->orderBy('listorder', 'asc')->get()); //商品品牌
+        $data['goods_img_list'] = object_to_array(DB::table('goods_img')->where(array('goods_id'=>$id))->orderBy('listorder', 'asc')->get()); //商品图片
         
         return view('admin.goods.edit', $data);
     }
@@ -138,9 +155,26 @@ class GoodsController extends CommonController
 		if(isset($_POST['promote_start_date'])){$_POST['promote_start_date'] = strtotime($_POST['promote_start_date']);}
         if(isset($_POST['promote_end_date'])){$_POST['promote_end_date'] = strtotime($_POST['promote_end_date']);}
         if(empty($_POST['promote_price'])){unset($_POST['promote_price']);}
+        if(!empty($_POST['goods_img']))
+        {
+            $goods_img = $_POST['goods_img'];
+            $_POST['goods_img'] = $_POST['goods_img'][0];
+        }
         
         if(DB::table('goods')->where('id', $id)->update($_POST))
         {
+            if(isset($goods_img))
+            {
+                $tmp = [];
+                foreach($goods_img as $k=>$v)
+                {
+                    $tmp[] = ['url'=>$v,'goods_id'=>$id,'add_time'=>time()];
+                }
+                
+                DB::table('goods_img')->where(array('goods_id'=>$id))->delete();
+                DB::table('goods_img')->insert($tmp);
+            }
+            
             success_jump('修改成功！', route('admin_goods'));
         }
 		else

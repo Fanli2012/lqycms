@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Model;
 use DB;
+use Validator;
 
 class Goods extends BaseModel
 {
@@ -150,6 +151,17 @@ class Goods extends BaseModel
     
     public static function add(array $data)
     {
+        $validator = Validator::make($data, [
+            'title' => 'required|unique:posts|max:255',
+            'body' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect('post/create')
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+        
         if ($id = self::insertGetId($data))
         {
             return $id;

@@ -10,7 +10,7 @@ class ArticleRequest extends Request
         'id' => 'required|integer',
         'title' => 'required|max:150',
         'typeid' => 'required|integer',
-        'click' => 'required|integer',
+        'click' => ['required','integer'],
     ];
     
     //总的自定义错误信息
@@ -19,6 +19,7 @@ class ArticleRequest extends Request
         'title.required' => '必须填写标题',
         'typeid.required' => '类目ID必填',
         'typeid.integer' => '栏目ID必须为数字',
+        'click.required' => '必须填写点击量',
         'click.integer' => '点击必须为数字',
         'id.required' => 'ID必填',
         'id.integer' => 'ID必须为数字',

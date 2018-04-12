@@ -90,15 +90,15 @@ class ArticleController extends CommonController
     public function doadd()
     {
         //数据验证
-        /* $validate = new ArticleRequest();
+        $validate = new ArticleRequest();
         $validator = Validator::make($_REQUEST, $validate->getSceneRules('add'), $validate->getSceneRulesMessages());
         
         if ($validator->fails())
         {
-            //$validator->errors()->first();
+            dd($validator->errors()->first());
             //$validator->errors()->all();
             error_jump('参数错误');
-        } */
+        }
         
         $litpic="";if(!empty($_POST["litpic"])){$litpic = $_POST["litpic"];}else{$_POST['litpic']="";} //缩略图
         if(empty($_POST["description"])){if(!empty($_POST["body"])){$_POST['description']=cut_str($_POST["body"]);}} //description
