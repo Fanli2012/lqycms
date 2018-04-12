@@ -4,8 +4,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Admin\CommonController;
 use DB;
 use Illuminate\Http\Request;
-use App\Http\Requests\ArticleRequest;
-use Validator;
+use App\Http\Logic\ArticleLogic;
 
 class ArticleController extends CommonController
 {
@@ -14,6 +13,11 @@ class ArticleController extends CommonController
         parent::__construct();
     }
 	
+    public function getLogic()
+    {
+        return new ArticleLogic();
+    }
+    
 	public function index()
     {
 		$res = '';
@@ -39,13 +43,7 @@ class ArticleController extends CommonController
 			}
         };
 		
-        $posts = parent::pageList('article', $where);
-		foreach($posts as $key=>$value)
-        {
-            $info = DB::table('arctype')->select('name')->where("id", $value->typeid)->first();
-			$posts[$key]->name = $info->name;
-			$posts[$key]->body = '';
-        }
+        $posts = $this->getLogic()->getPaginate($where);
 		
         $data['posts'] = $posts;
 		

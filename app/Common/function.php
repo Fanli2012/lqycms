@@ -1155,7 +1155,35 @@ function http_host($flag=true)
     return $res;
 }
 
-
+/**
+ * 获取数据属性
+ * @param $dataModel 数据模型
+ * @param $data 数据
+ * @return array
+ */
+function getDataAttr($dataModel,$data = [])
+{
+    if(empty($dataModel) || empty($data))
+    {
+        return false;
+    }
+    
+    foreach($data as $k=>$v)
+    {
+        $_method_str=ucfirst(preg_replace_callback('/_([a-zA-Z])/', function ($match) {
+            return strtoupper($match[1]);
+        }, $k));
+        
+        $_method = 'get' . $_method_str . 'Attr';
+        
+        if(method_exists($dataModel, $_method))
+        {
+            $data[$k.'_text'] = $dataModel::$_method($data);
+        }
+    }
+    
+    return $data;
+}
 
 
 

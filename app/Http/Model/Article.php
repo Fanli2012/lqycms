@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Model;
+use Illuminate\Support\Facades\DB;
 
 class Article extends BaseModel
 {
@@ -38,6 +39,11 @@ class Article extends BaseModel
         'id', 'typeid', 'tuijian', 'click', 'title', 'writer', 'source','litpic', 'pubdate', 'addtime', 'description', 'listorder'
     );
     
+    public static function getDb()
+    {
+        return DB::table('article');
+    }
+    
 	/**
      * 获取关联到文章的分类
      */
@@ -46,7 +52,37 @@ class Article extends BaseModel
         return $this->belongsTo(Arctype::class, 'typeid', 'id');
     }
 	
-    public static function getList(array $param)
+    /**
+     * 列表
+     * @param array $where 查询条件
+     * @param string $order 排序
+     * @param string $field 字段
+     * @param int $offset 偏移量
+     * @param int $limit 取多少条
+     * @return array
+     */
+    public static function getList($where = array(), $order = '', $field = '*', $offset = 0, $limit = 10)
+    {
+        $model = self::getDb();
+        if($where){$res = $res->where($where);}
+        
+        $res['count'] = $model->count();
+        $res['list'] = array();
+        
+        if($res['count'] > 0)
+        {
+            if($field){if(is_array($field)){$model = $model->select($field);}else{$model = $model->select(\DB::raw($field));}}
+            if($order){$model = $model->orderBy($order);}
+            if($offset){}else{$offset = 0;}
+            if($limit){}else{$limit = 10;}
+            
+            $res['list'] = $model->skip($offset)->take($limit)->get();
+        }
+        
+        return $res;
+    }
+    
+    /* public static function getList(array $param)
     {
         extract($param); //参数：group_id，limit，offset
         
@@ -89,35 +125,107 @@ class Article extends BaseModel
         }
         
         return $res;
+    } */
+    
+    /**
+     * 分页，用于前端html输出
+     * @param array $where 查询条件
+     * @param string $order 排序
+     * @param string $field 字段
+     * @param int $limit 每页几条
+     * @param int $page 当前第几页
+     * @return array
+     */
+    public static function getPaginate($where = array(), $order = '', $field = '*', $limit = '')
+    {
+        $res = self::getDb();
+        
+        if($where){$res = $res->where($where);}
+        if($field){if(is_array($field)){$res = $res->select($field);}else{$res = $res->select(\DB::raw($field));}}
+        if($order){$res = $res->orderBy($order);}
+        if($limit){}else{$limit = 10;}
+        
+        return $res->paginate($limit);
     }
     
-    public static function getOne(array $param)
+    /**
+     * 查询全部
+     * @param array $where 查询条件
+     * @param string $order 排序
+     * @param string $field 字段
+     * @param int $limit 取多少条
+     * @return array
+     */
+    public static function getAll($where = array(), $order = '', $field = '*', $limit = 10, $offset = 0)
     {
-        extract($param);
+        $res = self::getDb();
         
-        $where['id'] = $id;
-        if(isset($ischeck)){$where['ischeck'] = $ischeck;}
+        if($where){$res = $res->where($where);}
+        if($field){if(is_array($field)){$res = $res->select($field);}else{$res = $res->select(\DB::raw($field));}}
+        if($order){$res = $res->orderBy($order);}
+        if($offset){}else{$offset = 0;}
+        if($limit){}else{$limit = 10;}
         
-        $res = self::where($where)->first();
-        
-        if($res){$res->type_name = Arctype::where('id', $res->typeid)->value('name');}
+        $res = $res->skip($offset)->take($limit)->get();
         
         return $res;
     }
     
-    public static function add(array $data)
+    /**
+     * 获取一条
+     * @param array $where 条件
+     * @param string $field 字段
+     * @return array
+     */
+    public static function getOne($where, $field = '*')
     {
-        if ($id = self::insertGetId($data))
-        {
-            return $id;
-        }
-
-        return false;
+        $res = self::getDb();
+        
+        if($where){$res = $res->where($where);}
+        if($field){if(is_array($field)){$res = $res->select($field);}else{$res = $res->select(\DB::raw($field));}}
+        
+        $res = $res->find();
+        
+        return $res;
     }
     
-    public static function modify($where, array $data)
+    /**
+     * 添加
+     * @param array $data 数据
+     * @return int
+     */
+    public static function add(array $data,$type = 0)
     {
-        if (self::where($where)->update($data)!==false)
+        if($type==0)
+        {
+            // 新增单条数据并返回主键值
+            return self::insertGetId(parent::filterTableColumn($data,$this->table));
+        }
+        elseif($type==1)
+        {
+            /**
+             * 添加单条数据
+             * $data = ['foo' => 'bar', 'bar' => 'foo'];
+             * 添加多条数据
+             * $data = [
+             *     ['foo' => 'bar', 'bar' => 'foo'],
+             *     ['foo' => 'bar1', 'bar' => 'foo1'],
+             *     ['foo' => 'bar2', 'bar' => 'foo2']
+             * ];
+             */
+            return self::insert($data);
+        }
+    }
+    
+    /**
+     * 修改
+     * @param array $data 数据
+     * @param array $where 条件
+     * @return bool
+     */
+    public static function edit($data, $where = array())
+    {
+        if (self::where($where)->update(parent::filterTableColumn($data,$this->table)) !== false)
         {
             return true;
         }
@@ -125,14 +233,42 @@ class Article extends BaseModel
         return false;
     }
     
-    //删除一条记录
-    public static function remove($id)
+    /* public static function modify($where, array $data)
     {
-        if (!self::whereIn('id', explode(',', $id))->delete())
+        if (self::where($where)->update($data)!==false)
         {
-            return false;
+            return true;
         }
         
-        return true;
+        return false;
+    } */
+    
+    //删除一条记录
+    /* public static function remove($id)
+    {
+        return self::whereIn('id', explode(',', $id))->delete();
+    } */
+    
+    /**
+     * 删除
+     * @param array $where 条件
+     * @return bool
+     */
+    public static function del($where)
+    {
+        return self::where($where)->delete();
+    }
+    
+    //是否审核
+    public static function getIscheckAttr($data)
+    {
+        $arr = array(0 => '已审核', 1 => '未审核');
+        return $arr[$data['ischeck']];
+    }
+    
+    //是否栏目名称
+    public static function getTypenameAttr($data)
+    {
+        return DB::table('arctype')->where(array('id'=>$data['typeid']))->value('name');
     }
 }
