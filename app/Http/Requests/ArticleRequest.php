@@ -1,9 +1,7 @@
 <?php
 namespace App\Http\Requests;
 
-use Illuminate\Http\Request;
-
-class ArticleRequest extends Request
+class ArticleRequest extends BaseRequest
 {
     //总的验证规则
     protected $rules = [
@@ -31,7 +29,8 @@ class ArticleRequest extends Request
         'typeid.required' => '栏目ID必填',
         'typeid.integer' => '栏目ID必须为数字',
         'tuijian.integer' => '推荐等级必须是数字',
-        'click.integer' => '点击必须为数字',
+        'click.required' => '点击量必填',
+        'click.integer' => '点击量必须为数字',
         'title.max' => '标题不能大于150个字',
         'title.required' => '必须填写标题',
         'writer.max' => '作者不能超过20个字符',

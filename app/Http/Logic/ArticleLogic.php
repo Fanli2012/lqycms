@@ -34,7 +34,7 @@ class ArticleLogic extends BaseLogic
             foreach($res['list'] as $k=>$v)
             {
                 $res['list'][$k] = $this->getDataView($v);
-                $res['list'][$k]['typename'] = Article::getTypenameAttr(array('typeid'=>$v->typeid));
+                $res['list'][$k]->typename = Article::getTypenameAttr(array('typeid' => $v->typeid));
             }
         }
         
@@ -76,9 +76,9 @@ class ArticleLogic extends BaseLogic
         if(!$res){return false;}
         
         $res = $this->getDataView($res);
-        $res['typename'] = Article::getTypenameAttr(array('typeid'=>$res->typeid));
+        $res->typename = Article::getTypenameAttr(array('typeid'=>$res->typeid));
         
-        Article::getDb()->increment('click', 1);
+        Article::getDb()->where($where)->increment('click', 1);
         
         return $res;
     }
@@ -88,7 +88,7 @@ class ArticleLogic extends BaseLogic
     {
         if(empty($data)){return ReturnData::create(ReturnData::PARAMS_ERROR);}
         
-        $validator = $this->getValidate($_REQUEST,'add');
+        $validator = $this->getValidate($_REQUEST, 'add');
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
         $res = Article::add($data,$type);
@@ -101,7 +101,10 @@ class ArticleLogic extends BaseLogic
     public function edit($data, $where = array())
     {
         if(empty($data)){return ReturnData::create(ReturnData::SUCCESS);}
-        
+
+        $validator = $this->getValidate($_REQUEST, 'edit');
+        if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
+
         $res = Article::edit($data,$where);
         if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
         

@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Admin\CommonController;
 use DB;
+use App\Common\ReturnData;
 use Illuminate\Http\Request;
 use App\Http\Logic\ArticleLogic;
 
@@ -43,7 +44,7 @@ class ArticleController extends CommonController
 			}
         };
 		
-        $posts = $this->getLogic()->getPaginate($where);
+        $posts = $this->getLogic()->getPaginate($where, array('id', 'desc'));
 		
         $data['posts'] = $posts;
 		
@@ -87,17 +88,6 @@ class ArticleController extends CommonController
     
     public function doadd()
     {
-        //数据验证
-        $validate = new ArticleRequest();
-        $validator = Validator::make($_REQUEST, $validate->getSceneRules('add'), $validate->getSceneRulesMessages());
-        
-        if ($validator->fails())
-        {
-            dd($validator->errors()->first());
-            //$validator->errors()->all();
-            error_jump('参数错误');
-        }
-        
         $litpic="";if(!empty($_POST["litpic"])){$litpic = $_POST["litpic"];}else{$_POST['litpic']="";} //缩略图
         if(empty($_POST["description"])){if(!empty($_POST["body"])){$_POST['description']=cut_str($_POST["body"]);}} //description
         $content="";if(!empty($_POST["body"])){$content = $_POST["body"];}
@@ -144,18 +134,15 @@ class ArticleController extends CommonController
 				$_POST['litpic']='/uploads/'.date('Y/m',time()).'/'.basename($imagepath,'.'.$out[2][0]).'-lp.'.$out[2][0];
 			}
 		}
-		
-		unset($_POST["dellink"]);
-		unset($_POST["autolitpic"]);
-		unset($_POST["_token"]);
-        if(isset($_POST['editorValue'])){unset($_POST['editorValue']);}
-		if(DB::table('article')->insert($_POST))
-        {
-			success_jump("添加成功！");
-        }
+
+		$res = $this->getLogic()->add($_POST);
+		if($res['code']==ReturnData::SUCCESS)
+		{
+			success_jump($res['msg'], route('admin_article'));
+		}
 		else
 		{
-			error_jump("添加失败！请修改后重新添加");
+			error_jump($res['msg']);
 		}
     }
     
@@ -164,7 +151,7 @@ class ArticleController extends CommonController
         if(!empty($_GET["id"])){$id = $_GET["id"];}else {$id="";}if(preg_match('/[0-9]*/',$id)){}else{exit;}
         
 		$data['id'] = $id;
-		$data['post'] = object_to_array(DB::table('article')->where('id', $id)->first(), 1);
+		$data['post'] = object_to_array($this->getLogic()->getOne(['id'=>$id]), 1);
         
         return view('admin.article.edit', $data);
     }
@@ -176,8 +163,7 @@ class ArticleController extends CommonController
         if(empty($_POST["description"])){if(!empty($_POST["body"])){$_POST['description']=cut_str($_POST["body"]);}} //description
         $content="";if(!empty($_POST["body"])){$content = $_POST["body"];}
         $_POST['pubdate'] = time();//更新时间
-        $_POST['user_id'] = $_SESSION['admin_user_info']['id']; // 修改者id
-        
+
 		if(!empty($_POST["keywords"]))
 		{
 			$_POST['keywords']=str_replace("，",",",$_POST["keywords"]);
@@ -216,18 +202,15 @@ class ArticleController extends CommonController
 				$_POST['litpic']='/uploads/'.date('Y/m',time()).'/'.basename($imagepath,'.'.$out[2][0]).'-lp.'.$out[2][0];
 			}
 		}
-		
-		unset($_POST["dellink"]);
-		unset($_POST["autolitpic"]);
-		unset($_POST["_token"]);
-        if(isset($_POST['editorValue'])){unset($_POST['editorValue']);}
-        if(DB::table('article')->where('id', $id)->update($_POST))
-        {
-            success_jump("修改成功！", route('admin_article'));
-        }
+
+		$res = $this->getLogic()->edit($_POST,array('id'=>$id));
+		if($res['code']==ReturnData::SUCCESS)
+		{
+			success_jump($res['msg'], route('admin_article'));
+		}
 		else
 		{
-			error_jump("修改失败！");
+			error_jump($res['msg']);
 		}
     }
     

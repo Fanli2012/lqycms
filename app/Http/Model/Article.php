@@ -64,7 +64,7 @@ class Article extends BaseModel
     public static function getList($where = array(), $order = '', $field = '*', $offset = 0, $limit = 10)
     {
         $model = self::getDb();
-        if($where){$res = $res->where($where);}
+        if($where){$model = $model->where($where);}
         
         $res['count'] = $model->count();
         $res['list'] = array();
@@ -72,7 +72,7 @@ class Article extends BaseModel
         if($res['count'] > 0)
         {
             if($field){if(is_array($field)){$model = $model->select($field);}else{$model = $model->select(\DB::raw($field));}}
-            if($order){$model = $model->orderBy($order);}
+            if($order){$model = parent::getOrderByData($model, $order);}
             if($offset){}else{$offset = 0;}
             if($limit){}else{$limit = 10;}
             
@@ -142,7 +142,7 @@ class Article extends BaseModel
         
         if($where){$res = $res->where($where);}
         if($field){if(is_array($field)){$res = $res->select($field);}else{$res = $res->select(\DB::raw($field));}}
-        if($order){$res = $res->orderBy($order);}
+        if($order){$res = parent::getOrderByData($res, $order);}
         if($limit){}else{$limit = 10;}
         
         return $res->paginate($limit);
@@ -162,7 +162,7 @@ class Article extends BaseModel
         
         if($where){$res = $res->where($where);}
         if($field){if(is_array($field)){$res = $res->select($field);}else{$res = $res->select(\DB::raw($field));}}
-        if($order){$res = $res->orderBy($order);}
+        if($order){$res = parent::getOrderByData($res, $order);}
         if($offset){}else{$offset = 0;}
         if($limit){}else{$limit = 10;}
         
@@ -199,7 +199,7 @@ class Article extends BaseModel
         if($type==0)
         {
             // 新增单条数据并返回主键值
-            return self::insertGetId(parent::filterTableColumn($data,$this->table));
+            return self::insertGetId(parent::filterTableColumn($data,'article'));
         }
         elseif($type==1)
         {
@@ -225,7 +225,7 @@ class Article extends BaseModel
      */
     public static function edit($data, $where = array())
     {
-        if (self::where($where)->update(parent::filterTableColumn($data,$this->table)) !== false)
+        if (self::where($where)->update(parent::filterTableColumn($data,'article')) !== false)
         {
             return true;
         }
@@ -258,14 +258,14 @@ class Article extends BaseModel
     {
         return self::where($where)->delete();
     }
-    
+
     //是否审核
     public static function getIscheckAttr($data)
     {
         $arr = array(0 => '已审核', 1 => '未审核');
-        return $arr[$data['ischeck']];
+        return $arr[$data->ischeck];
     }
-    
+
     //是否栏目名称
     public static function getTypenameAttr($data)
     {

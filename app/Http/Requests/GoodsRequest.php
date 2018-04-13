@@ -1,9 +1,7 @@
 <?php
 namespace App\Http\Requests;
 
-use Illuminate\Http\Request;
-
-class GoodsRequest extends Request
+class GoodsRequest extends BaseRequest
 {
     //总的验证规则
     protected $rules = [

@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Api\CommonController;
 use Illuminate\Http\Request;
 use Log;
+use DB;
 use App\Common\ReturnData;
-
 use App\Http\Model\Article;
+use App\Http\Logic\ArticleLogic;
 
 class ArticleController extends CommonController
 {
@@ -14,16 +15,21 @@ class ArticleController extends CommonController
     {
         parent::__construct();
     }
-	
+
+    public function getLogic()
+    {
+        return new ArticleLogic();
+    }
+
     public function articleList(Request $request)
 	{
         //参数
-        $data['limit'] = $request->input('limit', 10);
-        $data['offset'] = $request->input('offset', 0);
-        if($request->input('typeid', '') != ''){$data['typeid'] = $request->input('typeid');}
-        $data['ischeck'] = Article::IS_CHECK;
+        $limit = $request->input('limit', 10);
+        $offset = $request->input('offset', 0);
+        if($request->input('typeid', null) != null){$where['typeid'] = $request->input('typeid');}
+        $where['ischeck'] = Article::IS_CHECK;
         
-        $res = Article::getList($data);
+        $res = $this->getLogic()->getList($where, array('id', 'desc'), '*', $offset, $limit);
 		if($res === false)
 		{
 			return ReturnData::create(ReturnData::SYSTEM_FAIL);
@@ -44,7 +50,7 @@ class ArticleController extends CommonController
         $data['ischeck'] = Article::IS_CHECK;
         if($data['id']==''){return ReturnData::create(ReturnData::PARAMS_ERROR);}
         
-        $res = Article::getOne($data);
+        $res = $this->getLogic()->getOne($data);
 		if($res === false)
 		{
 			return ReturnData::create(ReturnData::SYSTEM_FAIL);
@@ -52,9 +58,7 @@ class ArticleController extends CommonController
         
         //$res->pubdate = date('Y-m-d H:i',$res->pubdate);
         //$res->addtime = date('Y-m-d H:i',$res->addtime);
-        
-        \DB::table('article')->where(array('id'=>$data['id']))->increment('click', 1);
-        
+
 		return ReturnData::create(ReturnData::SUCCESS,$res);
     }
 }

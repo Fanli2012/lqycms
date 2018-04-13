@@ -1178,7 +1178,8 @@ function getDataAttr($dataModel,$data = [])
         
         if(method_exists($dataModel, $_method))
         {
-            $data[$k.'_text'] = $dataModel::$_method($data);
+			$tmp = $k.'_text';
+            $data->$tmp = $dataModel::$_method($data);
         }
     }
     
