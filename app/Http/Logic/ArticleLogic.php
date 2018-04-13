@@ -88,7 +88,7 @@ class ArticleLogic extends BaseLogic
     {
         if(empty($data)){return ReturnData::create(ReturnData::PARAMS_ERROR);}
         
-        $validator = $this->getValidate($_REQUEST, 'add');
+        $validator = $this->getValidate($data, 'add');
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
         $res = Article::add($data,$type);
@@ -101,10 +101,10 @@ class ArticleLogic extends BaseLogic
     public function edit($data, $where = array())
     {
         if(empty($data)){return ReturnData::create(ReturnData::SUCCESS);}
-
-        $validator = $this->getValidate($_REQUEST, 'edit');
+        
+        $validator = $this->getValidate($data, 'edit');
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
-
+        
         $res = Article::edit($data,$where);
         if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
         

@@ -3,6 +3,7 @@ namespace App\Http\Logic;
 use App\Common\ReturnData;
 use App\Http\Model\Arctype;
 use App\Http\Requests\ArctypeRequest;
+use Validator;
 
 class ArctypeLogic extends BaseLogic
 {
@@ -16,15 +17,17 @@ class ArctypeLogic extends BaseLogic
         return new Arctype();
     }
     
-    public function getValidate()
+    public function getValidate($data, $scene_name)
     {
-        return Loader::validate('Arctype');
+        //数据验证
+        $validate = new ArctypeRequest();
+        return Validator::make($data, $validate->getSceneRules($scene_name), $validate->getSceneRulesMessages());
     }
     
     //列表
     public function getList($where = array(), $order = '', $field = '*', $offset = '', $limit = '')
     {
-        $res = $this->getModel()->getList($where, $order, $field, $offset, $limit);
+        $res = Arctype::getList($where, $order, $field, $offset, $limit);
         
         if($res['list'])
         {
@@ -40,7 +43,7 @@ class ArctypeLogic extends BaseLogic
     //分页html
     public function getPaginate($where = array(), $order = '', $field = '*', $limit = '')
     {
-        $res = $this->getModel()->getPaginate($where, $order, $field, $limit);
+        $res = Arctype::getPaginate($where, $order, $field, $limit);
         
         return $res;
     }
@@ -48,7 +51,7 @@ class ArctypeLogic extends BaseLogic
     //全部列表
     public function getAll($where = array(), $order = '', $field = '*', $limit = '')
     {
-        $res = $this->getModel()->getAll($where, $order, $field, $limit);
+        $res = Arctype::getAll($where, $order, $field, $limit);
         
         /* if($res)
         {
@@ -64,7 +67,7 @@ class ArctypeLogic extends BaseLogic
     //详情
     public function getOne($where = array(), $field = '*')
     {
-        $res = $this->getModel()->getOne($where, $field);
+        $res = Arctype::getOne($where, $field);
         if(!$res){return false;}
         
         $res = $this->getDataView($res);
@@ -77,10 +80,10 @@ class ArctypeLogic extends BaseLogic
     {
         if(empty($data)){return ReturnData::create(ReturnData::PARAMS_ERROR);}
         
-        $check = $this->getValidate()->scene('add')->check($data);
-        if($check === false){return ReturnData::create(ReturnData::PARAMS_ERROR,null,$this->getValidate()->getError());}
+        $validator = $this->getValidate($data, 'add');
+        if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
-        $res = $this->getModel()->add($data,$type);
+        $res = Arctype::add($data,$type);
         if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
         
         return ReturnData::create(ReturnData::SUCCESS,$res);
@@ -91,7 +94,10 @@ class ArctypeLogic extends BaseLogic
     {
         if(empty($data)){return ReturnData::create(ReturnData::SUCCESS);}
         
-        $res = $this->getModel()->edit($data,$where);
+        $validator = $this->getValidate($data, 'edit');
+        if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
+        
+        $res = Arctype::edit($data,$where);
         if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
         
         return ReturnData::create(ReturnData::SUCCESS,$res);
@@ -102,10 +108,10 @@ class ArctypeLogic extends BaseLogic
     {
         if(empty($where)){return ReturnData::create(ReturnData::PARAMS_ERROR);}
         
-        $check = $this->getValidate()->scene('del')->check($where);
-        if($check === false){return ReturnData::create(ReturnData::PARAMS_ERROR,null,$this->getValidate()->getError());}
+        $validator = $this->getValidate($where,'del');
+        if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
-        $res = $this->getModel()->del($where);
+        $res = Arctype::del($where);
         if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
         
         return ReturnData::create(ReturnData::SUCCESS,$res);

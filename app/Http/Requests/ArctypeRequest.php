@@ -43,7 +43,7 @@ class ArctypeRequest extends BaseRequest
     
     //场景验证规则
     protected $scene = [
-        'add' => ['typename', 'typedir', 'pid', 'addtime', 'seotitle', 'keywords', 'description', 'listorder', 'templist', 'temparticle', 'litpic', 'seokeyword'],
+        'add' => ['name', 'typedir', 'pid', 'addtime', 'seotitle', 'keywords', 'description', 'listorder', 'templist', 'temparticle', 'litpic', 'seokeyword'],
         'del' => ['id'],
     ];
     

@@ -309,4 +309,10 @@ class Goods extends BaseModel
             DB::table('goods')->where(array('id'=>$goods_id))->decrement('goods_number', $goods_number);
         }
     }
+    
+    //获取栏目名称
+    public static function getTypenameAttr($data)
+    {
+        return DB::table('goods_type')->where(array('id'=>$data['typeid']))->value('name');
+    }
 }

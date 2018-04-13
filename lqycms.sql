@@ -78,13 +78,15 @@ insert  into `ecs_topic`(`topic_id`,`title`,`intro`,`start_time`,`end_time`,`dat
 DROP TABLE IF EXISTS `fl_access`;
 
 CREATE TABLE `fl_access` (
-  `role_id` mediumint(7) unsigned NOT NULL DEFAULT '0',
-  `menu_id` mediumint(7) unsigned NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+  `role_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `menu_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=182 DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
 
 /*Data for the table `fl_access` */
 
-insert  into `fl_access`(`role_id`,`menu_id`) values (3,1),(3,11),(3,12),(3,13),(3,14),(3,15),(3,16),(3,17),(3,18),(3,19),(3,20),(3,21),(3,22),(3,23),(3,24),(3,25),(3,32),(3,33),(3,34),(3,35),(3,36),(3,37),(3,6),(3,78),(3,83),(1,1),(1,2),(1,3),(1,4),(1,5),(1,6),(1,7),(1,8),(1,9),(1,10),(1,11),(1,12),(1,13),(1,14),(1,15),(1,16),(1,17),(1,18),(1,19),(1,20),(1,21),(1,22),(1,23),(1,24),(1,25),(1,26),(1,27),(1,28),(1,29),(1,30),(1,31),(1,32),(1,33),(1,34),(1,35),(1,36),(1,37),(1,38),(1,39),(1,40),(1,41),(1,42),(1,43),(1,44),(1,45),(1,46),(1,47),(1,48),(1,49),(1,50),(1,51),(1,52),(1,53),(1,54),(1,55),(1,56),(1,57),(1,58),(1,59),(1,60),(1,61),(1,62),(1,63),(1,64),(1,65),(1,66),(1,67),(1,68),(1,69),(1,70),(1,71),(1,72),(1,73),(1,74),(1,75),(1,76),(1,77),(1,78),(1,79),(1,80),(1,81),(1,82),(1,83),(1,84),(1,85),(1,86),(1,87),(1,88),(1,89),(1,90),(1,91),(1,92),(1,93),(1,94),(1,95),(1,96),(1,97),(1,98),(1,99),(1,100),(1,101),(1,102),(1,103),(1,104),(1,105),(1,106),(1,107),(1,108),(1,109),(1,110),(1,111),(1,112),(1,113),(1,114),(1,115),(1,116),(1,117),(2,2),(2,38),(2,39),(2,40),(2,41),(2,42),(2,50),(2,43),(2,44),(2,45),(2,46),(2,47),(2,48),(2,49),(2,51),(2,107),(2,108),(2,109),(2,110),(2,111),(2,112),(2,5),(2,7),(2,8),(2,9),(2,10),(2,104),(1,118),(1,119),(1,120),(1,121),(1,122),(1,123),(1,124),(1,125),(1,126),(1,127),(1,128),(1,129);
+insert  into `fl_access`(`role_id`,`menu_id`,`id`) values (3,1,1),(3,11,2),(3,12,3),(3,13,4),(3,14,5),(3,15,6),(3,16,7),(3,17,8),(3,18,9),(3,19,10),(3,20,11),(3,21,12),(3,22,13),(3,23,14),(3,24,15),(3,25,16),(3,32,17),(3,33,18),(3,34,19),(3,35,20),(3,36,21),(3,37,22),(3,6,23),(3,78,24),(3,83,25),(1,1,26),(1,2,27),(1,3,28),(1,4,29),(1,5,30),(1,6,31),(1,7,32),(1,8,33),(1,9,34),(1,10,35),(1,11,36),(1,12,37),(1,13,38),(1,14,39),(1,15,40),(1,16,41),(1,17,42),(1,18,43),(1,19,44),(1,20,45),(1,21,46),(1,22,47),(1,23,48),(1,24,49),(1,25,50),(1,26,51),(1,27,52),(1,28,53),(1,29,54),(1,30,55),(1,31,56),(1,32,57),(1,33,58),(1,34,59),(1,35,60),(1,36,61),(1,37,62),(1,38,63),(1,39,64),(1,40,65),(1,41,66),(1,42,67),(1,43,68),(1,44,69),(1,45,70),(1,46,71),(1,47,72),(1,48,73),(1,49,74),(1,50,75),(1,51,76),(1,52,77),(1,53,78),(1,54,79),(1,55,80),(1,56,81),(1,57,82),(1,58,83),(1,59,84),(1,60,85),(1,61,86),(1,62,87),(1,63,88),(1,64,89),(1,65,90),(1,66,91),(1,67,92),(1,68,93),(1,69,94),(1,70,95),(1,71,96),(1,72,97),(1,73,98),(1,74,99),(1,75,100),(1,76,101),(1,77,102),(1,78,103),(1,79,104),(1,80,105),(1,81,106),(1,82,107),(1,83,108),(1,84,109),(1,85,110),(1,86,111),(1,87,112),(1,88,113),(1,89,114),(1,90,115),(1,91,116),(1,92,117),(1,93,118),(1,94,119),(1,95,120),(1,96,121),(1,97,122),(1,98,123),(1,99,124),(1,100,125),(1,101,126),(1,102,127),(1,103,128),(1,104,129),(1,105,130),(1,106,131),(1,107,132),(1,108,133),(1,109,134),(1,110,135),(1,111,136),(1,112,137),(1,113,138),(1,114,139),(1,115,140),(1,116,141),(1,117,142),(2,2,143),(2,38,144),(2,39,145),(2,40,146),(2,41,147),(2,42,148),(2,50,149),(2,43,150),(2,44,151),(2,45,152),(2,46,153),(2,47,154),(2,48,155),(2,49,156),(2,51,157),(2,107,158),(2,108,159),(2,109,160),(2,110,161),(2,111,162),(2,112,163),(2,5,164),(2,7,165),(2,8,166),(2,9,167),(2,10,168),(2,104,169),(1,118,170),(1,119,171),(1,120,172),(1,121,173),(1,122,174),(1,123,175),(1,124,176),(1,125,177),(1,126,178),(1,127,179),(1,128,180),(1,129,181);
 
 /*Table structure for table `fl_admin` */
 
@@ -96,7 +98,7 @@ CREATE TABLE `fl_admin` (
   `email` varchar(30) NOT NULL DEFAULT '' COMMENT '邮箱',
   `logintime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '登录时间',
   `pwd` char(32) NOT NULL DEFAULT '' COMMENT 'admin',
-  `role_id` smallint(4) unsigned NOT NULL DEFAULT '0' COMMENT '角色id',
+  `role_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '角色id',
   `status` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '用户状态 0：正常； 1：禁用 ；2：未验证',
   `mobile` varchar(20) NOT NULL DEFAULT '' COMMENT '手机号',
   `avatar` varchar(150) NOT NULL DEFAULT '' COMMENT '头像',
@@ -113,7 +115,7 @@ insert  into `fl_admin`(`id`,`username`,`email`,`logintime`,`pwd`,`role_id`,`sta
 DROP TABLE IF EXISTS `fl_admin_role`;
 
 CREATE TABLE `fl_admin_role` (
-  `id` smallint(4) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL DEFAULT '' COMMENT '角色名',
   `des` varchar(150) NOT NULL DEFAULT '' COMMENT '描述',
   `status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '状态，0启用，1禁用',
@@ -396,7 +398,7 @@ CREATE TABLE `fl_goods` (
 
 /*Data for the table `fl_goods` */
 
-insert  into `fl_goods`(`id`,`typeid`,`tuijian`,`click`,`title`,`body`,`sn`,`price`,`litpic`,`pubdate`,`add_time`,`keywords`,`seotitle`,`description`,`status`,`shipping_fee`,`market_price`,`goods_number`,`user_id`,`sale`,`cost_price`,`goods_weight`,`point`,`comments`,`promote_start_date`,`promote_price`,`promote_end_date`,`goods_img`,`warn_number`,`spec`,`listorder`,`brand_id`) values (1,2,1,5677,'示例产品一','<p>是的发生</p>','sn123456','45000.00','/uploads/2018/04/1.jpg',1512273964,1496577749,'示例,产品,一','','是的发生',0,'0.00','50000.00',99,1,123,'0.00','0.00',0,0,0,'0.00',0,'/uploads/2017/06/201706041951031181.jpg',0,'',50,0),(2,1,1,37,'示例产品二','说的是','sn987','1.00','/uploads/2018/04/2.jpg',1496578330,1496578313,'产品,示例,二','','',0,'3.00','2.00',106,1,67,'0.00','0.00',0,0,0,'0.00',0,'/uploads/2017/06/201706042011354141.jpg',0,'',50,0),(3,1,0,38,'示例产品三','是的发生','sn232143','5.10','/uploads/2018/04/3.jpg',1496578380,1496578380,'示例,产品,三','','',0,'3.00','4.00',103,1,99,'0.00','0.00',0,0,0,'0.00',0,'/uploads/2017/06/201706042012428057.jpg',0,'',50,1),(4,1,0,115,'示例产品四','<p>电热熔</p>','sn9809702','5.00','/uploads/2018/04/4.jpg',1519736409,1496578429,'示例,产品,四','','电热熔',0,'3.00','6.00',91,1,345,'0.00','0.00',0,0,1518435963,'2.00',1519905139,'/uploads/2017/06/201706042013331349.jpg',0,'',50,0),(5,1,0,10,'示例产品五','就回家好看','kjkhk3','989.00','/uploads/2018/04/5.jpg',1522849406,1522849066,'示例,产品,五','','',0,'898.00','98.00',8989,1,1234,'0.00','0.00',0,0,1523281235,'909.00',1524750039,'',1,'',50,0);
+insert  into `fl_goods`(`id`,`typeid`,`tuijian`,`click`,`title`,`body`,`sn`,`price`,`litpic`,`pubdate`,`add_time`,`keywords`,`seotitle`,`description`,`status`,`shipping_fee`,`market_price`,`goods_number`,`user_id`,`sale`,`cost_price`,`goods_weight`,`point`,`comments`,`promote_start_date`,`promote_price`,`promote_end_date`,`goods_img`,`warn_number`,`spec`,`listorder`,`brand_id`) values (1,2,1,5699,'示例产品一','<p>是的发生</p>','sn123456','45000.00','/uploads/2018/04/1.jpg',1512273964,1496577749,'示例,产品,一','','是的发生',0,'0.00','50000.00',99,1,123,'0.00','0.00',0,0,0,'0.00',0,'/uploads/2017/06/201706041951031181.jpg',0,'',50,0),(2,1,1,38,'示例产品二','说的是','sn987','1.00','/uploads/2018/04/2.jpg',1496578330,1496578313,'产品,示例,二','','',0,'3.00','2.00',106,1,67,'0.00','0.00',0,0,0,'0.00',0,'/uploads/2017/06/201706042011354141.jpg',0,'',50,0),(3,1,0,39,'示例产品三','是的发生','sn232143','5.10','/uploads/2018/04/3.jpg',1496578380,1496578380,'示例,产品,三','','',0,'3.00','4.00',103,1,99,'0.00','0.00',0,0,0,'0.00',0,'/uploads/2017/06/201706042012428057.jpg',0,'',50,1),(4,1,0,115,'示例产品四','<p>电热熔</p>','sn9809702','5.00','/uploads/2018/04/4.jpg',1519736409,1496578429,'示例,产品,四','','电热熔',0,'3.00','6.00',91,1,345,'0.00','0.00',0,0,1518435963,'2.00',1519905139,'/uploads/2017/06/201706042013331349.jpg',0,'',50,0),(5,1,0,12,'示例产品五','就回家好看','kjkhk3','989.00','/uploads/2018/04/5.jpg',1522849406,1522849066,'示例,产品,五','','',0,'898.00','98.00',8989,1,1234,'0.00','0.00',0,0,1523281235,'909.00',1524750039,'',1,'',50,0);
 
 /*Table structure for table `fl_goods_brand` */
 
@@ -551,8 +553,8 @@ insert  into `fl_kuaidi`(`id`,`name`,`code`,`money`,`country`,`des`,`tel`,`websi
 DROP TABLE IF EXISTS `fl_menu`;
 
 CREATE TABLE `fl_menu` (
-  `id` int(6) unsigned NOT NULL AUTO_INCREMENT,
-  `pid` int(6) unsigned NOT NULL DEFAULT '0' COMMENT '父级id',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `pid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '父级id',
   `action` varchar(50) NOT NULL DEFAULT '' COMMENT '操作名称',
   `data` varchar(50) NOT NULL DEFAULT '' COMMENT '额外参数',
   `type` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '菜单类型  1：权限认证+菜单；0：只作为菜单',
@@ -799,6 +801,8 @@ CREATE TABLE `fl_session` (
   `session_id` varchar(250) NOT NULL COMMENT 'session_id',
   `session_expire` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '过期时间',
   `session_data` blob NOT NULL COMMENT 'session数据',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`),
   UNIQUE KEY `session_id` (`session_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -917,12 +921,14 @@ DROP TABLE IF EXISTS `fl_taglist`;
 CREATE TABLE `fl_taglist` (
   `tid` int(11) unsigned NOT NULL COMMENT '标签id',
   `aid` int(11) unsigned NOT NULL COMMENT '文章id',
-  PRIMARY KEY (`tid`,`aid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='tag标签-文章关系表';
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `idx_tid_aid` (`tid`,`aid`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='tag标签-文章关系表';
 
 /*Data for the table `fl_taglist` */
 
-insert  into `fl_taglist`(`tid`,`aid`) values (1,2),(1,5),(1,13),(2,10),(2,12);
+insert  into `fl_taglist`(`tid`,`aid`,`id`) values (1,2,1),(1,5,2),(1,13,3),(2,10,4),(2,12,5);
 
 /*Table structure for table `fl_token` */
 

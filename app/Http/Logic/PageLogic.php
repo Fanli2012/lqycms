@@ -1,14 +1,15 @@
 <?php
-namespace app\common\logic;
-use think\Loader;
-use app\common\lib\ReturnData;
-use app\common\model\Page;
+namespace App\Http\Logic;
+use App\Common\ReturnData;
+use App\Http\Model\Page;
+use App\Http\Requests\PageRequest;
+use Validator;
 
 class PageLogic extends BaseLogic
 {
-    protected function initialize()
+    public function __construct()
     {
-        parent::initialize();
+        parent::__construct();
     }
     
     public function getModel()
@@ -16,15 +17,17 @@ class PageLogic extends BaseLogic
         return new Page();
     }
     
-    public function getValidate()
+    public function getValidate($data, $scene_name)
     {
-        return Loader::validate('Page');
+        //数据验证
+        $validate = new PageRequest();
+        return Validator::make($data, $validate->getSceneRules($scene_name), $validate->getSceneRulesMessages());
     }
     
     //列表
     public function getList($where = array(), $order = '', $field = '*', $offset = '', $limit = '')
     {
-        $res = $this->getModel()->getList($where, $order, $field, $offset, $limit);
+        $res = Page::getList($where, $order, $field, $offset, $limit);
         
         if($res['list'])
         {
@@ -40,7 +43,7 @@ class PageLogic extends BaseLogic
     //分页html
     public function getPaginate($where = array(), $order = '', $field = '*', $limit = '')
     {
-        $res = $this->getModel()->getPaginate($where, $order, $field, $limit);
+        $res = Page::getPaginate($where, $order, $field, $limit);
         
         return $res;
     }
@@ -48,7 +51,7 @@ class PageLogic extends BaseLogic
     //全部列表
     public function getAll($where = array(), $order = '', $field = '*', $limit = '')
     {
-        $res = $this->getModel()->getAll($where, $order, $field, $limit);
+        $res = Page::getAll($where, $order, $field, $limit);
         
         /* if($res)
         {
@@ -64,12 +67,10 @@ class PageLogic extends BaseLogic
     //详情
     public function getOne($where = array(), $field = '*')
     {
-        $res = $this->getModel()->getOne($where, $field);
+        $res = Page::getOne($where, $field);
         if(!$res){return false;}
         
         $res = $this->getDataView($res);
-        
-        $this->getModel()->getDb()->where($where)->setInc('click', 1);
         
         return $res;
     }
@@ -79,10 +80,10 @@ class PageLogic extends BaseLogic
     {
         if(empty($data)){return ReturnData::create(ReturnData::PARAMS_ERROR);}
         
-        $check = $this->getValidate()->scene('add')->check($data);
-        if($check === false){return ReturnData::create(ReturnData::PARAMS_ERROR,null,$this->getValidate()->getError());}
+        $validator = $this->getValidate($data, 'add');
+        if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
-        $res = $this->getModel()->add($data,$type);
+        $res = Page::add($data,$type);
         if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
         
         return ReturnData::create(ReturnData::SUCCESS,$res);
@@ -93,7 +94,10 @@ class PageLogic extends BaseLogic
     {
         if(empty($data)){return ReturnData::create(ReturnData::SUCCESS);}
         
-        $res = $this->getModel()->edit($data,$where);
+        $validator = $this->getValidate($data, 'edit');
+        if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
+        
+        $res = Page::edit($data,$where);
         if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
         
         return ReturnData::create(ReturnData::SUCCESS,$res);
@@ -104,10 +108,10 @@ class PageLogic extends BaseLogic
     {
         if(empty($where)){return ReturnData::create(ReturnData::PARAMS_ERROR);}
         
-        $check = $this->getValidate()->scene('del')->check($where);
-        if($check === false){return ReturnData::create(ReturnData::PARAMS_ERROR,null,$this->getValidate()->getError());}
+        $validator = $this->getValidate($where,'del');
+        if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
-        $res = $this->getModel()->del($where);
+        $res = Page::del($where);
         if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
         
         return ReturnData::create(ReturnData::SUCCESS,$res);

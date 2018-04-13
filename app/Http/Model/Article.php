@@ -12,7 +12,7 @@ class Article extends BaseModel
      * @var string
      */
 	protected $table = 'article';
-	
+	const TABLE_NAME = 'article';
 	/**
      * 表明模型是否应该被打上时间戳
      * 默认情况下，Eloquent 期望 created_at 和updated_at 已经存在于数据表中，如果你不想要这些 Laravel 自动管理的数据列，在模型类中设置 $timestamps 属性为 false
@@ -41,7 +41,7 @@ class Article extends BaseModel
     
     public static function getDb()
     {
-        return DB::table('article');
+        return DB::table(self::TABLE_NAME);
     }
     
 	/**
@@ -199,7 +199,7 @@ class Article extends BaseModel
         if($type==0)
         {
             // 新增单条数据并返回主键值
-            return self::insertGetId(parent::filterTableColumn($data,'article'));
+            return self::insertGetId(parent::filterTableColumn($data,self::TABLE_NAME));
         }
         elseif($type==1)
         {
@@ -225,7 +225,7 @@ class Article extends BaseModel
      */
     public static function edit($data, $where = array())
     {
-        if (self::where($where)->update(parent::filterTableColumn($data,'article')) !== false)
+        if (self::where($where)->update(parent::filterTableColumn($data,self::TABLE_NAME)) !== false)
         {
             return true;
         }
@@ -258,15 +258,15 @@ class Article extends BaseModel
     {
         return self::where($where)->delete();
     }
-
+    
     //是否审核
     public static function getIscheckAttr($data)
     {
         $arr = array(0 => '已审核', 1 => '未审核');
         return $arr[$data->ischeck];
     }
-
-    //是否栏目名称
+    
+    //获取栏目名称
     public static function getTypenameAttr($data)
     {
         return DB::table('arctype')->where(array('id'=>$data['typeid']))->value('name');
