@@ -1,41 +1,29 @@
 <?php
 namespace App\Http\Requests;
 
-class GuestbookRequest extends BaseRequest
+class KeywordRequest extends BaseRequest
 {
     //总的验证规则
     protected $rules = [
         'id' => 'required|integer',
-        'title' => 'required|max:150',
-        'addtime' => 'required|integer',
-        'msg' => 'required|max:250',
-        'status' => 'integer|between:[0,1]',
-        'name' => 'max:30',
-        'phone' => 'max:20',
-        'email' => 'max:60',
+        'keyword' => 'required|max:30',
+        'rpurl' => 'required|max:150',
     ];
     
     //总的自定义错误信息
     protected $messages = [
         'id.required' => 'ID必填',
         'id.integer' => 'ID必须为数字',
-        'title.required' => '标题必填',
-        'title.max' => '标题不能超过150个字符',
-        'addtime.required' => '添加时间必填',
-        'addtime.integer' => '添加时间必须是数字',
-        'msg.required' => '描述必填',
-        'msg.max' => '描述不能超过250个字符',
-        'status.integer' => '状态必须是数字',
-        'status.between' => '是否阅读，默认0未阅读',
-        'name.max' => '姓名不能超过30个字符',
-        'phone.max' => '电话不能超过20个字符',
-        'email.max' => '邮箱不能超过60个字符',
+        'keyword.required' => '关键词必填',
+        'keyword.max' => '关键词不能超过30个字符',
+        'rpurl.required' => '链接网址必填',
+        'rpurl.max' => '链接网址不能超过150个字符',
     ];
     
     //场景验证规则
     protected $scene = [
-        'add'  => ['title', 'addtime', 'msg', 'status', 'name', 'phone', 'email'],
-        'edit' => ['title', 'addtime', 'msg', 'status', 'name', 'phone', 'email'],
+        'add'  => ['keyword', 'rpurl'],
+        'edit' => ['keyword', 'rpurl'],
         'del'  => ['id'],
     ];
     

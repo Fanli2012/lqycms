@@ -1,49 +1,50 @@
 <?php
 namespace App\Http\Requests;
 
-class GoodsBrandRequest extends BaseRequest
+class BonusRequest extends BaseRequest
 {
     //总的验证规则
     protected $rules = [
         'id' => 'required|integer',
-        'pid' => 'integer',
-        'add_time' => 'required|integer',
-        'title' => 'required|max:150',
-        'seotitle' => 'max:150',
-        'keywords' => 'max:60',
-        'description' => 'max:240',
-        'litpic' => 'max:100',
+        'name' => 'required|max:60',
+        'money' => ['required','regex:/^\d{0,10}(\.\d{0,2})?$/'],
+        'min_amount' => ['required','regex:/^\d{0,10}(\.\d{0,2})?$/'],
+        'start_time' => 'required|date_format:"Y-m-d H:i:s"',
+        'end_time' => 'required|date_format:"Y-m-d H:i:s"',
+        'point' => 'integer|between:[1,9999]',
         'status' => 'integer|between:[0,1]',
-        'listorder' => 'integer|between:[1,9999]',
-        'cover_img' => 'max:100',
-        'click' => 'integer',
+        'add_time' => 'required|integer',
+        'num' => 'integer|between:[-1,999999]',
     ];
     
     //总的自定义错误信息
     protected $messages = [
         'id.required' => 'ID必填',
         'id.integer' => 'ID必须为数字',
-        'pid.integer' => '父级id必须为数字',
+        'name.required' => '名称必填',
+        'name.max' => '名称不能大于60个字',
+        'money.required' => '金额必填',
+        'money.regex' => '金额只能带2位小数的数字',
+        'min_amount.required' => '满多少使用必填',
+        'min_amount.regex' => '满多少使用只能带2位小数的数字',
+        'start_time.required' => '开始时间必填',
+        'start_time.date_format' => '开始时间格式不正确，格式：1990-01-01 00:00:00',
+        'end_time.required' => '结束时间必填',
+        'end_time.date_format' => '结束时间格式不正确，格式：1990-01-01 00:00:00',
+        'point.integer' => '兑换优惠券所需积分必须是数字',
+        'point.between' => '兑换优惠券所需积分只能1-9999',
+        'status.integer' => '兑换优惠券所需积分必须是数字',
+        'status.between' => '状态：0可用，1不可用',
         'add_time.required' => '添加时间必填',
         'add_time.integer' => '添加时间必须是数字',
-        'title.required' => '标题必填',
-        'title.max' => '标题不能超过150个字符',
-        'seotitle.max' => 'seo标题不能超过150个字符',
-        'keywords.max' => '关键词不能超过60个字符',
-        'description.max' => '描述不能超过240个字符',
-        'litpic.max' => '缩略图不能超过100个字符',
-        'status.integer' => '是否显示必须是数字',
-        'status.between' => '是否显示，0显示',
-        'listorder.integer' => '排序必须是数字',
-        'listorder.between' => '排序只能1-9999',
-        'cover_img.max' => '封面不能超过100个字符',
-        'click.integer' => '点击必须为数字',
+        'num.integer' => '优惠券数量必须是数字',
+        'num.between' => '优惠券数量只能-1-999999',
     ];
     
     //场景验证规则
     protected $scene = [
-        'add'  => ['pid', 'add_time', 'title', 'seotitle', 'keywords', 'description', 'litpic', 'status', 'listorder', 'cover_img', 'click'],
-        'edit' => ['pid', 'add_time', 'title', 'seotitle', 'keywords', 'description', 'litpic', 'status', 'listorder', 'cover_img', 'click'],
+        'add'  => ['name', 'money', 'min_amount', 'start_time', 'end_time', 'point', 'status', 'add_time', 'num'],
+        'edit' => ['name', 'money', 'min_amount', 'start_time', 'end_time', 'point', 'status', 'add_time', 'num'],
         'del'  => ['id'],
     ];
     

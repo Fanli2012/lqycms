@@ -37,6 +37,10 @@ class ArticleLogic extends BaseLogic
                 $res['list'][$k]->typename = Article::getTypenameAttr(array('typeid' => $v->typeid));
             }
         }
+        else
+        {
+            return false;
+        }
         
         return $res;
     }

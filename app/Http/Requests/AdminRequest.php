@@ -1,41 +1,47 @@
 <?php
 namespace App\Http\Requests;
 
-class GuestbookRequest extends BaseRequest
+class AdminRequest extends BaseRequest
 {
     //总的验证规则
     protected $rules = [
         'id' => 'required|integer',
-        'title' => 'required|max:150',
-        'addtime' => 'required|integer',
-        'msg' => 'required|max:250',
-        'status' => 'integer|between:[0,1]',
-        'name' => 'max:30',
-        'phone' => 'max:20',
-        'email' => 'max:60',
+        'username' => 'required|max:30',
+        'email' => 'required|max:30',
+        'logintime' => 'integer',
+        'pwd' => 'required|max:32',
+        'role_id' => 'required|integer',
+        'status' => 'integer|between:[0,3]',
+        'mobile' => 'max:20',
+        'avatar' => 'max:150',
+        'create_at' => 'required|integer',
     ];
     
     //总的自定义错误信息
     protected $messages = [
         'id.required' => 'ID必填',
         'id.integer' => 'ID必须为数字',
-        'title.required' => '标题必填',
-        'title.max' => '标题不能超过150个字符',
-        'addtime.required' => '添加时间必填',
-        'addtime.integer' => '添加时间必须是数字',
-        'msg.required' => '描述必填',
-        'msg.max' => '描述不能超过250个字符',
-        'status.integer' => '状态必须是数字',
-        'status.between' => '是否阅读，默认0未阅读',
-        'name.max' => '姓名不能超过30个字符',
-        'phone.max' => '电话不能超过20个字符',
-        'email.max' => '邮箱不能超过60个字符',
+        'username.required' => '用户名必填',
+        'username.max' => '用户名不能超过30个字符',
+        'email.required' => '邮箱必填',
+        'email.max' => '邮箱不能超过30个字符',
+        'logintime.integer' => '登录时间必须是数字',
+        'pwd.required' => '密码必填',
+        'pwd.max' => '密码不能超过32个字符',
+        'role_id.required' => '角色ID必填',
+        'role_id.integer' => '角色ID必须为数字',
+        'status.integer' => '用户状态必须是数字',
+        'status.between' => '用户状态 0：正常； 1：禁用 ；2：未验证',
+        'mobile.max' => '手机号不能超过20个字符',
+        'avatar.max' => '头像不能超过150个字符',
+        'create_at.required' => '添加时间必填',
+        'create_at.integer' => '添加时间必须是数字',
     ];
     
     //场景验证规则
     protected $scene = [
-        'add'  => ['title', 'addtime', 'msg', 'status', 'name', 'phone', 'email'],
-        'edit' => ['title', 'addtime', 'msg', 'status', 'name', 'phone', 'email'],
+        'add'  => ['username', 'email', 'logintime', 'pwd', 'role_id', 'status', 'mobile', 'avatar', 'create_at'],
+        'edit' => ['username', 'email', 'logintime', 'pwd', 'role_id', 'status', 'mobile', 'avatar', 'create_at'],
         'del'  => ['id'],
     ];
     

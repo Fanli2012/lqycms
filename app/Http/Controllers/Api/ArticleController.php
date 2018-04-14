@@ -46,11 +46,11 @@ class ArticleController extends CommonController
     public function articleDetail(Request $request)
 	{
         //参数
-        $data['id'] = $request->input('id');
-        $data['ischeck'] = Article::IS_CHECK;
-        if($data['id']==''){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $where['id'] = $request->input('id',null);
+        $where['ischeck'] = Article::IS_CHECK;
+        if($where['id']==null){return ReturnData::create(ReturnData::PARAMS_ERROR);}
         
-        $res = $this->getLogic()->getOne($data);
+        $res = $this->getLogic()->getOne($where);
 		if($res === false)
 		{
 			return ReturnData::create(ReturnData::SYSTEM_FAIL);

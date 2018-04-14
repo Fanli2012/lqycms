@@ -1,41 +1,45 @@
 <?php
 namespace App\Http\Requests;
 
-class GuestbookRequest extends BaseRequest
+class MenuRequest extends BaseRequest
 {
     //总的验证规则
     protected $rules = [
         'id' => 'required|integer',
-        'title' => 'required|max:150',
-        'addtime' => 'required|integer',
-        'msg' => 'required|max:250',
+        'pid' => 'integer',
+        'action' => 'required|max:50',
+        'data' => 'max:50',
+        'type' => 'integer|between:[0,1]',
         'status' => 'integer|between:[0,1]',
-        'name' => 'max:30',
-        'phone' => 'max:20',
-        'email' => 'max:60',
+        'listorder' => 'integer',
+        'name' => 'required|max:50',
+        'icon' => 'max:50',
+        'des' => 'max:250',
     ];
     
     //总的自定义错误信息
     protected $messages = [
         'id.required' => 'ID必填',
         'id.integer' => 'ID必须为数字',
-        'title.required' => '标题必填',
-        'title.max' => '标题不能超过150个字符',
-        'addtime.required' => '添加时间必填',
-        'addtime.integer' => '添加时间必须是数字',
-        'msg.required' => '描述必填',
-        'msg.max' => '描述不能超过250个字符',
+        'pid.integer' => '父级ID必须为数字',
+        'action.required' => '操作名称必填',
+        'action.max' => '操作名称不能超过50个字符',
+        'data.max' => '额外参数不能超过50个字符',
+        'type.integer' => '菜单类型必须是数字',
+        'type.between' => '菜单类型 1：权限认证+菜单；0：只作为菜单',
         'status.integer' => '状态必须是数字',
-        'status.between' => '是否阅读，默认0未阅读',
-        'name.max' => '姓名不能超过30个字符',
-        'phone.max' => '电话不能超过20个字符',
-        'email.max' => '邮箱不能超过60个字符',
+        'status.between' => '状态 1显示',
+        'listorder.integer' => '排序必须是数字',
+        'name.required' => '菜单名称必填',
+        'name.max' => '菜单名称不能超过50个字符',
+        'icon.max' => '菜单图标不能超过50个字符',
+        'des.max' => '说明不能超过250个字符',
     ];
     
     //场景验证规则
     protected $scene = [
-        'add'  => ['title', 'addtime', 'msg', 'status', 'name', 'phone', 'email'],
-        'edit' => ['title', 'addtime', 'msg', 'status', 'name', 'phone', 'email'],
+        'add'  => ['pid', 'action', 'data', 'type', 'status', 'listorder', 'name', 'icon', 'des'],
+        'edit' => ['pid', 'action', 'data', 'type', 'status', 'listorder', 'name', 'icon', 'des'],
         'del'  => ['id'],
     ];
     

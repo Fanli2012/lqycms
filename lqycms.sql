@@ -78,15 +78,15 @@ insert  into `ecs_topic`(`topic_id`,`title`,`intro`,`start_time`,`end_time`,`dat
 DROP TABLE IF EXISTS `fl_access`;
 
 CREATE TABLE `fl_access` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `role_id` int(11) unsigned NOT NULL DEFAULT '0',
   `menu_id` int(11) unsigned NOT NULL DEFAULT '0',
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=182 DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
 
 /*Data for the table `fl_access` */
 
-insert  into `fl_access`(`role_id`,`menu_id`,`id`) values (3,1,1),(3,11,2),(3,12,3),(3,13,4),(3,14,5),(3,15,6),(3,16,7),(3,17,8),(3,18,9),(3,19,10),(3,20,11),(3,21,12),(3,22,13),(3,23,14),(3,24,15),(3,25,16),(3,32,17),(3,33,18),(3,34,19),(3,35,20),(3,36,21),(3,37,22),(3,6,23),(3,78,24),(3,83,25),(1,1,26),(1,2,27),(1,3,28),(1,4,29),(1,5,30),(1,6,31),(1,7,32),(1,8,33),(1,9,34),(1,10,35),(1,11,36),(1,12,37),(1,13,38),(1,14,39),(1,15,40),(1,16,41),(1,17,42),(1,18,43),(1,19,44),(1,20,45),(1,21,46),(1,22,47),(1,23,48),(1,24,49),(1,25,50),(1,26,51),(1,27,52),(1,28,53),(1,29,54),(1,30,55),(1,31,56),(1,32,57),(1,33,58),(1,34,59),(1,35,60),(1,36,61),(1,37,62),(1,38,63),(1,39,64),(1,40,65),(1,41,66),(1,42,67),(1,43,68),(1,44,69),(1,45,70),(1,46,71),(1,47,72),(1,48,73),(1,49,74),(1,50,75),(1,51,76),(1,52,77),(1,53,78),(1,54,79),(1,55,80),(1,56,81),(1,57,82),(1,58,83),(1,59,84),(1,60,85),(1,61,86),(1,62,87),(1,63,88),(1,64,89),(1,65,90),(1,66,91),(1,67,92),(1,68,93),(1,69,94),(1,70,95),(1,71,96),(1,72,97),(1,73,98),(1,74,99),(1,75,100),(1,76,101),(1,77,102),(1,78,103),(1,79,104),(1,80,105),(1,81,106),(1,82,107),(1,83,108),(1,84,109),(1,85,110),(1,86,111),(1,87,112),(1,88,113),(1,89,114),(1,90,115),(1,91,116),(1,92,117),(1,93,118),(1,94,119),(1,95,120),(1,96,121),(1,97,122),(1,98,123),(1,99,124),(1,100,125),(1,101,126),(1,102,127),(1,103,128),(1,104,129),(1,105,130),(1,106,131),(1,107,132),(1,108,133),(1,109,134),(1,110,135),(1,111,136),(1,112,137),(1,113,138),(1,114,139),(1,115,140),(1,116,141),(1,117,142),(2,2,143),(2,38,144),(2,39,145),(2,40,146),(2,41,147),(2,42,148),(2,50,149),(2,43,150),(2,44,151),(2,45,152),(2,46,153),(2,47,154),(2,48,155),(2,49,156),(2,51,157),(2,107,158),(2,108,159),(2,109,160),(2,110,161),(2,111,162),(2,112,163),(2,5,164),(2,7,165),(2,8,166),(2,9,167),(2,10,168),(2,104,169),(1,118,170),(1,119,171),(1,120,172),(1,121,173),(1,122,174),(1,123,175),(1,124,176),(1,125,177),(1,126,178),(1,127,179),(1,128,180),(1,129,181);
+insert  into `fl_access`(`id`,`role_id`,`menu_id`) values (1,3,1),(2,3,11),(3,3,12),(4,3,13),(5,3,14),(6,3,15),(7,3,16),(8,3,17),(9,3,18),(10,3,19),(11,3,20),(12,3,21),(13,3,22),(14,3,23),(15,3,24),(16,3,25),(17,3,32),(18,3,33),(19,3,34),(20,3,35),(21,3,36),(22,3,37),(23,3,6),(24,3,78),(25,3,83),(26,1,1),(27,1,2),(28,1,3),(29,1,4),(30,1,5),(31,1,6),(32,1,7),(33,1,8),(34,1,9),(35,1,10),(36,1,11),(37,1,12),(38,1,13),(39,1,14),(40,1,15),(41,1,16),(42,1,17),(43,1,18),(44,1,19),(45,1,20),(46,1,21),(47,1,22),(48,1,23),(49,1,24),(50,1,25),(51,1,26),(52,1,27),(53,1,28),(54,1,29),(55,1,30),(56,1,31),(57,1,32),(58,1,33),(59,1,34),(60,1,35),(61,1,36),(62,1,37),(63,1,38),(64,1,39),(65,1,40),(66,1,41),(67,1,42),(68,1,43),(69,1,44),(70,1,45),(71,1,46),(72,1,47),(73,1,48),(74,1,49),(75,1,50),(76,1,51),(77,1,52),(78,1,53),(79,1,54),(80,1,55),(81,1,56),(82,1,57),(83,1,58),(84,1,59),(85,1,60),(86,1,61),(87,1,62),(88,1,63),(89,1,64),(90,1,65),(91,1,66),(92,1,67),(93,1,68),(94,1,69),(95,1,70),(96,1,71),(97,1,72),(98,1,73),(99,1,74),(100,1,75),(101,1,76),(102,1,77),(103,1,78),(104,1,79),(105,1,80),(106,1,81),(107,1,82),(108,1,83),(109,1,84),(110,1,85),(111,1,86),(112,1,87),(113,1,88),(114,1,89),(115,1,90),(116,1,91),(117,1,92),(118,1,93),(119,1,94),(120,1,95),(121,1,96),(122,1,97),(123,1,98),(124,1,99),(125,1,100),(126,1,101),(127,1,102),(128,1,103),(129,1,104),(130,1,105),(131,1,106),(132,1,107),(133,1,108),(134,1,109),(135,1,110),(136,1,111),(137,1,112),(138,1,113),(139,1,114),(140,1,115),(141,1,116),(142,1,117),(143,2,2),(144,2,38),(145,2,39),(146,2,40),(147,2,41),(148,2,42),(149,2,50),(150,2,43),(151,2,44),(152,2,45),(153,2,46),(154,2,47),(155,2,48),(156,2,49),(157,2,51),(158,2,107),(159,2,108),(160,2,109),(161,2,110),(162,2,111),(163,2,112),(164,2,5),(165,2,7),(166,2,8),(167,2,9),(168,2,10),(169,2,104),(170,1,118),(171,1,119),(172,1,120),(173,1,121),(174,1,122),(175,1,123),(176,1,124),(177,1,125),(178,1,126),(179,1,127),(180,1,128),(181,1,129);
 
 /*Table structure for table `fl_admin` */
 
@@ -119,7 +119,7 @@ CREATE TABLE `fl_admin_role` (
   `name` varchar(30) NOT NULL DEFAULT '' COMMENT '角色名',
   `des` varchar(150) NOT NULL DEFAULT '' COMMENT '描述',
   `status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '状态，0启用，1禁用',
-  `pid` smallint(4) unsigned NOT NULL DEFAULT '0' COMMENT '父角色id',
+  `pid` smallint(11) unsigned NOT NULL DEFAULT '0' COMMENT '父角色id',
   `listorder` int(5) unsigned NOT NULL DEFAULT '0' COMMENT '排序',
   PRIMARY KEY (`id`),
   UNIQUE KEY `rolename` (`name`)
@@ -244,10 +244,10 @@ CREATE TABLE `fl_bonus` (
   `min_amount` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '满多少使用',
   `start_time` datetime NOT NULL COMMENT '开始时间',
   `end_time` datetime NOT NULL COMMENT '结束时间',
-  `point` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT '兑换优惠券所需积分,如果是0表示禁止兑换',
-  `status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0可用，1不可用',
+  `point` int(5) unsigned NOT NULL DEFAULT '0' COMMENT '兑换优惠券所需积分,如果是0表示禁止兑换',
+  `status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '状态：0可用，1不可用',
   `add_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '添加时间',
-  `num` mediumint(5) NOT NULL DEFAULT '-1' COMMENT '优惠券数量，预留，-1表示不限',
+  `num` int(11) NOT NULL DEFAULT '-1' COMMENT '优惠券数量，预留，-1表示不限',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='优惠券表';
 
@@ -261,9 +261,9 @@ DROP TABLE IF EXISTS `fl_cart`;
 
 CREATE TABLE `fl_cart` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `user_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
   `goods_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '商品id',
-  `shop_id` int(60) unsigned NOT NULL DEFAULT '0' COMMENT '商品所属的商店id，预留',
+  `shop_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '商品所属的商店id，预留',
   `goods_number` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT '商品数量',
   `goods_attr` text NOT NULL COMMENT '商品属性',
   `type` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '购物车商品类型;0普通;1团够;2拍卖;3夺宝奇兵',
@@ -304,9 +304,9 @@ CREATE TABLE `fl_comment` (
   `comment_type` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '用户评论的类型;0评论的是商品,1评论的是文章',
   `id_value` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '文章或者商品的id,文章对应的是article的article_id;商品对应的是goods的goods_id',
   `content` text NOT NULL COMMENT '评论的内容',
-  `comment_rank` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '该文章或者商品的重星级;只有1到5星;由数字代替;其中5代表5星',
+  `comment_rank` tinyint(1) unsigned NOT NULL DEFAULT '5' COMMENT '该文章或者商品的重星级;只有1到5星;由数字代替;其中5代表5星',
   `add_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '评论的时间',
-  `ip_address` varchar(15) NOT NULL DEFAULT '' COMMENT '评论时的用户IP',
+  `ip_address` varchar(20) NOT NULL DEFAULT '' COMMENT '评论时的用户IP',
   `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否被管理员批准显示;1是;0未批准显示',
   `parent_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '评论的父节点,取值该表的comment_id字段,如果该字段为0,则是一个普通评论,否则该条评论就是该字段的值所对应的评论的回复',
   `user_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '发表该评论的用户的用户id,取值user的user_id',
@@ -326,7 +326,7 @@ DROP TABLE IF EXISTS `fl_feedback`;
 CREATE TABLE `fl_feedback` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `content` text NOT NULL COMMENT '意见反馈内容',
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '添加时间',
+  `add_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '添加时间',
   `user_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
   `title` varchar(150) NOT NULL DEFAULT '' COMMENT '标题，选填',
   `mobile` varchar(20) NOT NULL DEFAULT '' COMMENT '手机号码，选填',
@@ -336,24 +336,24 @@ CREATE TABLE `fl_feedback` (
 
 /*Data for the table `fl_feedback` */
 
-insert  into `fl_feedback`(`id`,`content`,`created_at`,`user_id`,`title`,`mobile`,`type`) values (1,'发过火对光反射','2017-07-27 14:13:31',127,'','',''),(3,'content六角恐龙','2017-08-08 15:46:49',1,'title螺丝款计划','',''),(4,'asfa','2018-03-30 11:40:44',3,'','',''),(5,'sdgsd','2018-03-30 11:43:06',3,'','15280719685','积分/优惠券'),(6,'dgsg','2018-03-30 11:43:33',3,'','','购物流程');
+insert  into `fl_feedback`(`id`,`content`,`add_time`,`user_id`,`title`,`mobile`,`type`) values (1,'发过火对光反射',4294967295,127,'','',''),(3,'content六角恐龙',4294967295,1,'title螺丝款计划','',''),(4,'asfa',4294967295,3,'','',''),(5,'sdgsd',4294967295,3,'','15280719685','积分/优惠券'),(6,'dgsg',4294967295,3,'','','购物流程');
 
 /*Table structure for table `fl_friendlink` */
 
 DROP TABLE IF EXISTS `fl_friendlink`;
 
 CREATE TABLE `fl_friendlink` (
-  `id` int(5) unsigned NOT NULL AUTO_INCREMENT,
-  `webname` varchar(60) NOT NULL DEFAULT '',
-  `url` varchar(100) NOT NULL DEFAULT '',
-  `group_id` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `rank` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT '排序',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `webname` varchar(60) NOT NULL DEFAULT '' COMMENT '友情链接名称',
+  `url` varchar(100) NOT NULL DEFAULT '' COMMENT '友情链接url',
+  `group_id` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT '分组id',
+  `listorder` int(5) unsigned NOT NULL DEFAULT '0' COMMENT '排序',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='友情链接表';
 
 /*Data for the table `fl_friendlink` */
 
-insert  into `fl_friendlink`(`id`,`webname`,`url`,`group_id`,`rank`) values (1,'股票知识','http://www.1104.org/',0,0),(2,'炒股入门知识','http://www.pe7.org/',0,0);
+insert  into `fl_friendlink`(`id`,`webname`,`url`,`group_id`,`listorder`) values (1,'股票知识','http://www.1104.org/',0,0),(2,'炒股入门知识','http://www.pe7.org/',0,0);
 
 /*Table structure for table `fl_goods` */
 
@@ -477,7 +477,7 @@ CREATE TABLE `fl_goods_type` (
   `temparticle` varchar(50) NOT NULL DEFAULT '' COMMENT '详情页模板',
   `litpic` varchar(100) NOT NULL DEFAULT '' COMMENT '缩略图',
   `seokeyword` varchar(60) NOT NULL DEFAULT '' COMMENT '判断相关,可不填',
-  `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否显示',
+  `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否显示,1显示',
   `listorder` int(5) unsigned NOT NULL DEFAULT '50' COMMENT '排序',
   `cover_img` varchar(100) NOT NULL DEFAULT '' COMMENT '封面',
   PRIMARY KEY (`id`),
@@ -498,10 +498,10 @@ CREATE TABLE `fl_guestbook` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(150) NOT NULL DEFAULT '' COMMENT '标题',
   `addtime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '添加时间',
-  `msg` varchar(255) NOT NULL DEFAULT '' COMMENT '描述',
+  `msg` varchar(250) NOT NULL DEFAULT '' COMMENT '描述',
   `status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否阅读，默认0未阅读',
   `name` varchar(30) NOT NULL DEFAULT '' COMMENT '姓名',
-  `phone` varchar(11) NOT NULL DEFAULT '' COMMENT '电话',
+  `phone` varchar(20) NOT NULL DEFAULT '' COMMENT '电话',
   `email` varchar(60) NOT NULL DEFAULT '' COMMENT '邮箱',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='用户留言表';
@@ -517,7 +517,7 @@ DROP TABLE IF EXISTS `fl_keyword`;
 CREATE TABLE `fl_keyword` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `keyword` varchar(30) NOT NULL DEFAULT '' COMMENT '关键词',
-  `rpurl` varchar(60) NOT NULL DEFAULT '' COMMENT '链接网址',
+  `rpurl` varchar(150) NOT NULL DEFAULT '' COMMENT '链接网址',
   PRIMARY KEY (`id`),
   UNIQUE KEY `keyword` (`keyword`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
@@ -554,14 +554,14 @@ DROP TABLE IF EXISTS `fl_menu`;
 
 CREATE TABLE `fl_menu` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL DEFAULT '' COMMENT '菜单名称',
   `pid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '父级id',
   `action` varchar(50) NOT NULL DEFAULT '' COMMENT '操作名称',
   `data` varchar(50) NOT NULL DEFAULT '' COMMENT '额外参数',
-  `type` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '菜单类型  1：权限认证+菜单；0：只作为菜单',
-  `status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '状态，1显示，0不显示',
-  `name` varchar(50) NOT NULL DEFAULT '' COMMENT '菜单名称',
+  `type` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '菜单类型 1：权限认证+菜单；0：只作为菜单',
   `icon` varchar(50) NOT NULL DEFAULT '' COMMENT '菜单图标',
   `des` varchar(250) NOT NULL DEFAULT '' COMMENT '备注',
+  `status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '状态，1显示，0不显示',
   `listorder` int(5) unsigned NOT NULL DEFAULT '50' COMMENT '排序ID',
   PRIMARY KEY (`id`),
   KEY `status` (`status`),
@@ -570,7 +570,7 @@ CREATE TABLE `fl_menu` (
 
 /*Data for the table `fl_menu` */
 
-insert  into `fl_menu`(`id`,`pid`,`action`,`data`,`type`,`status`,`name`,`icon`,`des`,`listorder`) values (1,0,'article_default','',0,1,'文章管理','glyphicon glyphicon-pencil','',0),(2,0,'goods_default','',0,1,'商品管理','glyphicon glyphicon-shopping-cart','',10),(3,0,'menu_default','',0,1,'菜单管理','glyphicon glyphicon-th-list','',20),(4,0,'user_default','',0,1,'用户管理','glyphicon glyphicon-user','',30),(5,0,'extension_default','',0,1,'批量维护','glyphicon glyphicon-cloud','',40),(6,0,'sysconfig_default','',0,1,'设置','glyphicon glyphicon-wrench','',1000),(7,5,'admin_jump','',1,0,'页面跳转','','',1),(8,5,'admin','',1,0,'后台首页','','',2),(9,5,'admin_index_upconfig','',1,0,'更新系统参数配置','','',3),(10,5,'admin_index_upcache','',1,0,'更新缓存','','',4),(11,1,'admin_article','',1,1,'文章列表','','',50),(12,1,'admin_article_add','',1,1,'发布文章','','',50),(13,12,'admin_article_doadd','',1,0,'发布文章提交','','',50),(14,1,'admin_article_edit','',1,0,'文章修改','','',50),(15,14,'admin_article_doedit','',1,0,'文章修改提交','','',50),(16,1,'admin_article_del','',1,0,'文章删除','','',50),(17,1,'admin_article_repetarc','',1,1,'重复文档检测','','',50),(18,1,'admin_article_recommendarc','',1,0,'文章推荐','','',50),(19,1,'admin_article_articleexists','',1,0,'文章是否存在','','',50),(20,1,'admin_category','',1,1,'文章栏目','','',50),(21,20,'admin_category_add','',1,0,'文章栏目添加','','',50),(22,21,'admin_category_doadd','',1,0,'文章栏目添加提交','','',50),(23,20,'admin_category_edit','',1,0,'文章栏目修改','','',50),(24,23,'admin_category_doedit','',1,0,'文章栏目修改提交','','',50),(25,20,'admin_category_del','',1,0,'文章栏目删除','','',50),(26,5,'admin_tag','',1,1,'Tag标签管理','','',50),(27,26,'admin_tag_add','',1,0,'Tag标签添加','','',50),(28,27,'admin_tag_doadd','',1,0,'Tag标签添加提交','','',50),(29,26,'admin_tag_edit','',1,0,'Tag标签修改','','',50),(30,29,'admin_tag_doedit','',1,0,'Tag标签修改提交','','',50),(31,26,'admin_tag_del','',1,0,'Tag标签删除','','',50),(32,1,'admin_page','',1,1,'单页管理','','',50),(33,32,'admin_page_add','',1,0,'单页添加','','',50),(34,33,'admin_page_doadd','',1,0,'单页添加提交','','',50),(35,32,'admin_page_edit','',1,0,'单页修改','','',50),(36,35,'admin_page_doedit','',1,0,'单页修改提交','','',50),(37,32,'admin_page_del','',1,0,'单页删除','','',50),(38,2,'admin_goods','',1,1,'商品列表','','',50),(39,2,'admin_goods_add','',1,1,'商品添加','','',50),(40,39,'admin_goods_doadd','',1,0,'商品添加提交','','',50),(41,2,'admin_goods_edit','',1,0,'商品修改','','',50),(42,41,'admin_goods_doedit','',1,0,'商品修改提交','','',50),(43,2,'admin_goods_del','',1,0,'商品删除','','',50),(44,2,'admin_goods_recommendarc','',1,0,'重复商品','','',50),(45,2,'admin_goods_goodsexists','',1,0,'商品是否存在','','',50),(46,2,'admin_goodstype','',1,1,'商品分类','','',50),(47,46,'admin_goodstype_add','',1,1,'商品分类添加','','',50),(48,47,'admin_goodstype_doadd','',1,0,'商品分类添加提交','','',50),(49,46,'admin_producttype_edit','',1,0,'商品分类修改','','',50),(50,42,'admin_producttype_doedit','',1,0,'商品分类修改提交','','',50),(51,46,'admin_goodstype_del','',1,0,'商品分类删除','','',50),(52,5,'admin_friendlink','',1,1,'友情链接','','',50),(53,52,'admin_friendlink_add','',1,0,'友情链接添加','','',50),(54,53,'admin_friendlink_doadd','',1,0,'友情链接添加提交','','',50),(55,52,'admin_friendlink_edit','',1,0,'友情链接修改','','',50),(56,55,'admin_friendlink_doedit','',1,0,'友情链接修改提交','','',50),(57,52,'admin_friendlink_del','',1,0,'友情链接删除','','',50),(58,5,'admin_keyword','',1,1,'关键词管理','','',50),(59,58,'admin_keyword_add','',1,0,'关键词添加','','',50),(60,59,'admin_keyword_doadd','',1,0,'关键词添加提交','','',50),(61,58,'admin_keyword_edit','',1,0,'关键词修改','','',50),(62,61,'admin_keyword_doedit','',1,0,'关键词修改提交','','',50),(63,58,'admin_keyword_del','',1,0,'关键词删除','','',50),(64,5,'admin_searchword','',1,1,'搜索关键词','','',50),(65,64,'admin_searchword_add','',1,0,'搜索关键词添加','','',50),(66,65,'admin_searchword_doadd','',1,0,'搜索关键词添加提交','','',50),(67,64,'admin_searchword_edit','',1,0,'搜索关键词修改','','',50),(68,67,'admin_searchword_doedit','',1,0,'搜索关键词修改提交','','',50),(69,64,'admin_searchword_del','',1,0,'搜索关键词删除','','',50),(70,5,'admin_slide','',1,1,'轮播图','','',50),(71,70,'admin_slide_add','',1,0,'轮播图添加','','',50),(72,71,'admin_slide_doadd','',1,0,'轮播图添加提交','','',50),(73,70,'admin_slide_edit','',1,0,'轮播图修改','','',50),(74,73,'admin_slide_doedit','',1,0,'轮播图修改提交','','',50),(75,70,'admin_slide_del','',1,0,'轮播图删除','','',50),(76,5,'admin_guestbook','',1,1,'在线留言','','',50),(77,76,'admin_guestbook_del','',1,0,'在线留言删除','','',50),(78,6,'admin_sysconfig','',1,1,'系统基本参数','','',50),(79,78,'admin_sysconfig_add','',1,0,'系统参数添加','','',50),(80,79,'admin_sysconfig_doadd','',1,0,'系统参数添加提交','','',50),(81,78,'admin_sysconfig_edit','',1,0,'系统参数修改','','',50),(82,81,'admin_sysconfig_doedit','',1,0,'系统参数修改提交','','',50),(83,78,'admin_sysconfig_del','',1,0,'系统参数删除','','',50),(84,4,'admin_admin','',1,1,'管理员','','',50),(85,84,'admin_admin_add','',1,0,'管理员添加','','',50),(86,85,'admin_admin_doadd','',1,0,'管理员添加提交','','',50),(87,84,'admin_admin_edit','',1,0,'管理员修改','','',50),(88,87,'admin_admin_doedit','',1,0,'管理员修改提交','','',50),(89,84,'admin_admin_del','',1,0,'管理员删除','','',50),(90,4,'admin_adminrole','',1,1,'角色管理','','',50),(91,90,'admin_adminrole_add','',1,0,'角色添加','','',50),(92,91,'admin_adminrole_doadd','',1,0,'角色添加修改','','',50),(93,90,'admin_adminrole_edit','',1,0,'角色修改','','',50),(94,93,'admin_adminrole_doedit','',1,0,'角色修改提交','','',50),(95,90,'admin_adminrole_del','',1,0,'角色删除','','',50),(96,3,'admin_menu','',1,1,'后台菜单','','',50),(97,96,'admin_menu_add','',1,0,'菜单添加','','',50),(98,97,'admin_menu_doadd','',1,0,'菜单添加提交','','',50),(99,96,'admin_menu_edit','',1,0,'菜单修改','','',50),(100,99,'admin_menu_doedit','',1,0,'菜单修改提交','','',50),(101,96,'admin_menu_del','',1,0,'菜单删除','','',50),(102,90,'admin_adminrole_permissions','',1,0,'权限设置','','',50),(103,102,'admin_adminrole_dopermissions','',1,0,'权限设置提交','','',50),(104,5,'admin_welcome','',1,0,'欢迎页面','','',5),(105,0,'weixin_default','',0,1,'微信开发管理','glyphicon glyphicon-th-large','',50),(106,105,'admin_weixinmenu','',1,1,'微信自定义菜单','','',50),(107,2,'admin_goodsbrand','',1,1,'商品品牌','','',50),(108,107,'admin_goodsbrand_add','',1,0,'品牌添加','','',50),(109,108,'admin_goodsbrand_doadd','',1,0,'品牌添加提交','','',50),(110,107,'admin_goodsbrand_edit','',1,0,'品牌修改','','',50),(111,110,'admin_goodsbrand_doedit','',1,0,'品牌修改提交','','',50),(112,107,'admin_goodsbrand_del','',1,0,'品牌删除','','',50),(113,0,'order_default','',0,1,'订单管理','glyphicon glyphicon-credit-card','',50),(114,113,'admin_order','',1,1,'订单列表','','',50),(115,113,'admin_order_detail','',1,0,'订单详情','','',50),(116,113,'admin_order_edit','',1,0,'订单修改','','',50),(117,116,'admin_order_doedit','',1,0,'订单修改提交','','',50),(118,4,'admin_user','',1,1,'会员管理','','',50),(119,4,'admin_userwithdraw','',1,1,'提现申请','','',50),(120,5,'admin_feedback','',1,1,'意见反馈','','',50),(121,120,'admin_feedback_del','',1,0,'意见反馈删除','','',50),(122,113,'admin_kuaidi','',1,1,'快递管理','','',50),(123,122,'admin_kuaidi_add','',1,0,'快递添加','','',50),(124,122,'admin_kuaidi_edit','',1,0,'快递修改','','',50),(125,122,'admin_kuaidi_del','',1,0,'快递删除','','',50),(126,2,'admin_bonus','',1,1,'优惠券管理','','',50),(127,126,'admin_bonus_add','',1,0,'优惠券添加','','',50),(128,126,'admin_bonus_edit','',1,0,'优惠券啊修改','','',50),(129,126,'admin_bonus_del','',1,0,'优惠券删除','','',50);
+insert  into `fl_menu`(`id`,`name`,`pid`,`action`,`data`,`type`,`icon`,`des`,`status`,`listorder`) values (1,'文章管理',0,'article_default','',0,'glyphicon glyphicon-pencil','',1,0),(2,'商品管理',0,'goods_default','',0,'glyphicon glyphicon-shopping-cart','',1,10),(3,'菜单管理',0,'menu_default','',0,'glyphicon glyphicon-th-list','',1,20),(4,'用户管理',0,'user_default','',0,'glyphicon glyphicon-user','',1,30),(5,'批量维护',0,'extension_default','',0,'glyphicon glyphicon-cloud','',1,40),(6,'设置',0,'sysconfig_default','',0,'glyphicon glyphicon-wrench','',1,1000),(7,'页面跳转',5,'admin_jump','',1,'','',0,1),(8,'后台首页',5,'admin','',1,'','',0,2),(9,'更新系统参数配置',5,'admin_index_upconfig','',1,'','',0,3),(10,'更新缓存',5,'admin_index_upcache','',1,'','',0,4),(11,'文章列表',1,'admin_article','',1,'','',1,50),(12,'发布文章',1,'admin_article_add','',1,'','',1,50),(13,'发布文章提交',12,'admin_article_doadd','',1,'','',0,50),(14,'文章修改',1,'admin_article_edit','',1,'','',0,50),(15,'文章修改提交',14,'admin_article_doedit','',1,'','',0,50),(16,'文章删除',1,'admin_article_del','',1,'','',0,50),(17,'重复文档检测',1,'admin_article_repetarc','',1,'','',1,50),(18,'文章推荐',1,'admin_article_recommendarc','',1,'','',0,50),(19,'文章是否存在',1,'admin_article_articleexists','',1,'','',0,50),(20,'文章栏目',1,'admin_category','',1,'','',1,50),(21,'文章栏目添加',20,'admin_category_add','',1,'','',0,50),(22,'文章栏目添加提交',21,'admin_category_doadd','',1,'','',0,50),(23,'文章栏目修改',20,'admin_category_edit','',1,'','',0,50),(24,'文章栏目修改提交',23,'admin_category_doedit','',1,'','',0,50),(25,'文章栏目删除',20,'admin_category_del','',1,'','',0,50),(26,'Tag标签管理',5,'admin_tag','',1,'','',1,50),(27,'Tag标签添加',26,'admin_tag_add','',1,'','',0,50),(28,'Tag标签添加提交',27,'admin_tag_doadd','',1,'','',0,50),(29,'Tag标签修改',26,'admin_tag_edit','',1,'','',0,50),(30,'Tag标签修改提交',29,'admin_tag_doedit','',1,'','',0,50),(31,'Tag标签删除',26,'admin_tag_del','',1,'','',0,50),(32,'单页管理',1,'admin_page','',1,'','',1,50),(33,'单页添加',32,'admin_page_add','',1,'','',0,50),(34,'单页添加提交',33,'admin_page_doadd','',1,'','',0,50),(35,'单页修改',32,'admin_page_edit','',1,'','',0,50),(36,'单页修改提交',35,'admin_page_doedit','',1,'','',0,50),(37,'单页删除',32,'admin_page_del','',1,'','',0,50),(38,'商品列表',2,'admin_goods','',1,'','',1,50),(39,'商品添加',2,'admin_goods_add','',1,'','',1,50),(40,'商品添加提交',39,'admin_goods_doadd','',1,'','',0,50),(41,'商品修改',2,'admin_goods_edit','',1,'','',0,50),(42,'商品修改提交',41,'admin_goods_doedit','',1,'','',0,50),(43,'商品删除',2,'admin_goods_del','',1,'','',0,50),(44,'重复商品',2,'admin_goods_recommendarc','',1,'','',0,50),(45,'商品是否存在',2,'admin_goods_goodsexists','',1,'','',0,50),(46,'商品分类',2,'admin_goodstype','',1,'','',1,50),(47,'商品分类添加',46,'admin_goodstype_add','',1,'','',1,50),(48,'商品分类添加提交',47,'admin_goodstype_doadd','',1,'','',0,50),(49,'商品分类修改',46,'admin_producttype_edit','',1,'','',0,50),(50,'商品分类修改提交',42,'admin_producttype_doedit','',1,'','',0,50),(51,'商品分类删除',46,'admin_goodstype_del','',1,'','',0,50),(52,'友情链接',5,'admin_friendlink','',1,'','',1,50),(53,'友情链接添加',52,'admin_friendlink_add','',1,'','',0,50),(54,'友情链接添加提交',53,'admin_friendlink_doadd','',1,'','',0,50),(55,'友情链接修改',52,'admin_friendlink_edit','',1,'','',0,50),(56,'友情链接修改提交',55,'admin_friendlink_doedit','',1,'','',0,50),(57,'友情链接删除',52,'admin_friendlink_del','',1,'','',0,50),(58,'关键词管理',5,'admin_keyword','',1,'','',1,50),(59,'关键词添加',58,'admin_keyword_add','',1,'','',0,50),(60,'关键词添加提交',59,'admin_keyword_doadd','',1,'','',0,50),(61,'关键词修改',58,'admin_keyword_edit','',1,'','',0,50),(62,'关键词修改提交',61,'admin_keyword_doedit','',1,'','',0,50),(63,'关键词删除',58,'admin_keyword_del','',1,'','',0,50),(64,'搜索关键词',5,'admin_searchword','',1,'','',1,50),(65,'搜索关键词添加',64,'admin_searchword_add','',1,'','',0,50),(66,'搜索关键词添加提交',65,'admin_searchword_doadd','',1,'','',0,50),(67,'搜索关键词修改',64,'admin_searchword_edit','',1,'','',0,50),(68,'搜索关键词修改提交',67,'admin_searchword_doedit','',1,'','',0,50),(69,'搜索关键词删除',64,'admin_searchword_del','',1,'','',0,50),(70,'轮播图',5,'admin_slide','',1,'','',1,50),(71,'轮播图添加',70,'admin_slide_add','',1,'','',0,50),(72,'轮播图添加提交',71,'admin_slide_doadd','',1,'','',0,50),(73,'轮播图修改',70,'admin_slide_edit','',1,'','',0,50),(74,'轮播图修改提交',73,'admin_slide_doedit','',1,'','',0,50),(75,'轮播图删除',70,'admin_slide_del','',1,'','',0,50),(76,'在线留言',5,'admin_guestbook','',1,'','',1,50),(77,'在线留言删除',76,'admin_guestbook_del','',1,'','',0,50),(78,'系统基本参数',6,'admin_sysconfig','',1,'','',1,50),(79,'系统参数添加',78,'admin_sysconfig_add','',1,'','',0,50),(80,'系统参数添加提交',79,'admin_sysconfig_doadd','',1,'','',0,50),(81,'系统参数修改',78,'admin_sysconfig_edit','',1,'','',0,50),(82,'系统参数修改提交',81,'admin_sysconfig_doedit','',1,'','',0,50),(83,'系统参数删除',78,'admin_sysconfig_del','',1,'','',0,50),(84,'管理员',4,'admin_admin','',1,'','',1,50),(85,'管理员添加',84,'admin_admin_add','',1,'','',0,50),(86,'管理员添加提交',85,'admin_admin_doadd','',1,'','',0,50),(87,'管理员修改',84,'admin_admin_edit','',1,'','',0,50),(88,'管理员修改提交',87,'admin_admin_doedit','',1,'','',0,50),(89,'管理员删除',84,'admin_admin_del','',1,'','',0,50),(90,'角色管理',4,'admin_adminrole','',1,'','',1,50),(91,'角色添加',90,'admin_adminrole_add','',1,'','',0,50),(92,'角色添加修改',91,'admin_adminrole_doadd','',1,'','',0,50),(93,'角色修改',90,'admin_adminrole_edit','',1,'','',0,50),(94,'角色修改提交',93,'admin_adminrole_doedit','',1,'','',0,50),(95,'角色删除',90,'admin_adminrole_del','',1,'','',0,50),(96,'后台菜单',3,'admin_menu','',1,'','',1,50),(97,'菜单添加',96,'admin_menu_add','',1,'','',0,50),(98,'菜单添加提交',97,'admin_menu_doadd','',1,'','',0,50),(99,'菜单修改',96,'admin_menu_edit','',1,'','',0,50),(100,'菜单修改提交',99,'admin_menu_doedit','',1,'','',0,50),(101,'菜单删除',96,'admin_menu_del','',1,'','',0,50),(102,'权限设置',90,'admin_adminrole_permissions','',1,'','',0,50),(103,'权限设置提交',102,'admin_adminrole_dopermissions','',1,'','',0,50),(104,'欢迎页面',5,'admin_welcome','',1,'','',0,5),(105,'微信开发管理',0,'weixin_default','',0,'glyphicon glyphicon-th-large','',1,50),(106,'微信自定义菜单',105,'admin_weixinmenu','',1,'','',1,50),(107,'商品品牌',2,'admin_goodsbrand','',1,'','',1,50),(108,'品牌添加',107,'admin_goodsbrand_add','',1,'','',0,50),(109,'品牌添加提交',108,'admin_goodsbrand_doadd','',1,'','',0,50),(110,'品牌修改',107,'admin_goodsbrand_edit','',1,'','',0,50),(111,'品牌修改提交',110,'admin_goodsbrand_doedit','',1,'','',0,50),(112,'品牌删除',107,'admin_goodsbrand_del','',1,'','',0,50),(113,'订单管理',0,'order_default','',0,'glyphicon glyphicon-credit-card','',1,50),(114,'订单列表',113,'admin_order','',1,'','',1,50),(115,'订单详情',113,'admin_order_detail','',1,'','',0,50),(116,'订单修改',113,'admin_order_edit','',1,'','',0,50),(117,'订单修改提交',116,'admin_order_doedit','',1,'','',0,50),(118,'会员管理',4,'admin_user','',1,'','',1,50),(119,'提现申请',4,'admin_userwithdraw','',1,'','',1,50),(120,'意见反馈',5,'admin_feedback','',1,'','',1,50),(121,'意见反馈删除',120,'admin_feedback_del','',1,'','',0,50),(122,'快递管理',113,'admin_kuaidi','',1,'','',1,50),(123,'快递添加',122,'admin_kuaidi_add','',1,'','',0,50),(124,'快递修改',122,'admin_kuaidi_edit','',1,'','',0,50),(125,'快递删除',122,'admin_kuaidi_del','',1,'','',0,50),(126,'优惠券管理',2,'admin_bonus','',1,'','',1,50),(127,'优惠券添加',126,'admin_bonus_add','',1,'','',0,50),(128,'优惠券啊修改',126,'admin_bonus_edit','',1,'','',0,50),(129,'优惠券删除',126,'admin_bonus_del','',1,'','',0,50);
 
 /*Table structure for table `fl_order` */
 
@@ -798,10 +798,10 @@ insert  into `fl_searchword`(`id`,`name`,`title`,`description`,`content`,`pubdat
 DROP TABLE IF EXISTS `fl_session`;
 
 CREATE TABLE `fl_session` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `session_id` varchar(250) NOT NULL COMMENT 'session_id',
   `session_expire` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '过期时间',
   `session_data` blob NOT NULL COMMENT 'session数据',
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`),
   UNIQUE KEY `session_id` (`session_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -919,16 +919,16 @@ insert  into `fl_tagindex`(`id`,`tag`,`title`,`description`,`content`,`pubdate`,
 DROP TABLE IF EXISTS `fl_taglist`;
 
 CREATE TABLE `fl_taglist` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `tid` int(11) unsigned NOT NULL COMMENT '标签id',
   `aid` int(11) unsigned NOT NULL COMMENT '文章id',
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_tid_aid` (`tid`,`aid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='tag标签-文章关系表';
 
 /*Data for the table `fl_taglist` */
 
-insert  into `fl_taglist`(`tid`,`aid`,`id`) values (1,2,1),(1,5,2),(1,13,3),(2,10,4),(2,12,5);
+insert  into `fl_taglist`(`id`,`tid`,`aid`) values (1,1,2),(2,1,5),(3,1,13),(4,2,10),(5,2,12);
 
 /*Table structure for table `fl_token` */
 

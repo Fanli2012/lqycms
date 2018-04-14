@@ -1,41 +1,37 @@
 <?php
 namespace App\Http\Requests;
 
-class GuestbookRequest extends BaseRequest
+class GoodsSearchwordRequest extends BaseRequest
 {
     //总的验证规则
     protected $rules = [
         'id' => 'required|integer',
-        'title' => 'required|max:150',
-        'addtime' => 'required|integer',
-        'msg' => 'required|max:250',
-        'status' => 'integer|between:[0,1]',
-        'name' => 'max:30',
-        'phone' => 'max:20',
-        'email' => 'max:60',
+        'name' => 'required|max:60',
+        'status' => 'integer|between:[0,5]',
+        'add_time' => 'required|integer',
+        'listorder' => 'integer|between:[1,9999]',
+        'click' => 'integer',
     ];
     
     //总的自定义错误信息
     protected $messages = [
         'id.required' => 'ID必填',
         'id.integer' => 'ID必须为数字',
-        'title.required' => '标题必填',
-        'title.max' => '标题不能超过150个字符',
-        'addtime.required' => '添加时间必填',
-        'addtime.integer' => '添加时间必须是数字',
-        'msg.required' => '描述必填',
-        'msg.max' => '描述不能超过250个字符',
+        'name.required' => '标题必填',
+        'name.max' => '标题不能超过60个字符',
         'status.integer' => '状态必须是数字',
-        'status.between' => '是否阅读，默认0未阅读',
-        'name.max' => '姓名不能超过30个字符',
-        'phone.max' => '电话不能超过20个字符',
-        'email.max' => '邮箱不能超过60个字符',
+        'status.between' => '状态 0显示',
+        'add_time.required' => '添加时间必填',
+        'add_time.integer' => '添加时间必须是数字',
+        'listorder.integer' => '排序必须是数字',
+        'listorder.between' => '排序只能1-9999',
+        'click.integer' => '点击必须为数字',
     ];
     
     //场景验证规则
     protected $scene = [
-        'add'  => ['title', 'addtime', 'msg', 'status', 'name', 'phone', 'email'],
-        'edit' => ['title', 'addtime', 'msg', 'status', 'name', 'phone', 'email'],
+        'add'  => ['name', 'status', 'add_time', 'listorder', 'click'],
+        'edit' => ['name', 'status', 'add_time', 'listorder', 'click'],
         'del'  => ['id'],
     ];
     

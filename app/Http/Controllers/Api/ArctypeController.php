@@ -5,8 +5,9 @@ use App\Http\Controllers\Api\CommonController;
 use Illuminate\Http\Request;
 use Log;
 use App\Common\ReturnData;
-
+use App\Common\Helper;
 use App\Http\Model\Arctype;
+use App\Http\Logic\ArctypeLogic;
 
 class ArctypeController extends CommonController
 {
@@ -15,16 +16,21 @@ class ArctypeController extends CommonController
         parent::__construct();
     }
 	
+    public function getLogic()
+    {
+        return new ArctypeLogic();
+    }
+    
     public function arctypeList(Request $request)
 	{
         //参数
-        $data['limit'] = $request->input('limit', 10);
-        $data['offset'] = $request->input('offset', 0);
-        if($request->input('pid', null) !== null){$data['pid'] = $request->input('pid');}
-        $data['is_show'] = Arctype::IS_SHOW;
+        $limit = $request->input('limit', 10);
+        $offset = $request->input('offset', 0);
+        if($request->input('pid', null) !== null){$where['pid'] = $request->input('pid');}
+        $where['is_show'] = Arctype::IS_SHOW;
         
-        $res = Arctype::getList($data);
-		if($res == false)
+        $res = $this->getLogic()->getList($where, array('listorder', 'asc'), '*', $offset, $limit);
+		if($res === false)
 		{
 			return ReturnData::create(ReturnData::SYSTEM_FAIL);
 		}
@@ -41,11 +47,11 @@ class ArctypeController extends CommonController
     public function arctypeDetail(Request $request)
 	{
         //参数
-        $data['id'] = $request->input('id','');
-        $data['is_show'] = Arctype::IS_SHOW;
-        if($data['id']==''){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $where['id'] = $request->input('id',null);
+        $where['is_show'] = Arctype::IS_SHOW;
+        if($where['id'] == null){return ReturnData::create(ReturnData::PARAMS_ERROR);}
         
-        $res = Arctype::getOne($data);
+        $res = $this->getLogic()->getOne($where);
 		if($res === false)
 		{
 			return ReturnData::create(ReturnData::SYSTEM_FAIL);
@@ -54,5 +60,42 @@ class ArctypeController extends CommonController
         $res->addtime = date('Y-m-d H:i',$res->addtime);
         
 		return ReturnData::create(ReturnData::SUCCESS,$res);
+    }
+    
+    //添加
+    public function arctypeAdd(Request $request)
+    {
+        if(Helper::isPostRequest())
+        {
+            return $this->getLogic()->add($_POST);
+        }
+    }
+    
+    //修改
+    public function arctypeUpdate(Request $request)
+    {
+        if($request->input('id',null)!=null){$id = $request->input('id');}else{$id='';}if(preg_match('/[0-9]*/',$id)){}else{return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        
+        if(Helper::isPostRequest())
+        {
+            unset($_POST['id']);
+            $where['id'] = $id;
+            
+            return $this->getLogic()->edit($_POST,$where);
+        }
+    }
+    
+    //删除
+    public function arctypeDelete(Request $request)
+    {
+        if($request->input('id',null)!=null){$id = $request->input('id');}else{$id='';}if(preg_match('/[0-9]*/',$id)){}else{return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        
+        if(Helper::isPostRequest())
+        {
+            unset($_POST['id']);
+            $where['id'] = $id;
+            
+            return $this->getLogic()->del($where);
+        }
     }
 }

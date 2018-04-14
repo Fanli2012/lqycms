@@ -36,6 +36,10 @@ class ArctypeLogic extends BaseLogic
                 $res['list'][$k] = $this->getDataView($v);
             }
         }
+        else
+        {
+            return false;
+        }
         
         return $res;
     }
