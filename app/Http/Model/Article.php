@@ -184,7 +184,7 @@ class Article extends BaseModel
         if($where){$res = $res->where($where);}
         if($field){if(is_array($field)){$res = $res->select($field);}else{$res = $res->select(\DB::raw($field));}}
         
-        $res = $res->find();
+        $res = $res->first();
         
         return $res;
     }

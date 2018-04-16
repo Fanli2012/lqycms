@@ -61,4 +61,40 @@ class ArticleController extends CommonController
 
 		return ReturnData::create(ReturnData::SUCCESS,$res);
     }
+    //添加
+    public function articleAdd(Request $request)
+    {
+        if(Helper::isPostRequest())
+        {
+            return $this->getLogic()->add($_POST);
+        }
+    }
+    
+    //修改
+    public function articleUpdate(Request $request)
+    {
+        if($request->input('id',null)!=null){$id = $request->input('id');}else{$id='';}if(preg_match('/[0-9]*/',$id)){}else{return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        
+        if(Helper::isPostRequest())
+        {
+            unset($_POST['id']);
+            $where['id'] = $id;
+            
+            return $this->getLogic()->edit($_POST,$where);
+        }
+    }
+    
+    //删除
+    public function articleDelete(Request $request)
+    {
+        if($request->input('id',null)!=null){$id = $request->input('id');}else{$id='';}if(preg_match('/[0-9]*/',$id)){}else{return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        
+        if(Helper::isPostRequest())
+        {
+            unset($_POST['id']);
+            $where['id'] = $id;
+            
+            return $this->getLogic()->del($where);
+        }
+    }
 }
