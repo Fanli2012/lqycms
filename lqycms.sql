@@ -683,10 +683,10 @@ insert  into `fl_page`(`id`,`title`,`seotitle`,`keywords`,`template`,`descriptio
 DROP TABLE IF EXISTS `fl_payment`;
 
 CREATE TABLE `fl_payment` (
-  `id` smallint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `id` smallint(10) unsigned NOT NULL AUTO_INCREMENT,
   `pay_code` varchar(20) NOT NULL DEFAULT '' COMMENT '支付方式的英文缩写',
   `pay_name` varchar(100) NOT NULL DEFAULT '' COMMENT '支付方式名称',
-  `pay_fee` varchar(10) NOT NULL DEFAULT '0' COMMENT '支付费用',
+  `pay_fee` decimal(10,1) NOT NULL DEFAULT '0.0' COMMENT '支付费用',
   `pay_des` text NOT NULL COMMENT '支付方式描述',
   `pay_config` text NOT NULL COMMENT '支付方式的配置信息,包括商户号和密钥什么的',
   `status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否可用;0否;1是',
@@ -697,7 +697,7 @@ CREATE TABLE `fl_payment` (
 
 /*Data for the table `fl_payment` */
 
-insert  into `fl_payment`(`id`,`pay_code`,`pay_name`,`pay_fee`,`pay_des`,`pay_config`,`status`,`listorder`) values (1,'balance','余额支付','0','使用帐户余额支付。只有会员才能使用，通过设置信用额度，可以透支。','a:0:{}',1,0),(2,'weixin','微信','0','微信','a:0:{}',1,0),(3,'alipay','支付宝','0','支付宝','a:0:{}',1,0),(4,'cod','货到付款','0','开通城市：×××\r\n货到付款区域：×××','a:0:{}',0,0),(5,'bank','银行汇款/转帐','0','银行名称\r\n收款人信息：全称 ××× ；帐号或地址 ××× ；开户行 ×××。\r\n注意事项：办理电汇时，请在电汇单“汇款用途”一栏处注明您的订单号。','a:0:{}',0,0);
+insert  into `fl_payment`(`id`,`pay_code`,`pay_name`,`pay_fee`,`pay_des`,`pay_config`,`status`,`listorder`) values (1,'balance','余额支付','0.0','使用帐户余额支付。只有会员才能使用，通过设置信用额度，可以透支。','a:0:{}',1,0),(2,'weixin','微信','0.0','微信','a:0:{}',1,0),(3,'alipay','支付宝','0.0','支付宝','a:0:{}',1,0),(4,'cod','货到付款','0.0','开通城市：×××\r\n货到付款区域：×××','a:0:{}',0,0),(5,'bank','银行汇款/转帐','0.0','银行名称\r\n收款人信息：全称 ××× ；帐号或地址 ××× ；开户行 ×××。\r\n注意事项：办理电汇时，请在电汇单“汇款用途”一栏处注明您的订单号。','a:0:{}',0,0);
 
 /*Table structure for table `fl_refund` */
 

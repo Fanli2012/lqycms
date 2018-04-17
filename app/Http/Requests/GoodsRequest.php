@@ -44,7 +44,7 @@ class GoodsRequest extends BaseRequest
         'title.required' => '标题必填',
         'title.max' => '标题不能超过150个字符',
         'typeid.required' => '栏目ID必填',
-        'typeid.integer' => '栏目ID必须为数字符',
+        'typeid.integer' => '栏目ID必须为数字',
         'click.integer' => '点击量必须为数字',
         'tuijian.integer' => '推荐等级必须是数字',
         'sn.max' => '货号不能超过60个字符',

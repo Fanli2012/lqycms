@@ -66,6 +66,8 @@ class ArticleController extends CommonController
     {
         if(Helper::isPostRequest())
         {
+            $_POST['user_id'] = Token::$uid;
+            
             return $this->getLogic()->add($_POST);
         }
     }
@@ -79,6 +81,7 @@ class ArticleController extends CommonController
         {
             unset($_POST['id']);
             $where['id'] = $id;
+            //$where['user_id'] = Token::$uid;
             
             return $this->getLogic()->edit($_POST,$where);
         }
@@ -93,6 +96,7 @@ class ArticleController extends CommonController
         {
             unset($_POST['id']);
             $where['id'] = $id;
+            //$where['user_id'] = Token::$uid;
             
             return $this->getLogic()->del($where);
         }

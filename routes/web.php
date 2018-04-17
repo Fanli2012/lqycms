@@ -161,6 +161,9 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
 
 //API接口路由，需token验证
 Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web','token']], function () {
+    Route::post('/article_add', 'ArticleController@articleAdd'); //添加文章
+    Route::post('/article_update', 'ArticleController@articleUpdate'); //修改文章
+    Route::post('/article_delete', 'ArticleController@articleDelete'); //删除文章
     //用户中心
     Route::post('/user_signin', 'UserController@signin'); //签到
     Route::get('/user_info', 'UserController@userInfo'); //用户详细信息
