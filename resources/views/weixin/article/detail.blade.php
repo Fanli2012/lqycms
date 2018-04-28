@@ -14,7 +14,7 @@
 <h1 class="arc_tit"><?php echo $post['title']; ?></h1>
 
 <div class="arc_content box">
-<div class="ainfo"><?php echo $post['pubdate']; ?> <a style="color:#ee5b03;" href="<?php echo route('weixin_article_category',array('cat'=>$post['typeid'])); ?>"><?php echo $post['type_name']; ?></a></div>
+<div class="ainfo"><?php echo $post['pubdate']; ?> <a style="color:#ee5b03;" href="<?php echo route('weixin_article_category',array('cat'=>$post['typeid'])); ?>"><?php echo $post['typename']; ?></a></div>
 <?php echo $post['body']; ?>
 <div class="arcnext cl mb10" style="margin-top:10px;color:#999;">阅读 <?php echo $post['click']; ?><!-- <a class="red" href="" rel="prev"></a> --></div></div>
 

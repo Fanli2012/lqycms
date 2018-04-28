@@ -117,7 +117,10 @@ class Goods extends BaseModel
                 foreach($res['list'] as $k=>$v)
                 {
                     $res['list'][$k]->goods_detail_url = route('weixin_goods_detail',array('id'=>$v->id));
-                    $res['list'][$k]->price = self::get_final_price($v->id);
+                    $res['list'][$k]->price = self::get_goods_final_price($v);
+                    
+                    if(!empty($res['list'][$k]->litpic)){$res['list'][$k]->litpic = http_host().$res['list'][$k]->litpic;}
+                    
                     $res['list'][$k]->is_promote_goods = self::bargain_price($v->promote_price,$v->promote_start_date,$v->promote_end_date); //is_promote_goods等于0，说明不是促销商品
                 }
             }
@@ -142,7 +145,7 @@ class Goods extends BaseModel
         if($goods)
         {
             $goods['goods_detail_url'] = route('weixin_goods_detail',array('id'=>$goods->id));
-            $goods['price'] = self::get_final_price($id);
+            $goods['price'] = self::get_goods_final_price($goods);
             $goods['is_promote_goods'] = self::bargain_price($goods->promote_price,$goods->promote_start_date,$goods->promote_end_date); //is_promote_goods等于0，说明不是促销商品
         }
         
@@ -207,6 +210,42 @@ class Goods extends BaseModel
         
         //取得商品促销价格列表
         $goods = Goods::where('id',$goods_id)->where('status',0)->first(['promote_price','promote_start_date','promote_end_date','price']);
+        $final_price = $goods->price;
+        
+        // 计算商品的促销价格
+        if ($goods->promote_price > 0)
+        {
+            $promote_price = self::bargain_price($goods->promote_price, $goods->promote_start_date, $goods->promote_end_date);
+        }
+        else
+        {
+            $promote_price = 0;
+        }
+        
+        if ($promote_price != 0)
+        {
+            $final_price = $promote_price;
+        }
+        
+        //返回商品最终购买价格
+        return $final_price;
+    }
+    
+    /**
+     * 取得商品最终使用价格
+     *
+     * @param   string  $goods_id      商品编号
+     * @param   string  $goods_num     购买数量
+     *
+     * @return  商品最终购买价格
+     */
+    public static function get_goods_final_price($goods)
+    {
+        $final_price   = '0'; //商品最终购买价格
+        $promote_price = '0'; //商品促销价格
+        $user_price    = '0'; //商品会员价格，预留
+        
+        //取得商品促销价格列表
         $final_price = $goods->price;
         
         // 计算商品的促销价格

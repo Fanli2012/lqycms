@@ -95,19 +95,17 @@ class IndexController extends CommonController
 	//商品列表页
     public function goodslist(Request $request)
 	{
-        $data['typeid'] = 0;
-        if($request->input('typeid', null) != null){$data['typeid'] = $request->input('typeid');}
+        if($request->input('typeid', null) != null){$postdata['typeid'] = $request->input('typeid');}
+        if($request->input('orderby', null) != null){$postdata['orderby'] = $request->input('orderby');}
+        if($request->input('tuijian', null) != null){$postdata['tuijian'] = $request->input('tuijian');}
         
         $pagesize = 15;
         $offset = 0;
         if(isset($_REQUEST['page'])){$offset = ($_REQUEST['page']-1)*$pagesize;}
         
         //商品列表
-        $postdata = array(
-            'typeid' => $data['typeid'],
-            'limit'  => $pagesize,
-            'offset' => $offset
-		);
+        $postdata['limit'] = $pagesize;
+        $postdata['offset'] = $offset;
         $url = env('APP_API_URL')."/goods_list";
 		$res = curl_request($url,$postdata,'GET');
         $data['list'] = $res['data']['list'];
@@ -225,10 +223,8 @@ class IndexController extends CommonController
         if(isset($_REQUEST['page'])){$offset = ($_REQUEST['page']-1)*$pagesize;}
         
         //文章列表
-        $postdata2 = array(
-            'limit'  => $pagesize,
-            'offset' => $offset
-		);
+        $postdata2['limit'] = $limit;
+        $postdata2['offset'] = $offset;
         if($request->input('typeid', null) != null){$postdata2['typeid'] = $request->input('typeid');}
         
         $url = env('APP_API_URL')."/article_list";

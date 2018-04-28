@@ -178,9 +178,7 @@ class Cart extends BaseModel
      */
     public static function clearCart($user_id)
     {
-        self::where('user_id',$user_id)->delete();
-
-        return true;
+        return self::where('user_id',$user_id)->delete();
     }
     
     //购物车商品总数量

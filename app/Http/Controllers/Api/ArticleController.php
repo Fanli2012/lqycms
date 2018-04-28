@@ -1,11 +1,11 @@
 <?php
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Api\CommonController;
 use Illuminate\Http\Request;
 use Log;
 use DB;
 use App\Common\ReturnData;
+use App\Common\Helper;
 use App\Http\Model\Article;
 use App\Http\Logic\ArticleLogic;
 
@@ -61,6 +61,7 @@ class ArticleController extends CommonController
 
 		return ReturnData::create(ReturnData::SUCCESS,$res);
     }
+    
     //添加
     public function articleAdd(Request $request)
     {

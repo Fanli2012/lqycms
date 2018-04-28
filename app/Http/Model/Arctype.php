@@ -1,9 +1,8 @@
 <?php
 namespace App\Http\Model;
+use Illuminate\Support\Facades\DB;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Arctype extends Model
+class Arctype extends BaseModel
 {
 	//文章分类模型
 	
@@ -13,7 +12,7 @@ class Arctype extends Model
      * @var string
      */
 	protected $table = 'arctype';
-	const TABLE_NAME = 'article';
+	const TABLE_NAME = 'arctype';
 	
 	/**
      * 表明模型是否应该被打上时间戳

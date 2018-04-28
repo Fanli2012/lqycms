@@ -1,11 +1,12 @@
 <?php
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Api\CommonController;
 use Illuminate\Http\Request;
 use App\Common\ReturnData;
+use App\Common\Helper;
 
 use App\Http\Model\Slide;
+use App\Http\Logic\SlideLogic;
 
 class SlideController extends CommonController
 {
@@ -13,21 +14,89 @@ class SlideController extends CommonController
     {
         parent::__construct();
     }
-	
+    
+    public function getLogic()
+    {
+        return new SlideLogic();
+    }
+    
     public function slideList(Request $request)
 	{
         //参数
-        $data['limit'] = $request->input('limit', 10);
-        $data['offset'] = $request->input('offset', 0);
-        if($request->input('group_id', null) !== null){$data['group_id'] = $request->input('group_id');}
-        if($request->input('type', null) !== null){$data['type'] = $request->input('type');}
+        $where = array();
+        $limit = $request->input('limit', 10);
+        $offset = $request->input('offset', 0);
+        if($request->input('group_id', null) !== null){$where['group_id'] = $request->input('group_id');}
+        if($request->input('type', null) !== null){$where['type'] = $request->input('type');}
         
-        $res = Slide::getList($data);
+        $res = $this->getLogic()->getList($where, array('id', 'desc'), '*', $offset, $limit);
 		if($res == false)
 		{
 			return ReturnData::create(ReturnData::SYSTEM_FAIL);
 		}
         
+        foreach($res['list'] as $k=>$v)
+        {
+            if(!empty($res['list'][$k]->pic)){$res['list'][$k]->pic = http_host().$v->pic;}
+        }
+        
 		return ReturnData::create(ReturnData::SUCCESS,$res);
+    }
+    
+    //详情
+    public function slideDetail(Request $request)
+	{
+        //参数
+        if(!checkIsNumber($request->input('id', null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        
+		$res = $this->getLogic()->getOne($where);
+        if(!$res){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        
+        if(!empty($res->pic)){$res->pic = http_host().$res->pic;}
+        
+		return ReturnData::create(ReturnData::SUCCESS,$res);
+    }
+    
+    //添加
+    public function slideAdd(Request $request)
+    {
+        if(Helper::isPostRequest())
+        {
+            $res = $this->getLogic()->add($_POST);
+            
+            return $res;
+        }
+    }
+    
+    //修改
+    public function slideUpdate(Request $request)
+    {
+        if(!checkIsNumber($request->input('id', null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        
+        if(Helper::isPostRequest())
+        {
+            unset($_POST['id']);
+            $where['id'] = $id;
+            
+            $res = $this->getLogic()->edit($_POST,$where);
+            
+            return $res;
+        }
+    }
+    
+    //删除
+    public function slideDelete(Request $request)
+    {
+        if(!checkIsNumber($request->input('id', null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        
+        if(Helper::isPostRequest())
+        {
+            unset($_POST['id']);
+            $where['id'] = $id;
+            
+            $res = $this->getLogic()->del($where);
+            
+            return $res;
+        }
     }
 }

@@ -225,7 +225,7 @@ class Article extends BaseModel
      */
     public static function edit($data, $where = array())
     {
-        if (self::where($where)->update(parent::filterTableColumn($data,self::TABLE_NAME)) !== false)
+        if (self::where($where)->update(parent::filterTableColumn($data, self::TABLE_NAME)) !== false)
         {
             return true;
         }

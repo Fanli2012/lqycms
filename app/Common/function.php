@@ -1186,6 +1186,23 @@ function getDataAttr($dataModel,$data = [])
     return $data;
 }
 
+//判断是否为数字
+function checkIsNumber($data)
+{
+	if($data == '')
+	{
+		return false;
+	}
+	elseif($data === null)
+	{
+		return false;
+	}
+	elseif(preg_match("/^\d*$/",$data))
+	{
+		return true;
+	}
 
+	return false;
+}
 
 
