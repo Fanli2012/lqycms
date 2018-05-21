@@ -32,8 +32,8 @@ class CartController extends CommonController
         $data['goods_number'] = $request->input('goods_number','');
         $data['goods_id'] = $request->input('goods_id','');
         
-        if($request->input('goods_attr', '') != ''){$data['goods_attr'] = $request->input('goods_attr');}
-        if($request->input('shop_id', '') != ''){$data['shop_id'] = $request->input('shop_id');}
+        if($request->input('goods_attr', null) != null){$data['goods_attr'] = $request->input('goods_attr');}
+        if($request->input('shop_id', null) != null){$data['shop_id'] = $request->input('shop_id');}
         $data['add_time'] = time();
         $data['user_id'] = Token::$uid;
         
