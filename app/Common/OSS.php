@@ -1,13 +1,11 @@
 <?php
 namespace App\Common;
-
 use JohnLui\AliyunOSS;
 
 class OSS
 {
-
     private $ossClient;
-
+    
     public function __construct($isInternal = false)
     {
         $serverAddress   = $isInternal ? config('app.ossServerInternal') : config('app.ossServer');
@@ -17,7 +15,7 @@ class OSS
             config('app.AccessKeySecret')
         );
     }
-
+    
     public static function upload($ossKey, $filePath, $bucket = '')
     {
         $isInternal = config('app.isInternal');
@@ -26,7 +24,7 @@ class OSS
         $oss->ossClient->setBucket($bucket);
         $oss->ossClient->uploadFile($ossKey, $filePath);
     }
-
+    
     /**
      * 直接把变量内容上传到oss
      *
@@ -42,7 +40,7 @@ class OSS
         $oss->ossClient->setBucket($bucket);
         $oss->ossClient->uploadContent($osskey, $content);
     }
-
+    
     /**
      * 删除存储在oss中的文件
      *
@@ -58,7 +56,7 @@ class OSS
         $oss = new OSS($isInternal); // 上传文件使用内网，免流量费
         return $oss->ossClient->deleteObject($bucket, $ossKey);
     }
-
+    
     /**
      * 复制存储在阿里云OSS中的Object
      *
@@ -72,10 +70,10 @@ class OSS
     public function copyObject($sourceBuckt, $sourceKey, $destBucket, $destKey)
     {
         $oss = new OSS(true); // 上传文件使用内网，免流量费
-
+        
         return $oss->ossClient->copyObject($sourceBuckt, $sourceKey, $destBucket, $destKey);
     }
-
+    
     /**
      * 移动存储在阿里云OSS中的Object
      *
@@ -89,10 +87,10 @@ class OSS
     public function moveObject($sourceBuckt, $sourceKey, $destBucket, $destKey)
     {
         $oss = new OSS(true); // 上传文件使用内网，免流量费
-
+        
         return $oss->ossClient->moveObject($sourceBuckt, $sourceKey, $destBucket, $destKey);
     }
-
+    
     public static function getUrl($ossKey, $bucket = '')
     {
         !$bucket && $bucket = config('app.ossBucket');
@@ -100,17 +98,16 @@ class OSS
         $oss->ossClient->setBucket($bucket);
         return $oss->ossClient->getUrl($ossKey, new \DateTime("+1 day"));
     }
-
+    
     public static function createBucket($bucketName)
     {
         $oss = new OSS();
         return $oss->ossClient->createBucket($bucketName);
     }
-
+    
     public static function getAllObjectKey($bucketName)
     {
         $oss = new OSS();
         return $oss->ossClient->getAllObjectKey($bucketName);
     }
-
 }

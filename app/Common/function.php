@@ -1179,29 +1179,102 @@ function getDataAttr($dataModel,$data = [])
         if(method_exists($dataModel, $_method))
         {
 			$tmp = $k.'_text';
-            $data->$tmp = $dataModel::$_method($data);
+            $data->$tmp = $dataModel->$_method($data);
         }
     }
     
     return $data;
 }
 
+/**
+ * 调用服务接口
+ * @param $name 服务类名称
+ * @param array $config 配置
+ * @return object
+ */
+function service($name = '', $config = [])
+{
+    static $instance = [];
+    $guid = $name . 'Service';
+    if (!isset($instance[$guid]))
+    {
+        $class = 'App\\Http\\Service\\' . ucfirst($name);
+        if (class_exists($class))
+        {
+            $service = new $class($config);
+            $instance[$guid] = $service;
+        }
+        
+        throw new Exception('class not exists:' . $class);
+    }
+    
+    return $instance[$guid];
+}
+
+/**
+ * 调用逻辑接口
+ * @param $name 逻辑类名称
+ * @param array $config 配置
+ * @return object
+ */
+function logic($name = '', $config = [])
+{
+    static $instance = [];
+    $guid = $name . 'Logic';
+    if (!isset($instance[$guid]))
+    {
+        $class = 'App\\Http\\Logic\\' . ucfirst($name) . 'Logic';
+        
+        if (class_exists($class))
+        {
+            $logic = new $class($config);
+            $instance[$guid] = $logic;
+        }
+        
+        throw new Exception('class not exists:' . $class);
+    }
+    
+    return $instance[$guid];
+}
+
+/**
+ * 实例化（分层）模型
+ * @param $name 模型类名称
+ * @param array $config 配置
+ * @return object
+ */
+function model($name = '', $config = [])
+{
+    static $instance = [];
+    $guid = $name . 'Model';
+    if (!isset($instance[$guid]))
+    {
+        $class = 'App\\Http\\Model\\' . ucfirst($name);
+        if (class_exists($class))
+        {
+            $model = new $class($config);
+            $instance[$guid] = $model;
+        }
+        
+        throw new Exception('class not exists:' . $class);
+    }
+    
+    return $instance[$guid];
+}
+
 //判断是否为数字
 function checkIsNumber($data)
 {
-	if($data == '')
+	if($data == '' || $data == null)
 	{
 		return false;
 	}
-	elseif($data === null)
-	{
-		return false;
-	}
-	elseif(preg_match("/^\d*$/",$data))
+	
+    if(preg_match("/^\d*$/",$data))
 	{
 		return true;
 	}
-
+    
 	return false;
 }
 

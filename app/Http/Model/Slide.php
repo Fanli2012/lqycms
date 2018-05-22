@@ -1,24 +1,24 @@
 <?php
 namespace App\Http\Model;
-use Illuminate\Support\Facades\DB;
+use DB;
+use Log;
 
 class Slide extends BaseModel
 {
     //轮播图
 	protected $table = 'slide';
-    const TABLE_NAME = 'slide';
 
     public $timestamps = false;
 	protected $guarded = []; //$guarded包含你不想被赋值的字段数组。
 	
     const UN_SHOW      = 1; // 不显示
     const IS_SHOW      = 0; // 显示
-
-    public static function getDb()
+    
+    public function getDb()
     {
-        return DB::table(self::TABLE_NAME);
+        return DB::table($this->table);
     }
-
+    
     /**
      * 列表
      * @param array $where 查询条件
@@ -28,27 +28,27 @@ class Slide extends BaseModel
      * @param int $limit 取多少条
      * @return array
      */
-    public static function getList($where = array(), $order = '', $field = '*', $offset = 0, $limit = 10)
+    public function getList($where = array(), $order = '', $field = '*', $offset = 0, $limit = 10)
     {
-        $model = self::getDb();
+        $model = $this->getDb();
         if($where){$model = $model->where($where);}
-
+        
         $res['count'] = $model->count();
         $res['list'] = array();
-
+        
         if($res['count'] > 0)
         {
             if($field){if(is_array($field)){$model = $model->select($field);}else{$model = $model->select(\DB::raw($field));}}
             if($order){$model = parent::getOrderByData($model, $order);}
             if($offset){}else{$offset = 0;}
             if($limit){}else{$limit = 10;}
-
+            
             $res['list'] = $model->skip($offset)->take($limit)->get();
         }
-
+        
         return $res;
     }
-
+    
     /**
      * 分页，用于前端html输出
      * @param array $where 查询条件
@@ -58,18 +58,18 @@ class Slide extends BaseModel
      * @param int $page 当前第几页
      * @return array
      */
-    public static function getPaginate($where = array(), $order = '', $field = '*', $limit = '')
+    public function getPaginate($where = array(), $order = '', $field = '*', $limit = 10)
     {
-        $res = self::getDb();
-
+        $res = $this->getDb();
+        
         if($where){$res = $res->where($where);}
         if($field){if(is_array($field)){$res = $res->select($field);}else{$res = $res->select(\DB::raw($field));}}
         if($order){$res = parent::getOrderByData($res, $order);}
         if($limit){}else{$limit = 10;}
-
+        
         return $res->paginate($limit);
     }
-
+    
     /**
      * 查询全部
      * @param array $where 查询条件
@@ -78,50 +78,50 @@ class Slide extends BaseModel
      * @param int $limit 取多少条
      * @return array
      */
-    public static function getAll($where = array(), $order = '', $field = '*', $limit = 10, $offset = 0)
+    public function getAll($where = array(), $order = '', $field = '*', $limit = 10, $offset = 0)
     {
-        $res = self::getDb();
-
+        $res = $this->getDb();
+        
         if($where){$res = $res->where($where);}
         if($field){if(is_array($field)){$res = $res->select($field);}else{$res = $res->select(\DB::raw($field));}}
         if($order){$res = parent::getOrderByData($res, $order);}
         if($offset){}else{$offset = 0;}
         if($limit){}else{$limit = 10;}
-
+        
         $res = $res->skip($offset)->take($limit)->get();
-
+        
         return $res;
     }
-
+    
     /**
      * 获取一条
      * @param array $where 条件
      * @param string $field 字段
      * @return array
      */
-    public static function getOne($where, $field = '*')
+    public function getOne($where, $field = '*')
     {
-        $res = self::getDb();
-
+        $res = $this->getDb();
+        
         if($where){$res = $res->where($where);}
         if($field){if(is_array($field)){$res = $res->select($field);}else{$res = $res->select(\DB::raw($field));}}
-
+        
         $res = $res->first();
-
+        
         return $res;
     }
-
+    
     /**
      * 添加
      * @param array $data 数据
      * @return int
      */
-    public static function add(array $data,$type = 0)
+    public function add(array $data,$type = 0)
     {
         if($type==0)
         {
             // 新增单条数据并返回主键值
-            return self::insertGetId(parent::filterTableColumn($data,self::TABLE_NAME));
+            return self::insertGetId(parent::filterTableColumn($data,$this->table));
         }
         elseif($type==1)
         {
@@ -138,41 +138,41 @@ class Slide extends BaseModel
             return self::insert($data);
         }
     }
-
+    
     /**
      * 修改
      * @param array $data 数据
      * @param array $where 条件
      * @return bool
      */
-    public static function edit($data, $where = array())
+    public function edit($data, $where = array())
     {
-        if (self::where($where)->update(parent::filterTableColumn($data, self::TABLE_NAME)) !== false)
+        $res = $this->getDb();
+        $res = $res->where($where)->update(parent::filterTableColumn($data, $this->table));
+        
+        if ($res === false)
         {
-            return true;
+            return false;
         }
-
-        return false;
+        
+        return true;
     }
-
+    
     /**
      * 删除
      * @param array $where 条件
      * @return bool
      */
-    public static function del($where)
+    public function del($where)
     {
-        return self::where($where)->delete();
+        $res = $this->getDb();
+        $res = $res->where($where)->delete();
+        
+        return $res;
     }
-
-    //删除一条记录
-    public static function remove($id)
-    {
-        return self::whereIn('id', explode(',', $id))->delete();
-    }
-
+    
     //获取显示平台文字：0pc，1weixin，2app，3wap
-    public static function getTypeText($where)
+    public function getTypeAttr($where)
     {
         $res = '';
         if($where['type'] === 0)

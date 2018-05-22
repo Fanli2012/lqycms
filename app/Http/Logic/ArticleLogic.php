@@ -27,14 +27,14 @@ class ArticleLogic extends BaseLogic
     //列表
     public function getList($where = array(), $order = '', $field = '*', $offset = '', $limit = '')
     {
-        $res = Article::getList($where, $order, $field, $offset, $limit);
+        $res = $this->getModel()->getList($where, $order, $field, $offset, $limit);
         
         if($res['list'])
         {
             foreach($res['list'] as $k=>$v)
             {
                 $res['list'][$k] = $this->getDataView($v);
-                $res['list'][$k]->typename = Article::getTypenameAttr(array('typeid' => $v->typeid));
+                $res['list'][$k]->typename = $this->getModel()->getTypenameAttr(array('typeid' => $v->typeid));
             }
         }
         else
@@ -48,10 +48,10 @@ class ArticleLogic extends BaseLogic
     //分页html
     public function getPaginate($where = array(), $order = '', $field = '*', $limit = '')
     {
-        $res = Article::getPaginate($where, $order, $field, $limit);
+        $res = $this->getModel()->getPaginate($where, $order, $field, $limit);
         foreach($res as $k=>$v)
         {
-			$res[$k]->typename = Article::getTypenameAttr(array('typeid'=>$v->typeid));
+			$res[$k]->typename = $this->getModel()->getTypenameAttr(array('typeid'=>$v->typeid));
         }
         
         return $res;
@@ -60,7 +60,7 @@ class ArticleLogic extends BaseLogic
     //全部列表
     public function getAll($where = array(), $order = '', $field = '*', $limit = '')
     {
-        $res = Article::getAll($where, $order, $field, $limit);
+        $res = $this->getModel()->getAll($where, $order, $field, $limit);
         
         /* if($res)
         {
@@ -76,13 +76,13 @@ class ArticleLogic extends BaseLogic
     //详情
     public function getOne($where = array(), $field = '*')
     {
-        $res = Article::getOne($where, $field);
+        $res = $this->getModel()->getOne($where, $field);
         if(!$res){return false;}
         
         $res = $this->getDataView($res);
-        $res->typename = Article::getTypenameAttr(array('typeid'=>$res->typeid));
+        $res->typename = $this->getModel()->getTypenameAttr(array('typeid'=>$res->typeid));
         
-        Article::getDb()->where($where)->increment('click', 1);
+        $this->getModel()->getDb()->where($where)->increment('click', 1);
         
         return $res;
     }
@@ -95,7 +95,7 @@ class ArticleLogic extends BaseLogic
         $validator = $this->getValidate($data, 'add');
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
-        $res = Article::add($data,$type);
+        $res = $this->getModel()->add($data,$type);
         if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
         
         return ReturnData::create(ReturnData::SUCCESS,$res);
@@ -109,7 +109,7 @@ class ArticleLogic extends BaseLogic
         $validator = $this->getValidate($data, 'edit');
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
-        $res = Article::edit($data,$where);
+        $res = $this->getModel()->edit($data,$where);
         if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
         
         return ReturnData::create(ReturnData::SUCCESS,$res);
@@ -123,7 +123,7 @@ class ArticleLogic extends BaseLogic
         $validator = $this->getValidate($where,'del');
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
-        $res = Article::del($where);
+        $res = $this->getModel()->del($where);
         if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
         
         return ReturnData::create(ReturnData::SUCCESS,$res);

@@ -2,6 +2,8 @@
 namespace App\Http\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Schema;
+use DB;
+use Log;
 
 class BaseModel extends Model
 {
@@ -11,7 +13,7 @@ class BaseModel extends Model
     {
         return Schema::getColumnListing($table);
     }
-
+    
     //过滤不是某一表的字段
     public static function filterTableColumn($data, $table)
     {
@@ -20,17 +22,17 @@ class BaseModel extends Model
         if (!$table_column) {
             return $data;
         }
-
+        
         foreach ($data as $k => $v) {
             if (!in_array($k, $table_column)) {
                 unset($data[$k]);
             }
         }
-
+        
         return $data;
     }
-
-    //获取排序排序
+    
+    //获取排序参数
     public static function getOrderByData($model, $orderby)
     {
         if ($orderby == 'rand()')
@@ -51,7 +53,7 @@ class BaseModel extends Model
                 }
             }
         }
-
+        
         return $model;
     }
 }

@@ -1,11 +1,11 @@
 <?php
 namespace App\Http\Logic;
 use App\Common\ReturnData;
-use App\Http\Model\Feedback;
-use App\Http\Requests\FeedbackRequest;
+use App\Http\Model\FeedBack;
+use App\Http\Requests\FeedBackRequest;
 use Validator;
 
-class FeedbackLogic extends BaseLogic
+class FeedBackLogic extends BaseLogic
 {
     public function __construct()
     {
@@ -14,22 +14,22 @@ class FeedbackLogic extends BaseLogic
     
     public function getModel()
     {
-        return new Feedback();
+        return new FeedBack();
     }
     
     public function getValidate($data, $scene_name)
     {
         //数据验证
-        $validate = new FeedbackRequest();
+        $validate = new FeedBackRequest();
         return Validator::make($data, $validate->getSceneRules($scene_name), $validate->getSceneRulesMessages());
     }
     
     //列表
     public function getList($where = array(), $order = '', $field = '*', $offset = '', $limit = '')
     {
-        $res = Feedback::getList($where, $order, $field, $offset, $limit);
+        $res = $this->getModel()->getList($where, $order, $field, $offset, $limit);
         
-        if($res['list'])
+        if($res['count'] > 0)
         {
             foreach($res['list'] as $k=>$v)
             {
@@ -43,7 +43,7 @@ class FeedbackLogic extends BaseLogic
     //分页html
     public function getPaginate($where = array(), $order = '', $field = '*', $limit = '')
     {
-        $res = Feedback::getPaginate($where, $order, $field, $limit);
+        $res = $this->getModel()->getPaginate($where, $order, $field, $limit);
         
         return $res;
     }
@@ -51,7 +51,7 @@ class FeedbackLogic extends BaseLogic
     //全部列表
     public function getAll($where = array(), $order = '', $field = '*', $limit = '')
     {
-        $res = Feedback::getAll($where, $order, $field, $limit);
+        $res = $this->getModel()->getAll($where, $order, $field, $limit);
         
         /* if($res)
         {
@@ -67,7 +67,7 @@ class FeedbackLogic extends BaseLogic
     //详情
     public function getOne($where = array(), $field = '*')
     {
-        $res = Feedback::getOne($where, $field);
+        $res = $this->getModel()->getOne($where, $field);
         if(!$res){return false;}
         
         $res = $this->getDataView($res);
@@ -83,7 +83,7 @@ class FeedbackLogic extends BaseLogic
         $validator = $this->getValidate($data, 'add');
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
-        $res = Feedback::add($data,$type);
+        $res = $this->getModel()->add($data,$type);
         if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
         
         return ReturnData::create(ReturnData::SUCCESS,$res);
@@ -97,7 +97,7 @@ class FeedbackLogic extends BaseLogic
         $validator = $this->getValidate($data, 'edit');
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
-        $res = Feedback::edit($data,$where);
+        $res = $this->getModel()->edit($data,$where);
         if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
         
         return ReturnData::create(ReturnData::SUCCESS,$res);
@@ -111,7 +111,7 @@ class FeedbackLogic extends BaseLogic
         $validator = $this->getValidate($where,'del');
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
-        $res = Feedback::del($where);
+        $res = $this->getModel()->del($where);
         if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
         
         return ReturnData::create(ReturnData::SUCCESS,$res);

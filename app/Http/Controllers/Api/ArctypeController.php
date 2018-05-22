@@ -73,7 +73,8 @@ class ArctypeController extends CommonController
     //修改
     public function arctypeUpdate(Request $request)
     {
-        if($request->input('id',null)!=null){$id = $request->input('id');}else{$id='';}if(preg_match('/[0-9]*/',$id)){}else{return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
         
         if(Helper::isPostRequest())
         {
@@ -87,7 +88,8 @@ class ArctypeController extends CommonController
     //删除
     public function arctypeDelete(Request $request)
     {
-        if($request->input('id',null)!=null){$id = $request->input('id');}else{$id='';}if(preg_match('/[0-9]*/',$id)){}else{return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
         
         if(Helper::isPostRequest())
         {
