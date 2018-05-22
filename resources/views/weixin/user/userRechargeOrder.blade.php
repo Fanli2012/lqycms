@@ -4,7 +4,7 @@
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/jquery.min.js"></script>
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/weixin/mobile.js"></script></head><body>
 <div class="classreturn loginsignup">
-    <div class="ds-in-bl return"><a href="javascript:history.back(-1);"><img src="<?php echo env('APP_URL'); ?>/images/weixin/return.png" alt="返回"></a></div>
+    <div class="ds-in-bl return"><a href="<?php echo route('weixin_user_recharge'); ?>"><img src="<?php echo env('APP_URL'); ?>/images/weixin/return.png" alt="返回"></a></div>
     <div class="ds-in-bl tit center"><span>充值明细</span></div>
 </div>
 
@@ -23,7 +23,7 @@
         <li>
         <span class="green">+ <?php echo $v['money']; ?></span>
         <div class="info"><p class="tit">充值</p>
-        <p class="time"><?php echo $v['created_at']; ?></p></div>
+        <p class="time"><?php echo date('Y-m-d H:i:s',$v['created_at']); ?></p></div>
         </li>
         <?php } ?>
     </ul>

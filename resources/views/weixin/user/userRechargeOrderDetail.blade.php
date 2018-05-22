@@ -16,14 +16,14 @@ function jsApiCall()
             
             if(res.err_msg=='get_brand_wcpay_request:ok')
             {
-				alert('支付成功！');
+				alert('支付成功');
 			}
             else
             {
-				alert('支付失败！');
+				alert('支付失败');
 			}
             
-			setTimeout("location.href = '<?php echo $returnUrl; ?>'",2000);
+			setTimeout("location.href = '<?php echo $returnUrl; ?>'",1000);
 		}
 	);
 }
@@ -54,7 +54,7 @@ function callpay()
 </style>
 <div class="floor">
     <div style="margin:10px;text-align:left;">
-        <p>订单已于 <b style="color:#fea700;"><?php echo $post['created_at']; ?></b> 提交成功，请您尽快付款！</p>
+        <p>充值订单已于 <b style="color:#fea700;"><?php echo date('Y-m-d H:i:s', $post['created_at']); ?></b> 提交成功，请您尽快付款！</p>
         订单号：<?php echo $post['id']; ?><br>
         应付金额：<strong style="color:#D03737;">￥<?php echo $post['money']; ?></strong> 元<br><br>
 

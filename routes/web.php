@@ -44,7 +44,8 @@ Route::group(['namespace' => 'Home'], function () {
 	Route::get('/goodslist', 'IndexController@goodslist')->name('home_goodslist'); //产品分类页
     Route::get('/brandlist', 'IndexController@brandList')->name('home_brandlist'); //品牌列表
 	Route::get('/sitemap.xml', 'IndexController@sitemap')->name('home_sitemap');//sitemap
-	
+	Route::get('/wx_checksignature', 'IndexController@checksignature')->name('home_wx_checksignature');
+    
 	Route::get('/test', 'IndexController@test')->name('home_test');             //测试
 	Route::get('/aaa', function () {
 		dd('wap');
@@ -80,6 +81,7 @@ Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin'], function () {
 	Route::get('/test', 'IndexController@test')->name('weixin_test');           //测试
 });
 
+
 //微信路由，需登录，全局
 Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin', 'middleware' => ['web','wxlogin']], function () {
     //个人中心
@@ -112,8 +114,8 @@ Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin', 'middleware' => ['w
     Route::post('/order_dopay', 'OrderController@dopay')->name('weixin_order_dopay'); //订单支付
     Route::get('/order_list', 'OrderController@orderList')->name('weixin_order_list'); //全部订单列表
     Route::get('/order_detail', 'OrderController@orderDetail')->name('weixin_order_detail'); //订单详情
-    Route::get('/order_wxpay', 'OrderController@orderWxpay')->name('weixin_order_wxpay'); //订单微信支付
     Route::get('/order_yuepay', 'OrderController@orderYuepay')->name('weixin_order_yuepay'); //订单余额支付
+    Route::get('/order_wxpay', 'OrderController@orderWxpay')->name('weixin_order_wxpay'); //订单微信支付
     Route::any('/order_comment', 'OrderController@orderComment')->name('weixin_order_comment'); //订单评价
     //收货地址
     Route::get('/user_address', 'AddressController@index')->name('weixin_user_address_list');
@@ -131,6 +133,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('/dataapi/customer_login', 'Api\WechatAuthController@customerLogin');
 	Route::post('/dataapi/', 'Api\UserController@signin'); //签到
 });
+
 
 //API接口路由，无需token验证
 Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web']], function () {

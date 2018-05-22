@@ -61,6 +61,7 @@ class UserRechargeController extends CommonController
         $data['status'] = UserRecharge::UN_PAY; //0未处理，1已完成
         $data['pay_type'] = $request->input('pay_type',''); //充值类型：1微信，2支付宝
         $data['user_id'] = Token::$uid;
+        $data['created_at'] = time();
         
         if($data['money']=='' || $data['pay_type']=='')
 		{
@@ -84,7 +85,7 @@ class UserRechargeController extends CommonController
         $data['trade_no'] = $request->input('trade_no','');
         $data['pay_time'] = $request->input('pay_time','');
         $data['status'] = UserRecharge::COMPLETE_PAY;
-        $data['updated_at'] = date('Y-m-d H:i:s',time());
+        $data['updated_at'] = time();
         
         if($id=='' || $data['trade_no']=='' || $data['pay_time']=='')
 		{

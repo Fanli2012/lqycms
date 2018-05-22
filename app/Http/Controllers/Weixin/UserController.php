@@ -203,7 +203,7 @@ class UserController extends CommonController
                     $html .= '<li>';
                     $html .= '<span class="green">+ '.$v['money'].'</span>';
                     $html .= '<div class="info"><p class="tit">充值</p>';
-                    $html .= '<p class="time">'.$v['created_at'].'</p></div>';
+                    $html .= '<p class="time">'.date('Y-m-d H:i:s', $v['created_at']).'</p></div>';
                     $html .= '</li>';
                 }
             }
@@ -236,7 +236,7 @@ class UserController extends CommonController
 		$body = '充值';//订单详情
 		$out_trade_no = $user_recharge['recharge_sn'];//订单号
 		$total_fee = floatval($user_recharge['money']*100);//价格0.01
-        $attach = 'pay_type=1'; //pay_type=1充值支付
+        $attach = 'pay_type=1'; //附加数据，pay_type=1充值支付，示例：xxx=1&yyy=2
 		$notify_url = route('weixin_wxpay_notify');//通知地址
 		$wxconfig= \WxPayConfig::wxconfig();
         

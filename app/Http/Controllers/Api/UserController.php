@@ -218,6 +218,7 @@ class UserController extends CommonController
             return ReturnData::create(ReturnData::PARAMS_ERROR,null,'用户名已存在');
 		}
         
+        $data['add_time'] = time();
         //添加用户
         $res = User::wxRegister($data);
         

@@ -33,11 +33,11 @@ if (! function_exists('curl_request'))
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($curl, CURLOPT_HEADER, 0);
-
+        
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-
+        
         $response = curl_exec($curl);
-
+        
         if ($response === FALSE)
 		{
             $error = curl_error($curl);
@@ -50,9 +50,9 @@ if (! function_exists('curl_request'))
             $response = trim($response,chr(239).chr(187).chr(191));
             $response = json_decode($response, true);
         }
-
+        
         curl_close($curl);
-
+        
         return $response;
     }
 }

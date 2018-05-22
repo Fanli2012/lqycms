@@ -188,6 +188,7 @@ class User extends BaseModel
         if(isset($sex)){$data['sex'] = $sex;}
         if(isset($head_img)){$data['head_img'] = $head_img;}
         if(isset($nickname)){$data['nickname'] = $nickname;}
+        $data['add_time'] = time();
         
         if (isset($data) && $id = self::add($data))
         {

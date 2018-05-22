@@ -457,6 +457,27 @@ class IndexController extends CommonController
 		return view('home.404');
 	}
 	
+    //验证消息的确来自微信服务器
+    public function checksignature()
+	{
+		$signature = $_GET["signature"];
+		$timestamp = $_GET["timestamp"];
+		$nonce = $_GET["nonce"];
+		$echoStr = $_GET["echostr"];
+		
+		$token = 'fanli';
+		$tmpArr = array($token, $timestamp, $nonce);
+		sort($tmpArr, SORT_STRING);
+		$tmpStr = implode( $tmpArr );
+		$tmpStr = sha1( $tmpStr );
+		
+		if( $tmpStr == $signature ){
+			exit($echoStr);
+		}else{
+			return false;
+		}
+	}
+    
     //测试页面
 	public function test()
     {return view('home.index.test');

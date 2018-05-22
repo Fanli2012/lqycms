@@ -237,7 +237,7 @@ class OrderController extends CommonController
         $this->success_jump('支付成功',route('weixin_order_list'));
     }
     
-    //订单余额支付
+    //订单-微信支付
     public function orderWxpay(Request $request)
 	{
         $order_id = $request->input('order_id','');
@@ -262,7 +262,7 @@ class OrderController extends CommonController
 		$body = '订单支付';//订单详情
 		$out_trade_no = $data['order_detail']['order_sn'];//订单号
 		$total_fee = floatval($data['order_detail']['order_amount']*100);//价格0.01
-        $attach = 'pay_type=2'; //pay_type=2订单支付
+        $attach = 'pay_type=2'; //附加数据，pay_type=2订单支付，示例：xxx=1&yyy=2
 		$notify_url = route('weixin_wxpay_notify');//通知地址
 		$wxconfig= \WxPayConfig::wxconfig();
         

@@ -193,7 +193,7 @@
                     </a>
                 </div>
             </div>
-            <div class="myorder p">
+            <!-- <div class="myorder p">
                 <div class="content30">
                     <a href="">
                         <div class="order">
@@ -207,10 +207,10 @@
                         </div>
                     </a>
                 </div>
-            </div>
+            </div> -->
             <div class="myorder p">
                 <div class="content30">
-                    <a href="">
+                    <a href="<?php echo route('weixin_singlepage',array('id'=>'help')); ?>">
                         <div class="order">
                             <div class="fl">
                                 <img src="<?php echo env('APP_URL'); ?>/images/weixin/w6.png"/>
