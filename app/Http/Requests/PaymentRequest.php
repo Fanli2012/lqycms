@@ -9,8 +9,8 @@ class PaymentRequest extends BaseRequest
         'pay_code' => 'required|max:20',
         'pay_name' => 'required|max:100',
         'pay_fee' => ['required','regex:/^\d{0,10}(\.\d{0,1})?$/'],
-        'status' => 'integer|between:[0,1]',
-        'listorder' => 'integer|between:[1,9999]',
+        'status' => 'integer|between:0,1',
+        'listorder' => 'integer|between:1,9999',
     ];
     
     //总的自定义错误信息

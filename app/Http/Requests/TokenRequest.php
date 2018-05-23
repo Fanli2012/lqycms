@@ -7,7 +7,7 @@ class TokenRequest extends BaseRequest
     protected $rules = [
         'id' => 'required|integer',
         'token' => 'required|max:128',
-        'type' => 'required|integer|between:[0,6]',
+        'type' => 'required|integer|between:0,6',
         'uid' => 'required|integer',
         'created_at' => 'required|date_format:"Y-m-d H:i:s"',
         'expired_at' => 'required|date_format:"Y-m-d H:i:s"',

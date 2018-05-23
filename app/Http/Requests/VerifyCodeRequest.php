@@ -7,9 +7,9 @@ class VerifyCodeRequest extends BaseRequest
     protected $rules = [
         'id' => 'required|integer',
         'code' => 'required|max:10',
-        'type' => 'required|integer|between:[0,6]',
+        'type' => 'required|integer|between:0,6',
         'mobile' => 'required|max:20',
-        'status' => 'integer|between:[0,1]',
+        'status' => 'integer|between:0,1',
         'created_at' => 'required|date_format:"Y-m-d H:i:s"',
         'expired_at' => 'required|date_format:"Y-m-d H:i:s"',
     ];

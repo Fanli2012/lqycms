@@ -8,7 +8,7 @@ class SysconfigRequest extends BaseRequest
         'id' => 'required|integer',
         'varname' => 'required|max:100',
         'info' => 'required|max:100',
-        'is_show' => 'integer|between:[0,5]',
+        'is_show' => 'integer|between:0,5',
     ];
     
     //总的自定义错误信息

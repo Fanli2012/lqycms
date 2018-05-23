@@ -1,11 +1,13 @@
 <?php
 namespace App\Http\Controllers\Api;
-
-use App\Http\Controllers\Api\CommonController;
+use Log;
+use DB;
 use Illuminate\Http\Request;
 use App\Common\ReturnData;
+use App\Common\Helper;
 use App\Common\Token;
 use App\Http\Model\Bonus;
+use App\Http\Logic\BonusLogic;
 use App\Http\Model\UserBonus;
 
 class BonusController extends CommonController
@@ -15,106 +17,101 @@ class BonusController extends CommonController
         parent::__construct();
     }
     
+    public function getLogic()
+    {
+        return logic('Bonus');
+    }
+    
     //可用获取的优惠券列表
     public function bonusList(Request $request)
 	{
         //参数
-        $data['limit'] = $request->input('limit', 10);
-        $data['offset'] = $request->input('offset', 0);
+        $limit = $request->input('limit', 10);
+        $offset = $request->input('offset', 0);
+        $where = function ($query) use ($request) {
+            $query->where('delete_time', 0);
+            $query->where('status', Bonus::STATUS);
+            $query->where('num', '=', -1)->orWhere('num', '>', 0);
+            $query->where('start_time', '<', date('Y-m-d H:i:s'))->where('end_time', '>', date('Y-m-d H:i:s'));
+        };
         
-        $res = Bonus::getList($data);
+        $res = $this->getLogic()->getList($where, '', '*', $offset, $limit);
+		
+        /* if($res['count']>0)
+        {
+            foreach($res['list'] as $k=>$v)
+            {
+                
+            }
+        } */
+        
+		return ReturnData::create(ReturnData::SUCCESS, $res);
+    }
+    
+    public function bonusDetail(Request $request)
+	{
+        //参数
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
+        $where['id'] = $id;
+        $where['status'] = Bonus::STATUS;
+        $where['delete_time'] = 0;
+        
+        $res = $this->getLogic()->getOne($where);
 		if(!$res)
 		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL,null,$res);
+			return ReturnData::create(ReturnData::RECORD_NOT_EXIST);
 		}
         
 		return ReturnData::create(ReturnData::SUCCESS,$res);
     }
     
-    //添加优惠券
+    //添加
     public function bonusAdd(Request $request)
-	{
-        //参数
-        $data['name'] = $request->input('name',null);
-        $data['money'] = $request->input('money',null);
-        $data['min_amount'] = $request->input('min_amount',null);
-        $data['start_time'] = $request->input('start_time',null);
-        $data['end_time'] = $request->input('end_time',null);
-        if($request->input('point', null) !== null){$data['point'] = $request->input('point');}
-        if($request->input('status', null) !== null){$data['status'] = $request->input('status');}
-        $data['add_time'] = time();
-        
-        if($data['name']===null || $data['money']===null || $data['min_amount']===null || $data['start_time']===null || $data['end_time']===null)
-		{
-            return ReturnData::create(ReturnData::PARAMS_ERROR);
+    {
+        if(Helper::isPostRequest())
+        {
+            return $this->getLogic()->add($_POST);
         }
-        
-        if($data['start_time'] >= $data['end_time'])
-		{
-            return ReturnData::create(ReturnData::PARAMS_ERROR,null,'有效期错误');
-        }
-        
-        //正则验证时间格式，未作
-        
-        $res = Bonus::add($data);
-		if($res !== true)
-		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL,null,$res);
-		}
-        
-		return ReturnData::create(ReturnData::SUCCESS,$res);
     }
     
-    //修改优惠券
+    //修改
     public function bonusUpdate(Request $request)
-	{
-        //参数
-        $id = $request->input('id',null);
-        $data['name'] = $request->input('name',null);
-        $data['money'] = $request->input('money',null);
-        $data['min_amount'] = $request->input('min_amount',null);
-        $data['start_time'] = $request->input('start_time',null);
-        $data['end_time'] = $request->input('end_time',null);
-        if($request->input('point', null) !== null){$data['point'] = $request->input('point');}
-        if($request->input('status', null) !== null){$data['status'] = $request->input('status');}
+    {
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
         
-        if($id===null || $data['name']===null || $data['money']===null || $data['min_amount']===null || $data['start_time']===null || $data['end_time']===null)
-		{
-            return ReturnData::create(ReturnData::PARAMS_ERROR);
+        if(Helper::isPostRequest())
+        {
+            unset($_POST['id']);
+            $where['id'] = $id;
+            $where['status'] = Bonus::STATUS;
+            $where['delete_time'] = 0;
+            //$where['user_id'] = Token::$uid;
+            
+            if($_POST['start_time'] >= $_POST['end_time'])
+            {
+                return ReturnData::create(ReturnData::PARAMS_ERROR,null,'有效期错误');
+            }
+            
+            //正则验证时间格式，未作
+            
+            return $this->getLogic()->edit($_POST,$where);
         }
-        
-        if($data['start_time'] >= $data['end_time'])
-		{
-            return ReturnData::create(ReturnData::PARAMS_ERROR,null,'有效期错误');
-        }
-        
-        //正则验证时间格式，未作
-        
-        $res = Bonus::modify(array('id'=>$id),$data);
-		if($res !== true)
-		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL,null,$res);
-		}
-        
-		return ReturnData::create(ReturnData::SUCCESS,$res);
     }
     
-    //删除优惠券
+    //删除
     public function bonusDelete(Request $request)
-	{
-        //参数
-        $id = $request->input('id',null);
-        if($id===null)
-		{
-            return ReturnData::create(ReturnData::PARAMS_ERROR);
+    {
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
+        
+        if(Helper::isPostRequest())
+        {
+            $where['id'] = $id;
+            //$where['user_id'] = Token::$uid;
+            
+            return $this->getLogic()->del($where);
         }
-        
-        $res = Bonus::remove($id);
-		if($res !== true)
-		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL,null,$res);
-		}
-        
-		return ReturnData::create(ReturnData::SUCCESS,$res);
     }
 }

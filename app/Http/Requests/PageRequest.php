@@ -15,7 +15,7 @@ class PageRequest extends BaseRequest
         'filename' => 'required|max:60',
         'litpic' => 'max:100',
         'click' => 'integer',
-        'listorder' => 'integer|between:[1,9999]',
+        'listorder' => 'integer|between:1,9999',
     ];
     
     //总的自定义错误信息

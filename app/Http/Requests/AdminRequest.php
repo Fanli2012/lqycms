@@ -11,7 +11,7 @@ class AdminRequest extends BaseRequest
         'logintime' => 'integer',
         'pwd' => 'required|max:32',
         'role_id' => 'required|integer',
-        'status' => 'integer|between:[0,3]',
+        'status' => 'integer|between:0,3',
         'mobile' => 'max:20',
         'avatar' => 'max:150',
         'create_at' => 'required|integer',

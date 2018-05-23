@@ -9,7 +9,7 @@ class FeedbackRequest extends BaseRequest
         'content' => 'required',
         'add_time' => 'required|integer',
         'title' => 'max:150',
-        'user_id' => 'integer',
+        'user_id' => 'required|integer',
         'mobile' => 'max:20',
         'type' => 'max:20',
     ];
@@ -22,6 +22,7 @@ class FeedbackRequest extends BaseRequest
         'add_time.required' => '添加时间必填',
         'add_time.integer' => '添加时间必须为数字',
         'title.max' => '标题不能超过150个字符',
+        'user_id.required' => '发布者ID必填',
         'user_id.integer' => '发布者ID必须是数字',
         'mobile.max' => '手机号码不能超过20个字符',
         'type.max' => '意见反馈类型不能超过20个字符',
@@ -30,7 +31,7 @@ class FeedbackRequest extends BaseRequest
     //场景验证规则
     protected $scene = [
         'add'  => ['content', 'add_time', 'title', 'user_id', 'mobile', 'type'],
-        'edit' => ['content', 'add_time', 'title', 'user_id', 'mobile', 'type'],
+        'edit' => ['content', 'title', 'mobile', 'type'],
         'del'  => ['id'],
     ];
     

@@ -6,15 +6,15 @@ class CommentRequest extends BaseRequest
     //总的验证规则
     protected $rules = [
         'id' => 'required|integer',
-        'comment_type' => 'required|integer|between:[0,1]',
+        'comment_type' => 'required|integer|between:0,1',
         'id_value' => 'required|integer',
-        'comment_rank' => 'required|integer|between:[1,5]',
+        'comment_rank' => 'required|integer|between:1,5',
         'add_time' => 'required|integer',
         'ip_address' => 'max:20',
-        'status' => 'integer|between:[0,1]',
+        'status' => 'integer|between:0,1',
         'parent_id' => 'integer',
         'user_id' => 'required|integer',
-        'is_anonymous' => 'integer|between:[0,1]',
+        'is_anonymous' => 'integer|between:0,1',
     ];
     
     //总的自定义错误信息

@@ -9,24 +9,8 @@ class Region extends BaseModel
     
     protected $table = 'region';
     public $timestamps = false;
-    protected $guarded = []; //$guarded包含你不想被赋值的字段数组。
-    
-    public static function getRegionName($id)
-    {
-        if(empty($id) || $id==0){return '';}
-        
-        return self::where('id', $id)->value('name');
-    }
-    
-    /* public static function getList($parent_id=86)
-    {
-        return self::where('parent_id', $parent_id)->get();
-    }
-    
-    public static function getOne($id)
-    {
-        return self::where('id', $id)->first();
-    } */
+    protected $hidden = array();
+    protected $guarded = array(); //$guarded包含你不想被赋值的字段数组。
     
     public function getDb()
     {
@@ -92,17 +76,17 @@ class Region extends BaseModel
      * @param int $limit 取多少条
      * @return array
      */
-    public function getAll($where = array(), $order = '', $field = '*', $limit = 10, $offset = 0)
+    public function getAll($where = array(), $order = '', $field = '*', $limit = '', $offset = '')
     {
         $res = $this->getDb();
         
         if($where){$res = $res->where($where);}
         if($field){if(is_array($field)){$res = $res->select($field);}else{$res = $res->select(\DB::raw($field));}}
         if($order){$res = parent::getOrderByData($res, $order);}
-        if($offset){}else{$offset = 0;}
-        if($limit){}else{$limit = 10;}
+        if($offset){$res = $res->skip($offset);}
+        if($limit){$res = $res->take($limit);}
         
-        $res = $res->skip($offset)->take($limit)->get();
+        $res = $res->get();
         
         return $res;
     }
@@ -183,5 +167,13 @@ class Region extends BaseModel
         $res = $res->where($where)->delete();
         
         return $res;
+    }
+    
+    //根据id获取地区中文名称
+    public static function getRegionName($id)
+    {
+        if(empty($id) || $id==0){return '';}
+        
+        return self::where('id', $id)->value('name');
     }
 }

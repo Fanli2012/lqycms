@@ -14,7 +14,7 @@ class BonusLogic extends BaseLogic
     
     public function getModel()
     {
-        return new Bonus();
+        return model('Bonus');
     }
     
     public function getValidate($data, $scene_name)
@@ -80,8 +80,17 @@ class BonusLogic extends BaseLogic
     {
         if(empty($data)){return ReturnData::create(ReturnData::PARAMS_ERROR);}
         
+        $data['add_time'] = time();
+        
         $validator = $this->getValidate($data, 'add');
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
+        
+        if($data['start_time'] >= $data['end_time'])
+		{
+            return ReturnData::create(ReturnData::PARAMS_ERROR,null,'有效期错误');
+        }
+        
+        //正则验证时间格式，未作
         
         $res = $this->getModel()->add($data,$type);
         if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
@@ -111,7 +120,7 @@ class BonusLogic extends BaseLogic
         $validator = $this->getValidate($where,'del');
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
-        $res = $this->getModel()->del($where);
+        $res = $this->getModel()->edit(['delete_time'=>time()],$where);
         if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
         
         return ReturnData::create(ReturnData::SUCCESS,$res);

@@ -9,8 +9,9 @@ class UserRecharge extends BaseModel
 	
     protected $table = 'user_recharge';
     public $timestamps = false;
-	protected $guarded = []; //$guarded包含你不想被赋值的字段数组。
-	
+    protected $hidden = array();
+    protected $guarded = array(); //$guarded包含你不想被赋值的字段数组。
+    
     const UN_PAY = 0;
     const COMPLETE_PAY = 1;
     
@@ -78,17 +79,17 @@ class UserRecharge extends BaseModel
      * @param int $limit 取多少条
      * @return array
      */
-    public function getAll($where = array(), $order = '', $field = '*', $limit = 10, $offset = 0)
+    public function getAll($where = array(), $order = '', $field = '*', $limit = '', $offset = '')
     {
         $res = $this->getDb();
         
         if($where){$res = $res->where($where);}
         if($field){if(is_array($field)){$res = $res->select($field);}else{$res = $res->select(\DB::raw($field));}}
         if($order){$res = parent::getOrderByData($res, $order);}
-        if($offset){}else{$offset = 0;}
-        if($limit){}else{$limit = 10;}
+        if($offset){$res = $res->skip($offset);}
+        if($limit){$res = $res->take($limit);}
         
-        $res = $res->skip($offset)->take($limit)->get();
+        $res = $res->get();
         
         return $res;
     }

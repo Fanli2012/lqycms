@@ -13,8 +13,8 @@ class GoodsBrandRequest extends BaseRequest
         'keywords' => 'max:60',
         'description' => 'max:240',
         'litpic' => 'max:100',
-        'status' => 'integer|between:[0,1]',
-        'listorder' => 'integer|between:[1,9999]',
+        'status' => 'integer|between:0,1',
+        'listorder' => 'integer|between:1,9999',
         'cover_img' => 'max:100',
         'click' => 'integer',
     ];

@@ -1204,8 +1204,10 @@ function service($name = '', $config = [])
             $service = new $class($config);
             $instance[$guid] = $service;
         }
-        
-        throw new Exception('class not exists:' . $class);
+        else
+        {
+            throw new Exception('class not exists:' . $class);
+        }
     }
     
     return $instance[$guid];
@@ -1230,8 +1232,10 @@ function logic($name = '', $config = [])
             $logic = new $class($config);
             $instance[$guid] = $logic;
         }
-        
-        throw new Exception('class not exists:' . $class);
+        else
+        {
+            throw new Exception('class not exists:' . $class);
+        }
     }
     
     return $instance[$guid];
@@ -1249,14 +1253,16 @@ function model($name = '', $config = [])
     $guid = $name . 'Model';
     if (!isset($instance[$guid]))
     {
-        $class = 'App\\Http\\Model\\' . ucfirst($name);
+        $class = '\\App\\Http\\Model\\' . ucfirst($name);
         if (class_exists($class))
         {
             $model = new $class($config);
             $instance[$guid] = $model;
         }
-        
-        throw new Exception('class not exists:' . $class);
+        else
+        {
+            throw new Exception('class not exists:' . $class);
+        }
     }
     
     return $instance[$guid];

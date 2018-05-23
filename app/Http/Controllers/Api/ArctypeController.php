@@ -1,10 +1,11 @@
 <?php
 namespace App\Http\Controllers\Api;
-
-use Illuminate\Http\Request;
 use Log;
+use DB;
+use Illuminate\Http\Request;
 use App\Common\ReturnData;
 use App\Common\Helper;
+use App\Common\Token;
 use App\Http\Model\Arctype;
 use App\Http\Logic\ArctypeLogic;
 
@@ -17,7 +18,7 @@ class ArctypeController extends CommonController
 	
     public function getLogic()
     {
-        return new ArctypeLogic();
+        return logic('Arctype');
     }
     
     public function arctypeList(Request $request)
@@ -29,34 +30,33 @@ class ArctypeController extends CommonController
         $where['is_show'] = Arctype::IS_SHOW;
         
         $res = $this->getLogic()->getList($where, array('listorder', 'asc'), '*', $offset, $limit);
-		if($res === false)
-		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
-		}
-        
-        foreach($res['list'] as $k=>$v)
+		
+        if($res['count']>0)
         {
-            $res['list'][$k]->addtime = date('Y-m-d H:i',$v->addtime);
-            $res['list'][$k]->category_list_url = route('weixin_article_category',array('id'=>$v->id));
+            foreach($res['list'] as $k=>$v)
+            {
+                $res['list'][$k]->addtime = date('Y-m-d H:i',$v->addtime);
+                $res['list'][$k]->category_list_url = route('weixin_article_category',array('id'=>$v->id));
+            }
         }
         
-		return ReturnData::create(ReturnData::SUCCESS,$res);
+		return ReturnData::create(ReturnData::SUCCESS, $res);
     }
     
     public function arctypeDetail(Request $request)
 	{
         //参数
-        $where['id'] = $request->input('id',null);
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
+        
+        $where['id'] = $id;
         $where['is_show'] = Arctype::IS_SHOW;
-        if($where['id'] == null){return ReturnData::create(ReturnData::PARAMS_ERROR);}
         
         $res = $this->getLogic()->getOne($where);
-		if($res === false)
+		if(!$res)
 		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
+			return ReturnData::create(ReturnData::RECORD_NOT_EXIST);
 		}
-        
-        $res->addtime = date('Y-m-d H:i',$res->addtime);
         
 		return ReturnData::create(ReturnData::SUCCESS,$res);
     }
@@ -93,7 +93,6 @@ class ArctypeController extends CommonController
         
         if(Helper::isPostRequest())
         {
-            unset($_POST['id']);
             $where['id'] = $id;
             
             return $this->getLogic()->del($where);

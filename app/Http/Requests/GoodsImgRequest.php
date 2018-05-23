@@ -10,7 +10,7 @@ class GoodsImgRequest extends BaseRequest
         'goods_id' => 'required|integer',
         'add_time' => 'required|integer',
         'des' => 'max:150',
-        'listorder' => 'integer|between:[1,9999]',
+        'listorder' => 'integer|between:1,9999',
     ];
     
     //总的自定义错误信息

@@ -13,9 +13,10 @@ class Cart extends BaseModel
      * @var string
      */
 	protected $table = 'cart';
-    
     public $timestamps = false;
-	
+    protected $hidden = array();
+    protected $guarded = array(); //$guarded包含你不想被赋值的字段数组。
+    
     //购物车商品类型
     const CART_GENERAL_GOODS        = 0; // 普通商品
     const CART_GROUP_BUY_GOODS      = 1; // 团购商品
@@ -87,17 +88,17 @@ class Cart extends BaseModel
      * @param int $limit 取多少条
      * @return array
      */
-    public function getAll($where = array(), $order = '', $field = '*', $limit = 10, $offset = 0)
+    public function getAll($where = array(), $order = '', $field = '*', $limit = '', $offset = '')
     {
         $res = $this->getDb();
         
         if($where){$res = $res->where($where);}
         if($field){if(is_array($field)){$res = $res->select($field);}else{$res = $res->select(\DB::raw($field));}}
         if($order){$res = parent::getOrderByData($res, $order);}
-        if($offset){}else{$offset = 0;}
-        if($limit){}else{$limit = 10;}
+        if($offset){$res = $res->skip($offset);}
+        if($limit){$res = $res->take($limit);}
         
-        $res = $res->skip($offset)->take($limit)->get();
+        $res = $res->get();
         
         return $res;
     }
@@ -266,17 +267,17 @@ class Cart extends BaseModel
      * 添加商品到购物车
      *
      * @access  public
-     * @param   integer $goods_id   商品编号
-     * @param   integer $num        商品数量
-     * @param   json   $property    规格值对应的id json数组
+     * @param   integer $goods_id     商品编号
+     * @param   integer $goods_number 商品数量
+     * @param   json   $property      规格值对应的id json数组
      * @return  boolean
      */
-    public static function cartAdd(array $attributes)
+    public function cartAdd(array $attributes)
     {
         extract($attributes);
         
         //获取商品信息
-        $goods = Goods::where(['id' => $goods_id, 'status' => Goods::STATUS])->first();
+        $goods = Goods::where(['id' => $goods_id, 'status' => Goods::GOODS_NORMAL_STATUS])->first();
         
         if (!$goods)
         {
@@ -332,61 +333,14 @@ class Cart extends BaseModel
     }
     
     /**
-     * 清空购物车
-     * 
-     * @param int $type 类型：默认普通商品
+     * 用户购物车商品总数量
+     *
+     * @access  public
+     * @param   int $user_id 用户ID
+     * @return  int
      */
-    public static function clearCart($user_id)
+    public function TotalGoodsCount($where)
     {
-        return self::where('user_id',$user_id)->delete();
-    }
-    
-    //购物车商品总数量
-    public static function TotalGoodsCount($user_id)
-    {
-        return self::where('user_id',$user_id)->sum('goods_number');
-    }
-    
-    //购物车结算商品列表
-    public static function cartCheckoutGoodsList(array $param)
-    {
-        extract($param);
-        
-        $cartIds = explode("_",$ids);
-        
-        // 获取购物车列表
-    	$cartList = self::where(array('user_id'=>$user_id))->whereIn('id', $cartIds)->get();
-        $total_price = 0; //商品总金额
-        $total_goods = 0; //商品总数量
-        
-        if(!empty($cartList))
-        {
-    		$resultList = array();
-    		$checkArr = array();
-            
-            foreach($cartList as $k=>$v)
-            {
-                $goods = Goods::where(array('id'=>$v['goods_id']))->first();
-                
-                $cartList[$k]->is_promote = 0;
-                if(Goods::bargain_price($goods->price,$goods->promote_start_date,$goods->promote_end_date) > 0){$cartList[$k]->is_promote = 1;}
-                
-                $cartList[$k]->final_price = Goods::get_final_price($v['goods_id']); //商品最终价格
-                $cartList[$k]->goods_detail_url = route('weixin_goods_detail',array('id'=>$v['goods_id']));
-                $cartList[$k]->title = $goods->title;
-                $cartList[$k]->litpic = $goods->litpic;
-                $cartList[$k]->market_price = $goods->market_price;
-                $cartList[$k]->goods_sn = $goods->sn;
-                
-                $total_price = $total_price + $cartList[$k]->final_price*$cartList[$k]->goods_number;
-                $total_goods = $total_goods + $cartList[$k]->goods_number;
-            }
-        }
-        
-        $res['list'] = $cartList;
-        $res['total_price'] = $total_price;
-        $res['total_goods'] = $total_goods;
-        
-        return ReturnData::create(ReturnData::SUCCESS,$res);
+        return self::where($where)->sum('goods_number');
     }
 }

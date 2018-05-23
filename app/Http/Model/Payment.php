@@ -9,9 +9,10 @@ class Payment extends BaseModel
 	
     protected $table = 'payment';
     public $timestamps = false;
-	protected $guarded = []; //$guarded包含你不想被赋值的字段数组。
-	
-    const STATUS = 1; // 可用支付方式
+    protected $hidden = array();
+    protected $guarded = array(); //$guarded包含你不想被赋值的字段数组。
+    
+    const IS_SHOW = 1; // 可用支付方式
     
     public function getDb()
     {
@@ -77,17 +78,17 @@ class Payment extends BaseModel
      * @param int $limit 取多少条
      * @return array
      */
-    public function getAll($where = array(), $order = '', $field = '*', $limit = 10, $offset = 0)
+    public function getAll($where = array(), $order = '', $field = '*', $limit = '', $offset = '')
     {
         $res = $this->getDb();
         
         if($where){$res = $res->where($where);}
         if($field){if(is_array($field)){$res = $res->select($field);}else{$res = $res->select(\DB::raw($field));}}
         if($order){$res = parent::getOrderByData($res, $order);}
-        if($offset){}else{$offset = 0;}
-        if($limit){}else{$limit = 10;}
+        if($offset){$res = $res->skip($offset);}
+        if($limit){$res = $res->take($limit);}
         
-        $res = $res->skip($offset)->take($limit)->get();
+        $res = $res->get();
         
         return $res;
     }
@@ -169,64 +170,4 @@ class Payment extends BaseModel
         
         return $res;
     }
-    /* 
-    //获取列表
-	public static function getList(array $param)
-    {
-        extract($param); //参数：limit，offset
-        
-        $model = new Payment;
-        
-        if(isset($status) && $status!=-1){$where['status'] = $status;} //-1表示获取所有
-        
-        if(isset($where)){$model = $model->where($where);}
-        
-        $res['count'] = $model->count();
-        $res['list'] = array();
-        
-		if($res['count']>0)
-        {
-            $res['list'] = $model->orderBy('listorder','desc')->get();
-        }
-        
-        return $res;
-    }
-    
-    public static function getOne($where)
-    {
-        return self::where($where)->first();
-    }
-    
-    public static function add(array $data)
-    {
-        if(self::where(array('pay_code'=>$data['pay_code']))->first()){return ReturnData::create(ReturnData::PARAMS_ERROR,null,'支付方式已存在');}
-        
-        if ($id = self::insertGetId($data))
-        {
-            return ReturnData::create(ReturnData::SUCCESS,$id);
-        }
-
-        return ReturnData::create(ReturnData::SYSTEM_FAIL);
-    }
-    
-    public static function modify($where, array $data)
-    {
-        if (self::where($where)->update($data))
-        {
-            return true;
-        }
-        
-        return false;
-    }
-    
-    //删除一条记录
-    public static function remove($id)
-    {
-        if (!self::whereIn('id', explode(',', $id))->delete())
-        {
-            return false;
-        }
-        
-        return true;
-    } */
 }

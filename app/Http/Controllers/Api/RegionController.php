@@ -1,11 +1,13 @@
 <?php
 namespace App\Http\Controllers\Api;
-
-use App\Http\Controllers\Api\CommonController;
+use Log;
+use DB;
 use Illuminate\Http\Request;
 use App\Common\ReturnData;
-
+use App\Common\Helper;
+use App\Common\Token;
 use App\Http\Model\Region;
+use App\Http\Logic\RegionLogic;
 
 class RegionController extends CommonController
 {
@@ -14,39 +16,83 @@ class RegionController extends CommonController
         parent::__construct();
     }
 	
-	public function regionList(Request $request)
+    public function getLogic()
+    {
+        return logic('Region');
+    }
+    
+    public function regionList(Request $request)
 	{
         //参数
-		$id = $request->input('id', null);
-		if ($id == null)
-		{
-			return ReturnData::create(ReturnData::PARAMS_ERROR);
-		}
+        $where['parent_id'] = $request->input('id', 86);
         
-		$res = Region::getList($id);
-		if(!$res)
-		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
-		}
+        $res = $this->getLogic()->getAll($where);
+		
+        /* if($res['count']>0)
+        {
+            foreach($res['list'] as $k=>$v)
+            {
+                
+            }
+        } */
         
 		return ReturnData::create(ReturnData::SUCCESS,$res);
-	}
+    }
     
     public function regionDetail(Request $request)
 	{
         //参数
-		$id = $request->input('id', null);
-		if ($id == null)
-		{
-			return ReturnData::create(ReturnData::PARAMS_ERROR);
-		}
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
         
-		$res = Region::getOne($id);
+        $where['id'] = $id;
+        
+        $res = $this->getLogic()->getOne($where);
 		if(!$res)
 		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
+			return ReturnData::create(ReturnData::RECORD_NOT_EXIST);
 		}
         
 		return ReturnData::create(ReturnData::SUCCESS,$res);
-	}
+    }
+    
+    //添加
+    public function regionAdd(Request $request)
+    {
+        if(Helper::isPostRequest())
+        {
+            return $this->getLogic()->add($_POST);
+        }
+    }
+    
+    //修改
+    public function regionUpdate(Request $request)
+    {
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
+        
+        if(Helper::isPostRequest())
+        {
+            unset($_POST['id']);
+            $where['id'] = $id;
+            //$where['user_id'] = Token::$uid;
+            
+            return $this->getLogic()->edit($_POST,$where);
+        }
+    }
+    
+    //删除
+    public function regionDelete(Request $request)
+    {
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
+        
+        if(Helper::isPostRequest())
+        {
+            $where['id'] = $id;
+            //$where['user_id'] = Token::$uid;
+            
+            return $this->getLogic()->del($where);
+        }
+    }
 }

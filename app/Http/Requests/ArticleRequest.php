@@ -18,7 +18,7 @@ class ArticleRequest extends BaseRequest
         'keywords' => 'max:60',
         'seotitle' => 'max:150',
         'description' => 'max:250',
-        'ischeck' => 'between:[0,2]',
+        'ischeck' => 'between:0,2',
         'user_id' => 'integer',
     ];
     

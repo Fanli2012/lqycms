@@ -4,6 +4,7 @@ use App\Common\ReturnData;
 use App\Http\Model\Goods;
 use App\Http\Requests\GoodsRequest;
 use Validator;
+use App\Http\Model\Comment;
 
 class GoodsLogic extends BaseLogic
 {
@@ -14,7 +15,7 @@ class GoodsLogic extends BaseLogic
     
     public function getModel()
     {
-        return new Goods();
+        return model('Goods');
     }
     
     public function getValidate($data, $scene_name)
@@ -34,6 +35,9 @@ class GoodsLogic extends BaseLogic
             foreach($res['list'] as $k=>$v)
             {
                 $res['list'][$k] = $this->getDataView($v);
+                
+                $res['list'][$k]->price = $this->getModel()->get_goods_final_price($v);
+                $res['list'][$k]->is_promote_goods = $this->getModel()->bargain_price($v->promote_price,$v->promote_start_date,$v->promote_end_date); //is_promote_goods等于0，说明不是促销商品
             }
         }
         
@@ -53,13 +57,16 @@ class GoodsLogic extends BaseLogic
     {
         $res = $this->getModel()->getAll($where, $order, $field, $limit);
         
-        /* if($res)
+        if($res['count'] > 0)
         {
-            foreach($res as $k=>$v)
+            foreach($res['list'] as $k=>$v)
             {
-                $res[$k] = $this->getDataView($v);
+                $res['list'][$k] = $this->getDataView($v);
+                
+                $res['list'][$k]->price = $this->getModel()->get_goods_final_price($v); //商品最终价格
+                $res['list'][$k]->is_promote_goods = $this->getModel()->bargain_price($v->promote_price,$v->promote_start_date,$v->promote_end_date); //is_promote_goods等于0，说明不是促销商品
             }
-        } */
+        }
         
         return $res;
     }
@@ -71,6 +78,16 @@ class GoodsLogic extends BaseLogic
         if(!$res){return false;}
         
         $res = $this->getDataView($res);
+        $res->price = $this->getModel()->get_goods_final_price($res); //商品最终价格
+        $res->is_promote_goods = $this->getModel()->bargain_price($res->promote_price,$res->promote_start_date,$res->promote_end_date); //is_promote_goods等于0，说明不是促销商品
+		
+        //商品评论数
+        $where2['comment_type'] = Comment::GOODS_COMMENT_TYPE;
+        $where2['status'] = Comment::SHOW_COMMENT;
+        $where2['id_value'] = $res->id;
+        $res->goods_comments_num = model('Comment')->getCount($where2);
+        
+        $this->getModel()->getDb()->where($where)->increment('click', 1); //点击量+1
         
         return $res;
     }

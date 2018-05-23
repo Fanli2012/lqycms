@@ -8,9 +8,9 @@ class AdminRoleRequest extends BaseRequest
         'id' => 'required|integer',
         'name' => 'required|max:30',
         'des' => 'max:150',
-        'status' => 'integer|between:[0,2]',
+        'status' => 'integer|between:0,2',
         'pid' => 'integer',
-        'listorder' => 'integer|between:[1,9999]',
+        'listorder' => 'integer|between:1,9999',
     ];
     
     //总的自定义错误信息

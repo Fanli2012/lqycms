@@ -14,7 +14,7 @@ class ArctypeLogic extends BaseLogic
     
     public function getModel()
     {
-        return new Arctype();
+        return model('Arctype');
     }
     
     public function getValidate($data, $scene_name)

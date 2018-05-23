@@ -10,11 +10,11 @@ class BonusRequest extends BaseRequest
         'money' => ['required','regex:/^\d{0,10}(\.\d{0,2})?$/'],
         'min_amount' => ['required','regex:/^\d{0,10}(\.\d{0,2})?$/'],
         'start_time' => 'required|date_format:"Y-m-d H:i:s"',
-        'end_time' => 'required|date_format:"Y-m-d H:i:s"',
-        'point' => 'integer|between:[1,9999]',
-        'status' => 'integer|between:[0,1]',
+        'end_time' => 'required|date_format:"Y-m-d H:i:s"|after:start_time',
+        'point' => 'integer|between:1,9999',
+        'status' => 'integer|between:0,1',
         'add_time' => 'required|integer',
-        'num' => 'integer|between:[-1,999999]',
+        'num' => 'integer|between:-1,999999',
     ];
     
     //总的自定义错误信息
@@ -31,6 +31,7 @@ class BonusRequest extends BaseRequest
         'start_time.date_format' => '开始时间格式不正确，格式：1990-01-01 00:00:00',
         'end_time.required' => '结束时间必填',
         'end_time.date_format' => '结束时间格式不正确，格式：1990-01-01 00:00:00',
+        'end_time.after' => '结束时间必须大于开始时间',
         'point.integer' => '兑换优惠券所需积分必须是数字',
         'point.between' => '兑换优惠券所需积分只能1-9999',
         'status.integer' => '兑换优惠券所需积分必须是数字',

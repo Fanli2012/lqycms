@@ -13,9 +13,10 @@ class Arctype extends BaseModel
      * @var string
      */
 	protected $table = 'arctype';
-	
     public $timestamps = false;
-	
+    protected $hidden = array();
+    protected $guarded = array(); //$guarded包含你不想被赋值的字段数组。
+    
 	/**
      * The connection name for the model.
      * 默认情况下，所有的 Eloquent 模型使用应用配置中的默认数据库连接，如果你想要为模型指定不同的连接，可以通过 $connection 属性来设置
@@ -95,17 +96,17 @@ class Arctype extends BaseModel
      * @param int $limit 取多少条
      * @return array
      */
-    public function getAll($where = array(), $order = '', $field = '*', $limit = 10, $offset = 0)
+    public function getAll($where = array(), $order = '', $field = '*', $limit = '', $offset = '')
     {
         $res = $this->getDb();
         
         if($where){$res = $res->where($where);}
         if($field){if(is_array($field)){$res = $res->select($field);}else{$res = $res->select(\DB::raw($field));}}
         if($order){$res = parent::getOrderByData($res, $order);}
-        if($offset){}else{$offset = 0;}
-        if($limit){}else{$limit = 10;}
+        if($offset){$res = $res->skip($offset);}
+        if($limit){$res = $res->take($limit);}
         
-        $res = $res->skip($offset)->take($limit)->get();
+        $res = $res->get();
         
         return $res;
     }

@@ -8,8 +8,8 @@ class FriendlinkRequest extends BaseRequest
         'id' => 'required|integer',
         'webname' => 'required|max:60',
         'url' => 'required|max:100',
-        'group_id' => 'integer|between:[1,99]',
-        'listorder' => 'integer|between:[1,9999]',
+        'group_id' => 'integer|between:1,99',
+        'listorder' => 'integer|between:1,9999',
     ];
     
     //总的自定义错误信息

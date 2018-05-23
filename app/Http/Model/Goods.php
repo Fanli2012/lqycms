@@ -13,7 +13,7 @@ class Goods extends BaseModel
      * @var string
      */
 	protected $table = 'goods';
-	
+    
 	/**
      * 表明模型是否应该被打上时间戳
      * 默认情况下，Eloquent 期望 created_at 和updated_at 已经存在于数据表中，如果你不想要这些 Laravel 自动管理的数据列，在模型类中设置 $timestamps 属性为 false
@@ -21,7 +21,8 @@ class Goods extends BaseModel
      * @var bool
      */
     public $timestamps = false;
-	
+    protected $hidden = array();
+    
 	//protected $guarded = []; //$guarded包含你不想被赋值的字段数组。
 	//protected $fillable = ['name']; //定义哪些字段是可以进行赋值的,与$guarded相反
 	
@@ -33,11 +34,11 @@ class Goods extends BaseModel
     //protected $connection = 'connection-name';
 	
     //常用字段
-    protected $common_field = array(
+    public $common_field = array(
         'id', 'typeid', 'tuijian', 'click', 'title', 'description', 'sn', 'price','litpic', 'pubdate', 'add_time', 'market_price', 'goods_number', 'sale', 'comments','promote_start_date','promote_price','promote_end_date','goods_img','spec','point'
     );
     
-    const STATUS = 0; //商品状态 0正常 1已删除 2下架 3申请上架
+    const GOODS_NORMAL_STATUS = 0; //商品状态 0正常 1已删除 2下架 3申请上架
     
 	/**
      * 获取关联到产品的分类
@@ -78,7 +79,7 @@ class Goods extends BaseModel
             
             $res['list'] = $model->skip($offset)->take($limit)->get();
         }
-        
+        //return $model->toSql();//打印sql语句
         return $res;
     }
     
@@ -111,17 +112,17 @@ class Goods extends BaseModel
      * @param int $limit 取多少条
      * @return array
      */
-    public function getAll($where = array(), $order = '', $field = '*', $limit = 10, $offset = 0)
+    public function getAll($where = array(), $order = '', $field = '*', $limit = '', $offset = '')
     {
         $res = $this->getDb();
         
         if($where){$res = $res->where($where);}
         if($field){if(is_array($field)){$res = $res->select($field);}else{$res = $res->select(\DB::raw($field));}}
         if($order){$res = parent::getOrderByData($res, $order);}
-        if($offset){}else{$offset = 0;}
-        if($limit){}else{$limit = 10;}
+        if($offset){$res = $res->skip($offset);}
+        if($limit){$res = $res->take($limit);}
         
-        $res = $res->skip($offset)->take($limit)->get();
+        $res = $res->get();
         
         return $res;
     }
@@ -203,154 +204,7 @@ class Goods extends BaseModel
         
         return $res;
     }
-    /* 
-    //获取列表
-	public static function getList(array $param)
-    {
-        extract($param); //参数：limit，offset
-        
-        $where = '';
-        
-        $limit  = isset($limit) ? $limit : 10;
-        $offset = isset($offset) ? $offset : 0;
-        
-        $model = new Goods;
-        
-        if(isset($typeid)){$where['typeid'] = $typeid;}
-        if(isset($tuijian)){$where['tuijian'] = $tuijian;}
-        if(isset($status)){$where['status'] = $status;}else{$where['status'] = self::STATUS;}
-        if(isset($brand_id)){$where['brand_id'] = $brand_id;}
-        
-        if($where !== '')
-        {
-            $model = $model->where($where);
-        }
-        
-         //关键词搜索
-        if(isset($max_price) && isset($min_price)){$model = $model->where("price", ">=", $min_price)->where("price", "<=", $max_price);} //价格区间搜索
-        if(isset($keyword))
-        {
-            $model = $model->where(function ($query) use ($keyword) {$query->where("title", "like", "%$keyword%")->orWhere("sn", "like", "%$keyword%");});
-            
-            //添加搜索关键词
-            GoodsSearchword::add(array('name'=>$keyword));
-        }
-        //return $model->toSql();//打印sql语句
-        $res['count'] = $model->count();
-        $res['list'] = array();
-        
-        //排序
-        if(isset($orderby))
-        {
-            switch ($orderby)
-            {
-                case 1:
-                    $model = $model->orderBy('sale','desc'); //销量从高到低
-                    break;
-                case 2:
-                    $model = $model->orderBy('comments','desc'); //评论从高到低
-                    break;
-                case 3:
-                    $model = $model->orderBy('price','desc'); //价格从高到低
-                    break;
-                case 4:
-                    $model = $model->orderBy('price','asc'); //价格从低到高
-                    break;
-                case 5:
-                    $timestamp = time();
-                    $model = $model->where('promote_start_date','<=',$timestamp)->where('promote_end_date','>=',$timestamp); //促销商品
-                    break;
-                default:
-                    $model = $model->orderBy('pubdate','desc'); //最新
-            }
-        }
-        
-		if($res['count']>0)
-        {
-            $res['list']  = $model->select(self::$common_field)->skip($offset)->take($limit)->orderBy('id','desc')->get();
-            
-            if($res['list'])
-            {
-                foreach($res['list'] as $k=>$v)
-                {
-                    $res['list'][$k]->goods_detail_url = route('weixin_goods_detail',array('id'=>$v->id));
-                    $res['list'][$k]->price = self::get_goods_final_price($v);
-                    
-                    if(!empty($res['list'][$k]->litpic)){$res['list'][$k]->litpic = http_host().$res['list'][$k]->litpic;}
-                    
-                    $res['list'][$k]->is_promote_goods = self::bargain_price($v->promote_price,$v->promote_start_date,$v->promote_end_date); //is_promote_goods等于0，说明不是促销商品
-                }
-            }
-        }
-        
-        return $res;
-    }
     
-    public static function getOne(array $param)
-    {
-        extract($param);
-        
-        $model = new Goods;
-        
-        $where['id'] = $id;
-        
-        if(isset($where)){$model = $model->where($where);}
-        if(isset($field)){$model = $model->select($field);}
-        
-        $goods = $model->first();
-        
-        if($goods)
-        {
-            $goods['goods_detail_url'] = route('weixin_goods_detail',array('id'=>$goods->id));
-            $goods['price'] = self::get_goods_final_price($goods);
-            $goods['is_promote_goods'] = self::bargain_price($goods->promote_price,$goods->promote_start_date,$goods->promote_end_date); //is_promote_goods等于0，说明不是促销商品
-        }
-        
-        return $goods;
-    }
-    
-    public static function add(array $data)
-    {
-        $validator = Validator::make($data, [
-            'title' => 'required|unique:posts|max:255',
-            'body' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect('post/create')
-                        ->withErrors($validator)
-                        ->withInput();
-        }
-        
-        if ($id = self::insertGetId($data))
-        {
-            return $id;
-        }
-
-        return false;
-    }
-    
-    public static function modify($where, array $data)
-    {
-        if (self::where($where)->update($data))
-        {
-            return true;
-        }
-        
-        return false;
-    }
-    
-    //删除一条记录
-    public static function remove($id)
-    {
-        if (!self::whereIn('id', explode(',', $id))->delete())
-        {
-            return false;
-        }
-        
-        return true;
-    }
-     */
     /**
      * 取得商品最终使用价格
      *
@@ -359,20 +213,20 @@ class Goods extends BaseModel
      *
      * @return  商品最终购买价格
      */
-    public static function get_final_price($goods_id)
+    /* public function get_final_price($goods_id)
     {
         $final_price   = '0'; //商品最终购买价格
         $promote_price = '0'; //商品促销价格
         $user_price    = '0'; //商品会员价格，预留
         
         //取得商品促销价格列表
-        $goods = Goods::where('id',$goods_id)->where('status',0)->first(['promote_price','promote_start_date','promote_end_date','price']);
+        $goods = Goods::where('id',$goods_id)->where('status', self::GOODS_NORMAL_STATUS)->first(['promote_price','promote_start_date','promote_end_date','price']);
         $final_price = $goods->price;
         
         // 计算商品的促销价格
         if ($goods->promote_price > 0)
         {
-            $promote_price = self::bargain_price($goods->promote_price, $goods->promote_start_date, $goods->promote_end_date);
+            $promote_price = $this->bargain_price($goods->promote_price, $goods->promote_start_date, $goods->promote_end_date);
         }
         else
         {
@@ -386,7 +240,7 @@ class Goods extends BaseModel
         
         //返回商品最终购买价格
         return $final_price;
-    }
+    } */
     
     /**
      * 取得商品最终使用价格
@@ -396,7 +250,7 @@ class Goods extends BaseModel
      *
      * @return  商品最终购买价格
      */
-    public static function get_goods_final_price($goods)
+    public function get_goods_final_price($goods)
     {
         $final_price   = '0'; //商品最终购买价格
         $promote_price = '0'; //商品促销价格
@@ -408,7 +262,7 @@ class Goods extends BaseModel
         // 计算商品的促销价格
         if ($goods->promote_price > 0)
         {
-            $promote_price = self::bargain_price($goods->promote_price, $goods->promote_start_date, $goods->promote_end_date);
+            $promote_price = $this->bargain_price($goods->promote_price, $goods->promote_start_date, $goods->promote_end_date);
         }
         else
         {
@@ -433,7 +287,7 @@ class Goods extends BaseModel
      * @param   string  $end        促销结束日期
      * @return  float   如果还在促销期则返回促销价，否则返回0
      */
-    public static function bargain_price($price, $start, $end)
+    public function bargain_price($price, $start, $end)
     {
         if ($price <= 0)
         {
@@ -454,60 +308,28 @@ class Goods extends BaseModel
         }
     }
     
-    //获取商品详情
-	public static function goodsDetail(array $param)
+    /**
+     * 增加或减少商品库存
+     *
+     * @access  public
+     * @param   int   $id  商品ID
+     * @param   int  $type 1增加库存
+     * @return  bool
+     */
+    public function changeGoodsStock($where)
     {
-        extract($param); //参数：limit，offset
-        
-        $model = new Goods;
-        
-        if(isset($id)){$where['id'] = $id;}
-        
-        if(isset($where))
-        {
-            $model = $model->where($where);
-        }
-        else
-        {
-            return false;
-        }
-        
-        $res = $model->first();
-        
-        if($res)
-        {
-            $where2['comment_type'] = Comment::GOODS_COMMENT_TYPE;
-            $where2['status'] = Comment::SHOW_COMMENT;
-            $where2['id_value'] = $id;
-            $res->goods_comments_num = Comment::where($where2)->count();
-            
-            $res->price = self::get_final_price($res->id); //商品最终价格
-            $res->is_promote_goods = self::bargain_price($res->promote_price,$res->promote_start_date,$res->promote_end_date); //is_promote_goods等于0，说明不是促销商品
-        }
-        
-        return $res;
-    }
-    
-    //增加或减少商品库存
-    public static function changeGoodsStock(array $param)
-    {
-        //$param['type']=1减库存
-        extract($param);
-        
-        if(isset($type) && $type==1)
+        if($where['type']==1)
         {
             //增加库存
-            DB::table('goods')->where(array('id'=>$goods_id))->increment('goods_number', $goods_number);
+            return $this->getDb()->where($where)->increment('goods_number', $goods_number);
         }
-        else
-        {
-            //减少库存
-            DB::table('goods')->where(array('id'=>$goods_id))->decrement('goods_number', $goods_number);
-        }
+        
+        //减少库存
+        return $this->getDb()->where($where)->decrement('goods_number', $goods_number);
     }
     
     //获取栏目名称
-    public static function getTypenameAttr($data)
+    public function getTypenameAttr($data)
     {
         return DB::table('goods_type')->where(array('id'=>$data['typeid']))->value('name');
     }

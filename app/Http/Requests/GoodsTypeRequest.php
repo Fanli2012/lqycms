@@ -17,7 +17,7 @@ class GoodsTypeRequest extends BaseRequest
         'temparticle' => 'max:50',
         'litpic' => 'max:100',
         'seokeyword' => 'max:50',
-        'status' => 'integer|between:[0,1]',
+        'status' => 'integer|between:0,1',
         'listorder' => 'integer',
         'cover_img' => 'max:100',
     ];

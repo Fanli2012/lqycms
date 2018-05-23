@@ -7,9 +7,9 @@ class GoodsSearchwordRequest extends BaseRequest
     protected $rules = [
         'id' => 'required|integer',
         'name' => 'required|max:60',
-        'status' => 'integer|between:[0,5]',
+        'status' => 'integer|between:0,5',
         'add_time' => 'required|integer',
-        'listorder' => 'integer|between:[1,9999]',
+        'listorder' => 'integer|between:1,9999',
         'click' => 'integer',
     ];
     

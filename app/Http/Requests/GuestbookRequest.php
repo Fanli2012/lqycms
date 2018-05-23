@@ -9,7 +9,7 @@ class GuestbookRequest extends BaseRequest
         'title' => 'required|max:150',
         'addtime' => 'required|integer',
         'msg' => 'required|max:250',
-        'status' => 'integer|between:[0,1]',
+        'status' => 'integer|between:0,1',
         'name' => 'max:30',
         'phone' => 'max:20',
         'email' => 'max:60',

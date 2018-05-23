@@ -9,14 +9,9 @@ class Comment extends BaseModel
 	
     protected $table = 'comment';
 	public $timestamps = false;
-	
-	/**
-     * 不能被批量赋值的属性
-     *
-     * @var array
-     */
-    protected $guarded = [];
-	
+    protected $hidden = array();
+    protected $guarded = array(); //$guarded包含你不想被赋值的字段数组。
+    
     const UNSHOW_COMMENT = 0; //评论未批准显示
     const SHOW_COMMENT = 1; //评论批准显示
     const GOODS_COMMENT_TYPE = 0; //商品评论
@@ -87,17 +82,17 @@ class Comment extends BaseModel
      * @param int $limit 取多少条
      * @return array
      */
-    public function getAll($where = array(), $order = '', $field = '*', $limit = 10, $offset = 0)
+    public function getAll($where = array(), $order = '', $field = '*', $limit = '', $offset = '')
     {
         $res = $this->getDb();
         
         if($where){$res = $res->where($where);}
         if($field){if(is_array($field)){$res = $res->select($field);}else{$res = $res->select(\DB::raw($field));}}
         if($order){$res = parent::getOrderByData($res, $order);}
-        if($offset){}else{$offset = 0;}
-        if($limit){}else{$limit = 10;}
+        if($offset){$res = $res->skip($offset);}
+        if($limit){$res = $res->take($limit);}
         
-        $res = $res->skip($offset)->take($limit)->get();
+        $res = $res->get();
         
         return $res;
     }
@@ -179,6 +174,20 @@ class Comment extends BaseModel
         
         return $res;
     }
+    
+    /**
+     * 统计
+     * @param array $where 条件
+     * @return bool
+     */
+    public function getCount($where)
+    {
+        $res = $this->getDb();
+        $res = $res->where($where)->count();
+        
+        return $res;
+    }
+    
     /* 
     //获取列表
 	public static function getList(array $param)

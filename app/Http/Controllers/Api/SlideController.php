@@ -1,10 +1,11 @@
 <?php
 namespace App\Http\Controllers\Api;
-
+use Log;
+use DB;
 use Illuminate\Http\Request;
 use App\Common\ReturnData;
 use App\Common\Helper;
-
+use App\Common\Token;
 use App\Http\Model\Slide;
 use App\Http\Logic\SlideLogic;
 
@@ -26,18 +27,18 @@ class SlideController extends CommonController
         $where = array();
         $limit = $request->input('limit', 10);
         $offset = $request->input('offset', 0);
-        if($request->input('group_id', null) !== null){$where['group_id'] = $request->input('group_id');}
-        if($request->input('type', null) !== null){$where['type'] = $request->input('type');}
+        if($request->input('group_id', null) != null){$where['group_id'] = $request->input('group_id');}
+        if($request->input('type', null) != null){$where['type'] = $request->input('type');}
+        $where['is_show'] = Slide::IS_SHOW;
         
-        $res = $this->getLogic()->getList($where, array('id', 'desc'), '*', $offset, $limit);
-		if($res == false)
-		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
-		}
-        
-        foreach($res['list'] as $k=>$v)
+        $res = $this->getLogic()->getList($where, array('listorder', 'asc'), '*', $offset, $limit);
+		
+        if($res['count']>0)
         {
-            if(!empty($res['list'][$k]->pic)){$res['list'][$k]->pic = http_host().$v->pic;}
+            foreach($res['list'] as $k=>$v)
+            {
+                if(!empty($res['list'][$k]->pic)){$res['list'][$k]->pic = http_host().$v->pic;}
+            }
         }
         
 		return ReturnData::create(ReturnData::SUCCESS,$res);
@@ -47,10 +48,12 @@ class SlideController extends CommonController
     public function slideDetail(Request $request)
 	{
         //参数
-        if(!checkIsNumber($request->input('id', null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
+        $where['id'] = $id;
         
 		$res = $this->getLogic()->getOne($where);
-        if(!$res){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        if(!$res){return ReturnData::create(ReturnData::RECORD_NOT_EXIST);}
         
         if(!empty($res->pic)){$res->pic = http_host().$res->pic;}
         
@@ -71,7 +74,8 @@ class SlideController extends CommonController
     //修改
     public function slideUpdate(Request $request)
     {
-        if(!checkIsNumber($request->input('id', null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
         
         if(Helper::isPostRequest())
         {
@@ -87,11 +91,11 @@ class SlideController extends CommonController
     //删除
     public function slideDelete(Request $request)
     {
-        if(!checkIsNumber($request->input('id', null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
         
         if(Helper::isPostRequest())
         {
-            unset($_POST['id']);
             $where['id'] = $id;
             
             $res = $this->getLogic()->del($where);

@@ -9,7 +9,7 @@ class CollectGoodsRequest extends BaseRequest
         'user_id' => 'required|integer',
         'goods_id' => 'required|integer',
         'add_time' => 'required|integer',
-        'is_attention' => 'integer|between:[0,1]',
+        'is_attention' => 'integer|between:0,1',
     ];
     
     //总的自定义错误信息

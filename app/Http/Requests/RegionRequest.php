@@ -8,11 +8,11 @@ class RegionRequest extends BaseRequest
         'id' => 'required|integer',
         'name' => 'required|max:64',
         'parent_id' => 'integer',
-        'type' => 'integer|between:[0,3]',
+        'type' => 'integer|between:0,3',
         'sort_name' => 'max:50',
-        'is_oversea' => 'integer|between:[0,1]',
+        'is_oversea' => 'integer|between:0,1',
         'area_code' => 'max:10',
-        'status' => 'integer|between:[0,1]',
+        'status' => 'integer|between:0,1',
     ];
     
     //总的自定义错误信息

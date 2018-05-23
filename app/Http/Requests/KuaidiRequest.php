@@ -13,7 +13,7 @@ class KuaidiRequest extends BaseRequest
         'des' => 'max:150',
         'tel' => 'max:60',
         'website' => 'max:60',
-        'status' => 'integer|between:[0,1]',
+        'status' => 'integer|between:0,1',
         'listorder' => 'integer',
     ];
     

@@ -9,8 +9,8 @@ class CartRequest extends BaseRequest
         'user_id' => 'required|integer',
         'goods_id' => 'required|integer',
         'shop_id' => 'integer',
-        'goods_number' => 'required|integer|between:[1,9999]',
-        'type' => 'integer|between:[0,3]',
+        'goods_number' => 'required|integer|between:1,9999',
+        'type' => 'integer|between:0,3',
         'add_time' => 'required|integer',
     ];
     
@@ -34,9 +34,9 @@ class CartRequest extends BaseRequest
     
     //场景验证规则
     protected $scene = [
-        'add'  => ['user_id', 'goods_id', 'shop_id', 'goods_number', 'type', 'add_time'],
-        'edit' => ['user_id', 'goods_id', 'shop_id', 'goods_number', 'type', 'add_time'],
-        'del'  => ['id'],
+        'add'  => ['user_id', 'goods_id', 'goods_number', 'shop_id', 'type'],
+        'edit' => ['user_id', 'goods_id', 'shop_id', 'goods_number', 'type'],
+        'del'  => ['id','user_id'],
     ];
     
     /**

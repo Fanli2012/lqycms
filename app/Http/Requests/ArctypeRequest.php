@@ -18,6 +18,7 @@ class ArctypeRequest extends BaseRequest
         'temparticle' => 'max:50',
         'litpic' => 'max:100',
         'seokeyword' => 'max:50',
+        'is_show' => 'between:0,1',
     ];
     
     //总的自定义错误信息
@@ -39,11 +40,13 @@ class ArctypeRequest extends BaseRequest
         'temparticle.max' => '文章页模板不能超过50个字符',
         'litpic.max' => '封面或缩略图不能超过100个字符',
         'seokeyword.max' => 'seokeyword不能超过50个字符',
+        'is_show.between' => '是否显示：默认0显示,1不显示',
     ];
     
     //场景验证规则
     protected $scene = [
-        'add' => ['name', 'typedir', 'pid', 'addtime', 'seotitle', 'keywords', 'description', 'listorder', 'templist', 'temparticle', 'litpic', 'seokeyword'],
+        'add' => ['name', 'typedir', 'pid', 'addtime', 'seotitle', 'keywords', 'description', 'listorder', 'templist', 'temparticle', 'litpic', 'seokeyword','is_show'],
+        'add' => ['name', 'typedir', 'pid', 'seotitle', 'keywords', 'description', 'listorder', 'templist', 'temparticle', 'litpic', 'seokeyword'],
         'del' => ['id'],
     ];
     

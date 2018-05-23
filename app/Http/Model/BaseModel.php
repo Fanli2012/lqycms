@@ -14,18 +14,25 @@ class BaseModel extends Model
         return Schema::getColumnListing($table);
     }
     
-    //过滤不是某一表的字段
+    //过滤不是某一表的字段、过滤空值
     public static function filterTableColumn($data, $table)
     {
         $table_column = Schema::getColumnListing($table);
 
-        if (!$table_column) {
+        if (!$table_column)
+        {
             return $data;
         }
         
-        foreach ($data as $k => $v) {
-            if (!in_array($k, $table_column)) {
+        foreach ($data as $k => $v)
+        {
+            if (!in_array($k, $table_column))
+            {
                 unset($data[$k]);
+            }
+            else
+            {
+                if($data[$k]==''){unset($data[$k]);} //过滤空值
             }
         }
         

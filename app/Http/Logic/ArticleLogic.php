@@ -14,7 +14,7 @@ class ArticleLogic extends BaseLogic
     
     public function getModel()
     {
-        return new Article();
+        return model('Article');
     }
     
     public function getValidate($data, $scene_name)
@@ -36,10 +36,6 @@ class ArticleLogic extends BaseLogic
                 $res['list'][$k] = $this->getDataView($v);
                 $res['list'][$k]->typename = $this->getModel()->getTypenameAttr(array('typeid' => $v->typeid));
             }
-        }
-        else
-        {
-            return false;
         }
         
         return $res;
@@ -82,7 +78,7 @@ class ArticleLogic extends BaseLogic
         $res = $this->getDataView($res);
         $res->typename = $this->getModel()->getTypenameAttr(array('typeid'=>$res->typeid));
         
-        $this->getModel()->getDb()->where($where)->increment('click', 1);
+        $this->getModel()->getDb()->where($where)->increment('click', 1); //点击量+1
         
         return $res;
     }

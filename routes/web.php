@@ -144,11 +144,14 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     Route::get('/article_detail', 'ArticleController@articleDetail');
     Route::get('/arctype_list', 'ArctypeController@arctypeList');
     Route::get('/arctype_detail', 'ArctypeController@arctypeDetail');
+    //单页
+	Route::get('/page_list', 'PageController@pageList');
+    Route::get('/page_detail', 'PageController@pageDetail');
     //商品
     Route::get('/goods_detail', 'GoodsController@goodsDetail'); //商品详情
     Route::get('/goods_list', 'GoodsController@goodsList'); //商品列表
     Route::get('/goodstype_list', 'GoodsTypeController@goodsTypeList'); //商品分类列表
-    Route::get('/goods_searchword_list', 'GoodsController@goodsSearchwordList'); //商品搜索词列表
+    Route::get('/goods_searchword_list', 'GoodsSearchwordController@goodsSearchwordList'); //商品搜索词列表
     Route::get('/goodsbrand_detail', 'GoodsBrandController@goodsBrandDetail'); //商品品牌详情
     Route::get('/goodsbrand_list', 'GoodsBrandController@goodsBrandList'); //商品品牌列表
     //地区，省市区
