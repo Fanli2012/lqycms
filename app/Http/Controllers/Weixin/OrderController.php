@@ -279,13 +279,13 @@ class OrderController extends CommonController
 		//noncestr已填,商户无需重复填写
 		//spbill_create_ip已填,商户无需重复填写
 		//sign已填,商户无需重复填写
-		$unifiedOrder->setParameter("openid","$openid");//微信用户
+		$unifiedOrder->setParameter("openid","$openid");//微信用户openid，trade_type=JSAPI，此参数必传，用户在商户appid下的唯一标识，
 		$unifiedOrder->setParameter("body","$body");//商品描述
 		$unifiedOrder->setParameter("out_trade_no","$out_trade_no");//商户订单号
 		$unifiedOrder->setParameter("total_fee","$total_fee");//总金额
 		$unifiedOrder->setParameter("attach","$attach"); //附加数据，选填，在查询API和支付通知中原样返回，可作为自定义参数使用，示例：a=1&b=2
         $unifiedOrder->setParameter("notify_url","$notify_url");//通知地址
-		$unifiedOrder->setParameter("trade_type","JSAPI");//交易类型
+		$unifiedOrder->setParameter("trade_type","JSAPI");//交易类型,JSAPI，NATIVE，APP...
 		$prepay_id = $unifiedOrder->getPrepayId();
 		//=========步骤3：使用jsapi调起支付============
 		$jsApi->setPrepayId($prepay_id);

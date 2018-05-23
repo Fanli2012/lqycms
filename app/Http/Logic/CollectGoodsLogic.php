@@ -34,6 +34,9 @@ class CollectGoodsLogic extends BaseLogic
             foreach($res['list'] as $k=>$v)
             {
                 $res['list'][$k] = $this->getDataView($v);
+                
+                $goods = logic('Goods')->getOne(array('id'=>$v->goods_id));
+                $res['list'][$k]->goods = $goods;
             }
         }
         
@@ -80,8 +83,12 @@ class CollectGoodsLogic extends BaseLogic
     {
         if(empty($data)){return ReturnData::create(ReturnData::PARAMS_ERROR);}
         
+        $data['add_time'] = time();
+        
         $validator = $this->getValidate($data, 'add');
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
+        
+        if($this->getModel()->getOne(array('user_id'=>$data['user_id'],'goods_id'=>$data['goods_id']))){return '亲，您已经收藏啦！';}
         
         $res = $this->getModel()->add($data,$type);
         if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
@@ -110,6 +117,8 @@ class CollectGoodsLogic extends BaseLogic
         
         $validator = $this->getValidate($where,'del');
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
+        
+        if(!$this->getModel()->getOne(array('user_id'=>$where['user_id'],'goods_id'=>$where['goods_id']))){return '商品未收藏';}
         
         $res = $this->getModel()->del($where);
         if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}

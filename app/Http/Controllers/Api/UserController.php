@@ -1,13 +1,13 @@
 <?php
 namespace App\Http\Controllers\Api;
-
-use App\Http\Controllers\Api\CommonController;
+use Log;
+use DB;
 use Illuminate\Http\Request;
 use App\Common\ReturnData;
-use App\Common\Token;
 use App\Common\Helper;
+use App\Common\Token;
 use App\Http\Model\User;
-use DB;
+use App\Http\Logic\UserLogic;
 
 class UserController extends CommonController
 {
@@ -16,19 +16,109 @@ class UserController extends CommonController
         parent::__construct();
     }
     
-    //用户信息
-    public function userInfo(Request $request)
+    public function getLogic()
     {
-        if ($user = User::getUserInfo(Token::$uid))
+        return logic('User');
+    }
+    
+    public function userList(Request $request)
+	{
+        //参数
+        $limit = $request->input('limit', 10);
+        $offset = $request->input('offset', 0);
+        
+        $where = [];
+        if($request->input('parent_id', '')!=''){$where['parent_id'] = $request->input('parent_id');}
+        if($request->input('group_id', '')!=''){$where['group_id'] = $request->input('group_id');}
+        if($request->input('sex', '')!=''){$where['sex'] = $request->input('sex');}
+        
+        $res = $this->getLogic()->getList($where, array('id', 'desc'), '*', $offset, $limit);
+		
+        /* if($res['count']>0)
+        {
+            foreach($res['list'] as $k=>$v)
+            {
+                
+            }
+        } */
+        
+		return ReturnData::create(ReturnData::SUCCESS,$res);
+    }
+    
+    public function userDetail(Request $request)
+	{
+        //参数
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
+        $where['id'] = $id;
+        
+        $res = $this->getLogic()->getOne($where);
+		if(!$res)
 		{
-            return ReturnData::create(ReturnData::SUCCESS, $user);
-        }
-		else
-		{
-            return ReturnData::create(ReturnData::RECORD_NOT_EXIST);
+			return ReturnData::create(ReturnData::RECORD_NOT_EXIST);
+		}
+        
+		return ReturnData::create(ReturnData::SUCCESS,$res);
+    }
+    
+    //添加
+    public function userAdd(Request $request)
+    {
+        if(Helper::isPostRequest())
+        {
+            return $this->getLogic()->add($_POST);
         }
     }
     
+    //修改
+    public function userUpdate(Request $request)
+    {
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
+        
+        if(Helper::isPostRequest())
+        {
+            unset($_POST['id']);
+            $where['id'] = $id;
+            //$where['user_id'] = Token::$uid;
+            
+            return $this->getLogic()->edit($_POST,$where);
+        }
+    }
+    
+    //删除
+    public function userDelete(Request $request)
+    {
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
+        
+        if(Helper::isPostRequest())
+        {
+            $where['id'] = $id;
+            //$where['user_id'] = Token::$uid;
+            
+            return $this->getLogic()->del($where);
+        }
+    }
+    
+    //用户信息
+    public function userInfo(Request $request)
+    {
+        $where['id'] = Token::$uid;
+        
+        $res = $this->getLogic()->getOne($where);
+		if(!$res)
+		{
+			return ReturnData::create(ReturnData::RECORD_NOT_EXIST);
+		}
+        
+        if($res->pay_password){$res->pay_password = 1;}else{$res->pay_password = 0;}
+        unset($res->password);
+        
+		return ReturnData::create(ReturnData::SUCCESS,$res);
+    }
+    
+    /* 
     //修改用户信息
 	public function userInfoUpdate(Request $request)
 	{
@@ -487,5 +577,5 @@ class UserController extends CommonController
 		MallDataManager::tokenDelete(['uid'=>Token::$uid]);
 		
 		return ReturnCode::create(ReturnCode::SUCCESS);
-    }
+    } */
 }

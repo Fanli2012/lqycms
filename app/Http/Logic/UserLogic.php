@@ -34,6 +34,8 @@ class UserLogic extends BaseLogic
             foreach($res['list'] as $k=>$v)
             {
                 $res['list'][$k] = $this->getDataView($v);
+                
+                //$res['list'][$k]->user_name = !empty($res['list'][$k]->mobile) ? $res['list'][$k]->mobile : $res['list'][$k]->user_name;
             }
         }
         
@@ -71,6 +73,10 @@ class UserLogic extends BaseLogic
         if(!$res){return false;}
         
         $res = $this->getDataView($res);
+        
+        $res->reciever_address = model('UserAddress')->getOne(['id'=>$res->address_id]);
+        $res->collect_goods_count = model('CollectGoods')->getDb()->where(['user_id'=>$where['id']])->count();
+        $res->bonus_count = model('UserBonus')->getDb()->where(array('user_id'=>$where['id'],'status'=>0))->count();
         
         return $res;
     }
@@ -125,5 +131,13 @@ class UserLogic extends BaseLogic
     private function getDataView($data = array())
     {
         return getDataAttr($this->getModel(),$data);
+    }
+    
+    //获取用户信息
+    public function getUserInfo($user_id)
+    {
+        $user = self::where('id', $user_id)->first();
+        if(!$user){return false;}
+        
     }
 }

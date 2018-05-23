@@ -29,8 +29,8 @@ class CollectGoodsRequest extends BaseRequest
     //场景验证规则
     protected $scene = [
         'add'  => ['user_id', 'goods_id', 'add_time', 'is_attention'],
-        'edit' => ['user_id', 'goods_id', 'add_time', 'is_attention']
-        'del'  => ['id'],
+        'edit' => ['user_id', 'goods_id', 'add_time', 'is_attention'],
+        'del'  => ['user_id', 'goods_id'],
     ];
     
     /**

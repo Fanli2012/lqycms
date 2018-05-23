@@ -272,14 +272,6 @@ class User extends BaseModel
         return true;
     }
      */
-    //获取一条用户信息
-	public static function getOneUser($where)
-    {
-        $user = self::where($where)->first();
-        if(!$user){return false;}
-        
-		return $user;
-    }
     
     //获取用户信息
     public static function getUserInfo($user_id)
@@ -377,50 +369,17 @@ class User extends BaseModel
 		return $res;
     }
     
-    //获取性别文字：0未知,1男,2女
-    public static function getSexText($where)
-    {
-        $res = '';
-        if($where['sex'] === 0)
-        {
-            $res = '未知';
-        }
-        elseif($where['sex'] === 1)
-        {
-            $res = '男';
-        }
-        elseif($where['sex'] === 2)
-        {
-            $res = '女';
-        }
-        
-        return $res;
-    }
-    
-    //描述-文字
+    //性别1男2女
     public function getSexAttr($data)
     {
-        $arr = [0 => '不限', 1 => '黑色', 2 => '白色', 3 => '银色', 4 => '橙色', 5 => '绿色', 6 => '红色', 7 => '蓝色', 8 => '紫色', 9 => '黄色', 10 => '香槟色', 11 => '咖啡色'];
-        return $arr[$data['des']];
+        $arr = [0 => '未知', 1 => '男', 2 => '女'];
+        return $arr[$data->sex];
     }
     
-    //获取用户状态文字：1正常 2 删除 3锁定
-    public static function getStatusText($where)
+    //用户状态 1正常状态 2 删除至回收站 3锁定
+    public function getStatusAttr($data)
     {
-        $res = '';
-        if($where['status'] === 1)
-        {
-            $res = '正常';
-        }
-        elseif($where['status'] === 2)
-        {
-            $res = '删除';
-        }
-        elseif($where['status'] === 3)
-        {
-            $res = '锁定';
-        }
-        
-        return $res;
+        $arr = [1 => '正常', 2 => '删除', 3 => '锁定'];
+        return $arr[$data->status];
     }
 }
