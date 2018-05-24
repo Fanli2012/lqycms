@@ -92,9 +92,9 @@ class ArticleLogic extends BaseLogic
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
         $res = $this->getModel()->add($data,$type);
-        if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
+        if($res){return ReturnData::create(ReturnData::SUCCESS,$res);}
         
-        return ReturnData::create(ReturnData::SUCCESS,$res);
+        return ReturnData::create(ReturnData::FAIL);
     }
     
     //修改
@@ -106,9 +106,9 @@ class ArticleLogic extends BaseLogic
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
         $res = $this->getModel()->edit($data,$where);
-        if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
+        if($res){return ReturnData::create(ReturnData::SUCCESS,$res);}
         
-        return ReturnData::create(ReturnData::SUCCESS,$res);
+        return ReturnData::create(ReturnData::FAIL);
     }
     
     //删除
@@ -120,9 +120,9 @@ class ArticleLogic extends BaseLogic
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
         $res = $this->getModel()->del($where);
-        if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
+        if($res){return ReturnData::create(ReturnData::SUCCESS,$res);}
         
-        return ReturnData::create(ReturnData::SUCCESS,$res);
+        return ReturnData::create(ReturnData::FAIL);
     }
     
     /**

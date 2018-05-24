@@ -73,16 +73,32 @@ class UserController extends CommonController
     //修改
     public function userUpdate(Request $request)
     {
-        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
-        $id = $request->input('id');
-        
         if(Helper::isPostRequest())
         {
-            unset($_POST['id']);
-            $where['id'] = $id;
-            //$where['user_id'] = Token::$uid;
+            $where['id'] = Token::$uid;
             
-            return $this->getLogic()->edit($_POST,$where);
+            //判断用户名是否已经存在
+            if($request->input('user_name', null)!==null)
+            {
+                if(model('User')->getOne([['user_name', '=', $request->input('user_name')],['id', '<>', Token::$uid]]))
+                {
+                    return ReturnData::create(ReturnData::PARAMS_ERROR,null,'用户名已存在');
+                }
+            }
+            
+            if($request->input('email', null)!==null){$data['email'] = $request->input('email');}
+            if($request->input('sex', null)!==null){$data['sex'] = $request->input('sex');}
+            if($request->input('birthday', null)!==null){$data['birthday'] = $request->input('birthday');}
+            if($request->input('address_id', null)!==null){$data['address_id'] = $request->input('address_id');}
+            if($request->input('nickname', null)!==null){$data['nickname'] = $request->input('nickname');}
+            if($request->input('mobile', null)!==null){$data['mobile'] = $request->input('mobile');}
+            if($request->input('group_id', null)!==null){$data['group_id'] = $request->input('group_id');}
+            if($request->input('password', null)!==null){$data['password'] = $request->input('password');}
+            if($request->input('head_img', null)!==null){$data['head_img'] = $request->input('head_img');}
+            if($request->input('refund_account', null)!==null){$data['refund_account'] = $request->input('refund_account');}
+            if($request->input('refund_name', null)!==null){$data['refund_name'] = $request->input('refund_name');}
+            
+            return $this->getLogic()->edit($data,$where);
         }
     }
     
@@ -118,65 +134,6 @@ class UserController extends CommonController
 		return ReturnData::create(ReturnData::SUCCESS,$res);
     }
     
-    /* 
-    //修改用户信息
-	public function userInfoUpdate(Request $request)
-	{
-		if($request->input('user_name', null)!==null)
-        {
-            $data['user_name'] = $request->input('user_name');
-            
-            if(User::getOneUser($data))
-            {
-                return ReturnData::create(ReturnData::PARAMS_ERROR,null,'用户名已存在');
-            }
-        }
-        
-		if($request->input('email', null)!==null){$data['email'] = $request->input('email');}
-		if($request->input('sex', null)!==null){$data['sex'] = $request->input('sex');}
-        if($request->input('birthday', null)!==null){$data['birthday'] = $request->input('birthday');}
-        if($request->input('money', null)!==null){$data['money'] = $request->input('money');}
-        if($request->input('frozen_money', null)!==null){$data['frozen_money'] = $request->input('frozen_money');}
-        if($request->input('point', null)!==null){$data['point'] = $request->input('point');}
-        if($request->input('address_id', null)!==null){$data['address_id'] = $request->input('address_id');}
-        if($request->input('user_rank', null)!==null){$data['user_rank'] = $request->input('user_rank');}
-        if($request->input('parent_id', null)!==null){$data['parent_id'] = $request->input('parent_id');}
-        if($request->input('nickname', null)!==null){$data['nickname'] = $request->input('nickname');}
-        if($request->input('mobile', null)!==null){$data['mobile'] = $request->input('mobile');}
-        if($request->input('status', null)!==null){$data['status'] = $request->input('status');}
-        if($request->input('group_id', null)!==null){$data['group_id'] = $request->input('group_id');}
-        if($request->input('password', null)!==null){$data['password'] = $request->input('password');}
-        if($request->input('head_img', null)!==null){$data['head_img'] = $request->input('head_img');}
-        if($request->input('refund_account', null)!==null){$data['refund_account'] = $request->input('refund_account');}
-        if($request->input('refund_name', null)!==null){$data['refund_name'] = $request->input('refund_name');}
-        
-        if (isset($data))
-		{
-			User::modify(array('id'=>Token::$uid),$data);
-        }
-		
-		return ReturnData::create(ReturnData::SUCCESS);
-    }
-    
-    //修改用户余额
-	public function userMoneyUpdate(Request $request)
-	{
-        $data['money'] = $request->input('money','');
-        
-        if($data['money'] == '' || $data['money'] <= 0)
-        {
-            return ReturnData::create(ReturnData::PARAMS_ERROR);
-        }
-        
-        $user = User::getOneUser(array('id'=>Token::$uid));
-        $data['money'] = $user['money'] - $data['money'];
-        
-        if(User::modify(array('id'=>Token::$uid),$data))
-        {
-            return ReturnData::create(ReturnData::SUCCESS);
-        }
-    }
-    
     //修改用户密码、支付密码
     public function userPasswordUpdate(Request $request)
     {
@@ -184,64 +141,27 @@ class UserController extends CommonController
         {
             $data['password'] = $request->input('password');
             $data['old_password'] = $request->input('old_password');
-
+            
             if($data['password'] == $data['old_password']){return ReturnData::create(ReturnData::PARAMS_ERROR,null,'新旧密码相同');}
         }
-
+        
         if($request->input('pay_password', '')!='')
         {
             $data['pay_password'] = $request->input('pay_password');
             $data['old_pay_password'] = $request->input('old_pay_password','');
-
-            if($data['pay_password'] == $data['old_pay_password']){return ReturnData::create(ReturnData::PARAMS_ERROR,null,'新旧密码相同');}
+            
+            if($data['pay_password'] == $data['old_pay_password']){return ReturnData::create(ReturnData::PARAMS_ERROR,null,'新旧支付密码相同');}
         }
-
-        if (isset($data))
-        {
-            $res = User::userPasswordUpdate(array('id'=>Token::$uid),$data);
-
-            if($res === false)
-            {
-                return ReturnData::create(ReturnData::SYSTEM_FAIL,null,$res);
-            }
-
-            return ReturnData::create(ReturnData::SUCCESS);
-        }
-
-        return ReturnData::create(ReturnData::PARAMS_ERROR);
-    }
-    
-    //用户列表
-    public function userList(Request $request)
-    {
-        //参数
-        $data['limit'] = $request->input('limit', 10);
-        $data['offset'] = $request->input('offset', 0);
         
-        if($request->input('parent_id', '')!=''){$data['parent_id'] = $request->input('parent_id');}
-        if($request->input('group_id', '')!=''){$data['group_id'] = $request->input('group_id');}
-        if($request->input('sex', '')!=''){$data['sex'] = $request->input('sex');}
+        if(!isset($data)){return ReturnData::create(ReturnData::PARAMS_ERROR);}
         
-        $res = User::getList($data);
-		if(!$res)
-		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
-		}
-        
-		return ReturnData::create(ReturnData::SUCCESS,$res);
+        return $this->getLogic()->userPasswordUpdate($data, array('id'=>Token::$uid));
     }
     
     //签到
 	public function signin(Request $request)
 	{
-		$res = User::signin();
-        
-        if($res !== true)
-        {
-            return ReturnData::create(ReturnData::PARAMS_ERROR,null,$res);
-        }
-        
-		return ReturnData::create(ReturnData::SUCCESS);
+		return $this->getLogic()->signin(array('id'=>Token::$uid,'status'=>User::USER_NORMAL_STATUS));
     }
     
 	//登录
@@ -256,14 +176,7 @@ class UserController extends CommonController
             return ReturnData::create(ReturnData::PARAMS_ERROR);
         }
         
-        $res = User::wxLogin($data);
-        
-        if ($res === false)
-		{
-            return ReturnData::create(ReturnData::PARAMS_ERROR,null,'账号或密码错误');
-        }
-            
-        return ReturnData::create(ReturnData::SUCCESS,$res);
+        return $this->getLogic()->wxLogin($data);
     }
     
     //注册
@@ -272,52 +185,47 @@ class UserController extends CommonController
         $data['mobile'] = $request->input('mobile','');
         $data['user_name'] = $request->input('user_name','');
         $data['password'] = $request->input('password','');
-        $data['parent_id'] = $request->input('parent_id','');
-        $parent_mobile = $request->input('parent_mobile',null);
+        $data['parent_id'] = 0;if($request->input('parent_id',null)!=null){$data['parent_id'] = $request->input('parent_id');}
+        $parent_mobile = $request->input('parent_mobile','');
         
         if (($data['mobile']=='' && $data['user_name']=='') || $data['password']=='')
 		{
             return ReturnData::create(ReturnData::PARAMS_ERROR);
         }
         
-        if ($parent_mobile!=null)
+        if ($parent_mobile!='')
 		{
-            if($user = User::getOneUser(array('mobile'=>$parent_mobile)))
+            if($user = model('User')->getOne(array('mobile'=>$parent_mobile)))
             {
                 $data['parent_id'] = $user->id;
             }
             else
             {
-                return ReturnData::create(ReturnData::PARAMS_ERROR,null,'推荐人手机号错误');
+                return ReturnData::create(ReturnData::PARAMS_ERROR,null,'推荐人不存在或推荐人手机号错误');
             }
         }
         
-        if (isset($data['mobile']) && !Helper::isValidMobile($data['mobile']))
+        if ($data['mobile']!='')
 		{
-            return ReturnData::create(ReturnData::MOBILE_FORMAT_FAIL);
+            //判断手机格式
+            if(!Helper::isValidMobile($data['mobile'])){return ReturnData::create(ReturnData::MOBILE_FORMAT_FAIL);}
+            
+            //判断是否已经注册
+            if (model('User')->getOne(array('mobile'=>$data['mobile'])))
+            {
+                return ReturnData::create(ReturnData::MOBILE_EXIST);
+            }
         }
 		
-		//判断是否已经注册
-		if (User::getOneUser(array('mobile'=>$data['mobile'])))
+        if ($data['user_name']!='')
 		{
-            return ReturnData::create(ReturnData::MOBILE_EXIST);
-		}
-		
-		if (User::getOneUser(array('user_name'=>$data['user_name'])))
-		{
-            return ReturnData::create(ReturnData::PARAMS_ERROR,null,'用户名已存在');
-		}
-        
-        $data['add_time'] = time();
-        //添加用户
-        $res = User::wxRegister($data);
-        
-        if($res == false)
-        {
-            return ReturnData::create(ReturnData::SYSTEM_FAIL);
+            if (model('User')->getOne(array('user_name'=>$data['user_name'])))
+            {
+                return ReturnData::create(ReturnData::PARAMS_ERROR,null,'用户名已存在');
+            }
         }
         
-        return ReturnData::create(ReturnData::SUCCESS,$res);
+        return $this->getLogic()->wxRegister($data);
     }
 	
     //微信授权注册
@@ -328,9 +236,7 @@ class UserController extends CommonController
         $data['sex'] = $request->input('sex','');
         $data['head_img'] = $request->input('head_img','');
         $data['nickname'] = $request->input('nickname','');
-        $data['parent_id'] = $request->input('parent_id','');
-        $parent_mobile = $request->input('parent_mobile','');
-        $data['mobile'] = $request->input('mobile','');
+        $data['parent_id'] = 0;if($request->input('parent_id',null)!=null){$data['parent_id'] = $request->input('parent_id');}
         $data['user_name'] = date('YmdHis').dechex(rand(1000,9999));
         $data['password'] = md5('123456');
         
@@ -339,47 +245,19 @@ class UserController extends CommonController
             return ReturnData::create(ReturnData::PARAMS_ERROR);
         }
         
-        if ($parent_mobile!='')
+		if (model('User')->getOne(array('openid'=>$data['openid'])))
 		{
-            if($user = User::getOneUser(array('mobile'=>$parent_mobile)))
-            {
-                $data['parent_id'] = $user->id;
-            }
-            else
-            {
-                return ReturnData::create(ReturnData::PARAMS_ERROR,null,'推荐人手机号错误');
-            }
-        }
-        
-        if (isset($data['mobile']) && !Helper::isValidMobile($data['mobile']))
-		{
-            return ReturnData::create(ReturnData::MOBILE_FORMAT_FAIL);
-        }
-		
-		//判断是否已经注册
-		if (User::getOneUser(array('mobile'=>$data['mobile'])))
-		{
-            return ReturnData::create(ReturnData::MOBILE_EXIST);
-		}
-		
-		if (User::getOneUser(array('openid'=>$data['openid'])))
-		{
-            return ReturnData::create(ReturnData::SUCCESS,User::wxLogin(array('openid'=>$data['openid'])));
+            return $this->getLogic()->wxLogin(array('openid'=>$data['openid']));
 		}
         
         //添加用户
-        $res = User::wxRegister($data);
-        
-        if($res === false)
-        {
-            return ReturnData::create(ReturnData::SYSTEM_FAIL);
-        }
+        $res = $this->getLogic()->wxRegister($data);
+        if($res['code'] != ReturnData::SUCCESS){return $res;}
         
         //更新用户名user_name，微信登录没有用户名
-        $uid = DB::table('user')->where(array('openid'=>$data['openid']))->value('id');
-        if($uid){User::modify(array('openid'=>$data['openid']),array('user_name'=>'a'.$uid));}
+        model('User')->edit(array('user_name'=>'u'.$res['code']['data']['uid']),array('id'=>$res['code']['data']['uid']));
         
-        return ReturnData::create(ReturnData::SUCCESS,User::wxLogin(array('openid'=>$data['openid'])));
+        return $this->getLogic()->wxLogin(array('openid'=>$data['openid']));
     }
     
     //验证码登录
@@ -577,5 +455,5 @@ class UserController extends CommonController
 		MallDataManager::tokenDelete(['uid'=>Token::$uid]);
 		
 		return ReturnCode::create(ReturnCode::SUCCESS);
-    } */
+    }
 }

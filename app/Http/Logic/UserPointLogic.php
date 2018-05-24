@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Logic;
+use DB;
 use App\Common\ReturnData;
 use App\Http\Model\UserPoint;
 use App\Http\Requests\UserPointRequest;
@@ -75,7 +76,14 @@ class UserPointLogic extends BaseLogic
         return $res;
     }
     
-    //添加
+    /**
+     * 添加一条记录，并增加或减少用户余额，会操作用户积分，谨慎使用
+     * @param int    $data['user_id'] 排序
+     * @param int    $data['type'] 0增加,1减少
+     * @param float  $data['point'] 积分
+     * @param string $data['des'] 描述
+     * @return array
+     */
     public function add($data = array(), $type=0)
     {
         if(empty($data)){return ReturnData::create(ReturnData::PARAMS_ERROR);}
@@ -83,10 +91,39 @@ class UserPointLogic extends BaseLogic
         $validator = $this->getValidate($data, 'add');
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
-        $res = $this->getModel()->add($data,$type);
-        if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
+        if($data['point']<=0){return ReturnData::create(ReturnData::PARAMS_ERROR);}
         
-        return ReturnData::create(ReturnData::SUCCESS,$res);
+        $data['add_time'] = time();
+        
+        DB::beginTransaction(); //启动事务
+        
+        if($data['type'] == UserPoint::USER_POINT_INCREMENT)
+        {
+            //增加用户余额
+            model('User')->getDb()->where(array('id'=>$data['user_id']))->increment('point', $data['point']);
+        }
+        elseif($data['type'] == UserPoint::USER_POINT_DECREMENT)
+        {
+            //减少用户余额
+            model('User')->getDb()->where(array('id'=>$data['user_id']))->decrement('point', $data['point']);
+        }
+        else
+        {
+            DB::rollBack(); //事务回滚
+            return ReturnData::create(ReturnData::FAIL);
+        }
+        
+        $user_point = model('User')->getDb()->where(array('id'=>$data['user_id']))->value('point'); //用户余额
+        $data['user_point'] = $user_point;
+        
+        $res = $this->getModel()->add($data,$type);
+        if($res)
+        {
+            DB::commit(); //事务提交
+            return ReturnData::create(ReturnData::SUCCESS,$res);
+        }
+        
+        return ReturnData::create(ReturnData::FAIL);
     }
     
     //修改
@@ -98,9 +135,9 @@ class UserPointLogic extends BaseLogic
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
         $res = $this->getModel()->edit($data,$where);
-        if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
+        if($res){return ReturnData::create(ReturnData::SUCCESS,$res);}
         
-        return ReturnData::create(ReturnData::SUCCESS,$res);
+        return ReturnData::create(ReturnData::FAIL);
     }
     
     //删除
@@ -112,9 +149,9 @@ class UserPointLogic extends BaseLogic
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
         $res = $this->getModel()->del($where);
-        if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
+        if($res){return ReturnData::create(ReturnData::SUCCESS,$res);}
         
-        return ReturnData::create(ReturnData::SUCCESS,$res);
+        return ReturnData::create(ReturnData::FAIL);
     }
     
     /**

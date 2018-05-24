@@ -5,6 +5,7 @@ class ReturnData
 {
     //通用
     const SUCCESS               = 0;    //操作成功
+    const FAIL                  = 1;    //操作失败
     const FORBIDDEN             = 8001; //权限不足
     const SYSTEM_FAIL           = 8002; //系统错误，如数据写入失败之类的
     const PARAMS_ERROR          = 8003; //参数错误
@@ -54,6 +55,7 @@ class ReturnData
     //中文错误详情
     public static $codeTexts = array(
         0    => '操作成功',
+        1    => '操作失败',
         8001 => '权限不足',
         8002 => '系统错误，请联系管理员',
         8003 => '参数错误',

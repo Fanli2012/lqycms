@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Logic;
+use DB;
 use App\Common\ReturnData;
 use App\Http\Model\UserMoney;
 use App\Http\Requests\UserMoneyRequest;
@@ -75,7 +76,14 @@ class UserMoneyLogic extends BaseLogic
         return $res;
     }
     
-    //添加
+    /**
+     * 添加一条记录，并增加或减少用户余额，会操作用户余额表，谨慎使用
+     * @param int    $data['user_id'] 排序
+     * @param int    $data['type'] 0增加,1减少
+     * @param float  $data['money'] 金额
+     * @param string $data['des'] 描述
+     * @return array
+     */
     public function add($data = array(), $type=0)
     {
         if(empty($data)){return ReturnData::create(ReturnData::PARAMS_ERROR);}
@@ -83,10 +91,39 @@ class UserMoneyLogic extends BaseLogic
         $validator = $this->getValidate($data, 'add');
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
-        $res = $this->getModel()->add($data,$type);
-        if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
+        if($data['money']<=0){return ReturnData::create(ReturnData::PARAMS_ERROR);}
         
-        return ReturnData::create(ReturnData::SUCCESS,$res);
+        $data['add_time'] = time();
+        
+        DB::beginTransaction(); //启动事务
+        
+        if($data['type'] == UserMoney::USER_MONEY_INCREMENT)
+        {
+            //增加用户余额
+            model('User')->getDb()->where(array('id'=>$data['user_id']))->increment('money', $data['money']);
+        }
+        elseif($data['type'] == UserMoney::USER_MONEY_DECREMENT)
+        {
+            //减少用户余额
+            model('User')->getDb()->where(array('id'=>$data['user_id']))->decrement('money', $data['money']);
+        }
+        else
+        {
+            DB::rollBack(); //事务回滚
+            return ReturnData::create(ReturnData::FAIL);
+        }
+        
+        $user_money = model('User')->getDb()->where(array('id'=>$data['user_id']))->value('money'); //用户余额
+        $data['user_money'] = $user_money;
+        
+        $res = $this->getModel()->add($data,$type);
+        if($res)
+        {
+            DB::commit(); //事务提交
+            return ReturnData::create(ReturnData::SUCCESS,$res);
+        }
+        
+        return ReturnData::create(ReturnData::FAIL);
     }
     
     //修改
@@ -98,9 +135,9 @@ class UserMoneyLogic extends BaseLogic
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
         $res = $this->getModel()->edit($data,$where);
-        if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
+        if($res){return ReturnData::create(ReturnData::SUCCESS,$res);}
         
-        return ReturnData::create(ReturnData::SUCCESS,$res);
+        return ReturnData::create(ReturnData::FAIL);
     }
     
     //删除
@@ -112,9 +149,9 @@ class UserMoneyLogic extends BaseLogic
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
         $res = $this->getModel()->del($where);
-        if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
+        if($res){return ReturnData::create(ReturnData::SUCCESS,$res);}
         
-        return ReturnData::create(ReturnData::SUCCESS,$res);
+        return ReturnData::create(ReturnData::FAIL);
     }
     
     /**

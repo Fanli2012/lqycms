@@ -111,8 +111,8 @@ function dosubmit()
                 ,time: 2 //2秒后自动关闭
             });
             
-			var url = "http://www.baidu.com";
-			location.href = url;
+			//var url = "http://www.baidu.com";
+			//location.href = url;
 		}
 	},'json');
 }

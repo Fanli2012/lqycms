@@ -34,6 +34,9 @@ class UserGoodsHistoryLogic extends BaseLogic
             foreach($res['list'] as $k=>$v)
             {
                 $res['list'][$k] = $this->getDataView($v);
+                
+                $goods = logic('Goods')->getOne(array('id'=>$v->goods_id),array('id', 'typeid', 'tuijian', 'click', 'title', 'sn', 'price','litpic', 'pubdate', 'add_time', 'market_price', 'goods_number', 'sale', 'comments','promote_start_date','promote_price','promote_end_date','goods_img','spec','point'));
+                $res['list'][$k]->goods = $goods;
             }
         }
         
@@ -83,10 +86,14 @@ class UserGoodsHistoryLogic extends BaseLogic
         $validator = $this->getValidate($data, 'add');
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
-        $res = $this->getModel()->add($data,$type);
-        if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
+        if($this->getModel()->getOne(['goods_id'=>$data['goods_id'],'user_id'=>$data['user_id']])){return ReturnData::create(ReturnData::PARAMS_ERROR,null,'亲，已经添加了');}
         
-        return ReturnData::create(ReturnData::SUCCESS,$res);
+        $data['add_time'] = time();
+        
+        $res = $this->getModel()->add($data,$type);
+        if($res){return ReturnData::create(ReturnData::SUCCESS,$res);}
+        
+        return ReturnData::create(ReturnData::FAIL);
     }
     
     //修改
@@ -98,9 +105,9 @@ class UserGoodsHistoryLogic extends BaseLogic
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
         $res = $this->getModel()->edit($data,$where);
-        if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
+        if($res){return ReturnData::create(ReturnData::SUCCESS,$res);}
         
-        return ReturnData::create(ReturnData::SUCCESS,$res);
+        return ReturnData::create(ReturnData::FAIL);
     }
     
     //删除
@@ -108,13 +115,13 @@ class UserGoodsHistoryLogic extends BaseLogic
     {
         if(empty($where)){return ReturnData::create(ReturnData::PARAMS_ERROR);}
         
-        $validator = $this->getValidate($where,'del');
-        if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
+        //$validator = $this->getValidate($where,'del');
+        //if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
         $res = $this->getModel()->del($where);
-        if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
+        if($res){return ReturnData::create(ReturnData::SUCCESS,$res);}
         
-        return ReturnData::create(ReturnData::SUCCESS,$res);
+        return ReturnData::create(ReturnData::FAIL);
     }
     
     /**

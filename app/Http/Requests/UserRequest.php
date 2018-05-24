@@ -80,6 +80,7 @@ class UserRequest extends BaseRequest
     protected $scene = [
         'add' => ['email', 'user_name', 'password', 'pay_password', 'head_img', 'sex', 'birthday', 'commission', 'money', 'frozen_money', 'point', 'rank_points', 'address_id', 'add_time', 'user_rank', 'parent_id', 'nickname', 'mobile', 'status', 'group_id', 'updated_at', 'signin_time', 'openid', 'unionid', 'push_id', 'refund_account', 'refund_name', 'consumption_money'],
         'edit' => ['email', 'user_name', 'password', 'pay_password', 'head_img', 'sex', 'birthday', 'commission', 'money', 'frozen_money', 'point', 'rank_points', 'address_id', 'add_time', 'user_rank', 'parent_id', 'nickname', 'mobile', 'status', 'group_id', 'updated_at', 'signin_time', 'openid', 'unionid', 'push_id', 'refund_account', 'refund_name', 'consumption_money'],
+        'wx_register' => ['email', 'user_name', 'password', 'pay_password', 'head_img', 'add_time', 'parent_id', 'nickname', 'mobile', 'group_id', 'openid', 'unionid', 'push_id'],
         'del' => ['id'],
     ];
     

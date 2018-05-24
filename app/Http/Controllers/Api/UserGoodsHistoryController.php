@@ -1,13 +1,15 @@
 <?php
 namespace App\Http\Controllers\Api;
-
-use App\Http\Controllers\Api\CommonController;
+use Log;
+use DB;
 use Illuminate\Http\Request;
 use App\Common\ReturnData;
+use App\Common\Helper;
 use App\Common\Token;
-
 use App\Http\Model\UserGoodsHistory;
+use App\Http\Logic\UserGoodsHistoryLogic;
 
+//我的足迹
 class UserGoodsHistoryController extends CommonController
 {
     public function __construct()
@@ -15,72 +17,89 @@ class UserGoodsHistoryController extends CommonController
         parent::__construct();
     }
 	
-    //我的足迹列表
+    public function getLogic()
+    {
+        return logic('UserGoodsHistory');
+    }
+    
     public function userGoodsHistoryList(Request $request)
 	{
         //参数
-        $data['limit'] = $request->input('limit', 10);
-        $data['offset'] = $request->input('offset', 0);
+        $limit = $request->input('limit', 10);
+        $offset = $request->input('offset', 0);
+        $where['user_id'] = Token::$uid;
         
-        $data['user_id'] = Token::$uid;
+        $res = $this->getLogic()->getList($where, array('id', 'desc'), '*', $offset, $limit);
+		
+		return ReturnData::create(ReturnData::SUCCESS,$res);
+    }
+    
+    public function userGoodsHistoryDetail(Request $request)
+	{
+        //参数
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
+        $where['id'] = $id;
         
-        $res = UserGoodsHistory::getList($data);
-		if($res === false)
+        $res = $this->getLogic()->getOne($where);
+		if(!$res)
 		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
+			return ReturnData::create(ReturnData::RECORD_NOT_EXIST);
 		}
         
 		return ReturnData::create(ReturnData::SUCCESS,$res);
     }
     
-    //我的足迹添加
+    //添加
     public function userGoodsHistoryAdd(Request $request)
-	{
-        //参数
-        $data['goods_id'] = $request->input('goods_id',null);
-        $data['user_id'] = Token::$uid;
-        
-        if($data['goods_id']===null || $data['user_id']===null)
-		{
-            return ReturnData::create(ReturnData::PARAMS_ERROR);
+    {
+        if(Helper::isPostRequest())
+        {
+            $_POST['user_id'] = Token::$uid;
+            
+            return $this->getLogic()->add($_POST);
         }
-        
-        $res = UserGoodsHistory::add($data);
-		if($res === false)
-		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
-		}
-        
-		return ReturnData::create(ReturnData::SUCCESS,$res);
     }
     
-    //删除一条我的足迹
+    //修改
+    public function userGoodsHistoryUpdate(Request $request)
+    {
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
+        
+        if(Helper::isPostRequest())
+        {
+            unset($_POST['id']);
+            $where['id'] = $id;
+            $where['user_id'] = Token::$uid;
+            
+            return $this->getLogic()->edit($_POST,$where);
+        }
+    }
+    
+    //删除
     public function userGoodsHistoryDelete(Request $request)
-	{
-        //参数
-        $id = $request->input('id',null);
+    {
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
         
-        $res = UserGoodsHistory::remove($id,Token::$uid);
-		if($res === false)
-		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
-		}
-        
-		return ReturnData::create(ReturnData::SUCCESS,$res);
+        if(Helper::isPostRequest())
+        {
+            $where['id'] = $id;
+            $where['user_id'] = Token::$uid;
+            
+            return $this->getLogic()->del($where);
+        }
     }
     
     //清空我的足迹
     public function userGoodsHistoryClear(Request $request)
 	{
-        //参数
-        $user_id = Token::$uid;
-        
-        $res = UserGoodsHistory::clear($user_id);
-		if($res === false)
-		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
-		}
-        
-		return ReturnData::create(ReturnData::SUCCESS,$res);
+        if(Helper::isPostRequest())
+        {
+            $where['user_id'] = Token::$uid;
+            
+            return $this->getLogic()->del($where);
+        }
     }
 }

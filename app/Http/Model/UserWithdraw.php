@@ -12,6 +12,9 @@ class UserWithdraw extends BaseModel
     protected $hidden = array();
     protected $guarded = array(); //$guarded包含你不想被赋值的字段数组。
     
+    const UN_DELETE = 0; //未删除
+    const USER_WITHDRAW_DES = '提现';
+    
     public function getDb()
     {
         return DB::table($this->table);
@@ -168,54 +171,16 @@ class UserWithdraw extends BaseModel
         
         return $res;
     }
+    
+    //获取提现状态文字:0未处理,1处理中,2成功,3取消，4拒绝
+    public function getStatusAttr($data)
+    {
+        $arr = array(0 => '未处理', 1 => '处理中', 2 => '成功', 3 => '取消', 4 => '拒绝');
+        return $arr[$data->status];
+    }
+    
+    
     /* 
-    //获取列表
-	public static function getList(array $param)
-    {
-        extract($param); //参数：limit，offset
-        
-        $limit  = isset($limit) ? $limit : 10;
-        $offset = isset($offset) ? $offset : 0;
-        $where['user_id'] = $user_id;
-        $where['is_delete'] = 0;
-        
-        $model = new self;
-        
-        if(isset($status) && !empty($status)){if($status==-1){}else{$where['status'] = $status;}}
-        if(isset($method)){$where['method'] = $method;}
-        
-        $model = $model->where($where);
-        
-        $res['count'] = $model->count();
-        $res['list'] = array();
-        
-		if($res['count']>0)
-        {
-            $res['list']  = $model->skip($offset)->take($limit)->orderBy('id','desc')->get();
-            
-            foreach($res['list'] as $k=>$v)
-            {
-                $res['list'][$k]['status_text'] = self::getStatusText($v);
-            }
-        }
-        else
-        {
-            return false;
-        }
-        
-        return $res;
-    }
-    
-    public static function getOne(array $param)
-    {
-        extract($param);
-        
-        $where['id'] = $id;
-        $where['is_delete'] = 0;
-        
-        return self::where($where)->first();
-    }
-    
     public static function add(array $data)
     {
         $user = User::where(array('id'=>$data['user_id'],'pay_password'=>$data['pay_password']))->first();
@@ -240,52 +205,5 @@ class UserWithdraw extends BaseModel
         return ReturnData::create(ReturnData::SYSTEM_FAIL);
     }
     
-    public static function modify($where, array $data)
-    {
-        if (self::where($where)->update($data))
-        {
-            return true;
-        }
-        
-        return false;
-    }
-    
-    //删除一条记录
-    public static function remove($id,$user_id)
-    {
-        if (!self::whereIn('id', explode(',', $id))->where('user_id',$user_id)->update(array('is_delete'=>1)))
-        {
-            return false;
-        }
-        
-        return true;
-    }
-    
-    //获取提现状态文字:0未处理,1处理中,2成功,3取消，4拒绝
-    public static function getStatusText($where)
-    {
-        $res = '';
-        if($where['status'] == 0)
-        {
-            $res = '未处理';
-        }
-        elseif($where['status'] == 1)
-        {
-            $res = '处理中';
-        }
-        elseif($where['status'] == 2)
-        {
-            $res = '成功';
-        }
-        elseif($where['status'] == 3)
-        {
-            $res = '取消';
-        }
-        elseif($where['status'] == 4)
-        {
-            $res = '拒绝';
-        }
-        
-        return $res;
-    } */
+     */
 }

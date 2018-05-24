@@ -91,9 +91,9 @@ class CollectGoodsLogic extends BaseLogic
         if($this->getModel()->getOne(array('user_id'=>$data['user_id'],'goods_id'=>$data['goods_id']))){return '亲，您已经收藏啦！';}
         
         $res = $this->getModel()->add($data,$type);
-        if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
+        if($res){return ReturnData::create(ReturnData::SUCCESS,$res);}
         
-        return ReturnData::create(ReturnData::SUCCESS,$res);
+        return ReturnData::create(ReturnData::FAIL);
     }
     
     //修改
@@ -105,9 +105,9 @@ class CollectGoodsLogic extends BaseLogic
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
         $res = $this->getModel()->edit($data,$where);
-        if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
+        if($res){return ReturnData::create(ReturnData::SUCCESS,$res);}
         
-        return ReturnData::create(ReturnData::SUCCESS,$res);
+        return ReturnData::create(ReturnData::FAIL);
     }
     
     //删除
@@ -121,9 +121,9 @@ class CollectGoodsLogic extends BaseLogic
         if(!$this->getModel()->getOne(array('user_id'=>$where['user_id'],'goods_id'=>$where['goods_id']))){return '商品未收藏';}
         
         $res = $this->getModel()->del($where);
-        if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
+        if($res){return ReturnData::create(ReturnData::SUCCESS,$res);}
         
-        return ReturnData::create(ReturnData::SUCCESS,$res);
+        return ReturnData::create(ReturnData::FAIL);
     }
     
     /**

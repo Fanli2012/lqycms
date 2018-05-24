@@ -1,12 +1,15 @@
 <?php
 namespace App\Http\Controllers\Api;
-
-use App\Http\Controllers\Api\CommonController;
+use Log;
+use DB;
 use Illuminate\Http\Request;
 use App\Common\ReturnData;
+use App\Common\Helper;
 use App\Common\Token;
 use App\Http\Model\UserMoney;
+use App\Http\Logic\UserMoneyLogic;
 
+//余额明细
 class UserMoneyController extends CommonController
 {
     public function __construct()
@@ -14,46 +17,80 @@ class UserMoneyController extends CommonController
         parent::__construct();
     }
     
-    //余额明细列表
+    public function getLogic()
+    {
+        return logic('UserMoney');
+    }
+    
     public function userMoneyList(Request $request)
 	{
         //参数
-        $data['limit'] = $request->input('limit', 10);
-        $data['offset'] = $request->input('offset', 0);
-        if($request->input('type', null) !== null){$data['type'] = $request->input('type');}
-        $data['user_id'] = Token::$uid;
+        $limit = $request->input('limit', 10);
+        $offset = $request->input('offset', 0);
+        if($request->input('type', null) != null){$data['type'] = $request->input('type');}
         
-        $res = UserMoney::getList($data);
+        $where['user_id'] = Token::$uid;
+        
+        $res = $this->getLogic()->getList($where, array('id', 'desc'), '*', $offset, $limit);
+		
+		return ReturnData::create(ReturnData::SUCCESS,$res);
+    }
+    
+    public function userMoneyDetail(Request $request)
+	{
+        //参数
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
+        $where['id'] = $id;
+        
+        $res = $this->getLogic()->getOne($where);
 		if(!$res)
 		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
+			return ReturnData::create(ReturnData::RECORD_NOT_EXIST);
 		}
         
 		return ReturnData::create(ReturnData::SUCCESS,$res);
     }
     
-    //添加余额明细
+    //添加
     public function userMoneyAdd(Request $request)
-	{
-        //参数
-        $data['type'] = $request->input('type',null);
-        $data['money'] = $request->input('money',null);
-        $data['des'] = $request->input('des',null);
-        if($request->input('user_money', null) !== null){$data['user_money'] = $request->input('user_money');}
-        $data['add_time'] = time();
-        $data['user_id'] = Token::$uid;
-        
-        if($data['type']===null || $data['money']===null || $data['des']===null)
-		{
-            return ReturnData::create(ReturnData::PARAMS_ERROR);
+    {
+        if(Helper::isPostRequest())
+        {
+            $_POST['user_id'] = Token::$uid;
+            
+            return $this->getLogic()->add($_POST);
         }
+    }
+    
+    //修改
+    public function userMoneyUpdate(Request $request)
+    {
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
         
-        $res = UserMoney::add($data);
-		if(!$res)
-		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
-		}
+        if(Helper::isPostRequest())
+        {
+            unset($_POST['id']);
+            $where['id'] = $id;
+            $where['user_id'] = Token::$uid;
+            
+            return $this->getLogic()->edit($_POST,$where);
+        }
+    }
+    
+    //删除
+    public function userMoneyDelete(Request $request)
+    {
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
         
-		return ReturnData::create(ReturnData::SUCCESS,$res);
+        if(Helper::isPostRequest())
+        {
+            $where['id'] = $id;
+            $where['user_id'] = Token::$uid;
+            
+            return $this->getLogic()->del($where);
+        }
     }
 }

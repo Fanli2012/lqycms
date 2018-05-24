@@ -1,11 +1,13 @@
 <?php
 namespace App\Http\Controllers\Api;
-
-use App\Http\Controllers\Api\CommonController;
+use Log;
+use DB;
 use Illuminate\Http\Request;
 use App\Common\ReturnData;
+use App\Common\Helper;
 use App\Common\Token;
 use App\Http\Model\UserRecharge;
+use App\Http\Logic\UserRechargeLogic;
 
 class UserRechargeController extends CommonController
 {
@@ -14,90 +16,79 @@ class UserRechargeController extends CommonController
         parent::__construct();
     }
     
-    //用户充值列表
+    public function getLogic()
+    {
+        return logic('UserRecharge');
+    }
+    
     public function userRechargeList(Request $request)
 	{
         //参数
-        $data['limit']  = $request->input('limit', 10);
-        $data['offset'] = $request->input('offset', 0);
-        $data['status'] = $request->input('status', -1);
+        $limit = $request->input('limit', 10);
+        $offset = $request->input('offset', 0);
+        if($request->input('status', null) != null && $request->input('status')!=-1){$where['status'] = $request->input('status');}
+        $where['user_id'] = Token::$uid;
         
-        $data['user_id'] = Token::$uid;
-        
-        $res = UserRecharge::getList($data);
-		if($res === false)
-		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
-		}
-        
+        $res = $this->getLogic()->getList($where, array('id', 'desc'), '*', $offset, $limit);
+		
 		return ReturnData::create(ReturnData::SUCCESS,$res);
     }
     
-    //获取一条用户充值
     public function userRechargeDetail(Request $request)
 	{
         //参数
-        $data['id']  = $request->input('id', '');
-        if($data['id']=='')
-		{
-            return ReturnData::create(ReturnData::PARAMS_ERROR);
-        }
-        $data['user_id'] = Token::$uid;
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
+        $where['id'] = $id;
         
-        $res = UserRecharge::getOne($data);
-		if($res === false)
+        $res = $this->getLogic()->getOne($where);
+		if(!$res)
 		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
+			return ReturnData::create(ReturnData::RECORD_NOT_EXIST);
 		}
         
 		return ReturnData::create(ReturnData::SUCCESS,$res);
     }
     
-    //添加充值记录
+    //添加
     public function userRechargeAdd(Request $request)
-	{
-        //参数
-        $data['money'] = $request->input('money','');
-        $data['status'] = UserRecharge::UN_PAY; //0未处理，1已完成
-        $data['pay_type'] = $request->input('pay_type',''); //充值类型：1微信，2支付宝
-        $data['user_id'] = Token::$uid;
-        $data['created_at'] = time();
-        
-        if($data['money']=='' || $data['pay_type']=='')
-		{
-            return ReturnData::create(ReturnData::PARAMS_ERROR);
+    {
+        if(Helper::isPostRequest())
+        {
+            $_POST['user_id'] = Token::$uid;
+            
+            return $this->getLogic()->add($_POST);
         }
-        
-        $res = UserRecharge::add($data);
-		if($res === false)
-		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
-		}
-        
-		return ReturnData::create(ReturnData::SUCCESS,$res);
     }
     
-    //修改充值记录
+    //修改
     public function userRechargeUpdate(Request $request)
-	{
-        //参数
-        $id = $request->input('id','');
-        $data['trade_no'] = $request->input('trade_no','');
-        $data['pay_time'] = $request->input('pay_time','');
-        $data['status'] = UserRecharge::COMPLETE_PAY;
-        $data['updated_at'] = time();
+    {
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
         
-        if($id=='' || $data['trade_no']=='' || $data['pay_time']=='')
-		{
-            return ReturnData::create(ReturnData::PARAMS_ERROR);
+        if(Helper::isPostRequest())
+        {
+            unset($_POST['id']);
+            $where['id'] = $id;
+            $where['user_id'] = Token::$uid;
+            
+            return $this->getLogic()->edit($_POST,$where);
         }
+    }
+    
+    //删除
+    public function userRechargeDelete(Request $request)
+    {
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
         
-        $res = UserRecharge::modify(array('id'=>$id,'user_id'=>Token::$uid),$data);
-		if($res === false)
-		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
-		}
-        
-		return ReturnData::create(ReturnData::SUCCESS);
+        if(Helper::isPostRequest())
+        {
+            $where['id'] = $id;
+            $where['user_id'] = Token::$uid;
+            
+            return $this->getLogic()->del($where);
+        }
     }
 }

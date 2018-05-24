@@ -572,7 +572,7 @@ class UserController extends CommonController
             'nickname' => $_SESSION['weixin_oauth']['userinfo']['nickname'],
             'sex' => $_SESSION['weixin_oauth']['userinfo']['sex'],
             'head_img' => $_SESSION['weixin_oauth']['userinfo']['headimgurl'],
-            'parent_id' => isset($_SESSION['weixin_user_invite_code']) ? $_SESSION['weixin_user_invite_code'] : '',
+            'parent_id' => isset($_SESSION['weixin_user_invite_code']) ? $_SESSION['weixin_user_invite_code'] : 0,
             'parent_mobile' => '',
             'mobile' => ''
         );

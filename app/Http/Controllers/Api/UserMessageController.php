@@ -1,11 +1,13 @@
 <?php
 namespace App\Http\Controllers\Api;
-
-use App\Http\Controllers\Api\CommonController;
+use Log;
+use DB;
 use Illuminate\Http\Request;
 use App\Common\ReturnData;
+use App\Common\Helper;
 use App\Common\Token;
 use App\Http\Model\UserMessage;
+use App\Http\Logic\UserMessageLogic;
 
 class UserMessageController extends CommonController
 {
@@ -14,69 +16,81 @@ class UserMessageController extends CommonController
         parent::__construct();
     }
     
-    //用户消息列表
+    public function getLogic()
+    {
+        return logic('UserMessage');
+    }
+    
     public function userMessageList(Request $request)
 	{
         //参数
-        $data['limit'] = $request->input('limit', 10);
-        $data['offset'] = $request->input('offset', 0);
-        if($request->input('type', '') != ''){$data['type'] = $request->input('type');}
-        if($request->input('status', '') != ''){$data['status'] = $request->input('status');}
-        $data['user_id'] = Token::$uid;
+        $limit = $request->input('limit', 10);
+        $offset = $request->input('offset', 0);
+        if($request->input('type', null) != null){$where['type'] = $request->input('type');}
+        if($request->input('status', null) != null){$where['status'] = $request->input('status');}
         
-        $res = UserMessage::getList($data);
-		if(!$res)
-		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
-		}
-        
-		return ReturnData::create(ReturnData::SUCCESS,$res);
-    }
-    
-    //添加用户消息
-    public function userMessageAdd(Request $request)
-	{
-        //参数
-        $data['des'] = $request->input('des','');
-        if($request->input('type', '') != ''){$data['type'] = $request->input('type');}
-        if($request->input('title', '') != ''){$data['title'] = $request->input('title');}
-        if($request->input('litpic', '') != ''){$data['litpic'] = $request->input('litpic');}
-        $data['add_time'] = time();
-        $data['user_id'] = Token::$uid;
-        
-        if($data['des']=='')
-		{
-            return ReturnData::create(ReturnData::PARAMS_ERROR);
-        }
-        
-        $res = UserMessage::add($data);
-		if(!$res)
-		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
-		}
-        
-		return ReturnData::create(ReturnData::SUCCESS,$res);
-    }
-    
-    //修改用户消息
-    public function userMessageUpdate(Request $request)
-	{
-        //参数
-        if($request->input('des', '') != ''){$data['des'] = $request->input('des');}
-        if($request->input('type', '') != ''){$data['type'] = $request->input('type');}
-        if($request->input('title', '') != ''){$data['title'] = $request->input('title');}
-        if($request->input('litpic', '') != ''){$data['litpic'] = $request->input('litpic');}
-        if($request->input('status', '') != ''){$data['status'] = $request->input('status');}
-        
-        $where['id'] = $request->input('id');
         $where['user_id'] = Token::$uid;
         
-        $res = UserMessage::modify($where,$data);
-		if($res === false)
+        $res = $this->getLogic()->getList($where, array('id', 'desc'), '*', $offset, $limit);
+		
+		return ReturnData::create(ReturnData::SUCCESS,$res);
+    }
+    
+    public function userMessageDetail(Request $request)
+	{
+        //参数
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
+        $where['id'] = $id;
+        
+        $res = $this->getLogic()->getOne($where);
+		if(!$res)
 		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
+			return ReturnData::create(ReturnData::RECORD_NOT_EXIST);
 		}
         
 		return ReturnData::create(ReturnData::SUCCESS,$res);
+    }
+    
+    //添加
+    public function userMessageAdd(Request $request)
+    {
+        if(Helper::isPostRequest())
+        {
+            $_POST['user_id'] = Token::$uid;
+            
+            return $this->getLogic()->add($_POST);
+        }
+    }
+    
+    //修改
+    public function userMessageUpdate(Request $request)
+    {
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
+        
+        if(Helper::isPostRequest())
+        {
+            unset($_POST['id']);
+            $where['id'] = $id;
+            $where['user_id'] = Token::$uid;
+            
+            return $this->getLogic()->edit($_POST,$where);
+        }
+    }
+    
+    //删除
+    public function userMessageDelete(Request $request)
+    {
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
+        
+        if(Helper::isPostRequest())
+        {
+            $where['id'] = $id;
+            $where['user_id'] = Token::$uid;
+            
+            return $this->getLogic()->del($where);
+        }
     }
 }

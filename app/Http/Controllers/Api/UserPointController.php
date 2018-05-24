@@ -1,11 +1,13 @@
 <?php
 namespace App\Http\Controllers\Api;
-
-use App\Http\Controllers\Api\CommonController;
+use Log;
+use DB;
 use Illuminate\Http\Request;
 use App\Common\ReturnData;
+use App\Common\Helper;
 use App\Common\Token;
 use App\Http\Model\UserPoint;
+use App\Http\Logic\UserPointLogic;
 
 class UserPointController extends CommonController
 {
@@ -14,45 +16,80 @@ class UserPointController extends CommonController
         parent::__construct();
     }
     
+    public function getLogic()
+    {
+        return logic('UserPoint');
+    }
+    
     public function userPointList(Request $request)
 	{
         //参数
-        $data['limit'] = $request->input('limit', 10);
-        $data['offset'] = $request->input('offset', 0);
-        if($request->input('type', null) !== null){$data['type'] = $request->input('type');};
-        $data['user_id'] = Token::$uid;
+        $limit = $request->input('limit', 10);
+        $offset = $request->input('offset', 0);
+        if($request->input('type', null) != null){$data['type'] = $request->input('type');}
         
-        $res = UserPoint::getList($data);
+        $where['user_id'] = Token::$uid;
+        
+        $res = $this->getLogic()->getList($where, array('id', 'desc'), '*', $offset, $limit);
+		
+		return ReturnData::create(ReturnData::SUCCESS,$res);
+    }
+    
+    public function userPointDetail(Request $request)
+	{
+        //参数
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
+        $where['id'] = $id;
+        
+        $res = $this->getLogic()->getOne($where);
 		if(!$res)
 		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
+			return ReturnData::create(ReturnData::RECORD_NOT_EXIST);
 		}
         
 		return ReturnData::create(ReturnData::SUCCESS,$res);
     }
     
-    //添加积分明细
+    //添加
     public function userPointAdd(Request $request)
-	{
-        //参数
-        $data['type'] = $request->input('type',null);
-        $data['point'] = $request->input('point',null);
-        $data['des'] = $request->input('des',null);
-        if($request->input('user_point', null) !== null){$data['user_point'] = $request->input('user_point');}
-        $data['add_time'] = time();
-        $data['user_id'] = Token::$uid;
-        
-        if($data['type']===null || $data['point']===null || $data['des']===null)
-		{
-            return ReturnData::create(ReturnData::PARAMS_ERROR);
+    {
+        if(Helper::isPostRequest())
+        {
+            $_POST['user_id'] = Token::$uid;
+            
+            return $this->getLogic()->add($_POST);
         }
+    }
+    
+    //修改
+    public function userPointUpdate(Request $request)
+    {
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
         
-        $res = UserPoint::add($data);
-		if(!$res)
-		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
-		}
+        if(Helper::isPostRequest())
+        {
+            unset($_POST['id']);
+            $where['id'] = $id;
+            $where['user_id'] = Token::$uid;
+            
+            return $this->getLogic()->edit($_POST,$where);
+        }
+    }
+    
+    //删除
+    public function userPointDelete(Request $request)
+    {
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
         
-		return ReturnData::create(ReturnData::SUCCESS,$res);
+        if(Helper::isPostRequest())
+        {
+            $where['id'] = $id;
+            $where['user_id'] = Token::$uid;
+            
+            return $this->getLogic()->del($where);
+        }
     }
 }

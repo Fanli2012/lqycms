@@ -161,7 +161,7 @@ class CartLogic extends BaseLogic
         
         if(isset($cart_id) && $cart_id){return ReturnData::create(ReturnData::SUCCESS,$cart_id,'购物车添加成功');}
         
-        return ReturnData::create(ReturnData::PARAMS_ERROR,null,'系统错误');
+        return ReturnData::create(ReturnData::SYSTEM_FAIL);
     }
     
     //修改
@@ -173,9 +173,9 @@ class CartLogic extends BaseLogic
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
         $res = $this->getModel()->edit($data,$where);
-        if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
+        if($res){return ReturnData::create(ReturnData::SUCCESS,$res);}
         
-        return ReturnData::create(ReturnData::SUCCESS,$res);
+        return ReturnData::create(ReturnData::FAIL);
     }
     
     //删除
@@ -184,9 +184,9 @@ class CartLogic extends BaseLogic
         if(empty($where)){return ReturnData::create(ReturnData::PARAMS_ERROR);}
         
         $res = $this->getModel()->del($where);
-        if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
+        if($res){return ReturnData::create(ReturnData::SUCCESS,$res);}
         
-        return ReturnData::create(ReturnData::SUCCESS,$res);
+        return ReturnData::create(ReturnData::FAIL);
     }
     
     /**

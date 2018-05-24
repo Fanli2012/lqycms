@@ -1,6 +1,8 @@
 <?php
 namespace App\Http\Logic;
+use DB;
 use App\Common\ReturnData;
+use App\Http\Model\UserMoney;
 use App\Http\Model\UserWithdraw;
 use App\Http\Requests\UserWithdrawRequest;
 use Validator;
@@ -83,10 +85,37 @@ class UserWithdrawLogic extends BaseLogic
         $validator = $this->getValidate($data, 'add');
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
-        $res = $this->getModel()->add($data,$type);
-        if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
+        if(isset($data['pay_password']) && !empty($data['pay_password'])){}else{return ReturnData::create(ReturnData::PARAMS_ERROR,null,'请输入支付密码');}
         
-        return ReturnData::create(ReturnData::SUCCESS,$res);
+        $user = model('User')->getOne(array('id'=>$data['user_id'],'pay_password'=>$data['pay_password']));
+        if(!$user){return ReturnData::create(ReturnData::PARAMS_ERROR,null,'支付密码错误');}
+        unset($data['pay_password']);
+        
+        $min_withdraw_money = sysconfig('CMS_MIN_WITHDRAWAL_MONEY'); //最低可提现金额
+        if($user->money<$data['money']){return ReturnData::create(ReturnData::PARAMS_ERROR,null,'余额不足');}
+        if($user->money<$min_withdraw_money){return ReturnData::create(ReturnData::PARAMS_ERROR,null,'用户金额小于最小提现金额');}
+        if($data['money']<$min_withdraw_money){return ReturnData::create(ReturnData::PARAMS_ERROR,null,'提现金额不得小于最小提现金额');}
+        
+        DB::beginTransaction();
+        
+        $data['add_time'] = time();
+        $res = $this->getModel()->add($data,$type);
+        if($res)
+        {
+            //添加用户余额记录并扣除用户余额
+            $user_money_data['user_id'] = $data['user_id'];
+            $user_money_data['type'] = UserMoney::USER_MONEY_DECREMENT;
+            $user_money_data['money'] = $data['money'];
+            $user_money_data['des'] = UserWithdraw::USER_WITHDRAW_DES;
+            $user_money = logic('UserMoney')->add($user_money_data);
+            if($user_money['code'] != ReturnData::SUCCESS){DB::rollBack();return false;}
+            
+            DB::commit();
+            return ReturnData::create(ReturnData::SUCCESS,$res);
+        }
+        
+        DB::rollBack();
+        return ReturnData::create(ReturnData::FAIL);
     }
     
     //修改
@@ -98,9 +127,9 @@ class UserWithdrawLogic extends BaseLogic
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
         $res = $this->getModel()->edit($data,$where);
-        if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
+        if($res){return ReturnData::create(ReturnData::SUCCESS,$res);}
         
-        return ReturnData::create(ReturnData::SUCCESS,$res);
+        return ReturnData::create(ReturnData::FAIL);
     }
     
     //删除
@@ -111,10 +140,10 @@ class UserWithdrawLogic extends BaseLogic
         $validator = $this->getValidate($where,'del');
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
-        $res = $this->getModel()->del($where);
-        if($res === false){return ReturnData::create(ReturnData::SYSTEM_FAIL);}
+        $res = $this->getModel()->edit(['delete_time'=>time()],$where);
+        if($res){return ReturnData::create(ReturnData::SUCCESS,$res);}
         
-        return ReturnData::create(ReturnData::SUCCESS,$res);
+        return ReturnData::create(ReturnData::FAIL);
     }
     
     /**
@@ -125,5 +154,42 @@ class UserWithdrawLogic extends BaseLogic
     private function getDataView($data = array())
     {
         return getDataAttr($this->getModel(),$data);
+    }
+    
+    /**
+     * 取消/拒绝提现
+     * @param int $where['id'] 提现id
+     * @param int $data['status'] status=3取消或status=4拒绝
+     * @param string $data['re_note'] 理由，选填
+     * @return array
+     */
+    public function userWithdrawSuccessConfirm($data, $where)
+    {
+        if(empty($where) || empty($data)){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        if($data['status']!=3 || $data['status']!=4){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        
+        $user_withdraw = $this->getModel()->getOne($where);
+        if(!$user_withdraw){return false;}
+        
+        DB::beginTransaction();
+        
+        $data['updated_at'] = time();
+        $res = $this->getModel()->edit($data,$where);
+        if($res)
+        {
+            //添加用户余额记录并增加用户余额
+            $user_money_data['user_id'] = $user_withdraw->user_id;
+            $user_money_data['type'] = UserMoney::USER_MONEY_INCREMENT;
+            $user_money_data['money'] = $user_withdraw->money;
+            $user_money_data['des'] = '提现退回';
+            $user_money = logic('UserMoney')->add($user_money_data);
+            if($user_money['code'] != ReturnData::SUCCESS){DB::rollBack();return false;}
+            
+            DB::commit();
+            return true;
+        }
+        
+        DB::rollBack();
+        return false;
     }
 }
