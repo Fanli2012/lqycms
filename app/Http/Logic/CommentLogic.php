@@ -83,6 +83,9 @@ class CommentLogic extends BaseLogic
         $validator = $this->getValidate($data, 'add');
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
+        $comment = $this->getModel()->getOne(['comment_type'=>$data['comment_type'],'id_value'=>$data['id_value'],'user_id'=>$data['user_id']]);
+        if($comment){return ReturnData::create(ReturnData::FAIL,null,'您已经评论过了');}
+        
         $res = $this->getModel()->add($data,$type);
         if($res){return ReturnData::create(ReturnData::SUCCESS,$res);}
         
@@ -125,5 +128,21 @@ class CommentLogic extends BaseLogic
     private function getDataView($data = array())
     {
         return getDataAttr($this->getModel(),$data);
+    }
+    
+    //批量添加
+    public function batchAdd(array $data)
+    {
+        if(empty($data)){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        
+        DB::beginTransaction();
+        foreach($data as $k=>$v)
+        {
+            $res = $this->add($v);
+            if($res['code'] == ReturnData::SUCCESS){}else{DB::rollBack();return $res;}
+        }
+        
+        DB::commit();
+        return ReturnData::create(ReturnData::SUCCESS);
     }
 }
