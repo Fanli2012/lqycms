@@ -38,6 +38,7 @@ class GoodsLogic extends BaseLogic
                 
                 $res['list'][$k]->price = $this->getModel()->get_goods_final_price($v);
                 $res['list'][$k]->is_promote_goods = $this->getModel()->bargain_price($v->promote_price,$v->promote_start_date,$v->promote_end_date); //is_promote_goods等于0，说明不是促销商品
+                $res['list'][$k]->goods_detail_url = route('weixin_goods_detail',array('id'=>$v->id));
             }
         }
         
@@ -65,6 +66,7 @@ class GoodsLogic extends BaseLogic
                 
                 $res['list'][$k]->price = $this->getModel()->get_goods_final_price($v); //商品最终价格
                 $res['list'][$k]->is_promote_goods = $this->getModel()->bargain_price($v->promote_price,$v->promote_start_date,$v->promote_end_date); //is_promote_goods等于0，说明不是促销商品
+                $res['list'][$k]->goods_detail_url = route('weixin_goods_detail',array('id'=>$v->id));
             }
         }
         
@@ -80,7 +82,9 @@ class GoodsLogic extends BaseLogic
         $res = $this->getDataView($res);
         $res->price = $this->getModel()->get_goods_final_price($res); //商品最终价格
         $res->is_promote_goods = $this->getModel()->bargain_price($res->promote_price,$res->promote_start_date,$res->promote_end_date); //is_promote_goods等于0，说明不是促销商品
-		
+		$res->goods_detail_url = route('weixin_goods_detail',array('id'=>$res->id));
+        $res->goods_img_list = model('GoodsImg')->getDb()->where(['goods_id'=>$res->id])->get();
+        
         //商品评论数
         $where2['comment_type'] = Comment::GOODS_COMMENT_TYPE;
         $where2['status'] = Comment::SHOW_COMMENT;

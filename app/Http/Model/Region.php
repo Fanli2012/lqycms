@@ -170,10 +170,10 @@ class Region extends BaseModel
     }
     
     //根据id获取地区中文名称
-    public static function getRegionName($id)
+    public function getRegionName($where)
     {
-        if(empty($id) || $id==0){return '';}
+        if(empty($where)){return '';}
         
-        return self::where('id', $id)->value('name');
+        return $this->getDb()->where($where)->value('name');
     }
 }

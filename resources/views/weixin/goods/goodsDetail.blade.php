@@ -19,7 +19,7 @@
     <!-- Swiper -->
     <div class="swiper-container">
         <div class="swiper-wrapper">
-            <div class="swiper-slide"><img src="<?php echo $post['goods_img']; ?>" alt=""></div>
+            <?php if($post['goods_img_list']){foreach($post['goods_img_list'] as $k=>$v){ ?><div class="swiper-slide"><img src="<?php echo $v['url']; ?>" alt="<?php echo $v['des']; ?>"></div><?php }} ?>
         </div>
         <!-- Add Pagination -->
         <div class="swiper-pagination swiper-pagination-white"></div>

@@ -42,7 +42,7 @@ class GoodsController extends CommonController
             
             if($request->input('keyword', null) != null)
 			{
-				$query->where('title', 'like', '%'.$request->input('keyword').'%')->orWhere('sn', 'like', '%'.$request->input('keyword').'%');
+				$query->where(function ($query2) use ($request) {$query2->where('title', 'like', '%'.$request->input('keyword').'%')->orWhere('sn', 'like', '%'.$request->input('keyword').'%');});
 			}
             
             //价格区间搜索
@@ -64,12 +64,14 @@ class GoodsController extends CommonController
             }
         };
         
+        //var_dump(model('Goods')->where($where)->toSql());exit;
+        
         //关键词搜索
         if($request->input('keyword', null) != null)
         {
             //添加搜索关键词
             $goodssearchword = new GoodsSearchwordLogic();
-            $goodssearchword->add(array('name'=>$keyword));
+            $goodssearchword->add(array('name'=>$request->input('keyword')));
         }
         
         //排序

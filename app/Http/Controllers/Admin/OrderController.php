@@ -23,8 +23,8 @@ class OrderController extends CommonController
 		$where = function ($query) use ($res) {
 			if(isset($_REQUEST["keyword"]))
 			{
-				$query->where('order_sn', 'like', '%'.$_REQUEST['keyword'].'%')->orWhere("name", "like", '%'.$_REQUEST['keyword'].'%')->orWhere("mobile", "like", '%'.$_REQUEST['keyword'].'%');
-			}
+                $query->where(function ($query2){$query2->where('order_sn', 'like', '%'.$_REQUEST['keyword'].'%')->orWhere("name", "like", '%'.$_REQUEST['keyword'].'%')->orWhere("mobile", "like", '%'.$_REQUEST['keyword'].'%');});
+            }
             
             if(isset($_REQUEST["mobile"]))
 			{
@@ -76,9 +76,9 @@ class OrderController extends CommonController
             $posts[$key]->order_status_text = $order_status_arr?$order_status_arr['text']:'';
             $posts[$key]->order_status_num = $order_status_arr?$order_status_arr['num']:'';
             
-            $posts[$key]->province_name = Region::getRegionName($value->province);
-            $posts[$key]->city_name = Region::getRegionName($value->city);
-            $posts[$key]->district_name = Region::getRegionName($value->district);
+            $posts[$key]->province_name = model('Region')->getRegionName(['id'=>$value->province]);
+            $posts[$key]->city_name = model('Region')->getRegionName(['id'=>$value->city]);
+            $posts[$key]->district_name = model('Region')->getRegionName(['id'=>$value->district]);
         }
 		
         $data['posts'] = $posts;

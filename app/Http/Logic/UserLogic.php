@@ -228,6 +228,4 @@ class UserLogic extends BaseLogic
         
         return ReturnData::create(ReturnData::SUCCESS,$token, '注册成功');
     }
-    
-    
 }

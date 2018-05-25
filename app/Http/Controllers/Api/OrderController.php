@@ -1,12 +1,13 @@
 <?php
 namespace App\Http\Controllers\Api;
-
-use App\Http\Controllers\Api\CommonController;
+use Log;
+use DB;
 use Illuminate\Http\Request;
 use App\Common\ReturnData;
+use App\Common\Helper;
 use App\Common\Token;
 use App\Http\Model\Order;
-use DB;
+use App\Http\Logic\OrderLogic;
 
 class OrderController extends CommonController
 {
@@ -15,43 +16,76 @@ class OrderController extends CommonController
         parent::__construct();
     }
     
-    //订单列表
+    public function getLogic()
+    {
+        return logic('Order');
+    }
+    
     public function orderList(Request $request)
 	{
         //参数
-        $data['limit'] = $request->input('limit', 10);
-        $data['offset'] = $request->input('offset', 0);
+        $limit = $request->input('limit', 10);
+        $offset = $request->input('offset', 0);
         
-        $data['user_id'] = Token::$uid;
-        $data['status'] = $request->input('status',-1);
-        
-        return Order::getList($data);
+        $where = function ($query) use ($request) {
+            $query->where('user_id', Token::$uid)->where('is_delete', 0);
+            
+            $status = $request->input('status',null);
+            if($status!=null && $status!=0)
+            {
+                //0或者不传表示全部，1待付款，2待发货,3待收货,4待评价(确认收货，交易成功),5退款/售后
+                if($status == 1)
+                {
+                    $query->where('order_status', 0)->where('pay_status', 0);
+                }
+                elseif($status == 2)
+                {
+                    $query->where('order_status', 0)->where('shipping_status', 0)->where('pay_status', 1);
+                }
+                elseif($status == 3)
+                {
+                    $query->where('order_status', 0)->where('shipping_status', 1)->where('pay_status', 1)->where('refund_status', 0);
+                }
+                elseif($status == 4)
+                {
+                    $query->where('order_status', 3)->where('shipping_status', 2)->where('is_comment', 0)->where('refund_status', 0);
+                }
+                elseif($status == 5)
+                {
+                    $query->where('order_status', 3)->where('refund_status', '<>', 0);
+                }
+            }
+        };
+        //var_dump(model('Order')->where($where)->toSql());exit;
+        $res = $this->getLogic()->getList($where, array('id', 'desc'), '*', $offset, $limit);
+		
+		return ReturnData::create(ReturnData::SUCCESS,$res);
     }
     
-    //订单详情
     public function orderDetail(Request $request)
 	{
         //参数
-        $data['user_id'] = Token::$uid;
-        $data['order_id'] = $request->input('order_id','');
-        if($request->input('order_status','') != ''){$data['order_status'] = $request->input('order_status');}
-        if($request->input('pay_status','') != ''){$data['pay_status'] = $request->input('pay_status');}
-        if($request->input('refund_status','') != ''){$data['refund_status'] = $request->input('refund_status');}
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
+        $where['id'] = $id;
+        $where['user_id'] = Token::$uid;
+        if($request->input('order_status','') != ''){$where['order_status'] = $request->input('order_status');}
+        if($request->input('pay_status','') != ''){$where['pay_status'] = $request->input('pay_status');}
+        if($request->input('refund_status','') != ''){$where['refund_status'] = $request->input('refund_status');}
         
-        if($data['order_id']=='')
+        $res = $this->getLogic()->getOne($where);
+		if(!$res)
 		{
-            return ReturnData::create(ReturnData::PARAMS_ERROR);
-        }
+			return ReturnData::create(ReturnData::RECORD_NOT_EXIST);
+		}
         
-        return Order::getOne($data);
+		return ReturnData::create(ReturnData::SUCCESS,$res);
     }
     
-    //生成订单
+    //添加
     public function orderAdd(Request $request)
-	{
-        //参数
+    {
         $data['default_address_id'] = $request->input('default_address_id','');
-        //$data['payid'] = $request->input('payid','');
         $data['user_bonus_id'] = $request->input('user_bonus_id','');
         $data['shipping_costs'] = $request->input('shipping_costs','');
         $data['message'] = $request->input('message','');
@@ -60,52 +94,48 @@ class OrderController extends CommonController
         
         //获取商品列表
         $data['cartids'] = $request->input('cartids','');
-        
         if($data['cartids']=='')
 		{
             return ReturnData::create(ReturnData::PARAMS_ERROR);
         }
         
-		return Order::add($data);
+        if(Helper::isPostRequest())
+        {
+            $data['user_id'] = Token::$uid;
+            
+            return $this->getLogic()->add($data);
+        }
     }
     
-    //订单修改
+    //修改
     public function orderUpdate(Request $request)
-	{
-		if($request->input('id', '')!=''){$where['id'] = $request->input('id');}
-        if($request->input('order_sn', '')!=''){$where['order_sn'] = $request->input('order_sn');}
+    {
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
         
-        if($request->input('order_amount', '')!=''){$data['order_amount'] = $request->input('order_amount');}
-        if($request->input('out_trade_no', '')!=''){$data['out_trade_no'] = $request->input('out_trade_no');}
-        if($request->input('shipping_name', '')!=''){$data['shipping_name'] = $request->input('shipping_name');}
-        if($request->input('shipping_id', '')!=''){$data['shipping_id'] = $request->input('shipping_id');}
-        if($request->input('shipping_sn', '')!=''){$data['shipping_sn'] = $request->input('shipping_sn');}
-        if($request->input('shipping_fee', '')!=''){$data['shipping_fee'] = $request->input('shipping_fee');}
-        if($request->input('shipping_time', '')!=''){$data['shipping_time'] = $request->input('shipping_time');}
-        if($request->input('name', '')!=''){$data['name'] = $request->input('name');}
-        if($request->input('province', '')!=''){$data['province'] = $request->input('province');}
-        if($request->input('city', '')!=''){$data['city'] = $request->input('city');}
-        if($request->input('district', '')!=''){$data['district'] = $request->input('district');}
-        if($request->input('address', '')!=''){$data['address'] = $request->input('address');}
-        if($request->input('zipcode', '')!=''){$data['zipcode'] = $request->input('zipcode');}
-        if($request->input('mobile', '')!=''){$data['mobile'] = $request->input('mobile');}
-        if($request->input('message', '')!=''){$data['message'] = $request->input('message');}
-        if($request->input('is_comment', '')!=''){$data['is_comment'] = $request->input('is_comment');}
-        if($request->input('is_delete', '')!=''){$data['is_delete'] = $request->input('is_delete');}
-        if($request->input('to_buyer', '')!=''){$data['to_buyer'] = $request->input('to_buyer');}
-        if($request->input('invoice', '')!=''){$data['invoice'] = $request->input('invoice');}
-        if($request->input('invoice_title', '')!=''){$data['invoice_title'] = $request->input('invoice_title');}
-        if($request->input('invoice_taxpayer_number', '')!=''){$data['invoice_taxpayer_number'] = $request->input('invoice_taxpayer_number');}
-        
-        if(!isset($where)){return ReturnData::create(ReturnData::PARAMS_ERROR);}
-        
-        if (isset($data))
-		{
+        if(Helper::isPostRequest())
+        {
+            unset($_POST['id']);
+            $where['id'] = $id;
             $where['user_id'] = Token::$uid;
-			Order::modify($where,$data);
+            
+            return $this->getLogic()->edit($_POST,$where);
         }
-		
-		return ReturnData::create(ReturnData::SUCCESS);
+    }
+    
+    //删除
+    public function orderDelete(Request $request)
+    {
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
+        
+        if(Helper::isPostRequest())
+        {
+            $where['id'] = $id;
+            $where['user_id'] = Token::$uid;
+            
+            return $this->getLogic()->del($where);
+        }
     }
     
     //订单状态修改
@@ -126,7 +156,7 @@ class OrderController extends CommonController
             //判断订单是否存在或本人
             $where['order_status'] = 0;
             $where['pay_status'] = 0;
-            $order = Order::where($where)->first();
+            $order = model('Order')->getOne($where);
             if(!$order){return ReturnData::create(ReturnData::PARAMS_ERROR,null,'订单不存在');}
             
             //判断用户余额是否足够
@@ -208,19 +238,6 @@ class OrderController extends CommonController
         }
 		
 		return ReturnData::create(ReturnData::SUCCESS);
-    }
-    
-    //删除订单
-    public function orderDelete(Request $request)
-	{
-        $id = $request->input('id','');
-        
-        if($id=='')
-		{
-            return ReturnData::create(ReturnData::PARAMS_ERROR);
-        }
-        
-        return Order::remove($id,Token::$uid);
     }
     
     //商城支付宝app支付

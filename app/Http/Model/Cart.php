@@ -190,6 +190,14 @@ class Cart extends BaseModel
      */
     public function TotalGoodsCount($where)
     {
-        return self::where($where)->sum('goods_number');
+        return $this->getDb()->where($where)->sum('goods_number');
+    }
+    
+    /**
+     * 打印sql
+     */
+    public function toSql($where)
+    {
+        return $this->getDb()->where($where)->toSql();
     }
 }

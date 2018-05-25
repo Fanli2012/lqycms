@@ -192,4 +192,12 @@ class User extends BaseModel
         $arr = [1 => '正常', 2 => '删除', 3 => '锁定'];
         return $arr[$data->status];
     }
+    
+    /**
+     * 打印sql
+     */
+    public function toSql($where)
+    {
+        return $this->getDb()->where($where)->toSql();
+    }
 }

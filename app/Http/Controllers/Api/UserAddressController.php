@@ -1,12 +1,13 @@
 <?php
 namespace App\Http\Controllers\Api;
-
-use App\Http\Controllers\Api\CommonController;
+use Log;
+use DB;
 use Illuminate\Http\Request;
 use App\Common\ReturnData;
+use App\Common\Helper;
 use App\Common\Token;
-
 use App\Http\Model\UserAddress;
+use App\Http\Logic\UserAddressLogic;
 
 class UserAddressController extends CommonController
 {
@@ -15,136 +16,109 @@ class UserAddressController extends CommonController
         parent::__construct();
     }
 	
-    //用户收货地址列表
+    public function getLogic()
+    {
+        return logic('UserAddress');
+    }
+    
     public function userAddressList(Request $request)
 	{
         //参数
-        $data['limit'] = $request->input('limit', 10);
-        $data['offset'] = $request->input('offset', 0);
-        $data['user_id'] = Token::$uid;
+        $limit = $request->input('limit', 10);
+        $offset = $request->input('offset', 0);
         
-        $res = UserAddress::getList($data);
+        $where['user_id'] = Token::$uid;
         
+        $res = $this->getLogic()->getList($where, array('id', 'desc'), '*', $offset, $limit);
+		
+		return ReturnData::create(ReturnData::SUCCESS,$res);
+    }
+    
+    public function userAddressDetail(Request $request)
+	{
+        //参数
+        if($request->input('id',null) != null){$where['id'] = $request->input('id');}
+        $where['user_id'] = Token::$uid;
+        
+        $res = $this->getLogic()->getOne($where);
 		if(!$res)
 		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
+			return ReturnData::create(ReturnData::RECORD_NOT_EXIST);
 		}
         
 		return ReturnData::create(ReturnData::SUCCESS,$res);
     }
     
-    //用户收货地址详情
-    public function userAddressDetail(Request $request)
-	{
-        //参数
-        $id = $request->input('id',null);
+    //添加
+    public function userAddressAdd(Request $request)
+    {
+        if(Helper::isPostRequest())
+        {
+            $_POST['user_id'] = Token::$uid;
+            
+            return $this->getLogic()->add($_POST);
+        }
+    }
+    
+    //修改
+    public function userAddressUpdate(Request $request)
+    {
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
         
-        $res = UserAddress::getOne(Token::$uid,$id);
-		if($res === false)
-		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
-		}
+        if(Helper::isPostRequest())
+        {
+            unset($_POST['id']);
+            $where['id'] = $id;
+            $where['user_id'] = Token::$uid;
+            
+            return $this->getLogic()->edit($_POST,$where);
+        }
+    }
+    
+    //删除
+    public function userAddressDelete(Request $request)
+    {
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
         
-		return ReturnData::create(ReturnData::SUCCESS,$res);
+        if(Helper::isPostRequest())
+        {
+            $where['id'] = $id;
+            $where['user_id'] = Token::$uid;
+            
+            return $this->getLogic()->del($where);
+        }
     }
     
     //设为默认地址
     public function userAddressSetDefault(Request $request)
 	{
         //参数
-        $id = $request->input('id',null);
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
         
-        $res = UserAddress::setDefault($id,Token::$uid);
-		if(!$res)
+        $where['id'] = $id;
+        $where['user_id'] = Token::$uid;
+        $res = $this->getLogic()->setDefault($where);
+		if($res)
 		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
+			return ReturnData::create(ReturnData::SUCCESS,$res);
 		}
         
-		return ReturnData::create(ReturnData::SUCCESS,$res);
-    }
-    
-    //添加收货地址
-    public function userAddressAdd(Request $request)
-	{
-        //参数
-        $data['user_id'] = Token::$uid;
-        $data['name'] = $request->input('name',null);
-        $data['mobile'] = $request->input('mobile',null);
-        $data['province'] = $request->input('province',null);
-        $data['city'] = $request->input('city',null);
-        $data['district'] = $request->input('district',null);
-        $data['address'] = $request->input('address',null);
-        if($request->input('country',null)!==null){$data['country'] = $request->input('country');}
-        if($request->input('telphone',null)!==null){$data['telphone'] = $request->input('telphone');}
-        if($request->input('zipcode',null)!==null){$data['zipcode'] = $request->input('zipcode');}
-        if($request->input('is_default',null)!==null){$data['is_default'] = $request->input('is_default');}
-        
-        if($data['name']===null || $data['mobile']===null || $data['address']===null || $data['province']===null || $data['city']===null || $data['district']===null)
-		{
-            return ReturnData::create(ReturnData::PARAMS_ERROR);
-        }
-        
-        return UserAddress::add($data);
-    }
-    
-    //修改收货地址
-    public function userAddressUpdate(Request $request)
-	{
-        //参数
-        $data['user_id'] = Token::$uid;
-        $data['id'] = $request->input('id',null);
-        $data['name'] = $request->input('name',null);
-        $data['mobile'] = $request->input('mobile',null);
-        $data['province'] = $request->input('province',null);
-        $data['city'] = $request->input('city',null);
-        $data['district'] = $request->input('district',null);
-        $data['address'] = $request->input('address',null);
-        if($request->input('country',null)!==null){$data['country'] = $request->input('country');}
-        if($request->input('is_default',null)!==null){$data['is_default'] = $request->input('is_default');}
-        
-        if($data['id']===null || $data['name']===null || $data['mobile']===null || $data['address']===null || $data['province']===null || $data['city']===null || $data['district']===null)
-		{
-            return ReturnData::create(ReturnData::PARAMS_ERROR);
-        }
-        
-        $res = UserAddress::modify($data);
-		if(!$res)
-		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
-		}
-        
-		return ReturnData::create(ReturnData::SUCCESS,$res);
-    }
-    
-    //删除收货地址
-    public function userAddressDelete(Request $request)
-	{
-        //参数
-        $id = $request->input('id','');
-        
-        if($id == '')
-		{
-            return ReturnData::create(ReturnData::PARAMS_ERROR);
-        }
-        
-        $res = UserAddress::remove($id,Token::$uid);
-		if(!$res)
-		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
-		}
-        
-		return ReturnData::create(ReturnData::SUCCESS,$res);
+		return ReturnData::create(ReturnData::FAIL);
     }
     
     //获取用户默认地址
     public function userDefaultAddress(Request $request)
 	{
-        $res = UserAddress::userDefaultAddress(Token::$uid);
-		if(!$res)
+        $where['user_id'] = Token::$uid;
+        $res = $this->getLogic()->userDefaultAddress($where);
+		if($res)
 		{
-			return ReturnData::create(ReturnData::SYSTEM_FAIL);
+			return ReturnData::create(ReturnData::SUCCESS,$res);
 		}
         
-		return ReturnData::create(ReturnData::SUCCESS,$res);
+		return ReturnData::create(ReturnData::FAIL);
     }
 }

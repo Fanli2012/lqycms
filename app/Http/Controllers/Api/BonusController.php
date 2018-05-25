@@ -29,12 +29,9 @@ class BonusController extends CommonController
         $limit = $request->input('limit', 10);
         $offset = $request->input('offset', 0);
         $where = function ($query) use ($request) {
-            $query->where('delete_time', 0);
-            $query->where('status', Bonus::STATUS);
-            $query->where('num', '=', -1)->orWhere('num', '>', 0);
-            $query->where('start_time', '<', date('Y-m-d H:i:s'))->where('end_time', '>', date('Y-m-d H:i:s'));
+            $query->where('delete_time', 0)->where('status', Bonus::STATUS)->where('start_time', '<', date('Y-m-d H:i:s'))->where('end_time', '>', date('Y-m-d H:i:s'))->where(function ($query2){$query2->where('num', '=', -1)->orWhere('num', '>', 0);});
         };
-        
+        //var_dump(model('Bonus')->where($where)->toSql());exit;
         $res = $this->getLogic()->getList($where, '', '*', $offset, $limit);
 		
         /* if($res['count']>0)

@@ -63,7 +63,7 @@ class OrderController extends CommonController
         $id = $request->input('id','');
         
         $postdata = array(
-            'order_id'  => $id,
+            'id'  => $id,
             'access_token' => $_SESSION['weixin_user_info']['access_token']
 		);
         $url = env('APP_API_URL')."/order_detail";
@@ -117,7 +117,7 @@ class OrderController extends CommonController
         if($id==''){$this->error_jump('您访问的页面不存在或已被删除！');}
         
         $postdata = array(
-            'order_id' => $id,
+            'id' => $id,
             'order_status' => 3,
             'refund_status' => 0,
             'access_token' => $_SESSION['weixin_user_info']['access_token']
@@ -135,7 +135,7 @@ class OrderController extends CommonController
 	{
         //获取订单详情
         $postdata = array(
-            'order_id' => $id, //要支付的订单id
+            'id' => $id, //要支付的订单id
             'order_status' => 0,
             'pay_status' => 0,
             'access_token' => $_SESSION['weixin_user_info']['access_token']
@@ -202,7 +202,7 @@ class OrderController extends CommonController
         
         //获取订单详情
         $postdata = array(
-            'order_id' => $order_id, //要支付的订单id
+            'id' => $order_id, //要支付的订单id
             'order_status' => 0,
             'pay_status' => 0,
             'access_token' => $_SESSION['weixin_user_info']['access_token']
@@ -244,7 +244,7 @@ class OrderController extends CommonController
         
         //获取订单详情
         $postdata = array(
-            'order_id' => $order_id, //要支付的订单id
+            'id' => $order_id, //要支付的订单id
             'order_status' => 0,
             'pay_status' => 0,
             'access_token' => $_SESSION['weixin_user_info']['access_token']

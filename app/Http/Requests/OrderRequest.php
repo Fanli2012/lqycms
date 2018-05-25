@@ -44,7 +44,7 @@ class OrderRequest extends BaseRequest
         'title.required' => '标题必填',
         'title.max' => '标题不能超过150个字符',
         'typeid.required' => '栏目ID必填',
-        'typeid.integer' => '栏目ID必须为数字符',
+        'typeid.integer' => '栏目ID必须为数字',
         'click.integer' => '点击必须为数字',
         'tuijian.integer' => '推荐等级必须是数字',
         'sn.max' => '货号不能超过60个字符',
@@ -88,7 +88,7 @@ class OrderRequest extends BaseRequest
     
     //场景验证规则
     protected $scene = [
-        'add'  => ['typeid', 'title', 'tuijian', 'click', 'sn', 'price', 'litpic', 'pubdate', 'add_time', 'keywords', 'seotitle', 'description', 'status', 'shipping_fee', 'market_price', 'goods_number', 'user_id', 'sale', 'cost_price', 'goods_weight', 'point', 'comments', 'promote_start_date', 'promote_price', 'promote_end_date', 'goods_img', 'warn_number', 'listorder', 'brand_id'],
+        'add'  => ['message', 'warn_number', 'listorder', 'brand_id'],
         'edit' => ['typeid', 'title', 'tuijian', 'click', 'sn', 'price', 'litpic', 'pubdate', 'add_time', 'keywords', 'seotitle', 'description', 'status', 'shipping_fee', 'market_price', 'goods_number', 'user_id', 'sale', 'cost_price', 'goods_weight', 'point', 'comments', 'promote_start_date', 'promote_price', 'promote_end_date', 'goods_img', 'warn_number', 'listorder', 'brand_id'],
         'del'  => ['id'],
     ];

@@ -318,19 +318,27 @@ class Goods extends BaseModel
      */
     public function changeGoodsStock($where)
     {
-        if($where['type']==1)
+        if(isset($where['type']) && $where['type']==1)
         {
             //增加库存
-            return $this->getDb()->where($where)->increment('goods_number', $goods_number);
+            return $this->getDb()->where(array('id'=>$where['goods_id']))->increment('goods_number', $where['goods_number']);
         }
         
         //减少库存
-        return $this->getDb()->where($where)->decrement('goods_number', $goods_number);
+        return $this->getDb()->where(array('id'=>$where['goods_id']))->decrement('goods_number', $where['goods_number']);
     }
     
     //获取栏目名称
     public function getTypenameAttr($data)
     {
         return DB::table('goods_type')->where(array('id'=>$data['typeid']))->value('name');
+    }
+    
+    /**
+     * 打印sql
+     */
+    public function toSql($where)
+    {
+        return $this->getDb()->where($where)->toSql();
     }
 }
