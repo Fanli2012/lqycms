@@ -85,7 +85,7 @@ class UserController extends CommonController
                     return ReturnData::create(ReturnData::PARAMS_ERROR,null,'用户名已存在');
                 }
             }
-            
+            $data = [];
             if($request->input('email', null)!==null){$data['email'] = $request->input('email');}
             if($request->input('sex', null)!==null){$data['sex'] = $request->input('sex');}
             if($request->input('birthday', null)!==null){$data['birthday'] = $request->input('birthday');}

@@ -43,7 +43,7 @@ $(function(){
 		$("#head_img").ajaxSubmit({
 			dataType: 'json',
 			success: function(res) {
-				var img = res.data;
+				var img = res.data[0];
 				if(res.code==0)
                 {
 					$("#avator").attr("src",img);
