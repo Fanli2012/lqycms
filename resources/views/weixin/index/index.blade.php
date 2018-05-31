@@ -71,7 +71,7 @@ var swiper = new Swiper('.swiper-nav', {
 <!--导航左右滑动-end-->
 
 <!--菜单-start-->
-<div class="floor home_menu" style="border-bottom:1px solid #f0f0f0;border-top:1px solid #f0f0f0;">
+<div class="floor home_menu" style="background-color:#fff;border-bottom:1px solid #f0f0f0;border-top:1px solid #f0f0f0;">
     <nav>
         <a href="<?php echo route('weixin_category_goods_list'); ?>">
                 <img src="<?php echo env('APP_URL'); ?>/images/weixin/icon_05.png" alt="全部分类" />
@@ -121,7 +121,7 @@ var swiper = new Swiper('.swiper-nav', {
 <!--资讯头条-end-->
 
 <!--猜您喜欢-start-->
-<div class="floor guesslike">
+<div class="floor guesslike" style="background-color:#fff;">
     <div class="banner_tit">购·畅销</div>
     <ul class="goods_list_s cl">
     <?php if($goods_sale_list){foreach($goods_sale_list as $k=>$v){ ?>

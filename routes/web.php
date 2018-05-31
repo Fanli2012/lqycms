@@ -70,7 +70,6 @@ Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin'], function () {
     Route::get('/brand_detail/{id}', 'GoodsBrandController@brandDetail')->name('weixin_brand_detail'); //品牌详情
     
     Route::get('/bonus_list', 'BonusController@bonusList')->name('weixin_bonus_list');
-    Route::any('/wxpay_notify', 'WxPayController@wxpayNotify')->name('weixin_wxpay_notify'); //微信回调
     Route::any('/wxoauth', 'UserController@oauth')->name('weixin_wxoauth');     //微信网页授权
     Route::any('/login', 'UserController@login')->name('weixin_login');
     Route::any('/register', 'UserController@register')->name('weixin_register');
@@ -137,6 +136,8 @@ Route::group(['middleware' => ['web']], function () {
 
 //API接口路由，无需token验证
 Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web']], function () {
+    //各种回调
+    Route::any('/notify_wxpay_jsapi', 'NotifyController@wxpayJsapi')->name('notify_wxpay_jsapi'); //微信支付回调
     //轮播图
 	Route::get('/slide_list', 'SlideController@slideList');
     //文章
@@ -212,6 +213,11 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     Route::post('/order_status_update', 'OrderController@orderStatusUpdate'); //订单状态修改
     Route::get('/order_list', 'OrderController@orderList'); //订单列表
     Route::get('/order_detail', 'OrderController@orderDetail'); //订单详情
+    Route::post('/order_yue_pay', 'OrderController@orderYuepay'); //订单余额支付
+    Route::post('/order_user_cancel', 'OrderController@userCancelOrder'); //用户取消订单
+    Route::post('/order_user_receipt_confirm', 'OrderController@userReceiptConfirm'); //用户确认收货
+    Route::post('/order_user_refund', 'OrderController@userOrderRefund'); //用户退款退货
+    Route::post('/order_user_delete', 'OrderController@userOrderDelete'); //用户删除订单
     //购物车
     Route::get('/cart_list', 'CartController@cartList'); //购物车列表
     Route::post('/cart_clear', 'CartController@cartClear'); //清空购物车

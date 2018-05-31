@@ -237,7 +237,7 @@ class UserController extends CommonController
 		$out_trade_no = $user_recharge['recharge_sn'];//订单号
 		$total_fee = floatval($user_recharge['money']*100);//价格0.01
         $attach = 'pay_type=1'; //附加数据，pay_type=1充值支付，示例：xxx=1&yyy=2
-		$notify_url = route('weixin_wxpay_notify');//通知地址
+		$notify_url = route('notify_wxpay_jsapi');//通知地址
 		$wxconfig= \WxPayConfig::wxconfig();
         
 		//=========步骤1：网页授权获取用户openid============

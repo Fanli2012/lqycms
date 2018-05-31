@@ -1,5 +1,7 @@
 <?php
 namespace App\Http\Logic;
+use Log;
+use DB;
 use App\Common\ReturnData;
 use App\Http\Model\Order;
 use App\Http\Requests\OrderRequest;
@@ -257,8 +259,159 @@ class OrderLogic extends BaseLogic
         $validator = $this->getValidate($where,'del');
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
-        $res = $this->getModel()->del($where);
+        $where2 = function ($query) use ($where) {
+            $query->where($where)->where(function ($query2) {$query2->where(array('order_status'=>3,'refund_status'=>0))->orWhere(array('order_status'=>1))->orWhere(array('order_status'=>2));});
+        };
+        
+        $data['is_delete'] = 1;
+        $res = $this->getModel()->edit($data, $where2);
         if($res){return ReturnData::create(ReturnData::SUCCESS,$res);}
+        
+        return ReturnData::create(ReturnData::FAIL);
+    }
+    
+    /**
+     * 用户-取消订单
+     * @param int $data['id'] 订单id
+     * @param int $data['user_id'] 用户id
+     * @return array
+     */
+    public function userCancelOrder($where = array())
+    {
+        if(empty($where)){return ReturnData::create(ReturnData::SUCCESS);}
+        
+        $where['order_status'] = 0;
+        $where['pay_status'] = 0;
+        $order = $this->getModel()->getOne($where);
+        if(!$order){return ReturnData::create(ReturnData::PARAMS_ERROR,null,'订单不存在');}
+        
+        $data['order_status'] = 1;
+        $data['updated_at'] = time();
+        $res = $this->getModel()->edit($data,$where);
+        if($res){return ReturnData::create(ReturnData::SUCCESS,$res);}
+        
+        return ReturnData::create(ReturnData::FAIL);
+    }
+    
+    /**
+     * 订单-余额支付
+     * @param int $data['id'] 订单id
+     * @param int $data['user_id'] 用户id
+     * @return array
+     */
+    public function orderYuepay($where = array())
+    {
+        if(empty($where)){return ReturnData::create(ReturnData::SUCCESS);}
+        
+        $where['order_status'] = 0;
+        $where['pay_status'] = 0;
+        $order = $this->getModel()->getOne($where);
+        if(!$order){return ReturnData::create(ReturnData::PARAMS_ERROR,null,'订单不存在');}
+        
+        DB::beginTransaction();
+        
+        $data['pay_status'] = 1;
+        $data['pay_money'] = $order->order_amount; //支付金额
+        $data['pay_id'] = 1;
+        $data['pay_time'] = time();
+        $data['updated_at'] = time();
+        $res = $this->getModel()->edit($data,$where);
+        if($res)
+        {
+            $user_money_data['user_id'] = $where['user_id'];
+            $user_money_data['type'] = 1;
+            $user_money_data['money'] = $order->order_amount;
+            $user_money_data['des'] = '订单余额支付';
+            if(!logic('UserMoney')->add($user_money_data)){DB::rollBack();}
+            
+            DB::commit();
+            return ReturnData::create(ReturnData::SUCCESS,$res,'支付成功');
+        }
+        
+        DB::rollBack();
+        return ReturnData::create(ReturnData::FAIL);
+    }
+    
+    /**
+     * 订单-确认收货
+     * @param int $data['id'] 订单id
+     * @param int $data['user_id'] 用户id
+     * @return array
+     */
+    public function orderReceiptConfirm($where = array())
+    {
+        if(empty($where)){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        
+        //判断订单是否存在或本人
+        $where['order_status'] = 0;
+        $where['refund_status'] = 0;
+        $where['pay_status'] = 1;
+        $order = $this->getModel()->getOne($where);
+        if(!$order){return ReturnData::create(ReturnData::PARAMS_ERROR,null,'订单不存在');}
+        
+        $data['order_status'] = 3;
+        $data['shipping_status'] = 2;
+        $data['refund_status'] = 0;
+        $data['is_comment'] = 0;
+        $data['updated_at'] = time();
+        $res = $this->getModel()->edit($data,$where);
+        if($res)
+        {
+            return ReturnData::create(ReturnData::SUCCESS);
+        }
+        
+        return ReturnData::create(ReturnData::FAIL);
+    }
+    
+    /**
+     * 订单-退款退货
+     * @param int $data['id'] 订单id
+     * @param int $data['user_id'] 用户id
+     * @return array
+     */
+    public function orderRefund($where = array())
+    {
+        if(empty($where)){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        
+        $where['order_status'] = 3;
+        $where['refund_status'] = 0;
+        $order = $this->getModel()->getOne($where);
+        if(!$order){return ReturnData::create(ReturnData::PARAMS_ERROR,null,'订单不存在');}
+        
+        $data['refund_status'] = 1;
+        $data['updated_at'] = time();
+        $res = $this->getModel()->edit($data,$where);
+        if($res)
+        {
+            return ReturnData::create(ReturnData::SUCCESS);
+        }
+        
+        return ReturnData::create(ReturnData::FAIL);
+    }
+    
+    /**
+     * 订单-设为评价
+     * @param int $data['id'] 订单id
+     * @param int $data['user_id'] 用户id
+     * @return array
+     */
+    public function orderSetComment($where = array())
+    {
+        if(empty($where)){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        
+        $where['order_status'] = 3;
+        $where['refund_status'] = 0;
+        $data['is_comment'] = Order::ORDER_UN_COMMENT;
+        $order = $this->getModel()->getOne($where);
+        if(!$order){return ReturnData::create(ReturnData::PARAMS_ERROR,null,'订单不存在，或已评价');}
+        
+        $data['is_comment'] = Order::ORDER_IS_COMMENT;
+        $data['updated_at'] = time();
+        $res = $this->getModel()->edit($data,$where);
+        if($res)
+        {
+            return ReturnData::create(ReturnData::SUCCESS);
+        }
         
         return ReturnData::create(ReturnData::FAIL);
     }

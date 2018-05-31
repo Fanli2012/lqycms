@@ -12,6 +12,9 @@ class Order extends BaseModel
     protected $hidden = array();
     protected $guarded = array(); //$guarded包含你不想被赋值的字段数组。
     
+    const ORDER_UN_COMMENT = 0;//未评价
+    const ORDER_IS_COMMENT = 1;//是否评论，1已评价
+    
     public function getDb()
     {
         return DB::table($this->table);
@@ -141,19 +144,12 @@ class Order extends BaseModel
      * 修改
      * @param array $data 数据
      * @param array $where 条件
-     * @return bool
+     * @return int
      */
     public function edit($data, $where = array())
     {
         $res = $this->getDb();
-        $res = $res->where($where)->update(parent::filterTableColumn($data, $this->table));
-        
-        if ($res === false)
-        {
-            return false;
-        }
-        
-        return true;
+        return $res->where($where)->update(parent::filterTableColumn($data, $this->table));
     }
     
     /**

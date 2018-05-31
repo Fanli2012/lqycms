@@ -138,6 +138,66 @@ class OrderController extends CommonController
         }
     }
     
+    //用户-取消订单
+    public function userCancelOrder(Request $request)
+	{
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
+        
+        $where['id'] = $id;
+        $where['user_id'] = Token::$uid;
+        
+        return $this->getLogic()->userCancelOrder($where);
+    }
+    
+    //订单-余额支付
+    public function orderYuepay(Request $request)
+	{
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
+        
+        $where['id'] = $id;
+        $where['user_id'] = Token::$uid;
+        
+        return $this->getLogic()->orderYuepay($where);
+    }
+    
+    //用户-确认收货
+    public function userReceiptConfirm(Request $request)
+	{
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
+        
+        $where['id'] = $id;
+        $where['user_id'] = Token::$uid;
+        
+        return $this->getLogic()->orderReceiptConfirm($where);
+    }
+    
+    //用户-退款退货
+    public function userOrderRefund(Request $request)
+	{
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
+        
+        $where['id'] = $id;
+        $where['user_id'] = Token::$uid;
+        
+        return $this->getLogic()->orderRefund($where);
+    }
+    
+    //用户-删除订单
+    public function userOrderDelete(Request $request)
+	{
+        if(!checkIsNumber($request->input('id',null))){return ReturnData::create(ReturnData::PARAMS_ERROR);}
+        $id = $request->input('id');
+        
+        $where['id'] = $id;
+        $where['user_id'] = Token::$uid;
+        
+        return $this->getLogic()->del($where);
+    }
+    
     //订单状态修改
     public function orderStatusUpdate(Request $request)
 	{

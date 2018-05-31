@@ -15,6 +15,7 @@ class CommentRequest extends BaseRequest
         'parent_id' => 'integer',
         'user_id' => 'required|integer',
         'is_anonymous' => 'integer|between:0,1',
+        'order_id' => 'required|integer',
     ];
     
     //总的自定义错误信息
@@ -38,12 +39,14 @@ class CommentRequest extends BaseRequest
         'user_id.integer' => '用户ID必须为数字',
         'is_anonymous.integer' => '是否匿名必须是数字',
         'is_anonymous.between' => '是否匿名，0否',
+        'order_id.required' => '订单ID必填',
+        'order_id.integer' => '订单ID必须为数字',
     ];
     
     //场景验证规则
     protected $scene = [
-        'add'  => ['comment_type', 'id_value', 'comment_rank', 'ip_address', 'status', 'parent_id', 'user_id', 'is_anonymous'],
-        'edit' => ['comment_type', 'id_value', 'comment_rank', 'ip_address', 'status', 'parent_id', 'user_id', 'is_anonymous'],
+        'add'  => ['comment_type', 'id_value', 'comment_rank', 'ip_address', 'status', 'parent_id', 'user_id', 'is_anonymous', 'order_id'],
+        'edit' => ['comment_type', 'id_value', 'comment_rank', 'ip_address', 'status', 'parent_id', 'user_id', 'is_anonymous', 'order_id'],
         'del'  => ['id'],
     ];
     

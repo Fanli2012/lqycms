@@ -83,8 +83,8 @@ function cancel_order(order_id)
         content: '确定要取消该订单吗？'
         ,btn: ['确定', '取消']
         ,yes: function(){
-            var url = '<?php echo env('APP_API_URL')."/order_status_update"; ?>';
-            $.post(url,{access_token:access_token,id:order_id,type:2},function(res)
+            var url = '<?php echo env('APP_API_URL')."/order_user_cancel"; ?>';
+            $.post(url,{access_token:access_token,id:order_id},function(res)
             {
                 //提示
                 layer.open({
@@ -114,8 +114,8 @@ function done_order(order_id)
         content: '确定要这样操作吗？'
         ,btn: ['确定', '取消']
         ,yes: function(){
-            var url = '<?php echo env('APP_API_URL')."/order_status_update"; ?>';
-            $.post(url,{access_token:access_token,id:order_id,type:3},function(res)
+            var url = '<?php echo env('APP_API_URL')."/order_user_receipt_confirm"; ?>';
+            $.post(url,{access_token:access_token,id:order_id},function(res)
             {
                 //提示
                 layer.open({
@@ -145,8 +145,8 @@ function del_order(order_id)
         content: '确定要删除该订单吗？'
         ,btn: ['确定', '取消']
         ,yes: function(){
-            var url = '<?php echo env('APP_API_URL')."/order_status_update"; ?>';
-            $.post(url,{access_token:access_token,id:order_id,type:5},function(res)
+            var url = '<?php echo env('APP_API_URL')."/order_user_delete"; ?>';
+            $.post(url,{access_token:access_token,id:order_id},function(res)
             {
                 //提示
                 layer.open({

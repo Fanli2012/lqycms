@@ -21,7 +21,7 @@
         <div class="swiper-slide<?php if($order_status==2){echo ' swiper-slide-activate';} ?>"><a href="<?php echo route('weixin_order_list',array('status'=>2)); ?>">待发货</a></div>
         <div class="swiper-slide<?php if($order_status==3){echo ' swiper-slide-activate';} ?>"><a href="<?php echo route('weixin_order_list',array('status'=>3)); ?>">待收货</a></div>
         <div class="swiper-slide<?php if($order_status==4){echo ' swiper-slide-activate';} ?>"><a href="<?php echo route('weixin_order_list',array('status'=>4)); ?>">待评价</a></div>
-        <div class="swiper-slide<?php if($order_status==5){echo ' swiper-slide-activate';} ?>"><a href="<?php echo route('weixin_order_list',array('status'=>5)); ?>">退款/售后</a></div>
+        <!--<div class="swiper-slide<?php if($order_status==5){echo ' swiper-slide-activate';} ?>"><a href="<?php echo route('weixin_order_list',array('status'=>5)); ?>">退款/售后</a></div>-->
     </div>
 </div>
 <style>
@@ -51,7 +51,7 @@ var swiper = new Swiper('.swiper-nav', {
 </a>
 
 <p class="des">合计: ￥<?php echo $value['order_amount']; ?> <small>(含运费:￥<?php echo $value['shipping_fee']; ?>)</small></p>
-<div class="tag"><?php if($value['order_status_num']==4){ ?><a href="javascript:refund_order(<?php echo $value['id']; ?>);">申请退款</a><?php } ?><?php if($value['order_status_num']==4 || $value['order_status_num']==6 || $value['order_status_num']==7){ ?><a href="javascript:del_order(<?php echo $value['id']; ?>);">删除</a><?php } ?><?php if($value['order_status_num']==1){ ?><a href="javascript:cancel_order(<?php echo $value['id']; ?>);">取消订单</a><?php } ?><?php if($value['order_status_num']==1){ ?><a href="<?php echo route('weixin_order_pay',array('id'=>$value['id'])); ?>">付款</a><?php } ?><?php if($value['order_status_num']==3){ ?><a href="http://m.kuaidi100.com/index_all.html?type=<?php echo $value['shipping_name']; ?>&postid=<?php echo $value['shipping_sn']; ?>#result">查看物流</a><?php } ?><?php if($value['order_status_num']==3){ ?><a href="javascript:done_order(<?php echo $value['id']; ?>);">确认收货</a><?php } ?><?php if($value['order_status_num']==4){ ?><a class="activate" href="<?php echo route('weixin_order_comment',array('id'=>$value['id'])); ?>">评价</a><?php } ?></div>
+<div class="tag"><!--<?php if($value['order_status_num']==4 && $value['refund_status']==0){ ?><a href="javascript:refund_order(<?php echo $value['id']; ?>);">申请退款</a><?php } ?><?php if($value['order_status_num']==4 || $value['order_status_num']==6 || $value['order_status_num']==7){ ?><a href="javascript:del_order(<?php echo $value['id']; ?>);">删除</a><?php } ?>--><?php if($value['order_status_num']==1){ ?><a href="javascript:cancel_order(<?php echo $value['id']; ?>);">取消订单</a><?php } ?><?php if($value['order_status_num']==1){ ?><a href="<?php echo route('weixin_order_pay',array('id'=>$value['id'])); ?>">付款</a><?php } ?><?php if($value['order_status_num']==3){ ?><a href="http://m.kuaidi100.com/index_all.html?type=<?php echo $value['shipping_name']; ?>&postid=<?php echo $value['shipping_sn']; ?>#result">查看物流</a><?php } ?><?php if($value['order_status_num']==2 || $value['order_status_num']==3){ ?><a href="javascript:done_order(<?php echo $value['id']; ?>);">确认收货</a><?php } ?><?php if($value['order_status_num']==4 && $value['is_comment']==0){ ?><a class="activate" href="<?php echo route('weixin_order_comment',array('id'=>$value['id'])); ?>">评价</a><?php } ?></div>
 </div>
 <?php }}else{ ?>
     <div style="text-align:center;line-height:40px;color:#999;">暂无记录</div>
@@ -85,8 +85,8 @@ function cancel_order(order_id)
         content: '确定要取消该订单吗？'
         ,btn: ['确定', '取消']
         ,yes: function(){
-            var url = '<?php echo env('APP_API_URL')."/order_status_update"; ?>';
-            $.post(url,{access_token:access_token,id:order_id,type:2},function(res)
+            var url = '<?php echo env('APP_API_URL')."/order_user_cancel"; ?>';
+            $.post(url,{access_token:access_token,id:order_id},function(res)
             {
                 //提示
                 layer.open({
@@ -116,8 +116,8 @@ function done_order(order_id)
         content: '确定要这样操作吗？'
         ,btn: ['确定', '取消']
         ,yes: function(){
-            var url = '<?php echo env('APP_API_URL')."/order_status_update"; ?>';
-            $.post(url,{access_token:access_token,id:order_id,type:3},function(res)
+            var url = '<?php echo env('APP_API_URL')."/order_user_receipt_confirm"; ?>';
+            $.post(url,{access_token:access_token,id:order_id},function(res)
             {
                 //提示
                 layer.open({
@@ -147,8 +147,8 @@ function del_order(order_id)
         content: '确定要删除该订单吗？'
         ,btn: ['确定', '取消']
         ,yes: function(){
-            var url = '<?php echo env('APP_API_URL')."/order_status_update"; ?>';
-            $.post(url,{access_token:access_token,id:order_id,type:5},function(res)
+            var url = '<?php echo env('APP_API_URL')."/order_user_delete"; ?>';
+            $.post(url,{access_token:access_token,id:order_id},function(res)
             {
                 //提示
                 layer.open({
@@ -178,8 +178,8 @@ function refund_order(order_id)
         content: '确定要申请退款吗？'
         ,btn: ['确定', '取消']
         ,yes: function(){
-            var url = '<?php echo env('APP_API_URL')."/order_status_update"; ?>';
-            $.post(url,{access_token:access_token,id:order_id,type:4},function(res)
+            var url = '<?php echo env('APP_API_URL')."/order_user_refund"; ?>';
+            $.post(url,{access_token:access_token,id:order_id},function(res)
             {
                 //提示
                 layer.open({

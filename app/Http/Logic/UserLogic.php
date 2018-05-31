@@ -1,10 +1,13 @@
 <?php
 namespace App\Http\Logic;
+use Log;
+use DB;
 use App\Common\ReturnData;
 use App\Common\Token;
 use App\Http\Model\User;
 use App\Http\Requests\UserRequest;
 use Validator;
+use App\Http\Model\UserMoney;
 
 class UserLogic extends BaseLogic
 {

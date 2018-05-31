@@ -1,7 +1,6 @@
 <?php
 namespace App\Http\Controllers\Weixin;
 
-use App\Http\Controllers\Weixin\CommonController;
 use Illuminate\Http\Request;
 use App\Common\ReturnData;
 use App\Common\Helper;
@@ -101,15 +100,6 @@ class OrderController extends CommonController
             $res = curl_request($url,$postdata,'POST');
             if($res['code']!=0){$this->error_jump('评论失败');}
             
-            //订单状态设为已评价
-            $postdata = array(
-                'id' => $_POST['order_id'],
-                'type' => 6,
-                'access_token' => $_SESSION['weixin_user_info']['access_token']
-            );
-            $url = env('APP_API_URL')."/order_status_update";
-            $res = curl_request($url,$postdata,'POST');
-            
             $this->success_jump('评论成功',route('weixin_order_list'));
         }
         
@@ -168,7 +158,7 @@ class OrderController extends CommonController
         $order_id = $request->input('order_id','');
         $payment_id = $request->input('payment_id','');
         
-        if($order_id == '' || $order_id == '')
+        if($order_id == '' || $payment_id == '')
         {
             $this->error_jump(ReturnData::PARAMS_ERROR);
         }
@@ -199,42 +189,17 @@ class OrderController extends CommonController
     public function orderYuepay(Request $request)
 	{
         $order_id = $request->input('order_id','');
-        
-        //获取订单详情
-        $postdata = array(
-            'id' => $order_id, //要支付的订单id
-            'order_status' => 0,
-            'pay_status' => 0,
-            'access_token' => $_SESSION['weixin_user_info']['access_token']
-		);
-        $url = env('APP_API_URL')."/order_detail";
-		$res = curl_request($url,$postdata,'GET');
-        $order_detail = $res['data'];
-        if($res['code']!=0){$this->error_jump('订单不存在或已过期');}
-        
-        //获取会员信息
-        $postdata = array(
-            'access_token' => $_SESSION['weixin_user_info']['access_token']
-		);
-        $url = env('APP_API_URL')."/user_info";
-		$res = curl_request($url,$postdata,'GET');
-        $user_info = $res['data'];
-        
-        if($order_detail['order_amount']>$user_info['money']){$this->error_jump('余额不足');}
-        
+
         //修改订单状态
         $postdata = array(
-            'id' => $order_detail['id'],
-            'type' => 1,
-            'pay_id' => 1,
-            'pay_name' => '余额支付',
+            'id' => $order_id,
             'access_token' => $_SESSION['weixin_user_info']['access_token']
 		);
-        $url = env('APP_API_URL')."/order_status_update";
+        $url = env('APP_API_URL')."/order_yue_pay";
 		$res = curl_request($url,$postdata,'POST');
-        if($res['code']!=0){$this->error_jump('支付失败');}
+        if($res['code']==ReturnData::SUCCESS){$this->success_jump('支付成功',route('weixin_order_list'));}
         
-        $this->success_jump('支付成功',route('weixin_order_list'));
+        $this->error_jump('支付失败');
     }
     
     //订单-微信支付
@@ -251,9 +216,9 @@ class OrderController extends CommonController
 		);
         $url = env('APP_API_URL')."/order_detail";
 		$res = curl_request($url,$postdata,'GET');
+        if($res['code']!=0){$this->error_jump('订单不存在或已过期');}
         $data['order_detail'] = $res['data'];
         $data['order_id'] = $order_id;
-        if($res['code']!=0){$this->error_jump('订单不存在或已过期');}
         
         //微信支付-start
         require_once(resource_path('org/wxpay/WxPayConfig.php')); // 导入微信配置类
@@ -263,7 +228,7 @@ class OrderController extends CommonController
 		$out_trade_no = $data['order_detail']['order_sn'];//订单号
 		$total_fee = floatval($data['order_detail']['order_amount']*100);//价格0.01
         $attach = 'pay_type=2'; //附加数据，pay_type=2订单支付，示例：xxx=1&yyy=2
-		$notify_url = route('weixin_wxpay_notify');//通知地址
+		$notify_url = route('notify_wxpay_jsapi');//通知地址
 		$wxconfig= \WxPayConfig::wxconfig();
         
 		//=========步骤1：网页授权获取用户openid============

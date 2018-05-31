@@ -93,6 +93,9 @@ class UserMoneyLogic extends BaseLogic
         
         if($data['money']<=0){return ReturnData::create(ReturnData::PARAMS_ERROR);}
         
+        $user = model('User')->getOne(['id'=>$data['user_id']]);
+        if(!$user){return ReturnData::create(ReturnData::PARAMS_ERROR,null,'用户不存在');}
+        
         $data['add_time'] = time();
         
         DB::beginTransaction(); //启动事务
@@ -104,6 +107,9 @@ class UserMoneyLogic extends BaseLogic
         }
         elseif($data['type'] == UserMoney::USER_MONEY_DECREMENT)
         {
+            //判断用户余额是否足够
+            if($data['money']>$user->money){return ReturnData::create(ReturnData::FAIL,null,'余额不足');}
+            
             //减少用户余额
             model('User')->getDb()->where(array('id'=>$data['user_id']))->decrement('money', $data['money']);
         }

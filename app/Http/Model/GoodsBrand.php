@@ -144,19 +144,12 @@ class GoodsBrand extends BaseModel
      * 修改
      * @param array $data 数据
      * @param array $where 条件
-     * @return bool
+     * @return int
      */
     public function edit($data, $where = array())
     {
         $res = $this->getDb();
-        $res = $res->where($where)->update(parent::filterTableColumn($data, $this->table));
-        
-        if ($res === false)
-        {
-            return false;
-        }
-        
-        return true;
+        return $res->where($where)->update(parent::filterTableColumn($data, $this->table));
     }
     
     /**

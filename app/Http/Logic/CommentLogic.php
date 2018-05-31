@@ -1,7 +1,10 @@
 <?php
 namespace App\Http\Logic;
+use Log;
+use DB;
 use App\Common\ReturnData;
 use App\Http\Model\Comment;
+use App\Http\Model\Order;
 use App\Http\Requests\CommentRequest;
 use Validator;
 
@@ -83,7 +86,7 @@ class CommentLogic extends BaseLogic
         $validator = $this->getValidate($data, 'add');
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
-        $comment = $this->getModel()->getOne(['comment_type'=>$data['comment_type'],'id_value'=>$data['id_value'],'user_id'=>$data['user_id']]);
+        $comment = $this->getModel()->getOne(['comment_type'=>$data['comment_type'],'id_value'=>$data['id_value'],'user_id'=>$data['user_id'],'order_id'=>$data['order_id']]);
         if($comment){return ReturnData::create(ReturnData::FAIL,null,'您已经评论过了');}
         
         $res = $this->getModel()->add($data,$type);
@@ -130,19 +133,34 @@ class CommentLogic extends BaseLogic
         return getDataAttr($this->getModel(),$data);
     }
     
-    //批量添加
-    public function batchAdd(array $data)
+    /**
+     * 评价-批量添加
+     * @return array
+     */
+    public function batchAdd($data)
     {
         if(empty($data)){return ReturnData::create(ReturnData::PARAMS_ERROR);}
         
+        $order_id = 0;
         DB::beginTransaction();
+        
         foreach($data as $k=>$v)
         {
             $res = $this->add($v);
-            if($res['code'] == ReturnData::SUCCESS){}else{DB::rollBack();return $res;}
+            $order_id = $v['order_id'];
+            if($res['code'] != ReturnData::SUCCESS){DB::rollBack();return $res;}
         }
         
-        DB::commit();
-        return ReturnData::create(ReturnData::SUCCESS);
+        //设为已评价
+        $data2['is_comment'] = Order::ORDER_IS_COMMENT;
+        $data2['updated_at'] = time();
+        if(model('Order')->edit($data2,['id'=>$order_id]))
+        {
+            DB::commit();
+            return ReturnData::create(ReturnData::SUCCESS,null,'评价成功');
+        }
+        
+        DB::rollBack();
+        return ReturnData::create(ReturnData::FAIL);
     }
 }

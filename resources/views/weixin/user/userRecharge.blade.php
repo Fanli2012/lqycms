@@ -71,7 +71,7 @@ function chongzhi()
             {
                 //提示
                 layer.open({
-                    content: res.msg
+                    content: '充值订单创建成功，请支付'
                     ,skin: 'msg'
                     ,time: 2 //2秒后自动关闭
                 });
