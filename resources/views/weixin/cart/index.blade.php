@@ -83,9 +83,9 @@
         <img src="<?php echo env('APP_URL'); ?>/images/weixin/nothing.png">
         <p>购物车暂无商品</p>
         <a href="<?php echo route('weixin'); ?>">去逛逛</a>
-    </div>
+    </div><br><br>
 </div>
-<br><br>
+
 <!--猜你喜欢-start-->
 <div class="floor">
 <div class="banner_headline">

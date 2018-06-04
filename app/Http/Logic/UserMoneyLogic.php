@@ -78,7 +78,7 @@ class UserMoneyLogic extends BaseLogic
     
     /**
      * 添加一条记录，并增加或减少用户余额，会操作用户余额表，谨慎使用
-     * @param int    $data['user_id'] 排序
+     * @param int    $data['user_id'] 用户id
      * @param int    $data['type'] 0增加,1减少
      * @param float  $data['money'] 金额
      * @param string $data['des'] 描述

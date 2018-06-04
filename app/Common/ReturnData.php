@@ -149,4 +149,15 @@ class ReturnData
         
         return false;
     }
+    
+    public static function getCodeText($code)
+    {
+        $res = '';
+        if (isset(self::$codeTexts[$code]))
+		{
+            $res = self::$codeTexts[$code];
+        }
+        
+        return $res;
+    }
 }

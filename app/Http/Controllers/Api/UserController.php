@@ -237,7 +237,7 @@ class UserController extends CommonController
         $data['head_img'] = $request->input('head_img','');
         $data['nickname'] = $request->input('nickname','');
         $data['parent_id'] = 0;if($request->input('parent_id',null)!=null){$data['parent_id'] = $request->input('parent_id');}
-        $data['user_name'] = date('YmdHis').dechex(rand(1000,9999));
+        $data['user_name'] = date('YmdHis').dechex(date('His').rand(1000,9999));
         $data['password'] = md5('123456');
         
         if ($data['openid']=='')
@@ -245,17 +245,15 @@ class UserController extends CommonController
             return ReturnData::create(ReturnData::PARAMS_ERROR);
         }
         
-		if (model('User')->getOne(array('openid'=>$data['openid'])))
-		{
-            return $this->getLogic()->wxLogin(array('openid'=>$data['openid']));
-		}
-        
-        //添加用户
-        $res = $this->getLogic()->wxRegister($data);
-        if($res['code'] != ReturnData::SUCCESS){return $res;}
-        
-        //更新用户名user_name，微信登录没有用户名
-        model('User')->edit(array('user_name'=>'u'.$res['code']['data']['uid']),array('id'=>$res['code']['data']['uid']));
+		if (!model('User')->getOne(array('openid'=>$data['openid'])))
+        {
+            //添加用户
+            $res = $this->getLogic()->wxRegister($data);
+            if($res['code'] != ReturnData::SUCCESS){return $res;}
+            
+            //更新用户名user_name，微信登录没有用户名
+            model('User')->edit(array('user_name'=>date('Ymd').'u'.$res['data']['uid']),array('id'=>$res['data']['uid']));
+        }
         
         return $this->getLogic()->wxLogin(array('openid'=>$data['openid']));
     }

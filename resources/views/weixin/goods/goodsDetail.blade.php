@@ -4,13 +4,13 @@
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/jquery.min.js"></script>
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/weixin/mobile.js"></script>
 <meta name="keywords" content="关键词"><meta name="description" content="描述"></head><body style="background-color:#f1f1f1;">
-<div class="classreturn loginsignup">
+<!-- <div class="classreturn loginsignup">
     <div class="ds-in-bl return"><a href="javascript:history.back(-1);"><img src="<?php echo env('APP_URL'); ?>/images/weixin/return.png" alt="返回"></a></div>
     <div class="ds-in-bl tit center"><span>商品详情</span></div>
     <div class="ds-in-bl nav_menu"><a href="javascript:void(0);"><img src="<?php echo env('APP_URL'); ?>/images/weixin/class1.png" alt="菜单"></a></div>
 </div>
 
-@include('weixin.common.headerNav')
+@include('weixin.common.headerNav') -->
 
 <!--商品详情-start-->
 <div class="goods_detail">

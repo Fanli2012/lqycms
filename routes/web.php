@@ -210,7 +210,6 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
     //订单
     Route::post('/order_add', 'OrderController@orderAdd'); //生成订单
     Route::post('/order_update', 'OrderController@orderUpdate'); //订单修改
-    Route::post('/order_status_update', 'OrderController@orderStatusUpdate'); //订单状态修改
     Route::get('/order_list', 'OrderController@orderList'); //订单列表
     Route::get('/order_detail', 'OrderController@orderDetail'); //订单详情
     Route::post('/order_yue_pay', 'OrderController@orderYuepay'); //订单余额支付
