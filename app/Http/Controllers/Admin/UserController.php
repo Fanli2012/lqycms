@@ -1,10 +1,11 @@
 <?php
 namespace App\Http\Controllers\Admin;
-
-use App\Http\Controllers\Admin\CommonController;
 use DB;
-use App\Http\Model\User;
+use App\Common\ReturnData;
 use App\Common\Helper;
+use Illuminate\Http\Request;
+use App\Http\Logic\UserLogic;
+use App\Http\Model\User;
 
 class UserController extends CommonController
 {
@@ -13,18 +14,15 @@ class UserController extends CommonController
         parent::__construct();
     }
 	
+    public function getLogic()
+    {
+        return new UserLogic();
+    }
+    
     public function index()
     {
-        $posts = parent::pageList('user');
-		
-        if($posts)
-        {
-            foreach($posts as $k=>$v)
-            {
-                $posts[$k]->sex_text = User::getSexText(['sex'=>$v->sex]);
-                $posts[$k]->status_text = User::getStatusText(['status'=>$v->status]);
-            }
-        }
+        $where = '';
+		$posts = $this->getLogic()->getPaginate($where, array('id', 'desc'));
         
         $data['posts'] = $posts;
         return view('admin.user.index', $data);

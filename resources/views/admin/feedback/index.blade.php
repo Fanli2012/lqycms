@@ -17,7 +17,7 @@
 <td><?php echo $row->id; ?></td>
 <td><?php echo $row->title; ?></td>
 <td><?php echo $row->content; ?></td>
-<td><?php echo $row->created_at; ?></td>
+<td><?php echo date('Y-m-d H:i:s', $row->add_time); ?></td>
 <td><a onclick="delconfirm('<?php echo route('admin_feedback_del',array('id'=>$row->id)); ?>')" href="javascript:;">删除</a></td>
 </tr><?php }} ?>
 </tbody></table></div><!-- 表格结束 --></form><!-- 表单结束 -->

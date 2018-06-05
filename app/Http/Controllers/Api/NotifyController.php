@@ -76,7 +76,7 @@ class NotifyController extends CommonController
                 $order_update_data['pay_id'] = 2;
                 $order_update_data['pay_time'] = $pay_time_timestamp;
                 $order_update_data['pay_name'] = 'wxpay_jsapi';
-                $order_update_data['out_trade_no'] = $post_data['transaction_id'];
+                $order_update_data['trade_no'] = $post_data['transaction_id'];
                 $order_update_data['updated_at'] = time();
                 
                 DB::table('order')->where(array('order_sn'=>$post_data['out_trade_no'],'order_status'=>0,'pay_status'=>0))->update($order_update_data);

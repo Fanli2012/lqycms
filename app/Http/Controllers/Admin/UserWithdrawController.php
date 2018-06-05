@@ -1,10 +1,11 @@
 <?php
 namespace App\Http\Controllers\Admin;
-
-use App\Http\Controllers\Admin\CommonController;
 use DB;
-use App\Http\Model\UserWithdraw;
 use App\Common\ReturnData;
+use App\Common\Helper;
+use Illuminate\Http\Request;
+use App\Http\Logic\UserWithdrawLogic;
+use App\Http\Model\UserWithdraw;
 
 class UserWithdrawController extends CommonController
 {
@@ -13,18 +14,15 @@ class UserWithdrawController extends CommonController
         parent::__construct();
     }
 	
+    public function getLogic()
+    {
+        return new UserWithdrawLogic();
+    }
+    
     public function index()
     {
-        $posts = parent::pageList('user_withdraw',array('is_delete'=>0));
-		
-        if($posts)
-        {
-            foreach($posts as $k=>$v)
-            {
-                $posts[$k]->user = DB::table('user')->where('id', $v->user_id)->first();
-                $posts[$k]->status_text = UserWithdraw::getStatusText(['status'=>$v->status]);
-            }
-        }
+        $where['delete_time'] = 0;
+		$posts = $this->getLogic()->getPaginate($where, array('id', 'desc'));
         
         $data['posts'] = $posts;
         return view('admin.UserWithdraw.index', $data);

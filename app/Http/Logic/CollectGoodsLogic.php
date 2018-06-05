@@ -88,7 +88,7 @@ class CollectGoodsLogic extends BaseLogic
         $validator = $this->getValidate($data, 'add');
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
-        if($this->getModel()->getOne(array('user_id'=>$data['user_id'],'goods_id'=>$data['goods_id']))){return '亲，您已经收藏啦！';}
+        if($this->getModel()->getOne(array('user_id'=>$data['user_id'],'goods_id'=>$data['goods_id']))){return ReturnData::create(ReturnData::FAIL,null,'亲，您已经收藏啦！');}
         
         $res = $this->getModel()->add($data,$type);
         if($res){return ReturnData::create(ReturnData::SUCCESS,$res);}

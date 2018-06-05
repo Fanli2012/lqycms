@@ -47,6 +47,15 @@ class UserWithdrawLogic extends BaseLogic
     {
         $res = $this->getModel()->getPaginate($where, $order, $field, $limit);
         
+        if($res->count() > 0)
+        {
+            foreach($res as $k=>$v)
+            {
+                $res[$k] = $this->getDataView($v);
+                $res[$k]->user = model('User')->getOne(['id'=>$v->user_id]);
+            }
+        }
+        
         return $res;
     }
     

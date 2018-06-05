@@ -24,7 +24,7 @@
         <li>
         <span class="green">- <?php echo $v['money']; ?></span>
         <div class="info"><p class="tit">提现</p>
-        <p class="des">收款账号:<?php echo $v['name']; ?> ,提现方式:<?php echo $v['method']; ?> ,姓名:<?php echo $v['name']; ?><br>状态:<font color="red"><?php echo $v['status_text']; ?></font></p>
+        <p class="des">收款账号:<?php echo $v['name']; ?><br/>姓名:<?php echo $v['name']; ?><br/>提现方式:<?php echo $v['method']; ?><br>状态:<font color="red"><?php echo $v['status_text']; ?></font></p>
         <p class="time"><?php echo date('Y-m-d H:i:s',$v['add_time']); ?></p></div>
         </li>
         <?php } ?>

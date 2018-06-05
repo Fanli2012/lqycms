@@ -45,9 +45,14 @@ class ArticleLogic extends BaseLogic
     public function getPaginate($where = array(), $order = '', $field = '*', $limit = '')
     {
         $res = $this->getModel()->getPaginate($where, $order, $field, $limit);
-        foreach($res as $k=>$v)
+        
+        if($res->count() > 0)
         {
-			$res[$k]->typename = $this->getModel()->getTypenameAttr(array('typeid'=>$v->typeid));
+            foreach($res as $k=>$v)
+            {
+                $res[$k] = $this->getDataView($v);
+                $res[$k]->typename = $this->getModel()->getTypenameAttr(array('typeid'=>$v->typeid));
+            }
         }
         
         return $res;

@@ -1,10 +1,11 @@
 <?php
 namespace App\Http\Controllers\Admin;
-
-use App\Http\Controllers\Admin\CommonController;
 use DB;
-use App\Http\Model\Kuaidi;
+use App\Common\ReturnData;
 use App\Common\Helper;
+use Illuminate\Http\Request;
+use App\Http\Logic\KuaidiLogic;
+use App\Http\Model\Kuaidi;
 
 class KuaidiController extends CommonController
 {
@@ -13,18 +14,17 @@ class KuaidiController extends CommonController
         parent::__construct();
     }
     
+    public function getLogic()
+    {
+        return new KuaidiLogic();
+    }
+    
     public function index()
     {
-        $data['posts'] = parent::pageList('kuaidi', '', [['status', 'asc'], ['listorder', 'asc']]);
-		
-        if($data['posts'])
-        {
-            foreach($data['posts'] as $k=>$v)
-            {
-                $data['posts'][$k]->status_text = Kuaidi::getStatusText(array('status'=>$v->status));
-            }
-        }
+        $where = '';
+		$posts = $this->getLogic()->getPaginate($where, [['status', 'asc'], ['listorder', 'asc']]);
         
+        $data['posts'] = $posts;
 		return view('admin.kuaidi.index', $data);
     }
     

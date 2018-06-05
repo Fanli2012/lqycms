@@ -1,8 +1,10 @@
 <?php
 namespace App\Http\Controllers\Admin;
-
-use App\Http\Controllers\Admin\CommonController;
 use DB;
+use App\Common\ReturnData;
+use App\Common\Helper;
+use Illuminate\Http\Request;
+use App\Http\Logic\WeixinMenuLogic;
 use App\Http\Model\WeixinMenu;
 use App\Common\WechatMenu;
 
@@ -13,10 +15,16 @@ class WeixinMenuController extends CommonController
         parent::__construct();
     }
 	
+    public function getLogic()
+    {
+        return new WeixinMenuLogic();
+    }
+    
 	public function index()
 	{
-		$catlist = WeixinMenu::getList(array('is_show'=>-1));
-		
+        $where['is_show'] = -1;
+		$catlist = $this->getLogic()->getPaginate($where, array('id', 'desc'));
+        
 		$data['catlist'] = $catlist;
 		return view('admin.WeixinMenu.index', $data);
 	}

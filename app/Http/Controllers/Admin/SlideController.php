@@ -1,8 +1,10 @@
 <?php
 namespace App\Http\Controllers\Admin;
-
-use App\Http\Controllers\Admin\CommonController;
 use DB;
+use App\Common\ReturnData;
+use App\Common\Helper;
+use Illuminate\Http\Request;
+use App\Http\Logic\SlideLogic;
 use App\Http\Model\Slide;
 
 class SlideController extends CommonController
@@ -12,18 +14,17 @@ class SlideController extends CommonController
         parent::__construct();
     }
     
+    public function getLogic()
+    {
+        return new SlideLogic();
+    }
+    
     public function index()
     {
-        $data['posts'] = parent::pageList('slide', '', [['is_show', 'asc'], ['listorder', 'asc']]);
-		
-        if($data['posts'])
-        {
-            foreach($data['posts'] as $k=>$v)
-            {
-                $data['posts'][$k]->type_text = Slide::getTypeText(array('type'=>$v->type));
-            }
-        }
+        $where = '';
+		$posts = $this->getLogic()->getPaginate($where, array('id', 'desc'));
         
+        $data['posts'] = $posts;
 		return view('admin.slide.index', $data);
     }
     
