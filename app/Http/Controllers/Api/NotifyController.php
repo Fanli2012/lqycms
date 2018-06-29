@@ -24,7 +24,9 @@ class NotifyController extends CommonController
         Log::info('微信支付回调数据：'.$GLOBALS['HTTP_RAW_POST_DATA']);
         
         //获取通知的数据
-		$xml = $GLOBALS['HTTP_RAW_POST_DATA'];
+		//$xml = $GLOBALS['HTTP_RAW_POST_DATA'];
+        $xml = file_get_contents("php://input");
+        
         //将XML转为array
         //禁止引用外部xml实体
         libxml_disable_entity_loader(true);

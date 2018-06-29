@@ -8,7 +8,6 @@ include_once "errorCode.php";
  */
 class XMLParse
 {
-
 	/**
 	 * 提取出xml数据包中的加密消息
 	 * @param string $xmltext 待提取的xml字符串
@@ -29,7 +28,7 @@ class XMLParse
 			return array(ErrorCode::$ParseXmlError, null, null);
 		}
 	}
-
+    
 	/**
 	 * 生成xml消息
 	 * @param string $encrypt 加密后的消息密文
@@ -47,8 +46,5 @@ class XMLParse
 </xml>";
 		return sprintf($format, $encrypt, $signature, $timestamp, $nonce);
 	}
-
 }
-
-
 ?>

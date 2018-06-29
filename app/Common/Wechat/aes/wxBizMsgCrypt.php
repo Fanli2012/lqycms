@@ -1,11 +1,9 @@
 <?php
-
 /**
  * 对公众平台发送给公众账号的消息加解密示例代码.
  *
  * @copyright Copyright (c) 1998-2014 Tencent Inc.
  */
-
 
 include_once "sha1.php";
 include_once "xmlparse.php";
@@ -81,8 +79,7 @@ class WXBizMsgCrypt
 		$encryptMsg = $xmlparse->generate($encrypt, $signature, $timeStamp, $nonce);
 		return ErrorCode::$OK;
 	}
-
-
+    
 	/**
 	 * 检验消息的真实性，并且获取解密后的明文.
 	 * <ol>
@@ -145,6 +142,4 @@ class WXBizMsgCrypt
 
 		return ErrorCode::$OK;
 	}
-
 }
-

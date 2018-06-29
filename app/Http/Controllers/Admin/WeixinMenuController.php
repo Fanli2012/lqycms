@@ -6,7 +6,7 @@ use App\Common\Helper;
 use Illuminate\Http\Request;
 use App\Http\Logic\WeixinMenuLogic;
 use App\Http\Model\WeixinMenu;
-use App\Common\WechatMenu;
+use App\Common\Wechat\WechatMenu;
 
 class WeixinMenuController extends CommonController
 {

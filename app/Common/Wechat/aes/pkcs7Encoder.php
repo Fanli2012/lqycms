@@ -1,5 +1,4 @@
 <?php
-
 include_once "errorCode.php";
 
 /**
@@ -10,7 +9,7 @@ include_once "errorCode.php";
 class PKCS7Encoder
 {
 	public static $block_size = 32;
-
+    
 	/**
 	 * 对需要加密的明文进行填充补位
 	 * @param $text 需要进行填充补位操作的明文
@@ -33,7 +32,7 @@ class PKCS7Encoder
 		}
 		return $text . $tmp;
 	}
-
+    
 	/**
 	 * 对解密后的明文进行补位删除
 	 * @param decrypted 解密后的明文
@@ -41,11 +40,13 @@ class PKCS7Encoder
 	 */
 	function decode($text)
 	{
-
 		$pad = ord(substr($text, -1));
-		if ($pad < 1 || $pad > 32) {
+        
+		if ($pad < 1 || $pad > 32)
+        {
 			$pad = 0;
 		}
+        
 		return substr($text, 0, (strlen($text) - $pad));
 	}
 }
@@ -58,12 +59,12 @@ class PKCS7Encoder
 class Prpcrypt
 {
 	public $key;
-
+    
 	function __construct($k)
 	{
 		$this->key = base64_decode($k . "=");
 	}
-
+    
 	/**
 	 * 对明文进行加密
 	 * @param string $text 需要加密的明文
@@ -71,7 +72,6 @@ class Prpcrypt
 	 */
 	public function encrypt($text, $appid)
 	{
-
 		try {
 			//获得16位随机字符串，填充到明文之前
 			$random = $this->getRandomStr();
@@ -97,7 +97,7 @@ class Prpcrypt
 			return array(ErrorCode::$EncryptAESError, null);
 		}
 	}
-
+    
 	/**
 	 * 对密文进行解密
 	 * @param string $encrypted 需要解密的密文
@@ -105,7 +105,6 @@ class Prpcrypt
 	 */
 	public function decrypt($encrypted, $appid)
 	{
-
 		try {
 			//使用BASE64对需要解密的字符串进行解码
 			$ciphertext_dec = base64_decode($encrypted);
@@ -120,8 +119,7 @@ class Prpcrypt
 		} catch (Exception $e) {
 			return array(ErrorCode::$DecryptAESError, null);
 		}
-
-
+        
 		try {
 			//去除补位字符
 			$pkc_encoder = new PKCS7Encoder;
@@ -141,26 +139,24 @@ class Prpcrypt
 		if ($from_appid != $appid)
 			return array(ErrorCode::$ValidateAppidError, null);
 		return array(0, $xml_content);
-
 	}
-
-
+    
 	/**
 	 * 随机生成16位字符串
 	 * @return string 生成的字符串
 	 */
 	function getRandomStr()
 	{
-
 		$str = "";
 		$str_pol = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
 		$max = strlen($str_pol) - 1;
-		for ($i = 0; $i < 16; $i++) {
+        
+		for ($i = 0; $i < 16; $i++)
+        {
 			$str .= $str_pol[mt_rand(0, $max)];
 		}
+        
 		return $str;
 	}
-
 }
-
 ?>

@@ -1,5 +1,5 @@
 <?php
-namespace App\Common;
+namespace App\Common\Wechat;
 
 /**
  * 微信自定义菜单

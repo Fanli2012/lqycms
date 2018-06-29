@@ -1,5 +1,5 @@
 <?php
-namespace App\Common;
+namespace App\Common\Wechat;
 
 if (!class_exists("WXBizMsgCrypt"))
 {
@@ -63,8 +63,8 @@ class WxComponent
      * @param string $component_appid 平台appId
      * @param string $component_appsecret 平台appsecret
      * @param string $component_verify_ticket 平台票据，微信服务器定时推送过来
-     * @param string $encodingAesKey 公众号消息加解密Key
-     * @param string $token 公众号消息校验Token
+     * @param string $encodingAesKey 公众号消息加解密Key，公众平台上，开发者设置的EncodingAESKey
+     * @param string $token 公众号消息校验Token，公众平台上，开发者设置的token
      */
     public function __construct($component_appid, $component_appsecret, $component_verify_ticket, $encodingAesKey, $token)
     {
@@ -141,16 +141,16 @@ class WxComponent
 
     /**
      * 获得预授权码
-     * @param $access_token
+     * @param $component_access_token
      * @return bool|mixed{
      *    "pre_auth_code":"Cx_Dk6qiBE0Dmx4EmlT3oRfArPvwSQ-oa3NL_fwHM7VI08r52wazoZX2Rhpz1dEw",
      *    "expires_in":600
      *    }
      */
-    public function getPreauthCode($access_token)
+    public function getPreauthCode($component_access_token)
     {
         $arr    = array('component_appid' => $this->component_appid);
-        $result = $this->httpPost(self::API_URL_PREFIX . self::GET_PREAUTHCODE_URL . $access_token, json_encode($arr));
+        $result = $this->httpPost(self::API_URL_PREFIX . self::GET_PREAUTHCODE_URL . $component_access_token, json_encode($arr));
         if ($result) {
             $json = json_decode($result, true);
             if (!$json || !empty($json['errcode'])) {

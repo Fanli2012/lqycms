@@ -3,7 +3,14 @@
 
 PC端
 
+PC企业站
+
 ![alt text](/public/images/screenshots.jpg "网站截图")
+
+PC商城
+
+![alt text](/public/images/pcscreenshots1.jpg "网站截图")
+![alt text](/public/images/pcscreenshots2.jpg "网站截图")
 
 WAP端
 

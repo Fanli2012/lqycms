@@ -5,7 +5,7 @@ use App\Http\Controllers\Weixin\CommonController;
 use Illuminate\Http\Request;
 use App\Common\ReturnCode;
 use App\Common\ReturnData;
-use App\Common\WechatAuth;
+use App\Common\Wechat\WechatAuth;
 use App\Common\Helper;
 
 class UserController extends CommonController

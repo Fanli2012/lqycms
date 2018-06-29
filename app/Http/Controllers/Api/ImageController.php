@@ -207,4 +207,54 @@ class ImageController extends CommonController
         
         return $fileArray;
     }
+    
+    /**
+     * base64图片上传，成功返回路径，不含域名，只能单图上传
+     * @param string img base64字符串
+     * @return string
+     */
+    public function base64ImageUpload(Request $request)
+	{
+        $res = [];
+        $base64_img = $_POST['img'];
+        
+        if($base64_img)
+        {
+            if(preg_match('/^(data:\s*image\/(\w+);base64,)/', $base64_img, $result))
+            {
+                $type = $result[2];
+                if(in_array($type, array('jpeg','jpg','gif','bmp','png')))
+                {
+                    $image_path = $this->path.'/'.date('Ymdhis',time()).rand(1000,9999).'.'.$type;
+                    $uploads_path = $this->path; //存储路径
+                    
+                    if(!file_exists($this->public_path.$uploads_path))
+                    {
+                        Helper::createDir($this->public_path.$uploads_path); //创建文件夹;
+                    }
+                    
+                    if(file_put_contents($this->public_path.$image_path, base64_decode(str_replace($result[1], '', $base64_img))))
+                    {
+                        return ReturnData::create(ReturnData::SUCCESS,null,$image_path);
+                    }
+                    else
+                    {
+                        return ReturnData::create(ReturnData::SYSTEM_FAIL,null,'图片上传失败');
+                    }
+                }
+                else
+                {
+                    //文件类型错误
+                    return ReturnData::create(ReturnData::SYSTEM_FAIL,null,'图片上传类型错误');
+                }
+            }
+            else
+            {
+                //文件错误
+                return ReturnData::create(ReturnData::SYSTEM_FAIL,null,'文件错误');
+            }
+        }
+        
+        return ReturnData::create(ReturnData::SYSTEM_FAIL,null,'请上传文件');
+    }
 }

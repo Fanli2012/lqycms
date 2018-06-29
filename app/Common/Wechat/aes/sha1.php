@@ -1,5 +1,4 @@
 <?php
-
 include_once "errorCode.php";
 
 /**
@@ -29,8 +28,5 @@ class SHA1
 			return array(ErrorCode::$ComputeSignatureError, null);
 		}
 	}
-
 }
-
-
 ?>
