@@ -59,7 +59,7 @@ function output_excel()
 <?php if($posts){foreach($posts as $row){ ?>
 <tr>
     <td><a href="<?php echo route('admin_order_detail',array('id'=>$row->id)); ?>"><?php echo $row->order_sn.'-'.$row->id; ?></a>, 金额：<?php echo $row->order_amount; ?><br>下单时间：<?php echo date('Y-m-d H:i:s',$row->add_time); ?></td>
-    <td><?php if($row->pay_money){echo '支付金额：'.$row->pay_money;} ?><?php if($row->out_trade_no){echo ', 流水号：'.$row->out_trade_no;} ?><?php if($row->pay_name){echo '<br><font color="green">'.$row->pay_name.'</font>, ';} ?><?php if($row->pay_time){echo '支付时间：'.date('Y-m-d H:i:s',$row->pay_time);} ?></td>
+    <td><?php if($row->pay_money){echo '支付金额：'.$row->pay_money;} ?><?php if($row->trade_no){echo ', 流水号：'.$row->out_trade_no;} ?><?php if($row->pay_name){echo '<br><font color="green">'.$row->pay_name.'</font>, ';} ?><?php if($row->pay_time){echo '支付时间：'.date('Y-m-d H:i:s',$row->pay_time);} ?></td>
     <td><?php echo $row->name.'[TEL:'.$row->mobile.']'; ?><br><?php echo $row->province_name; ?><?php echo $row->city_name; ?><?php echo $row->district_name; ?></td>
     <td><?php if($row->order_status_text=='待发货'){echo '<font color="red">'.$row->order_status_text.'</font>';}else{echo $row->order_status_text;} ?></td>
     <td><?php if($row->place_type==1){echo 'pc';}elseif($row->place_type==2){echo 'weixin';}elseif($row->place_type==3){echo 'app';}elseif($row->place_type==4){echo 'wap';} ?></td>

@@ -72,7 +72,7 @@ class OrderController extends CommonController
         $posts = parent::pageList('order', $where);
 		foreach($posts as $key=>$value)
         {
-            $order_status_arr = Order::getOrderStatusText(object_to_array($value, 1));
+            $order_status_arr = model('Order')->getOrderStatusAttr($value);
             $posts[$key]->order_status_text = $order_status_arr?$order_status_arr['text']:'';
             $posts[$key]->order_status_num = $order_status_arr?$order_status_arr['num']:'';
             
@@ -96,16 +96,16 @@ class OrderController extends CommonController
 		
         if($data['post'])
         {
-            $order_status_arr = Order::getOrderStatusText($data['post']);
+            $order_status_arr = model('Order')->getOrderStatusAttr($data['post']);
             $data['post']['order_status_text'] = $order_status_arr?$order_status_arr['text']:'';
             $data['post']['order_status_num'] = $order_status_arr?$order_status_arr['num']:'';
             
-            $data['post']['province_name'] = Region::getRegionName($data['post']['province']);
-            $data['post']['city_name'] = Region::getRegionName($data['post']['city']);
-            $data['post']['district_name'] = Region::getRegionName($data['post']['district']);
+            $data['post']['province_name'] = model('Region')->getRegionName(['id'=>$data['post']->province]);
+            $data['post']['city_name'] = model('Region')->getRegionName(['id'=>$data['post']->city]);
+            $data['post']['district_name'] = model('Region')->getRegionName(['id'=>$data['post']->district]);
             
-            $data['post']['invoice_text'] = Order::getInvoiceText($data['post']);
-            $data['post']['place_type_text'] = Order::getPlaceTypeText($data['post']);
+            $data['post']['invoice_text'] = model('Order')->getInvoiceAttr($data['post']);
+            $data['post']['place_type_text'] = model('Order')->getPlaceTypeAttr($data['post']);
             
             $data['post']['user'] = User::where(array('id'=>$data['post']['user_id']))->first(); //下单人信息
             
@@ -113,7 +113,7 @@ class OrderController extends CommonController
             
             foreach($order_goods as $k=>$v)
             {
-                $order_goods[$k]['refund_status_text'] = OrderGoods::getRefundStatusText($v);
+                $order_goods[$k]['refund_status_text'] = model('OrderGoods')->getRefundStatusAttr($v);
             }
             
             $data['post']['goodslist'] = $order_goods;
