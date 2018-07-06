@@ -170,4 +170,18 @@ class Slide extends BaseModel
         $arr = array(0 => 'pc', 1 => 'weixin', 2 => 'app', 3 => 'wap');
         return $arr[$data->type];
     }
+    
+    //是否显示，默认0显示
+    public function getIsShowAttr($data)
+    {
+        $arr = array(0 => '显示', 1 => '隐藏');
+        return $arr[$data->is_show];
+    }
+    
+    //跳转方式，0_blank，1_self，2_parent，3_top，4framename
+    public function getTargetAttr($data)
+    {
+        $arr = array(0 => '_blank', 1 => '_self', 2 => '_parent', 3 => '_top', 4 => 'framename');
+        return $arr[$data->target];
+    }
 }

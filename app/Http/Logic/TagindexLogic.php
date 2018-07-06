@@ -45,6 +45,14 @@ class TagindexLogic extends BaseLogic
     {
         $res = $this->getModel()->getPaginate($where, $order, $field, $limit);
         
+        if($res->count() > 0)
+        {
+            foreach($res as $k=>$v)
+            {
+                $res[$k] = $this->getDataView($v);
+            }
+        }
+        
         return $res;
     }
     
@@ -53,13 +61,13 @@ class TagindexLogic extends BaseLogic
     {
         $res = $this->getModel()->getAll($where, $order, $field, $limit);
         
-        /* if($res)
+        if($res)
         {
             foreach($res as $k=>$v)
             {
                 $res[$k] = $this->getDataView($v);
             }
-        } */
+        }
         
         return $res;
     }
@@ -83,6 +91,7 @@ class TagindexLogic extends BaseLogic
         $validator = $this->getValidate($data, 'add');
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
+        $data['pubdate'] = time();//添加时间
         $res = $this->getModel()->add($data,$type);
         if($res){return ReturnData::create(ReturnData::SUCCESS,$res);}
         

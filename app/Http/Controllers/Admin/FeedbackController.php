@@ -1,8 +1,11 @@
 <?php
 namespace App\Http\Controllers\Admin;
-
-use App\Http\Controllers\Admin\CommonController;
 use DB;
+use App\Common\Helper;
+use App\Common\ReturnData;
+use Illuminate\Http\Request;
+use App\Http\Logic\FeedbackLogic;
+use App\Http\Model\Feedback;
 
 class FeedbackController extends CommonController
 {
@@ -11,10 +14,38 @@ class FeedbackController extends CommonController
         parent::__construct();
     }
     
+    public function getLogic()
+    {
+        return new FeedbackLogic();
+    }
+    
     public function index()
     {
-        $data['posts'] = parent::pageList('feedback');
-		
+        $res = '';
+        $where = function ($query) use ($res) {
+			if(isset($_REQUEST["keyword"]))
+			{
+				$query->where('title', 'like', '%'.$_REQUEST['keyword'].'%');
+			}
+			
+			if(isset($_REQUEST["user_id"]))
+			{
+				$query->where('user_id', $_REQUEST["user_id"]);
+			}
+            
+            if(isset($_REQUEST["type"]))
+			{
+				$query->where('type', $_REQUEST["type"]);
+			}
+            
+            if(isset($_REQUEST["mobile"]))
+			{
+				$query->where('mobile', $_REQUEST["mobile"]);
+			}
+        };
+        
+        $posts = $this->getLogic()->getPaginate($where, array('id', 'desc'));
+        $data['posts'] = $posts;
 		return view('admin.feedback.index', $data);
     }
     
@@ -23,60 +54,61 @@ class FeedbackController extends CommonController
         return view('admin.feedback.add');
     }
     
-    public function doadd()
+    public function doadd(Request $request)
     {
-		if(isset($_POST['editorValue'])){unset($_POST['editorValue']);}
-		unset($_POST["_token"]);
-		
-		if(DB::table('feedback')->insert(array_filter($_POST)))
+        if(Helper::isPostRequest())
         {
-            success_jump('添加成功！', route('admin_feedback'));
+            $res = $this->getLogic()->add($_POST);
+            if($res['code'] == ReturnData::SUCCESS)
+            {
+                success_jump($res['msg'], route('admin_feedback'));
+            }
+            
+            error_jump($res['msg']);
         }
-		else
-		{
-			error_jump('添加失败！请修改后重新添加');
-		}
     }
     
-    public function edit()
+    public function edit(Request $request)
     {
-        if(!empty($_GET["id"])){$id = $_GET["id"];}else{$id="";}
-        if(preg_match('/[0-9]*/',$id)){}else{exit;}
+        if(!checkIsNumber($request->input('id',null))){error_jump('参数错误');}
+        $id = $request->input('id');
         
-        $data['id'] = $id;
-		$data['post'] = object_to_array(DB::table('feedback')->where('id', $id)->first(), 1);
+        $data['id'] = $where['id'] = $id;
+		$data['post'] = $this->getLogic()->getOne($where);
         
         return view('admin.feedback.edit', $data);
     }
     
-    public function doedit()
+    public function doedit(Request $request)
     {
-        if(!empty($_POST["id"])){$id = $_POST["id"];unset($_POST["id"]);}else{$id="";exit;}
+        if(!checkIsNumber($request->input('id',null))){error_jump('参数错误');}
+        $id = $request->input('id');
         
-		if(isset($_POST['editorValue'])){unset($_POST['editorValue']);}
-		unset($_POST["_token"]);
-		
-		if(DB::table('feedback')->where('id', $id)->update($_POST))
+        if(Helper::isPostRequest())
         {
-            success_jump('修改成功！', route('admin_slide'));
+            $where['id'] = $id;
+            $res = $this->getLogic()->edit($_POST, $where);
+            if($res['code'] == ReturnData::SUCCESS)
+            {
+                success_jump($res['msg'], route('admin_feedback'));
+            }
+            
+            error_jump($res['msg']);
         }
-		else
-		{
-			error_jump('修改失败！');
-		}
     }
     
-    public function del()
+    public function del(Request $request)
     {
-		if(!empty($_GET["id"])){$id = $_GET["id"];}else{error_jump('删除失败！请重新提交');}
-		
-		if(DB::table('feedback')->whereIn("id", explode(',', $id))->delete())
+        if(!checkIsNumber($request->input('id',null))){error_jump('参数错误');}
+        $id = $request->input('id');
+        
+        $where['id'] = $id;
+        $res = $this->getLogic()->del($where);
+        if($res['code'] == ReturnData::SUCCESS)
         {
-            success_jump('删除成功');
+            success_jump($res['msg']);
         }
-		else
-		{
-			error_jump('删除失败！请重新提交');
-		}
+        
+        error_jump($res['msg']);
     }
 }

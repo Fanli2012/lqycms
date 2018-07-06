@@ -18,7 +18,7 @@ class OrderController extends CommonController
     
     public function getLogic()
     {
-        return logic('Order');
+        return new OrderLogic();
     }
     
     public function orderList(Request $request)

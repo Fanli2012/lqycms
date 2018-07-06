@@ -30,7 +30,7 @@ class FeedbackRequest extends BaseRequest
     
     //场景验证规则
     protected $scene = [
-        'add'  => ['content', 'add_time', 'title', 'user_id', 'mobile', 'type'],
+        'add'  => ['content', 'title', 'mobile', 'type'],
         'edit' => ['content', 'title', 'mobile', 'type'],
         'del'  => ['id'],
     ];

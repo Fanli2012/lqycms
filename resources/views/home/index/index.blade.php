@@ -94,8 +94,12 @@ var swiper = new Swiper('.swiper-container', {
 </li>
 </ul></div>
 
+<style>
+.index-tit span a{font-size:14px;color:#666;font-weight:400;}
+.index-tit .spilt{margin:0 12px;font-size:14px;font-weight:400;}
+</style>
 <div class="box">
-<p style="font-weight:bold;font-size:24px;color:#333;margin-top:30px;margin-bottom:20px;">编辑推荐</p>
+<p class="index-tit" style="font-weight:bold;font-size:28px;color:#333;margin-top:30px;margin-bottom:20px;">编辑推荐<small style="margin-left:20px;font-size:14px;color:#666;font-weight:400;">工厂直达消费者，剔除品牌溢价</small><span style="float:right;"><a href="">夏凉</a><b class="spilt">/</b><a href="">夏凉</a><b class="spilt">/</b><a href="">夏凉</a><b class="spilt">/</b><a href="">夏凉</a><b class="spilt">/</b><a href="">夏凉</a><b class="spilt">/</b><a href="">夏凉</a><a style="margin-left:20px;" href="">查看更多 ></a></span></p>
 <ul class="pul">
 <?php if($tjlist){foreach($tjlist as $k=>$v){ ?>
 <li><a href="<?php echo route('home_goods',array('id'=>$v['id'])); ?>" target="_blank"><img src="<?php echo $v['litpic']; ?>" alt="<?php echo $v['title']; ?>">
@@ -109,7 +113,7 @@ var swiper = new Swiper('.swiper-container', {
 </ul></div>
 
 <div class="box">
-<p style="font-weight:bold;font-size:24px;color:#333;margin-top:30px;margin-bottom:20px;">热门商品</p>
+<p style="font-weight:bold;font-size:28px;color:#333;margin-top:30px;margin-bottom:20px;">热门商品</p>
 <ul class="pul" id="goods_list">
 <?php if($list){foreach($list as $k=>$v){ ?>
 <li><a href="<?php echo route('home_goods',array('id'=>$v['id'])); ?>" target="_blank"><img src="<?php echo $v['litpic']; ?>" alt="<?php echo $v['title']; ?>">

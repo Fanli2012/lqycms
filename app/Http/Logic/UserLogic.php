@@ -67,13 +67,13 @@ class UserLogic extends BaseLogic
     {
         $res = $this->getModel()->getAll($where, $order, $field, $limit);
         
-        /* if($res)
+        if($res)
         {
             foreach($res as $k=>$v)
             {
                 $res[$k] = $this->getDataView($v);
             }
-        } */
+        }
         
         return $res;
     }
@@ -101,6 +101,7 @@ class UserLogic extends BaseLogic
         $validator = $this->getValidate($data, 'add');
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
+        $data['add_time'] = $data['updated_at'] = time();//添加、更新时间
         $res = $this->getModel()->add($data,$type);
         if($res){return ReturnData::create(ReturnData::SUCCESS,$res);}
         
@@ -116,7 +117,6 @@ class UserLogic extends BaseLogic
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
         $data['updated_at'] =time();
-        
         $res = $this->getModel()->edit($data,$where);
         if($res){return ReturnData::create(ReturnData::SUCCESS,$res);}
         

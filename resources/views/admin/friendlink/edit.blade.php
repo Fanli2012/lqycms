@@ -9,11 +9,11 @@
 <tbody>
     <tr>
         <td>链接名称：</td>
-        <td><input name="webname" type="text" id="webname" value="<?php echo $post["webname"]; ?>" class="required" style="width:30%" placeholder="在此输入关键词"><input style="display:none;" name="id" type="text" id="id" value="<?php echo $id; ?>"></td>
+        <td><input name="webname" type="text" id="webname" value="<?php echo $post->webname; ?>" class="required" style="width:30%" placeholder="在此输入关键词"><input style="display:none;" name="id" type="text" id="id" value="<?php echo $id; ?>"></td>
     </tr>
     <tr>
         <td>链接网址：</td>
-        <td><input name="url" type="text" id="rpurl" value="<?php echo $post["url"]; ?>" style="width:60%" class="required"> (请用绝对地址)</td>
+        <td><input name="url" type="text" id="rpurl" value="<?php echo $post->url; ?>" style="width:60%" class="required"> (请用绝对地址)</td>
     </tr>
     <tr>
         <td colspan="2"><button type="submit" class="btn btn-success" value="Submit">保存(Submit)</button>&nbsp;&nbsp;<button type="reset" class="btn btn-default" value="Reset">重置(Reset)</button></td>

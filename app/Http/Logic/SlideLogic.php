@@ -61,13 +61,13 @@ class SlideLogic extends BaseLogic
     {
         $res = $this->getModel()->getAll($where, $order, $field, $limit);
         
-        /* if($res)
+        if($res)
         {
             foreach($res as $k=>$v)
             {
                 $res[$k] = $this->getDataView($v);
             }
-        } */
+        }
         
         return $res;
     }
@@ -105,7 +105,7 @@ class SlideLogic extends BaseLogic
         $validator = $this->getValidate($data, 'edit');
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
-        $res = $this->getModel()->edit($data,$where);
+        $res = $this->getModel()->edit($data, $where);
         if($res){return ReturnData::create(ReturnData::SUCCESS,$res);}
         
         return ReturnData::create(ReturnData::FAIL);

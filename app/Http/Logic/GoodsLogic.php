@@ -50,6 +50,14 @@ class GoodsLogic extends BaseLogic
     {
         $res = $this->getModel()->getPaginate($where, $order, $field, $limit);
         
+        if($res->count() > 0)
+        {
+            foreach($res as $k=>$v)
+            {
+                $res[$k] = $this->getDataView($v);
+            }
+        }
+        
         return $res;
     }
     
@@ -58,15 +66,15 @@ class GoodsLogic extends BaseLogic
     {
         $res = $this->getModel()->getAll($where, $order, $field, $limit);
         
-        if($res['count'] > 0)
+        if($res)
         {
-            foreach($res['list'] as $k=>$v)
+            foreach($res as $k=>$v)
             {
-                $res['list'][$k] = $this->getDataView($v);
+                $res[$k] = $this->getDataView($v);
                 
-                $res['list'][$k]->price = $this->getModel()->get_goods_final_price($v); //商品最终价格
-                $res['list'][$k]->is_promote_goods = $this->getModel()->bargain_price($v->promote_price,$v->promote_start_date,$v->promote_end_date); //is_promote_goods等于0，说明不是促销商品
-                $res['list'][$k]->goods_detail_url = route('weixin_goods_detail',array('id'=>$v->id));
+                $res[$k]->price = $this->getModel()->get_goods_final_price($v); //商品最终价格
+                $res[$k]->is_promote_goods = $this->getModel()->bargain_price($v->promote_price,$v->promote_start_date,$v->promote_end_date); //is_promote_goods等于0，说明不是促销商品
+                $res[$k]->goods_detail_url = route('weixin_goods_detail',array('id'=>$v->id));
             }
         }
         
@@ -104,6 +112,7 @@ class GoodsLogic extends BaseLogic
         $validator = $this->getValidate($data, 'add');
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
+        $data['add_time'] = $data['pubdate'] = time();//添加、更新时间
         $res = $this->getModel()->add($data,$type);
         if($res){return ReturnData::create(ReturnData::SUCCESS,$res);}
         

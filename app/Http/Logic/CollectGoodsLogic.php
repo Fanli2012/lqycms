@@ -48,6 +48,14 @@ class CollectGoodsLogic extends BaseLogic
     {
         $res = $this->getModel()->getPaginate($where, $order, $field, $limit);
         
+        if($res->count() > 0)
+        {
+            foreach($res as $k=>$v)
+            {
+                $res[$k] = $this->getDataView($v);
+            }
+        }
+        
         return $res;
     }
     
@@ -56,13 +64,13 @@ class CollectGoodsLogic extends BaseLogic
     {
         $res = $this->getModel()->getAll($where, $order, $field, $limit);
         
-        /* if($res)
+        if($res)
         {
             foreach($res as $k=>$v)
             {
                 $res[$k] = $this->getDataView($v);
             }
-        } */
+        }
         
         return $res;
     }

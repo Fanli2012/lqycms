@@ -63,13 +63,13 @@ class ArticleLogic extends BaseLogic
     {
         $res = $this->getModel()->getAll($where, $order, $field, $limit);
         
-        /* if($res)
+        if($res)
         {
             foreach($res as $k=>$v)
             {
                 $res[$k] = $this->getDataView($v);
             }
-        } */
+        }
         
         return $res;
     }
@@ -96,6 +96,7 @@ class ArticleLogic extends BaseLogic
         $validator = $this->getValidate($data, 'add');
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
+        $data['addtime'] = $data['pubdate'] = time();//添加、更新时间
         $res = $this->getModel()->add($data,$type);
         if($res){return ReturnData::create(ReturnData::SUCCESS,$res);}
         
@@ -110,6 +111,7 @@ class ArticleLogic extends BaseLogic
         $validator = $this->getValidate($data, 'edit');
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
+        $data['pubdate'] = time();//更新时间
         $res = $this->getModel()->edit($data,$where);
         if($res){return ReturnData::create(ReturnData::SUCCESS,$res);}
         

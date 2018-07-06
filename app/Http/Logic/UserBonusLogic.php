@@ -46,6 +46,14 @@ class UserBonusLogic extends BaseLogic
     {
         $res = $this->getModel()->getPaginate($where, $order, $field, $limit);
         
+        if($res->count() > 0)
+        {
+            foreach($res as $k=>$v)
+            {
+                $res[$k] = $this->getDataView($v);
+            }
+        }
+        
         return $res;
     }
     
@@ -54,13 +62,13 @@ class UserBonusLogic extends BaseLogic
     {
         $res = $this->getModel()->getAll($where, $order, $field, $limit);
         
-        /* if($res)
+        if($res)
         {
             foreach($res as $k=>$v)
             {
                 $res[$k] = $this->getDataView($v);
             }
-        } */
+        }
         
         return $res;
     }
@@ -85,7 +93,7 @@ class UserBonusLogic extends BaseLogic
         $validator = $this->getValidate($data, 'add');
         if ($validator->fails()){return ReturnData::create(ReturnData::PARAMS_ERROR, null, $validator->errors()->first());}
         
-        $data['get_time'] = time();
+        $data['get_time'] = time(); //优惠券获取时间
         
         $bonus = model('Bonus')->getOne(['id'=>$data['bonus_id']]);
         if(!$bonus){return ReturnData::create(ReturnData::PARAMS_ERROR,null,'亲，您来晚了啦，已被抢光了');}
@@ -93,7 +101,6 @@ class UserBonusLogic extends BaseLogic
         
         if($this->getModel()->getOne(['bonus_id'=>$data['bonus_id'],'user_id'=>$data['user_id']])){return ReturnData::create(ReturnData::PARAMS_ERROR,null,'亲，您已获取！');}
         
-        $data['get_time'] = time(); //优惠券获取时间
         $res = $this->getModel()->add($data,$type);
         if($res)
         {

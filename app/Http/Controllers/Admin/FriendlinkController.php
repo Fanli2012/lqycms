@@ -1,8 +1,11 @@
 <?php
 namespace App\Http\Controllers\Admin;
-
-use App\Http\Controllers\Admin\CommonController;
 use DB;
+use App\Common\Helper;
+use App\Common\ReturnData;
+use Illuminate\Http\Request;
+use App\Http\Logic\FriendlinkLogic;
+use App\Http\Model\Friendlink;
 
 class FriendlinkController extends CommonController
 {
@@ -11,70 +14,91 @@ class FriendlinkController extends CommonController
         parent::__construct();
     }
 	
-    public function index()
+    public function getLogic()
     {
-		$posts = parent::pageList('friendlink');
-		
-        $data['posts'] = $posts;
-        
-        return view('admin.friendlink.index', $data);
+        return new FriendlinkLogic();
     }
     
-    public function add()
+    public function index(Request $request)
+    {
+        $res = '';
+        $where = function ($query) use ($res) {
+			if(isset($_REQUEST["keyword"]))
+			{
+				$query->where('webname', 'like', '%'.$_REQUEST['keyword'].'%');
+			}
+			
+			if(isset($_REQUEST["group_id"]))
+			{
+				$query->where('group_id', $_REQUEST["group_id"]);
+			}
+        };
+        
+        $posts = $this->getLogic()->getPaginate($where, array('listorder', 'asc'));
+        $data['posts'] = $posts;
+		return view('admin.friendlink.index', $data);
+    }
+    
+    public function add(Request $request)
     {
         return view('admin.friendlink.add');
     }
     
-    public function doadd()
+    public function doadd(Request $request)
     {
-		unset($_POST["_token"]);
-		if(DB::table('friendlink')->insert($_POST))
+        if(Helper::isPostRequest())
         {
-            success_jump('添加成功！', route('admin_friendlink'));
+            $res = $this->getLogic()->add($_POST);
+            if($res['code'] == ReturnData::SUCCESS)
+            {
+                success_jump($res['msg'], route('admin_friendlink'));
+            }
+            
+            error_jump($res['msg']);
         }
-		else
-		{
-			error_jump('添加失败！请修改后重新添加');
-		}
     }
     
-    public function edit()
+    public function edit(Request $request)
     {
-        if(!empty($_GET["id"])){$id = $_GET["id"];}else{$id="";}
-        if(preg_match('/[0-9]*/',$id)){}else{exit;}
+        if(!checkIsNumber($request->input('id',null))){error_jump('参数错误');}
+        $id = $request->input('id');
         
-        $data['id'] = $id;
-		$data['post'] = object_to_array(DB::table('friendlink')->where('id', $id)->first(), 1);
+        $data['id'] = $where['id'] = $id;
+		$data['post'] = $this->getLogic()->getOne($where);
         
         return view('admin.friendlink.edit', $data);
     }
     
-    public function doedit()
+    public function doedit(Request $request)
     {
-        if(!empty($_POST["id"])){$id = $_POST["id"];unset($_POST["id"]);}else {$id="";exit;}
+        if(!checkIsNumber($request->input('id',null))){error_jump('参数错误');}
+        $id = $request->input('id');
         
-		unset($_POST["_token"]);
-		if(DB::table('friendlink')->where('id', $id)->update($_POST))
+        if(Helper::isPostRequest())
         {
-            success_jump('修改成功！', route('admin_friendlink'));
+            $where['id'] = $id;
+            $res = $this->getLogic()->edit($_POST, $where);
+            if($res['code'] == ReturnData::SUCCESS)
+            {
+                success_jump($res['msg'], route('admin_friendlink'));
+            }
+            
+            error_jump($res['msg']);
         }
-		else
-		{
-			error_jump('修改失败！');
-		}
     }
     
-    public function del()
+    public function del(Request $request)
     {
-		if(!empty($_GET["id"])){$id = $_GET["id"];}else{error_jump('删除失败！请重新提交');}
-		
-		if(DB::table('friendlink')->whereIn("id", explode(',', $id))->delete())
+        if(!checkIsNumber($request->input('id',null))){error_jump('参数错误');}
+        $id = $request->input('id');
+        
+        $where['id'] = $id;
+        $res = $this->getLogic()->del($where);
+        if($res['code'] == ReturnData::SUCCESS)
         {
-            success_jump('删除成功');
+            success_jump($res['msg']);
         }
-		else
-		{
-			error_jump('删除失败！请重新提交');
-		}
+        
+        error_jump($res['msg']);
     }
 }

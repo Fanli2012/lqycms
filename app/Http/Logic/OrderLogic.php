@@ -57,6 +57,14 @@ class OrderLogic extends BaseLogic
     {
         $res = $this->getModel()->getPaginate($where, $order, $field, $limit);
         
+        if($res->count() > 0)
+        {
+            foreach($res as $k=>$v)
+            {
+                $res[$k] = $this->getDataView($v);
+            }
+        }
+        
         return $res;
     }
     
@@ -65,13 +73,13 @@ class OrderLogic extends BaseLogic
     {
         $res = $this->getModel()->getAll($where, $order, $field, $limit);
         
-        /* if($res)
+        if($res)
         {
             foreach($res as $k=>$v)
             {
                 $res[$k] = $this->getDataView($v);
             }
-        } */
+        }
         
         return $res;
     }
@@ -165,10 +173,12 @@ class OrderLogic extends BaseLogic
             $pay_status = 1; //已付款
         }
         
+        $time = time();
         //构造订单字段
 		$order_info = array(
             'order_sn'     => date('YmdHis').rand(1000,9999),
-            'add_time'     => time(),
+            'add_time'     => $time,
+            'updated_at'   => $time,
             'pay_status'   => $pay_status,
             'user_id'      => $data['user_id'],
             'goods_amount' => $order_goods['total_price'], //商品的总金额

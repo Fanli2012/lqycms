@@ -89,9 +89,7 @@ class ArticleController extends CommonController
         $litpic="";if(!empty($_POST["litpic"])){$litpic = $_POST["litpic"];}else{$_POST['litpic']="";} //缩略图
         if(empty($_POST["description"])){if(!empty($_POST["body"])){$_POST['description']=cut_str($_POST["body"]);}} //description
         $content="";if(!empty($_POST["body"])){$content = $_POST["body"];}
-        $_POST['pubdate'] = time();//更新时间
-        $_POST['addtime'] = time();//添加时间
-		$_POST['user_id'] = $_SESSION['admin_user_info']['id']; // 发布者id
+        $_POST['user_id'] = $_SESSION['admin_user_info']['id']; // 发布者id
         
 		//关键词
         if(!empty($_POST["keywords"]))
@@ -160,8 +158,7 @@ class ArticleController extends CommonController
         $litpic="";if(!empty($_POST["litpic"])){$litpic = $_POST["litpic"];}else{$_POST['litpic']="";} //缩略图
         if(empty($_POST["description"])){if(!empty($_POST["body"])){$_POST['description']=cut_str($_POST["body"]);}} //description
         $content="";if(!empty($_POST["body"])){$content = $_POST["body"];}
-        $_POST['pubdate'] = time();//更新时间
-
+        
 		if(!empty($_POST["keywords"]))
 		{
 			$_POST['keywords']=str_replace("，",",",$_POST["keywords"]);

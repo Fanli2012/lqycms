@@ -1,8 +1,8 @@
 <?php
 namespace App\Http\Controllers\Admin;
 use DB;
-use App\Common\ReturnData;
 use App\Common\Helper;
+use App\Common\ReturnData;
 use Illuminate\Http\Request;
 use App\Http\Logic\SlideLogic;
 use App\Http\Model\Slide;
@@ -19,74 +19,96 @@ class SlideController extends CommonController
         return new SlideLogic();
     }
     
-    public function index()
+    public function index(Request $request)
     {
-        $where = '';
-		$posts = $this->getLogic()->getPaginate($where, array('id', 'desc'));
+        $res = '';
+        $where = function ($query) use ($res) {
+			if(isset($_REQUEST["keyword"]))
+			{
+				$query->where('title', 'like', '%'.$_REQUEST['keyword'].'%');
+			}
+			
+			if(isset($_REQUEST["group_id"]))
+			{
+				$query->where('group_id', $_REQUEST["group_id"]);
+			}
+            
+            if(isset($_REQUEST["is_show"]))
+			{
+				$query->where('is_show', $_REQUEST["is_show"]);
+			}
+            
+            if(isset($_REQUEST["type"]))
+			{
+				$query->where('type', $_REQUEST["type"]);
+			}
+        };
         
+        $posts = $this->getLogic()->getPaginate($where, array('listorder', 'asc'));
         $data['posts'] = $posts;
 		return view('admin.slide.index', $data);
     }
     
-    public function add()
+    public function add(Request $request)
     {
         return view('admin.slide.add');
     }
     
-    public function doadd()
+    public function doadd(Request $request)
     {
-		if(isset($_POST['editorValue'])){unset($_POST['editorValue']);}
-		unset($_POST["_token"]);
-		
-		if(DB::table('slide')->insert(array_filter($_POST)))
+        if(Helper::isPostRequest())
         {
-            success_jump('添加成功！', route('admin_slide'));
+            $res = $this->getLogic()->add($_POST);
+            if($res['code'] == ReturnData::SUCCESS)
+            {
+                success_jump($res['msg'], route('admin_slide'));
+            }
+            
+            error_jump($res['msg']);
         }
-		else
-		{
-			error_jump('添加失败！请修改后重新添加');
-		}
     }
     
-    public function edit()
+    public function edit(Request $request)
     {
-        if(!empty($_GET["id"])){$id = $_GET["id"];}else{$id="";}
-        if(preg_match('/[0-9]*/',$id)){}else{exit;}
+        if(!checkIsNumber($request->input('id',null))){error_jump('参数错误');}
+        $id = $request->input('id');
         
-        $data['id'] = $id;
-		$data['post'] = object_to_array(DB::table('slide')->where('id', $id)->first(), 1);
+        $data['id'] = $where['id'] = $id;
+		$data['post'] = $this->getLogic()->getOne($where);
         
         return view('admin.slide.edit', $data);
     }
     
-    public function doedit()
+    public function doedit(Request $request)
     {
-        if(!empty($_POST["id"])){$id = $_POST["id"];unset($_POST["id"]);}else{$id="";exit;}
+        if(!checkIsNumber($request->input('id',null))){error_jump('参数错误');}
+        $id = $request->input('id');
         
-		if(isset($_POST['editorValue'])){unset($_POST['editorValue']);}
-		unset($_POST["_token"]);
-		
-		if(DB::table('slide')->where('id', $id)->update($_POST))
+        if(Helper::isPostRequest())
         {
-            success_jump('修改成功！', route('admin_slide'));
+            $where['id'] = $id;
+            $res = $this->getLogic()->edit($_POST, $where);
+            if($res['code'] == ReturnData::SUCCESS)
+            {
+                success_jump($res['msg'], route('admin_slide'));
+            }
+            
+            error_jump($res['msg']);
         }
-		else
-		{
-			error_jump('修改失败！');
-		}
     }
     
-    public function del()
+    public function del(Request $request)
     {
-		if(!empty($_GET["id"])){$id = $_GET["id"];}else{error_jump('删除失败！请重新提交');}
-		
-		if(DB::table('slide')->whereIn("id", explode(',', $id))->delete())
+        if(!checkIsNumber($request->input('id',null))){error_jump('参数错误');}
+        $id = $request->input('id');
+        
+        $where['id'] = $id;
+        $res = $this->getLogic()->del($where);
+        if($res['code'] == ReturnData::SUCCESS)
         {
-            success_jump('删除成功');
+            success_jump($res['msg']);
         }
-		else
-		{
-			error_jump('删除失败！请重新提交');
-		}
+        
+        error_jump($res['msg']);
     }
 }

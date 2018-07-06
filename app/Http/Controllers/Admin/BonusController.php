@@ -1,10 +1,10 @@
 <?php
 namespace App\Http\Controllers\Admin;
-
-use App\Http\Controllers\Admin\CommonController;
 use DB;
-use App\Http\Model\Bonus;
 use App\Common\Helper;
+use Illuminate\Http\Request;
+use App\Http\Model\Bonus;
+use App\Http\Logic\BonusLogic;
 
 class BonusController extends CommonController
 {
@@ -13,18 +13,37 @@ class BonusController extends CommonController
         parent::__construct();
     }
     
+    public function getLogic()
+    {
+        return logic('Bonus');
+    }
+    
     public function index()
     {
-        $data['posts'] = parent::pageList('bonus', '', [['status', 'asc']]);
+        $res = '';
+		$where = function ($query) use ($res) {
+			if(isset($_REQUEST["keyword"]))
+			{
+				$query->where('name', 'like', '%'.$_REQUEST['keyword'].'%');
+			}
+			
+			if(isset($_REQUEST["id"]))
+			{
+				$query->where('typeid', $_REQUEST["id"]);
+			}
+        };
 		
-        if($data['posts'])
+        $posts = $this->getLogic()->getPaginate($where, array('status', 'asc'));
+		if($posts)
         {
-            foreach($data['posts'] as $k=>$v)
+            foreach($posts as $k=>$v)
             {
                 
             }
         }
         
+        $data['posts'] = $posts;
+		
 		return view('admin.bonus.index', $data);
     }
     

@@ -1,8 +1,8 @@
 <?php
 namespace App\Http\Controllers\Admin;
-
-use App\Http\Controllers\Admin\CommonController;
 use DB;
+use App\Common\ReturnData;
+use Illuminate\Http\Request;
 
 class CategoryController extends CommonController
 {

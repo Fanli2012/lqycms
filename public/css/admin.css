@@ -44,8 +44,8 @@ input[type="text"],input[type="password"]{padding:4px 5px;vertical-align:middle;
 .menu ul{padding:0;}
 .menu ul li{background-color:#f2f2f2;border:solid 1px #E5E5E5;border-bottom:0;}
 .menu ul li a{padding-left:20px;color:#444;display:block;height:45px;line-height:45px;position:relative;font-size:16px;}
-.menu ul li .inactive{background:url(/images/off.png) no-repeat 90% center;}
-.menu ul li .active{background:url(/images/on.png) no-repeat 90% center;color:#01aef0;} 
+.menu ul li .inactive{/* background:url(../images/off.png) no-repeat 90% center; */}
+.menu ul li .active{/* background:url(../images/on.png) no-repeat 90% center; */color:#01aef0;} 
 .menu ul li ul{display:none;padding:0;}
 .menu ul li ul li{border-left:0;border-right:0;background-color:#fafafa;border-color:#eee;}
 .menu ul li ul li ul{display:none;padding:0;}

@@ -9,50 +9,50 @@
 <tbody>
     <tr>
         <td align="right">标题：</td>
-        <td><input name="title" type="text" id="title" value="<?php echo $post['title']; ?>" class="required" style="width:30%" placeholder="在此输入关键词"><input style="display:none;" name="id" type="text" id="id" value="<?php echo $id; ?>"></td>
+        <td><input name="title" type="text" id="title" value="<?php echo $post->title; ?>" class="required" style="width:30%" placeholder="在此输入关键词"><input style="display:none;" name="id" type="text" id="id" value="<?php echo $id; ?>"></td>
     </tr>
     <tr>
         <td align="right">链接网址：</td>
-        <td><input name="url" type="text" id="url" value="<?php echo $post['url']; ?>" style="width:60%" class="required"> (请用绝对地址)</td>
+        <td><input name="url" type="text" id="url" value="<?php echo $post->url; ?>" style="width:60%" class="required"> (请用绝对地址)</td>
     </tr>
     <tr>
         <td align="right">跳转方式：</td>
         <td>
-			<input type="radio" value='0' name="target" <?php if(isset($post['target']) && $post['target']==0){echo 'checked';} ?> />&nbsp;_blank&nbsp;&nbsp;
-			<input type="radio" value='1' name="target" <?php if(isset($post['target']) && $post['target']==1){echo 'checked';} ?> />&nbsp;_self
+			<input type="radio" value='0' name="target" <?php if(isset($post->target) && $post->target==0){echo 'checked';} ?> />&nbsp;_blank&nbsp;&nbsp;
+			<input type="radio" value='1' name="target" <?php if(isset($post->target) && $post->target==1){echo 'checked';} ?> />&nbsp;_self
 		</td>
     </tr>
     <tr>
         <td align="right">显示平台：</td>
         <td>
-			<input type="radio" value='0' name="type" <?php if(isset($post['type']) && $post['type']==0){echo 'checked';} ?> />&nbsp;pc&nbsp;&nbsp;
-			<input type="radio" value='1' name="type" <?php if(isset($post['type']) && $post['type']==1){echo 'checked';} ?> />&nbsp;weixin&nbsp;&nbsp;
-			<input type="radio" value='2' name="type" <?php if(isset($post['type']) && $post['type']==2){echo 'checked';} ?> />&nbsp;app&nbsp;&nbsp;
-			<input type="radio" value='3' name="type" <?php if(isset($post['type']) && $post['type']==3){echo 'checked';} ?> />&nbsp;wap
+			<input type="radio" value='0' name="type" <?php if(isset($post->type) && $post->type==0){echo 'checked';} ?> />&nbsp;pc&nbsp;&nbsp;
+			<input type="radio" value='1' name="type" <?php if(isset($post->type) && $post->type==1){echo 'checked';} ?> />&nbsp;weixin&nbsp;&nbsp;
+			<input type="radio" value='2' name="type" <?php if(isset($post->type) && $post->type==2){echo 'checked';} ?> />&nbsp;app&nbsp;&nbsp;
+			<input type="radio" value='3' name="type" <?php if(isset($post->type) && $post->type==3){echo 'checked';} ?> />&nbsp;wap
 		</td>
     </tr>
     <tr>
         <td align="right">是否显示：</td>
         <td>
-			<input type="radio" value='0' name="is_show" <?php if(isset($post['is_show']) && $post['is_show']==0){echo 'checked';} ?> />&nbsp;是&nbsp;&nbsp;
-			<input type="radio" value='1' name="is_show" <?php if(isset($post['is_show']) && $post['is_show']==1){echo 'checked';} ?> />&nbsp;否
+			<input type="radio" value='0' name="is_show" <?php if(isset($pos->is_show) && $pos->is_show==0){echo 'checked';} ?> />&nbsp;是&nbsp;&nbsp;
+			<input type="radio" value='1' name="is_show" <?php if(isset($pos->is_show) && $pos->is_show==1){echo 'checked';} ?> />&nbsp;否
 		</td>
     </tr>
     <tr>
         <td align="right">排序：</td>
         <td>
-			<input name="listorder" type="text" id="listorder" value="<?php echo $post['listorder']; ?>" size="3" />
+			<input name="listorder" type="text" id="listorder" value="<?php echo $post->listorder; ?>" size="3" />
 		</td>
     </tr>
     <tr>
         <td align="right">所属的组：</td>
         <td>
-			<input name="group_id" type="text" id="group_id" value="<?php echo $post['group_id']; ?>" size="3" />
+			<input name="group_id" type="text" id="group_id" value="<?php echo $post->group_id; ?>" size="3" />
 		</td>
     </tr>
     <tr>
         <td style="vertical-align:middle;" align="right">图片：</td>
-        <td style="vertical-align:middle;"><button type="button" onclick="upImage();">选择图片</button> <input name="pic" type="text" id="pic" value="<?php echo $post['pic']; ?>" style="width:40%"> <img style="margin-left:20px;<?php if(empty($post["pic"]) || !imgmatch($post["pic"])){ echo "display:none;"; } ?>" src="<?php if(imgmatch($post["pic"])){echo $post["pic"];} ?>" width="120" height="80" id="picview"></td>
+        <td style="vertical-align:middle;"><button type="button" onclick="upImage();">选择图片</button> <input name="pic" type="text" id="pic" value="<?php echo $post->pic; ?>" style="width:40%"> <img style="margin-left:20px;<?php if(empty($post->pic) || !imgmatch($post->pic)){ echo "display:none;"; } ?>" src="<?php if(imgmatch($post->pic)){echo $post->pic;} ?>" width="120" height="80" id="picview"></td>
     </tr>
 <!-- 配置文件 --><script type="text/javascript" src="/other/flueditor/ueditor.config.js"></script>
 <!-- 编辑器源码文件 --><script type="text/javascript" src="/other/flueditor/ueditor.all.js"></script>
