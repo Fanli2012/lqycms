@@ -9,7 +9,7 @@
 <tbody>
     <tr>
         <td align="right">用户名：</td>
-        <td><input name="username" type="text" id="username" value="<?php echo $post["username"]; ?>" class="required" style="width:30%" placeholder="在此输入用户名"><input style="display:none;" type="text" name="id" id="id" value="<?php echo $id; ?>"></td>
+        <td><input name="username" type="text" id="username" value="<?php echo $post->username; ?>" class="required" style="width:30%" placeholder="在此输入用户名"><input style="display:none;" type="text" name="id" id="id" value="<?php echo $id; ?>"></td>
     </tr>
     <tr>
         <td align="right">密码：</td>
@@ -17,17 +17,17 @@
     </tr>
     <tr>
         <td align="right">邮箱：</td>
-        <td><input name="email" type="text" id="email" value="<?php echo $post["email"]; ?>" style="width:30%"></td>
+        <td><input name="email" type="text" id="email" value="<?php echo $post->email; ?>" style="width:30%"></td>
     </tr>
     <tr>
         <td align="right">角色：</td>
         <td>
 		<select name="role_id" id="role_id">
 			<?php if($rolelist){foreach($rolelist as $row){ ?>
-				<?php if($post["role_id"]==$row["id"]){ ?>
-				<option selected value="<?php echo $row["id"]; ?>"><?php echo $row["name"]; ?></option>
+				<?php if($post->role_id==$row->id){ ?>
+				<option selected value="<?php echo $row->id; ?>"><?php echo $row->name; ?></option>
 				<?php }else{ ?>
-				<option value="<?php echo $row["id"]; ?>"><?php echo $row["name"]; ?></option>
+				<option value="<?php echo $row->id; ?>"><?php echo $row->name; ?></option>
 			<?php }}} ?>
 		</select>
 		</td>

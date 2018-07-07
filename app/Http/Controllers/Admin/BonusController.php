@@ -2,9 +2,10 @@
 namespace App\Http\Controllers\Admin;
 use DB;
 use App\Common\Helper;
+use App\Common\ReturnData;
 use Illuminate\Http\Request;
-use App\Http\Model\Bonus;
 use App\Http\Logic\BonusLogic;
+use App\Http\Model\Bonus;
 
 class BonusController extends CommonController
 {
@@ -15,10 +16,10 @@ class BonusController extends CommonController
     
     public function getLogic()
     {
-        return logic('Bonus');
+        return new BonusLogic();
     }
     
-    public function index()
+    public function index(Request $request)
     {
         $res = '';
 		$where = function ($query) use ($res) {
@@ -47,69 +48,62 @@ class BonusController extends CommonController
 		return view('admin.bonus.index', $data);
     }
     
-    public function add()
+    public function add(Request $request)
     {
         if(Helper::isPostRequest())
         {
-            if(isset($_POST['editorValue'])){unset($_POST['editorValue']);}
-            unset($_POST["_token"]);
-            
             if($_POST["start_time"]>=$_POST["end_time"]){error_jump('参数错误');}
             
-            if(DB::table('bonus')->insert(array_filter($_POST)))
+            $res = $this->getLogic()->add($_POST);
+            if($res['code'] == ReturnData::SUCCESS)
             {
-                success_jump('添加成功！', route('admin_bonus'));
+                success_jump($res['msg'], route('admin_bonus'));
             }
-            else
-            {
-                error_jump('添加失败！请修改后重新添加');
-            }
+            
+            error_jump($res['msg']);
         }
         
         return view('admin.bonus.add');
     }
     
-    public function edit()
+    public function edit(Request $request)
     {
+        if(!checkIsNumber($request->input('id',null))){error_jump('参数错误');}
+        $id = $request->input('id');
+        
         if(Helper::isPostRequest())
         {
-            if(!empty($_POST["id"])){$id = $_POST["id"];unset($_POST["id"]);}else{$id="";exit;}
-        
-            if(isset($_POST['editorValue'])){unset($_POST['editorValue']);}
-            unset($_POST["_token"]);
+            $where['id'] = $id;
             
             if($_POST["start_time"]>=$_POST["end_time"]){error_jump('参数错误');}
             
-            if(DB::table('bonus')->where('id', $id)->update($_POST))
+            $res = $this->getLogic()->edit($_POST, $where);
+            if($res['code'] == ReturnData::SUCCESS)
             {
-                success_jump('修改成功！', route('admin_bonus'));
+                success_jump($res['msg'], route('admin_bonus'));
             }
-            else
-            {
-                error_jump('修改失败！');
-            }
+            
+            error_jump($res['msg']);
         }
         
-        if(!empty($_GET["id"])){$id = $_GET["id"];}else{$id="";}
-        if(preg_match('/[0-9]*/',$id)){}else{exit;}
-        
-        $data['id'] = $id;
-		$data['post'] = object_to_array(DB::table('bonus')->where('id', $id)->first(), 1);
+        $data['id'] = $where['id'] = $id;
+		$data['post'] = $this->getLogic()->getOne($where);
         
         return view('admin.bonus.edit', $data);
     }
     
-    public function del()
+    public function del(Request $request)
     {
-		if(!empty($_GET["id"])){$id = $_GET["id"];}else{error_jump('删除失败！请重新提交');}
-		
-		if(DB::table('bonus')->whereIn("id", explode(',', $id))->delete())
+        if(!checkIsNumber($request->input('id',null))){error_jump('参数错误');}
+        $id = $request->input('id');
+        
+        $where['id'] = $id;
+        $res = $this->getLogic()->del($where);
+        if($res['code'] == ReturnData::SUCCESS)
         {
-            success_jump('删除成功');
+            success_jump($res['msg']);
         }
-		else
-		{
-			error_jump('删除失败！请重新提交');
-		}
+        
+        error_jump($res['msg']);
     }
 }

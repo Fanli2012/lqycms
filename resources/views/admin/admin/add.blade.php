@@ -24,7 +24,7 @@
         <td>
 		<select name="role_id" id="role_id">
 			<?php if($rolelist){foreach($rolelist as $row){ ?>
-				<option value="<?php echo $row["id"]; ?>"><?php echo $row["name"]; ?></option>
+				<option value="<?php echo $row->id; ?>"><?php echo $row->name; ?></option>
 			<?php }} ?>
 		</select>
 		</td>

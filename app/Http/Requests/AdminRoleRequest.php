@@ -10,7 +10,7 @@ class AdminRoleRequest extends BaseRequest
         'des' => 'max:150',
         'status' => 'integer|between:0,2',
         'pid' => 'integer',
-        'listorder' => 'integer|between:1,9999',
+        'listorder' => 'integer|between:0,9999',
     ];
     
     //总的自定义错误信息
@@ -24,7 +24,7 @@ class AdminRoleRequest extends BaseRequest
         'status.between' => '状态，0启用，1禁用',
         'pid.integer' => '父级ID必须为数字',
         'listorder.integer' => '排序必须是数字',
-        'listorder.between' => '排序只能1-9999',
+        'listorder.between' => '排序只能0-9999',
     ];
     
     //场景验证规则

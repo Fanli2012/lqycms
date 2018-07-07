@@ -1,8 +1,11 @@
 <?php
 namespace App\Http\Controllers\Admin;
-
-use App\Http\Controllers\Admin\CommonController;
 use DB;
+use App\Common\Helper;
+use App\Common\ReturnData;
+use Illuminate\Http\Request;
+use App\Http\Logic\AdminLogic;
+use App\Http\Model\Admin;
 
 class AdminController extends CommonController
 {
@@ -11,62 +14,88 @@ class AdminController extends CommonController
         parent::__construct();
     }
 	
-    public function index()
+    public function getLogic()
     {
-        $posts = parent::pageList('admin');
-		
-        $data['posts'] = $posts;
-        
-        return view('admin.admin.index', $data);
+        return new AdminLogic();
     }
     
-    public function add()
+    public function index(Request $request)
     {
-		$data['rolelist'] = object_to_array(DB::table('admin_role')->orderBy('listorder','desc')->get());
+        $res = '';
+        $where = function ($query) use ($res) {
+			if(isset($_REQUEST["keyword"]))
+			{
+				$query->where('username', 'like', '%'.$_REQUEST['keyword'].'%');
+			}
+			
+			if(isset($_REQUEST["role_id"]))
+			{
+				$query->where('role_id', $_REQUEST["role_id"]);
+			}
+            
+            if(isset($_REQUEST["status"]))
+			{
+				$query->where('status', $_REQUEST["status"]);
+			}
+        };
+        
+        $posts = $this->getLogic()->getPaginate($where, array('id', 'desc'));
+        $data['posts'] = $posts;
+		return view('admin.admin.index', $data);
+    }
+    
+    public function add(Request $request)
+    {
+		$data['rolelist'] = logic('AdminRole')->getAll('', ['listorder','asc']);
 		
         return view('admin.admin.add', $data);
     }
     
-    public function doadd()
+    public function doadd(Request $request)
     {
-		unset($_POST["_token"]);
-		$_POST['pwd'] = md5($_POST['pwd']);
-		if(DB::table('admin')->insert($_POST))
+        if(Helper::isPostRequest())
         {
-            success_jump('添加成功！', route('admin_admin'));
+            $_POST['pwd'] = md5($_POST['pwd']);
+            
+            $res = $this->getLogic()->add($_POST);
+            if($res['code'] == ReturnData::SUCCESS)
+            {
+                success_jump($res['msg'], route('admin_admin'));
+            }
+            
+            error_jump($res['msg']);
         }
-		else
-		{
-			error_jump('添加失败！请修改后重新添加');
-		}
     }
     
-    public function edit()
+    public function edit(Request $request)
     {
-		if(!empty($_GET["id"])){$id = $_GET["id"];}else{$id="";}
-        if(preg_match('/[0-9]*/',$id)){}else{exit;}
+        if(!checkIsNumber($request->input('id',null))){error_jump('参数错误');}
+        $id = $request->input('id');
         
-        $data['id'] = $id;
-		$data['post'] = object_to_array(DB::table('admin')->where('id', $id)->first(), 1);
-        $data['rolelist'] = object_to_array(DB::table('admin_role')->orderBy('listorder','desc')->get());
-		
+        $data['id'] = $where['id'] = $id;
+		$data['post'] = $this->getLogic()->getOne($where);
+        $data['rolelist'] = logic('AdminRole')->getAll('', ['listorder','asc']);
+        
         return view('admin.admin.edit', $data);
     }
 	
-	public function doedit()
+	public function doedit(Request $request)
     {
-        if(!empty($_POST["id"])){$id = $_POST["id"];unset($_POST["id"]);}else {$id="";exit;}
+        if(!checkIsNumber($request->input('id',null))){error_jump('参数错误');}
+        $id = $request->input('id');
         
-		unset($_POST["_token"]);
-		$_POST['pwd'] = md5($_POST['pwd']);
-		if(DB::table('admin')->where('id', $id)->update($_POST))
+        if(Helper::isPostRequest())
         {
-            success_jump('修改成功！', route('admin_admin'));
+            $_POST['pwd'] = md5($_POST['pwd']);
+            $where['id'] = $id;
+            $res = $this->getLogic()->edit($_POST, $where);
+            if($res['code'] == ReturnData::SUCCESS)
+            {
+                success_jump($res['msg'], route('admin_admin'));
+            }
+            
+            error_jump($res['msg']);
         }
-		else
-		{
-			error_jump('修改失败！');
-		}
     }
     
 	//修改密码
@@ -97,17 +126,18 @@ class AdminController extends CommonController
         }
     } */
     
-    public function del()
+    public function del(Request $request)
     {
-		if(!empty($_GET["id"])){$id = $_GET["id"];}else{error_jump('删除失败！请重新提交');}
-		
-		if(DB::table('admin')->whereIn("id", explode(',', $id))->delete())
+        if(!checkIsNumber($request->input('id',null))){error_jump('参数错误');}
+        $id = $request->input('id');
+        
+        $where['id'] = $id;
+        $res = $this->getLogic()->del($where);
+        if($res['code'] == ReturnData::SUCCESS)
         {
-            success_jump('删除成功');
+            success_jump($res['msg']);
         }
-		else
-		{
-			error_jump('删除失败！请重新提交');
-		}
+        
+        error_jump($res['msg']);
     }
 }

@@ -14,7 +14,7 @@ class AdminRequest extends BaseRequest
         'status' => 'integer|between:0,3',
         'mobile' => 'max:20',
         'avatar' => 'max:150',
-        'create_at' => 'required|integer',
+        'add_time' => 'required|integer',
     ];
     
     //总的自定义错误信息
@@ -34,14 +34,14 @@ class AdminRequest extends BaseRequest
         'status.between' => '用户状态 0：正常； 1：禁用 ；2：未验证',
         'mobile.max' => '手机号不能超过20个字符',
         'avatar.max' => '头像不能超过150个字符',
-        'create_at.required' => '添加时间必填',
-        'create_at.integer' => '添加时间必须是数字',
+        'add_time.required' => '添加时间必填',
+        'add_time.integer' => '添加时间必须是数字',
     ];
     
     //场景验证规则
     protected $scene = [
-        'add'  => ['username', 'email', 'logintime', 'pwd', 'role_id', 'status', 'mobile', 'avatar', 'create_at'],
-        'edit' => ['username', 'email', 'logintime', 'pwd', 'role_id', 'status', 'mobile', 'avatar', 'create_at'],
+        'add'  => ['username', 'email', 'logintime', 'pwd', 'role_id', 'status', 'mobile', 'avatar'],
+        'edit' => ['username', 'email', 'logintime', 'pwd', 'role_id', 'status', 'mobile', 'avatar'],
         'del'  => ['id'],
     ];
     
