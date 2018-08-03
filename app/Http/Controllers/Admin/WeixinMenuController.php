@@ -59,7 +59,7 @@ class WeixinMenuController extends CommonController
 		
 		if(DB::table('weixin_menu')->insert($_POST))
         {
-            success_jump('添加成功！');
+            success_jump('添加成功');
         }
 		else
 		{
@@ -89,7 +89,7 @@ class WeixinMenuController extends CommonController
 		
 		if(DB::table('weixin_menu')->where('id', $id)->update($_POST))
         {
-            success_jump('修改成功！', route('admin_weixinmenu'));
+            success_jump('修改成功', route('admin_weixinmenu'));
         }
 		else
 		{
@@ -206,6 +206,6 @@ class WeixinMenuController extends CommonController
         
         $wechat_menu->create_menu($jsonmenu);
         
-		success_jump('修改菜单，生成后，不会立即显示，有24小时的缓存，除非你取消关注，然后重新关注！', route('admin_weixinmenu'),5);
+		success_jump('修改菜单，生成后，不会立即显示，有24小时的缓存，除非你取消关注，然后重新关注', route('admin_weixinmenu'),5);
     }
 }

@@ -60,7 +60,7 @@ class CategoryController extends CommonController
 		
 		if(DB::table('arctype')->insert($_POST))
         {
-            success_jump('添加成功！');
+            success_jump('添加成功');
         }
 		else
 		{
@@ -91,7 +91,7 @@ class CategoryController extends CommonController
 		
 		if(DB::table('arctype')->where('id', $id)->update($_POST))
         {
-            success_jump('修改成功！', route('admin_category'));
+            success_jump('修改成功', route('admin_category'));
         }
 		else
 		{
@@ -119,7 +119,7 @@ class CategoryController extends CommonController
 					}
 					else
 					{
-						error_jump('栏目下的文章删除失败！');
+						error_jump('栏目下的文章删除失败');
 					}
 				}
 				else

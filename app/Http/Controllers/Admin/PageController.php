@@ -27,7 +27,7 @@ class PageController extends CommonController
 		
         if(DB::table("page")->insert($_POST))
         {
-            success_jump('添加成功！');
+            success_jump('添加成功');
         }
 		else
 		{
@@ -61,7 +61,7 @@ class PageController extends CommonController
 		
         if(DB::table('page')->where('id', $id)->update($_POST))
         {
-            success_jump('修改成功！', route('admin_page'));
+            success_jump('修改成功', route('admin_page'));
         }
 		else
 		{

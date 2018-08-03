@@ -33,7 +33,7 @@ class SearchwordController extends CommonController
 		
 		if($insertId = DB::table('searchword')->insertGetId($_POST))
         {
-            success_jump('添加成功！', route('admin_searchword'));
+            success_jump('添加成功', route('admin_searchword'));
         }
 		else
 		{
@@ -63,11 +63,11 @@ class SearchwordController extends CommonController
 		
 		if(DB::table('searchword')->where('id', $id)->update($_POST))
         {
-            success_jump('修改成功！', route('admin_searchword'));
+            success_jump('修改成功', route('admin_searchword'));
         }
 		else
 		{
-			error_jump('修改失败！');
+			error_jump('修改失败');
 		}
     }
     

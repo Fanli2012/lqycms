@@ -27,7 +27,7 @@ class IndexController extends CommonController
 	public function upconfig()
 	{
         cache()->forget('sysconfig'); //删除缓存
-		success_jump('更新成功！');
+		success_jump('更新成功');
     }
     
 	//更新缓存
@@ -35,6 +35,6 @@ class IndexController extends CommonController
 	{
 		cache()->forget('sysconfig'); //删除缓存
 		dir_delete(storage_path().'/framework/cache/data/');
-		success_jump('更新成功！');
+		success_jump('更新成功');
     }
 }

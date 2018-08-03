@@ -46,11 +46,11 @@ class UserWithdrawController extends CommonController
 		unset($_POST["_token"]);
 		if(DB::table('user_withdraw')->where('id', $id)->update($_POST))
         {
-            success_jump('修改成功！', route('admin_user'));
+            success_jump('修改成功', route('admin_user'));
         }
 		else
 		{
-			error_jump('修改失败！');
+			error_jump('修改失败');
 		}
     }
     

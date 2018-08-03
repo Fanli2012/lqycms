@@ -134,7 +134,7 @@ class OrderController extends CommonController
 		
         if(Order::insert($_POST))
         {
-            success_jump('添加成功！', route('admin_order'));
+            success_jump('添加成功', route('admin_order'));
         }
 		else
 		{
@@ -167,7 +167,7 @@ class OrderController extends CommonController
 		
         if(Order::where('id', $id)->update($_POST))
         {
-            success_jump('修改成功！', route('admin_order'));
+            success_jump('修改成功', route('admin_order'));
         }
 		else
 		{

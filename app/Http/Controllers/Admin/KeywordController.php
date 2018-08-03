@@ -28,7 +28,7 @@ class KeywordController extends CommonController
 		unset($_POST["_token"]);
         if(DB::table('keyword')->insert($_POST))
         {
-            success_jump("添加成功！", route('admin_keyword'));
+            success_jump("添加成功", route('admin_keyword'));
         }
 		else
 		{
@@ -54,11 +54,11 @@ class KeywordController extends CommonController
 		unset($_POST["_token"]);
 		if(DB::table('keyword')->where('id', $id)->update($_POST))
         {
-            success_jump('修改成功！', route('admin_keyword'));
+            success_jump('修改成功', route('admin_keyword'));
         }
 		else
 		{
-			error_jump('修改失败！');
+			error_jump('修改失败');
 		}
     }
     

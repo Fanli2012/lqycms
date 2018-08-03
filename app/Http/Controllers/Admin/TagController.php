@@ -49,7 +49,7 @@ class TagController extends CommonController
                 }
             }
 			
-            success_jump('添加成功！', route('admin_tag'));
+            success_jump('添加成功', route('admin_tag'));
         }
 		else
 		{
@@ -125,11 +125,11 @@ class TagController extends CommonController
                 DB::table("taglist")->where('tid', $id)->delete();
             }
             
-            success_jump('修改成功！', route('admin_tag'));
+            success_jump('修改成功', route('admin_tag'));
         }
 		else
 		{
-			error_jump('修改失败！');
+			error_jump('修改失败');
 		}
     }
     

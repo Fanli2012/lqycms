@@ -110,7 +110,7 @@ class AdminRoleController extends CommonController
 	//角色权限设置视图
 	public function permissions()
     {
-		if(!empty($_GET["id"])){$data['role_id'] = $_GET["id"];}else{error_jump('您访问的页面不存在或已被删除！');}
+		if(!empty($_GET["id"])){$data['role_id'] = $_GET["id"];}else{error_jump('您访问的页面不存在或已被删除');}
 		
 		$menu = [];
 		$access = model('Access')->getAll(['role_id'=>$data['role_id']]);

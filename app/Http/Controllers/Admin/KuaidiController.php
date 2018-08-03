@@ -37,7 +37,7 @@ class KuaidiController extends CommonController
             
             if(DB::table('kuaidi')->insert(array_filter($_POST)))
             {
-                success_jump('添加成功！', route('admin_kuaidi'));
+                success_jump('添加成功', route('admin_kuaidi'));
             }
             else
             {
@@ -59,11 +59,11 @@ class KuaidiController extends CommonController
             
             if(DB::table('kuaidi')->where('id', $id)->update($_POST))
             {
-                success_jump('修改成功！', route('admin_kuaidi'));
+                success_jump('修改成功', route('admin_kuaidi'));
             }
             else
             {
-                error_jump('修改失败！');
+                error_jump('修改失败');
             }
         }
         

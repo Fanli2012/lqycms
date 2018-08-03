@@ -42,7 +42,7 @@ class SysconfigController extends CommonController
 		if($_POST['varname']!="" && DB::table('sysconfig')->insert($_POST))
         {
 			cache()->forget('sysconfig'); //删除缓存
-            success_jump('添加成功！', route('admin_sysconfig'));
+            success_jump('添加成功', route('admin_sysconfig'));
         }
 		else
 		{
@@ -83,7 +83,7 @@ class SysconfigController extends CommonController
 		if(DB::table('sysconfig')->where('id', $id)->update($_POST))
         {
             cache()->forget('sysconfig'); //删除缓存
-            success_jump('更新成功！', route('admin_sysconfig'));
+            success_jump('更新成功', route('admin_sysconfig'));
         }
 		else
 		{

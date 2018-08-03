@@ -39,7 +39,7 @@ class MenuController extends CommonController
         {
 			DB::table('access')->insert(['role_id' => 1, 'menu_id' => $menuid]);
 			
-            success_jump('添加成功！', route('admin_menu'));
+            success_jump('添加成功', route('admin_menu'));
         }
 		else
 		{
@@ -66,11 +66,11 @@ class MenuController extends CommonController
 		unset($_POST["_token"]);
 		if(DB::table('menu')->where('id', $id)->update($_POST))
         {
-            success_jump('修改成功！', route('admin_menu'));
+            success_jump('修改成功', route('admin_menu'));
         }
 		else
 		{
-			error_jump('修改失败！');
+			error_jump('修改失败');
 		}
     }
     

@@ -60,7 +60,7 @@ class LoginController extends BaseController
     {
 		session_unset();
         session_destroy();// 退出登录，清除session
-		success_jump('退出成功！', route('home'));
+		success_jump('退出成功', route('home'));
     }
     
     //密码恢复
@@ -71,11 +71,11 @@ class LoginController extends BaseController
         
         if(DB::table('admin')->where('id', 1)->update($data))
         {
-            success_jump('密码恢复成功！', route('admin_login'));
+            success_jump('密码恢复成功', route('admin_login'));
         }
 		else
 		{
-			error_jump('密码恢复失败！', route('home'));
+			error_jump('密码恢复失败', route('home'));
 		}
     }
 	

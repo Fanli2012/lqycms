@@ -40,7 +40,7 @@ class UserRankController extends CommonController
             
             if(DB::table('user_rank')->insert(array_filter($_POST)))
             {
-                success_jump('添加成功！', route('admin_userrank'));
+                success_jump('添加成功', route('admin_userrank'));
             }
             else
             {
@@ -65,11 +65,11 @@ class UserRankController extends CommonController
             
             if(DB::table('user_rank')->where('id', $id)->update($_POST) !== false)
             {
-                success_jump('修改成功！', route('admin_userrank'));
+                success_jump('修改成功', route('admin_userrank'));
             }
             else
             {
-                error_jump('修改失败！');
+                error_jump('修改失败');
             }
         }
         

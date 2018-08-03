@@ -15,7 +15,7 @@ a{color:#313131;text-decoration:none;}a:hover{text-decoration:none;color:#22ac38
 .pul{margin-right:-15px;font-family:"Microsoft Yahei";}.pul a:hover .title{text-decoration:underline;}
 .pul li{background-color: #fff;float:left;overflow:hidden;margin-right:15px;margin-bottom:15px;border:1px solid #dcdcdc;}.pul li a:hover{text-decoration:none;}
 .pul li img{width:308px;height:308px;display:block;margin-bottom:10px;}
-.pul li .title{overflow:hidden;white-space:nowrap;width:293px;height:20px;margin:0 5px 2px 10px;font-weight:400;display: block;color: #333;font-size: 14px;line-height: 15px;}
+.pul li .title{overflow:hidden;white-space:nowrap;width:290px;height:20px;margin:0 8px 2px 10px;font-weight:400;display: block;color: #333;font-size: 14px;line-height: 15px;}
 .pul li .desc{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;width:288px;margin:0 10px 5px 10px;font-size: 12px;line-height: 16px;padding: 0;color: #999;height: 20px;}
 .pul li .desc .price-point{display: inline-block;font-weight: 400;color: #e61414;}
 .pul .item-prices{height: 50px;}.pul .red{background-color: #e61414;}.pul .green{background-color: #26a96d;}

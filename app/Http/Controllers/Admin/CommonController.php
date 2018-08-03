@@ -39,7 +39,7 @@ class CommonController extends Controller
 				
 				if(!$check)
 				{
-					error_jump('你没有权限访问，请联系管理员！', route('admin'));
+					error_jump('你没有权限访问，请联系管理员', route('admin'));
 				}
 			}
         }

@@ -101,7 +101,7 @@ class GoodsController extends CommonController
                 DB::table('goods_img')->insert($tmp);
             }
             
-            success_jump('添加成功！', route('admin_goods'));
+            success_jump('添加成功', route('admin_goods'));
         }
 		else
 		{
@@ -175,11 +175,11 @@ class GoodsController extends CommonController
                 DB::table('goods_img')->insert($tmp);
             }
             
-            success_jump('修改成功！', route('admin_goods'));
+            success_jump('修改成功', route('admin_goods'));
         }
 		else
 		{
-			error_jump('修改失败！');
+			error_jump('修改失败');
 		}
     }
     

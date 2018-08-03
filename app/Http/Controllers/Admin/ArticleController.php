@@ -236,7 +236,7 @@ class ArticleController extends CommonController
 	//推荐文章
 	public function recommendarc()
     {
-		if(!empty($_GET["id"])){$id = $_GET["id"];}else{error_jump("您访问的页面不存在或已被删除！");} //if(preg_match('/[0-9]*/',$id)){}else{exit;}
+		if(!empty($_GET["id"])){$id = $_GET["id"];}else{error_jump("您访问的页面不存在或已被删除");} //if(preg_match('/[0-9]*/',$id)){}else{exit;}
 		
 		$data['tuijian'] = 1;
 		

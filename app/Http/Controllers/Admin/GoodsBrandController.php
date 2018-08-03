@@ -27,7 +27,7 @@ class GoodsBrandController extends CommonController
 		
         if(DB::table("goods_brand")->insert($_POST))
         {
-            success_jump('添加成功！', route('admin_goodsbrand'));
+            success_jump('添加成功', route('admin_goodsbrand'));
         }
 		else
 		{
@@ -60,7 +60,7 @@ class GoodsBrandController extends CommonController
 		
         if(DB::table('goods_brand')->where('id', $id)->update($_POST))
         {
-            success_jump('修改成功！', route('admin_goodsbrand'));
+            success_jump('修改成功', route('admin_goodsbrand'));
         }
 		else
 		{

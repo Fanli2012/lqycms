@@ -102,7 +102,7 @@ class UserController extends CommonController
             
             if(DB::table('user')->insert($_POST))
             {
-                success_jump('添加成功！', route('admin_user'));
+                success_jump('添加成功', route('admin_user'));
             }
             else
             {
@@ -124,11 +124,11 @@ class UserController extends CommonController
             unset($_POST["_token"]);
             if(DB::table('user')->where('id', $id)->update($_POST))
             {
-                success_jump('修改成功！', route('admin_user'));
+                success_jump('修改成功', route('admin_user'));
             }
             else
             {
-                error_jump('修改失败！');
+                error_jump('修改失败');
             }
         }
         

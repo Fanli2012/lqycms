@@ -61,7 +61,7 @@ class GoodsTypeController extends CommonController
 		
 		if(DB::table("goods_type")->insert($_POST))
         {
-            success_jump('添加成功！', route('admin_goodstype'));
+            success_jump('添加成功', route('admin_goodstype'));
         }
 		else
 		{
@@ -92,7 +92,7 @@ class GoodsTypeController extends CommonController
 		
 		if(DB::table("goods_type")->where('id', $id)->update($_POST))
         {
-            success_jump('修改成功！', route('admin_goodstype'));
+            success_jump('修改成功', route('admin_goodstype'));
         }
 		else
 		{
@@ -120,7 +120,7 @@ class GoodsTypeController extends CommonController
 					}
 					else
 					{
-						error_jump('分类下的商品删除失败！');
+						error_jump('分类下的商品删除失败');
 					}
 				}
 				else

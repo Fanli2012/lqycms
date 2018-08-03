@@ -25,7 +25,7 @@ class Search extends Base
         
 		if(db('search')->insert($_POST))
         {
-            $this->success('添加成功！', FLADMIN.'/Search' , 1);
+            $this->success('添加成功', FLADMIN.'/Search' , 1);
         }
 		else
 		{
@@ -57,11 +57,11 @@ class Search extends Base
         
 		if(db('search')->where("id=$id")->update($_POST))
         {
-            $this->success('修改成功！', FLADMIN.'/Search' , 1);
+            $this->success('修改成功', FLADMIN.'/Search' , 1);
         }
 		else
 		{
-			$this->error('修改失败！', FLADMIN.'/Search/edit?id='.$_POST["id"] , 3);
+			$this->error('修改失败', FLADMIN.'/Search/edit?id='.$_POST["id"] , 3);
 		}
     }
     
