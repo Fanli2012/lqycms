@@ -75,7 +75,7 @@ class GoodsController extends CommonController
         }
         
         //排序
-        $orderby = '';
+        $orderby = ['id','desc'];
         if($request->input('orderby', null) != null)
         {
             switch ($request->input('orderby'))

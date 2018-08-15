@@ -92,6 +92,7 @@ class GoodsLogic extends BaseLogic
         $res->is_promote_goods = $this->getModel()->bargain_price($res->promote_price,$res->promote_start_date,$res->promote_end_date); //is_promote_goods等于0，说明不是促销商品
 		$res->goods_detail_url = route('weixin_goods_detail',array('id'=>$res->id));
         $res->goods_img_list = model('GoodsImg')->getDb()->where(['goods_id'=>$res->id])->get();
+        $res->type_name = model('GoodsType')->getDb()->where(['id'=>$res->typeid])->value('name');
         
         //商品评论数
         $where2['comment_type'] = Comment::GOODS_COMMENT_TYPE;

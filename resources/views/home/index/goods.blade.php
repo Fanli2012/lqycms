@@ -1,5 +1,5 @@
 <!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
-<title><?php echo $post["title"]; ?>_<?php echo sysconfig('CMS_WEBNAME'); ?></title><meta name="keywords" content="{dede:field.keywords/}" /><meta name="description" content="{dede:field.description function='html2text(@me)'/}" /><link rel="stylesheet" href="<?php echo sysconfig('CMS_BASEHOST'); ?>/css/style.css"><script type="text/javascript" src="<?php echo sysconfig('CMS_BASEHOST'); ?>/js/ad.js"></script></head><body>
+<title><?php echo $post->title; ?>_<?php echo sysconfig('CMS_WEBNAME'); ?></title><meta name="keywords" content="{dede:field.keywords/}" /><meta name="description" content="{dede:field.description function='html2text(@me)'/}" /><link rel="stylesheet" href="<?php echo sysconfig('CMS_BASEHOST'); ?>/css/style.css"><script type="text/javascript" src="<?php echo sysconfig('CMS_BASEHOST'); ?>/js/ad.js"></script></head><body>
 @include('home.common.header')
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/jquery.min.js"></script>
 <script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/layer/layer.js"></script>
@@ -36,28 +36,53 @@
         <span class="arrow"><small></small></span>
         <li><a href="<?php echo route('home_goodslist'); ?>">所有商品</a></li>
         <span class="arrow"><small></small></span>
-        <li><a href="<?php echo route('home_goodslist',array('id'=>$post['id'])); ?>"><?php echo $post['type_name']; ?></a></li>
+        <li><a href="<?php echo route('home_goodslist',array('typeid'=>$post->typeid)); ?>"><?php echo $post->type_name; ?></a></li>
     </ul>
-    <a class="bookMark" href="<?php echo route('home_goodslist',array('id'=>$post['id'])); ?>">查看更多同类商品<span></span></a>
+    <a class="bookMark" href="<?php echo route('home_goodslist',array('id'=>$post->id)); ?>">查看更多同类商品<span></span></a>
 </div>
     
 <div class="clearfix">
 <div class="main-pic">
     <div class="normal-pic-wrapper clearfix" data-spm="ne">
         <div class="normal-pic ">
-            <a href="javascript:;" target="_blank" class="piclink">
-                <div class="item-pic-wrap">
-                <div class="J_zoom pic " style="background-image: url(<?php echo $post['litpic']; ?>);"></div>
-                </div>
-            </a>
+    <!-- Swiper -->
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <?php if($post->goods_img_list){foreach($post->goods_img_list as $k=>$v){ ?><div class="swiper-slide"><img src="<?php echo $v->url; ?>" alt="<?php echo $v->des; ?>"></div><?php }} ?>
+        </div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination swiper-pagination-white"></div>
+    </div>
+<link rel="stylesheet" href="<?php echo env('APP_URL'); ?>/css/swiper.min.css">
+<style>
+.swiper-container{width:360px;height:360px;}
+.swiper-slide{text-align:center;font-size:18px;background:#fff;}
+.swiper-slide img{width:360px;height:360px;}
+</style>
+<script type="text/javascript" src="<?php echo env('APP_URL'); ?>/js/swiper.min.js"></script>
+<script>
+//Swiper轮播
+var swiper = new Swiper('.swiper-container', {
+    pagination: '.swiper-pagination',
+    paginationClickable: true,
+    autoHeight: true, //enable auto height
+    slidesPerView: 1,
+    paginationClickable: true,
+    spaceBetween: 30,
+    loop: true,
+    centeredSlides: true,
+    autoplay: 3000,
+    autoplayDisableOnInteraction: false
+});
+</script>
         </div>
     </div>
 </div>
 
 <div class="main-box J_mainBox avil">
-<h2 class="title"><?php echo $post['title']; ?></h2>
-<?php if($post['description']){ ?><div class="description"><?php echo $post['description']; ?></div><?php } ?>
-<p class="price "><span class="rmb">¥</span><em class="j-flag"><?php echo $post["price"]; ?></em><sub class="dis">¥<span class="j-flag j-original"><?php echo $post["market_price"]; ?></span></sub></p>
+<h2 class="title"><?php echo $post->title; ?></h2>
+<?php if($post->description){ ?><div class="description"><?php echo $post->description; ?></div><?php } ?>
+<p class="price "><span class="rmb">¥</span><em class="j-flag"><?php echo $post->price; ?></em><sub class="dis">¥<span class="j-flag j-original"><?php echo $post->market_price; ?></span></sub></p>
 <p class="buyorjoin j-flag f-cb"><a style="box-sizing: border-box;line-height: 47px;width: 170px;height: 50px;margin-top:10px;font-size: 18px;border: 2px solid #d33a31;color: #d33a31;background-color: white;display: inline-block;text-align: center;margin-right: 10px;" href="javascript:submit();">立即购买</a><a style="width: 188px;height: 50px;line-height: 50px;margin-top:10px;font-size: 18px;background-color: #d33a31;display: inline-block;text-align: center;color: #fff;" href="javascript:submit();">加入购物车</a></p>
 </div>
 <div class="cl"></div></div>
@@ -74,7 +99,7 @@ function submit()
         closeBtn: 0, //不显示关闭按钮
         anim: 2,
         shadeClose: true, //开启遮罩关闭
-        content: '<img src="<?php echo get_erweima(route('weixin_goods_detail',array('id'=>$post['id'])),360); ?>">'
+        content: '<img src="<?php echo get_erweima(route('weixin_goods_detail',array('id'=>$post->id)),360); ?>">'
     });
 }
 </script>
@@ -112,7 +137,7 @@ function submit()
 </div>
 
 <div class="recom-list"><ul><?php if($tj_list){foreach($tj_list as $k=>$v){ ?>
-<li class="tab-pannel" style="float: none; overflow: hidden; height: 222px; display: block;"><a href="<?php echo route('home_goods',array('id'=>$v['id'])); ?>"><img src="<?php echo $v['litpic']; ?>" alt="<?php echo $v["title"]; ?>"><div class="look-price"><div>¥<?php echo $v["price"]; ?></div><p><?php echo $v["title"]; ?></p></div></a></li>
+<li class="tab-pannel" style="float: none; overflow: hidden; height: 222px; display: block;"><a href="<?php echo route('home_goods',array('id'=>$v->id)); ?>"><img src="<?php echo $v->litpic; ?>" alt="<?php echo $v->title; ?>"><div class="look-price"><div>¥<?php echo $v->price; ?></div><p><?php echo $v->title; ?></p></div></a></li>
 <?php }} ?></ul></div>
 </div>
 
@@ -122,7 +147,7 @@ function submit()
 <span>宝贝详情</span>
 </div>
 <div class="detail-con">
-<?php echo $post['body']; ?>
+<?php echo $post->body; ?>
 </div>
 </div></div>
 <div class="cl"></div>

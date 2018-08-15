@@ -157,19 +157,13 @@ class IndexController extends CommonController
 	{
         if(empty($id) || !preg_match('/[0-9]+/',$id)){return redirect()->route('page404');}
 		
-		$post = object_to_array(DB::table('goods')->where(['id'=>$id,'status'=>0])->first(), 1);if(empty($post)){return redirect()->route('page404');}$post['type_name'] = DB::table('goods_type')->where('id', $post['typeid'])->value('name');
-		if($post)
-        {
-			$data['post'] = $post;
-        }
-        else
-        {
-            return redirect()->route('page404');
-        }
+        $where['id'] = $id;
+        $where['status'] = 0;
+        $data['post'] = logic('Goods')->getOne($where);
+        if(!$data['post']){return redirect()->route('page404');}
         
-        $data['tj_list'] = object_to_array(DB::table('goods')->where(['tuijian'=>1,'status'=>0])->get());
+        $data['tj_list'] = DB::table('goods')->where(['tuijian'=>1,'status'=>0])->orderBy('id', 'desc')->get();
         
-        DB::table('goods')->where(array('id'=>$id))->increment('click', 1);
         return view('home.index.goods', $data);
     }
     
