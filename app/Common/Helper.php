@@ -383,4 +383,50 @@ class Helper
         
         return '';
     }
+    
+    /**
+	* 图片转base64
+	* @param image_file String 图片路径
+	* @return 转为base64的图片
+	*/
+    public static function Base64EncodeImage($image_file)
+    {
+        if(file_exists($image_file) || is_file($image_file))
+        {
+            $base64_image = '';
+            $image_info = getimagesize($image_file);
+            $image_data = fread(fopen($image_file, 'r'), filesize($image_file));
+            $base64_image = 'data:' . $image_info['mime'] . ';base64,' . chunk_split(base64_encode($image_data));
+            return $base64_image;
+        }
+        
+        return false;
+    }
+    
+    //提取数字
+    public static function findNum($str='')
+    {
+        $str=trim($str);
+        if(empty($str)){return '';}
+        $reg='/(\d{3}(\.\d+)?)/is';//匹配数字的正则表达式
+        preg_match_all($reg,$str,$result);
+        if(is_array($result)&&!empty($result)&&!empty($result[1])&&!empty($result[1][0])){
+            return $result[1][0];
+        }
+        
+        return ''; 
+    }
+    
+    /**
+	 * 过滤emoji
+	 */
+	public static function filterEmoji($str)
+	{
+        // preg_replace_callback执行一个正则表达式搜索并且使用一个回调进行替换
+		$str = preg_replace_callback('/./u', function (array $match) {
+                    return strlen($match[0]) >= 4 ? '' : $match[0];
+                }, $str);
+        
+		return $str;
+	}
 }
