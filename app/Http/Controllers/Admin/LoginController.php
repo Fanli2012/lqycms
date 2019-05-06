@@ -36,7 +36,9 @@ class LoginController extends BaseController
         if(!empty($_POST["username"])){$username = $_POST["username"];}else{$username='';exit;}//用户名
         if(!empty($_POST["pwd"])){$pwd = md5($_POST["pwd"]);}else{$pwd='';exit;}//密码
 		
-        $admin_user = DB::table('admin')->where(array('username' => $username, 'pwd' => $pwd))->orWhere(array('email' => $username, 'pwd' => $pwd))->first();
+        $admin_user = DB::table('admin')->where(array('username' => $username, 'pwd' => $pwd))->orWhere(function ($query) use ($username, $pwd) {
+            $query->where('email', '=', $username)->where('pwd', '=', $pwd);
+        })->first();
 		
         if($admin_user)
         {
@@ -49,10 +51,8 @@ class LoginController extends BaseController
 			
 			return redirect()->route('admin');
         }
-        else
-        {
-            return redirect()->route('admin_login');
-        }
+		
+		error_jump('账号或密码错误', route('admin_login'));
     }
 
     //退出登录
@@ -73,10 +73,8 @@ class LoginController extends BaseController
         {
             success_jump('密码恢复成功', route('admin_login'));
         }
-		else
-		{
-			error_jump('密码恢复失败', route('home'));
-		}
+		
+		error_jump('密码恢复失败', route('home'));
     }
 	
 	/**

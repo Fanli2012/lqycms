@@ -2,7 +2,7 @@
 git clone https://github.com/Fanli2012/lqycms.git
 
 cmd下创建.env文件
-echo test > .env
+echo hello > .env
 
 
 说明
@@ -42,6 +42,15 @@ $qrcode = new \SimpleSoftwareIO\QrCode\BaconQrCodeGenerator;
 return $qrcode->size(500)->generate('Make a qrcode without Laravel!');
 
 二进制数据直接显示成二维码图片return '<img src="data:image/png;base64,'.base64_encode(\QrCode::format('png')->encoding('UTF-8')->size(200)->generate('http://www.baidu.com/')).'">';
+
+
+composer.phar install安装出现proc_open错误，解决办法
+修改composer.json中scripts下的"php artisan optimize"为"php artisan clear-compiled"
+
+
+composer中国全量镜像修改
+进入项目的根目录（也就是 composer.json 文件所在目录），执行如下命令：
+composer config repo.packagist composer https://packagist.phpcomposer.com
 
 
 微信开发，支付
