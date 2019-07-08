@@ -166,6 +166,6 @@ class Kuaidi extends BaseModel
     public function getStatusAttr($data)
     {
         $arr = array(0 => '显示', 1 => '不显示');
-        return $arr[$data['status']];
+        return $arr[$data->status];
     }
 }

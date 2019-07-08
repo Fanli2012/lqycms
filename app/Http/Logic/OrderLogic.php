@@ -305,8 +305,8 @@ class OrderLogic extends BaseLogic
     
     /**
      * 订单-余额支付
-     * @param int $data['id'] 订单id
-     * @param int $data['user_id'] 用户id
+     * @param int $where['id'] 订单id
+     * @param int $where['user_id'] 用户id
      * @return array
      */
     public function orderYuepay($where = array())
@@ -318,6 +318,14 @@ class OrderLogic extends BaseLogic
         $order = $this->getModel()->getOne($where);
         if(!$order){return ReturnData::create(ReturnData::PARAMS_ERROR,null,'订单不存在');}
         
+		//获取用户余额信息
+		$user = model('User')->getOne(array('id'=>$where['user_id']));
+		if(!$user){return ReturnData::create(ReturnData::PARAMS_ERROR,null,'用户不存在');}
+		if($user->money < $order->order_amount)
+		{
+			return ReturnData::create(ReturnData::PARAMS_ERROR, null, '余额不足');
+		}
+		
         DB::beginTransaction();
         
         $data['pay_status'] = 1;
@@ -326,20 +334,20 @@ class OrderLogic extends BaseLogic
         $data['pay_time'] = time();
         $data['updated_at'] = time();
         $res = $this->getModel()->edit($data,$where);
-        if($res)
+        if(!$res)
         {
-            $user_money_data['user_id'] = $where['user_id'];
-            $user_money_data['type'] = 1;
-            $user_money_data['money'] = $order->order_amount;
-            $user_money_data['des'] = '订单余额支付';
-            if(!logic('UserMoney')->add($user_money_data)){DB::rollBack();}
-            
-            DB::commit();
-            return ReturnData::create(ReturnData::SUCCESS,$res,'支付成功');
+			DB::rollBack();
+			return ReturnData::create(ReturnData::FAIL);
         }
         
-        DB::rollBack();
-        return ReturnData::create(ReturnData::FAIL);
+		$user_money_data['user_id'] = $where['user_id'];
+		$user_money_data['type'] = 1;
+		$user_money_data['money'] = $order->order_amount;
+		$user_money_data['des'] = '订单余额支付';
+		if(!logic('UserMoney')->add($user_money_data)){ DB::rollBack(); return ReturnData::create(ReturnData::FAIL); }
+		
+		DB::commit();
+		return ReturnData::create(ReturnData::SUCCESS,$res,'支付成功');
     }
     
     /**

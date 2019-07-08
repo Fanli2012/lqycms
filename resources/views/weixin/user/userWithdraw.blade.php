@@ -68,7 +68,7 @@ function submit()
 {
 	var url = '<?php echo env('APP_API_URL').'/user_withdraw_add'; ?>';
 	var name = $("#name").val();
-	var method = $('[name="method"][checked]').val();
+	var method = $('input[name="method"]:checked').val();
     var money = $("#money").val();
     var account = $("#account").val();
     var bank_name = $("#bank_name").val();

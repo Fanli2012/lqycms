@@ -130,13 +130,14 @@ class UserMoneyLogic extends BaseLogic
         $user_money = model('User')->getDb()->where(array('id'=>$data['user_id']))->value('money'); //用户余额
         $data['user_money'] = $user_money;
         
-        $res = $this->getModel()->add($data,$type);
+        $res = $this->getModel()->add($data, $type);
         if($res)
         {
             DB::commit(); //事务提交
             return ReturnData::create(ReturnData::SUCCESS,$res);
         }
         
+		DB::rollBack(); //事务回滚
         return ReturnData::create(ReturnData::FAIL);
     }
     

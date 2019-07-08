@@ -17,7 +17,6 @@ class Comment extends BaseModel
     const GOODS_COMMENT_TYPE = 0; //商品评论
     const ARTICLE_COMMENT_TYPE = 1; //文章评论
     
-    
     public function getDb()
     {
         return DB::table($this->table);

@@ -191,5 +191,8 @@ $(function(){
 });
 </script>
 
+<script>
+console.log("Github地址：https://github.com/Fanli2012/lqycms\nEmail:374861669@qq.com");
+</script>
 @include('home.common.footer')
 </body></html>

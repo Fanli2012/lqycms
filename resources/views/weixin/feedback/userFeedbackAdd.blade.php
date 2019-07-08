@@ -32,7 +32,7 @@
 </select>
 </div>
 <div class="adr-form-group">
-  <label for="doc-ta-1" style="border-left:2px solid #f23030;padding-left:4px;margin-bottom:2px;">详细地址(必填)</label>
+  <label for="doc-ta-1" style="border-left:2px solid #f23030;padding-left:4px;margin-bottom:2px;">反馈内容(必填)</label>
   <textarea style="margin-top:4px;" name="content" class="" rows="3" id="content" placeholder="提优质意见可得大礼哦"></textarea>
 </div>
 

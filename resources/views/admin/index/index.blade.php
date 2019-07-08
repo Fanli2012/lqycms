@@ -74,4 +74,7 @@ $(document).ready(function(){
 </script>
 <iframe src="<?php echo route('admin_welcome'); ?>" frameborder="0" scrolling="yes" width="100%" height="100%" allowtransparency="true" id="appiframe" name="appiframe"></iframe>
 </div></div><!-- 右边结束 --></div></div>
+<script>
+console.log("Github地址：https://github.com/Fanli2012/lqycms\nEmail:374861669@qq.com");
+</script>
 </body></html>

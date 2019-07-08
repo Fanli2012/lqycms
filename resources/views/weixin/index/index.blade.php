@@ -179,4 +179,7 @@ var swiper = new Swiper('.swiper-nav', {
 .banner_tit{font-size:18px;font-weight:400;background-color:#fff;color:#f23030;height:46px;line-height:46px;padding-left:10px;padding-right:10px;border-bottom:1px solid #eee;text-align:center;}
 </style>
 @include('weixin.common.footer')
+<script>
+console.log("Github地址：https://github.com/Fanli2012/lqycms\nEmail:374861669@qq.com");
+</script>
 </body></html>
