@@ -9,7 +9,7 @@ use App\Common\Token;
 use App\Http\Model\Article;
 use App\Http\Logic\ArticleLogic;
 
-class ArticleController extends CommonController
+class ArticleController extends BaseController
 {
     public function __construct()
     {

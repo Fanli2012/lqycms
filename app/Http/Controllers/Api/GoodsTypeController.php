@@ -9,7 +9,7 @@ use App\Common\Token;
 use App\Http\Model\GoodsType;
 use App\Http\Logic\GoodsTypeLogic;
 
-class GoodsTypeController extends CommonController
+class GoodsTypeController extends BaseController
 {
     public function __construct()
     {

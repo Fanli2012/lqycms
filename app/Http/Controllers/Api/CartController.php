@@ -9,7 +9,7 @@ use App\Common\Token;
 use App\Http\Model\Cart;
 use App\Http\Logic\CartLogic;
 
-class CartController extends CommonController
+class CartController extends BaseController
 {
     public function __construct()
     {

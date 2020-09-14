@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Logic\UserWithdrawLogic;
 use App\Http\Model\UserWithdraw;
 
-class UserWithdrawController extends CommonController
+class UserWithdrawController extends BaseController
 {
     public function __construct()
     {

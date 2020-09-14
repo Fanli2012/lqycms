@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Logic\KuaidiLogic;
 use App\Http\Model\Kuaidi;
 
-class KuaidiController extends CommonController
+class KuaidiController extends BaseController
 {
     public function __construct()
     {

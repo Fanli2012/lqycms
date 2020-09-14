@@ -10,7 +10,7 @@ use App\Http\Model\UserGoodsHistory;
 use App\Http\Logic\UserGoodsHistoryLogic;
 
 //我的足迹
-class UserGoodsHistoryController extends CommonController
+class UserGoodsHistoryController extends BaseController
 {
     public function __construct()
     {

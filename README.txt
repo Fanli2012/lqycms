@@ -27,7 +27,7 @@ echo hello > .env
 php composer.phar install
 php artisan key:generate
 
-4、 登录后台->顶部按钮，更新缓存：/fladmin/login.php，账号：admin888，密码：admin
+4、 登录后台->顶部按钮，更新缓存：/fladmin/login.php，账号：admin888，密码：123456
 
 
 注意

@@ -1,10 +1,9 @@
 <?php
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Admin\CommonController;
 use DB;
 
-class GoodsController extends CommonController
+class GoodsController extends BaseController
 {
     public function __construct()
     {
@@ -59,7 +58,7 @@ class GoodsController extends CommonController
         $litpic="";if(!empty($_POST["litpic"])){$litpic = $_POST["litpic"];}else{$_POST['litpic']="";} //缩略图
         if(empty($_POST["description"])){if(!empty($_POST["body"])){$_POST['description']=cut_str($_POST["body"]);}} //description
         $_POST['add_time'] = $_POST['pubdate'] = time(); //添加&更新时间
-		$_POST['user_id'] = $_SESSION['admin_user_info']['id']; // 发布者id
+		$_POST['user_id'] = $_SESSION['admin_info']['id']; // 发布者id
 		
 		//关键词
         if(!empty($_POST["keywords"]))
@@ -132,7 +131,7 @@ class GoodsController extends CommonController
         $litpic="";if(!empty($_POST["litpic"])){$litpic = $_POST["litpic"];}else{$_POST['litpic']="";} //缩略图
         if(empty($_POST["description"])){if(!empty($_POST["body"])){$_POST['description']=cut_str($_POST["body"]);}}//description
         $_POST['pubdate'] = time();//更新时间
-        $_POST['user_id'] = $_SESSION['admin_user_info']['id']; // 修改者id
+        $_POST['user_id'] = $_SESSION['admin_info']['id']; // 修改者id
 		
 		//关键词
         if(!empty($_POST["keywords"]))

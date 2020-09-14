@@ -4,7 +4,7 @@ use DB;
 use App\Common\ReturnData;
 use Illuminate\Http\Request;
 
-class CategoryController extends CommonController
+class CategoryController extends BaseController
 {
     public function __construct()
     {

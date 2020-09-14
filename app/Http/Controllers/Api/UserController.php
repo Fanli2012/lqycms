@@ -9,7 +9,7 @@ use App\Common\Token;
 use App\Http\Model\User;
 use App\Http\Logic\UserLogic;
 
-class UserController extends CommonController
+class UserController extends BaseController
 {
     public function __construct()
     {

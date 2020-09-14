@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Logic\AdminRoleLogic;
 use App\Http\Model\AdminRole;
 
-class AdminRoleController extends CommonController
+class AdminRoleController extends BaseController
 {
     public function __construct()
     {

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Logic\SlideLogic;
 use App\Http\Model\Slide;
 
-class SlideController extends CommonController
+class SlideController extends BaseController
 {
     public function __construct()
     {

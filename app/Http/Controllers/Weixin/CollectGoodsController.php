@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Weixin;
 use App\Http\Controllers\Weixin\CommonController;
 use Illuminate\Http\Request;
 
-class CollectGoodsController extends CommonController
+class CollectGoodsController extends BaseController
 {
     public function __construct()
     {

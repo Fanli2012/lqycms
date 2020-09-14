@@ -1,20 +1,22 @@
 <?php
+
 namespace App\Http\Model;
+
 use DB;
 use Log;
 
 class Menu extends BaseModel
 {
-	protected $table = 'menu';
+    protected $table = 'menu';
     public $timestamps = false;
     protected $hidden = array();
     protected $guarded = array(); //$guarded包含你不想被赋值的字段数组。
-    
+
     public function getDb()
     {
         return DB::table($this->table);
     }
-    
+
     /**
      * 列表
      * @param array $where 查询条件
@@ -24,27 +26,42 @@ class Menu extends BaseModel
      * @param int $limit 取多少条
      * @return array
      */
-    public function getList($where = array(), $order = '', $field = '*', $offset = 0, $limit = 10)
+    public function getList($where = array(), $order = '', $field = '*', $offset = 0, $limit = 15)
     {
         $model = $this->getDb();
-        if($where){$model = $model->where($where);}
-        
+        if ($where) {
+            $model = $model->where($where);
+        }
+
         $res['count'] = $model->count();
         $res['list'] = array();
-        
-        if($res['count'] > 0)
-        {
-            if($field){if(is_array($field)){$model = $model->select($field);}else{$model = $model->select(\DB::raw($field));}}
-            if($order){$model = parent::getOrderByData($model, $order);}
-            if($offset){}else{$offset = 0;}
-            if($limit){}else{$limit = 10;}
-            
+
+        if ($res['count'] > 0) {
+            if ($field) {
+                if (is_array($field)) {
+                    $model = $model->select($field);
+                } else {
+                    $model = $model->select(\DB::raw($field));
+                }
+            }
+            if ($order) {
+                $model = parent::getOrderByData($model, $order);
+            }
+            if ($offset) {
+            } else {
+                $offset = 0;
+            }
+            if ($limit) {
+            } else {
+                $limit = 15;
+            }
+
             $res['list'] = $model->skip($offset)->take($limit)->get();
         }
-        
+
         return $res;
     }
-    
+
     /**
      * 分页，用于前端html输出
      * @param array $where 查询条件
@@ -54,18 +71,31 @@ class Menu extends BaseModel
      * @param int $page 当前第几页
      * @return array
      */
-    public function getPaginate($where = array(), $order = '', $field = '*', $limit = 10)
+    public function getPaginate($where = array(), $order = '', $field = '*', $limit = 15)
     {
         $res = $this->getDb();
-        
-        if($where){$res = $res->where($where);}
-        if($field){if(is_array($field)){$res = $res->select($field);}else{$res = $res->select(\DB::raw($field));}}
-        if($order){$res = parent::getOrderByData($res, $order);}
-        if($limit){}else{$limit = 10;}
-        
+
+        if ($where) {
+            $res = $res->where($where);
+        }
+        if ($field) {
+            if (is_array($field)) {
+                $res = $res->select($field);
+            } else {
+                $res = $res->select(\DB::raw($field));
+            }
+        }
+        if ($order) {
+            $res = parent::getOrderByData($res, $order);
+        }
+        if ($limit) {
+        } else {
+            $limit = 15;
+        }
+
         return $res->paginate($limit);
     }
-    
+
     /**
      * 查询全部
      * @param array $where 查询条件
@@ -77,18 +107,32 @@ class Menu extends BaseModel
     public function getAll($where = array(), $order = '', $field = '*', $limit = '', $offset = '')
     {
         $res = $this->getDb();
-        
-        if($where){$res = $res->where($where);}
-        if($field){if(is_array($field)){$res = $res->select($field);}else{$res = $res->select(\DB::raw($field));}}
-        if($order){$res = parent::getOrderByData($res, $order);}
-        if($offset){$res = $res->skip($offset);}
-        if($limit){$res = $res->take($limit);}
-        
+
+        if ($where) {
+            $res = $res->where($where);
+        }
+        if ($field) {
+            if (is_array($field)) {
+                $res = $res->select($field);
+            } else {
+                $res = $res->select(\DB::raw($field));
+            }
+        }
+        if ($order) {
+            $res = parent::getOrderByData($res, $order);
+        }
+        if ($offset) {
+            $res = $res->skip($offset);
+        }
+        if ($limit) {
+            $res = $res->take($limit);
+        }
+
         $res = $res->get();
-        
+
         return $res;
     }
-    
+
     /**
      * 获取一条
      * @param array $where 条件
@@ -98,29 +142,34 @@ class Menu extends BaseModel
     public function getOne($where, $field = '*')
     {
         $res = $this->getDb();
-        
-        if($where){$res = $res->where($where);}
-        if($field){if(is_array($field)){$res = $res->select($field);}else{$res = $res->select(\DB::raw($field));}}
-        
+
+        if ($where) {
+            $res = $res->where($where);
+        }
+        if ($field) {
+            if (is_array($field)) {
+                $res = $res->select($field);
+            } else {
+                $res = $res->select(\DB::raw($field));
+            }
+        }
+
         $res = $res->first();
-        
+
         return $res;
     }
-    
+
     /**
      * 添加
      * @param array $data 数据
      * @return int
      */
-    public function add(array $data,$type = 0)
+    public function add(array $data, $type = 0)
     {
-        if($type==0)
-        {
+        if ($type == 0) {
             // 新增单条数据并返回主键值
-            return self::insertGetId(parent::filterTableColumn($data,$this->table));
-        }
-        elseif($type==1)
-        {
+            return self::insertGetId(parent::filterTableColumn($data, $this->table));
+        } elseif ($type == 1) {
             /**
              * 添加单条数据
              * $data = ['foo' => 'bar', 'bar' => 'foo'];
@@ -134,7 +183,7 @@ class Menu extends BaseModel
             return self::insert($data);
         }
     }
-    
+
     /**
      * 修改
      * @param array $data 数据
@@ -146,7 +195,7 @@ class Menu extends BaseModel
         $res = $this->getDb();
         return $res->where($where)->update(parent::filterTableColumn($data, $this->table));
     }
-    
+
     /**
      * 删除
      * @param array $where 条件
@@ -156,41 +205,38 @@ class Menu extends BaseModel
     {
         $res = $this->getDb();
         $res = $res->where($where)->delete();
-        
+
         return $res;
     }
-    
-	//获取后台管理员所具有权限的菜单列表
-	public static function getPermissionsMenu($role_id, $pid=0, $pad=0)
-	{
-		$res = [];
-		
-		$where['access.role_id'] = $role_id;
-		$where['menu.pid'] = $pid;
-		$where["menu.status"] = 1;
-		
-		$menu = object_to_array(\DB::table('menu')
+
+    //获取后台管理员所具有权限的菜单列表
+    public static function getPermissionsMenu($role_id, $pid = 0, $pad = 0)
+    {
+        $res = [];
+
+        $where['access.role_id'] = $role_id;
+        $where['menu.pid'] = $pid;
+        $where["menu.status"] = 1;
+
+        $menu = object_to_array(DB::table('menu')
             ->join('access', 'access.menu_id', '=', 'menu.id')
             ->select('menu.*', 'access.role_id')
-			->where($where)
-			->orderBy('listorder', 'asc')
+            ->where($where)
+            ->orderBy('listorder', 'asc')
             ->get());
-		
-		if($menu)
-		{
-			foreach($menu as $row)
-			{
-				$row['deep'] = $pad;
-				
-				if($PermissionsMenu = self::getPermissionsMenu($role_id, $row['id'], $pad+1))
-				{
-					$row['child'] = $PermissionsMenu;
-				}
-				
-				$res[] = $row;
-			}
-		}
-		
-		return $res;
-	}
+
+        if ($menu) {
+            foreach ($menu as $row) {
+                $row['deep'] = $pad;
+
+                if ($permissions_menu = self::getPermissionsMenu($role_id, $row['id'], $pad + 1)) {
+                    $row['child'] = $permissions_menu;
+                }
+
+                $res[] = $row;
+            }
+        }
+
+        return $res;
+    }
 }

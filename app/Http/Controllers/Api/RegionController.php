@@ -9,7 +9,7 @@ use App\Common\Token;
 use App\Http\Model\Region;
 use App\Http\Logic\RegionLogic;
 
-class RegionController extends CommonController
+class RegionController extends BaseController
 {
     public function __construct()
     {

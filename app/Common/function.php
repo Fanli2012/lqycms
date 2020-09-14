@@ -1044,22 +1044,20 @@ function dir_delete($dir)
 //对象转数组
 function object_to_array($object, $get=0)
 {
-	$res = '';
-	if(!empty($object))
-	{
-		if($get==0)
-		{
-			foreach($object as $key=>$value)
-			{
-				$res[$key] = (array)$value;
-			}
-		}
-		elseif($get==1)
-		{
-			$res = (array)$object;
+	$res = [];
+	if(empty($object)) {
+		return $res;
+	}
+
+	if ($get==0) {
+		foreach ($object as $key=>$value) {
+			$res[$key] = (array)$value;
 		}
 	}
-	
+	elseif ($get==1) {
+		$res = (array)$object;
+	}
+
     return $res;
 }
 

@@ -9,7 +9,7 @@ use App\Common\Token;
 use App\Http\Model\FeedBack;
 use App\Http\Logic\FeedBackLogic;
 
-class FeedBackController extends CommonController
+class FeedBackController extends BaseController
 {
     public function __construct()
     {

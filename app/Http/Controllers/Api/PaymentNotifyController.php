@@ -7,7 +7,7 @@ use App\Common\ReturnData;
 use App\Common\Token;
 use App\Http\Model\UserMoney;
 
-class PaymentNotifyController extends CommonController
+class PaymentNotifyController extends BaseController
 {
     public function __construct()
     {

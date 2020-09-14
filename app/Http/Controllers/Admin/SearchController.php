@@ -1,7 +1,7 @@
 <?php
 namespace app\fladmin\controller;
 
-class Search extends Base
+class Search extends BaseController
 {
 	public function _initialize()
 	{

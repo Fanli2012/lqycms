@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Common\ReturnData;
 use App\Common\Token;
 
-class IndexController extends CommonController
+class IndexController extends BaseController
 {
     public function __construct()
     {

@@ -6,7 +6,7 @@ use DB;
 use App\Http\Model\UserRank;
 use App\Common\Helper;
 
-class UserRankController extends CommonController
+class UserRankController extends BaseController
 {
     public function __construct()
     {

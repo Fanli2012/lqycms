@@ -15,6 +15,7 @@ return [
     |
     */
 
+	// 通过在.env中的 QUEUE_CONNECTION 选项，来决定选择何种驱动
     'default' => env('QUEUE_DRIVER', 'sync'),
 
     /*
@@ -60,7 +61,7 @@ return [
         'redis' => [
             'driver' => 'redis',
             'connection' => 'default',
-            'queue' => 'default',
+            'queue' => env('REDIS_QUEUE', 'default'),
             'retry_after' => 90,
         ],
 
@@ -77,6 +78,7 @@ return [
     |
     */
 
+    // 队列有可能失败，失败的队列会写入到mysql的failed_jobs表里面
     'failed' => [
         'database' => env('DB_CONNECTION', 'mysql'),
         'table' => 'failed_jobs',

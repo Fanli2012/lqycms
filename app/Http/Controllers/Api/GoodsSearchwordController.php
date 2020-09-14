@@ -9,7 +9,7 @@ use App\Common\Token;
 use App\Http\Model\GoodsSearchword;
 use App\Http\Logic\GoodsSearchwordLogic;
 
-class GoodsSearchwordController extends CommonController
+class GoodsSearchwordController extends BaseController
 {
     public function __construct()
     {

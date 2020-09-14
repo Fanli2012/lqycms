@@ -1,9 +1,7 @@
 <?php
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Admin\CommonController;
-
-class IndexController extends CommonController
+class IndexController extends BaseController
 {
     public function __construct()
     {
@@ -13,7 +11,7 @@ class IndexController extends CommonController
 	public function index()
 	{
 		$leftmenu = new \App\Http\Model\Menu();
-		$data['menus'] = $leftmenu::getPermissionsMenu($_SESSION['admin_user_info']['role_id']);
+		$data['menus'] = $leftmenu::getPermissionsMenu($_SESSION['admin_info']['role_id']);
 		
 		return view('admin.index.index', $data);
 	}

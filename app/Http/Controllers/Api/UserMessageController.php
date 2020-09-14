@@ -9,7 +9,7 @@ use App\Common\Token;
 use App\Http\Model\UserMessage;
 use App\Http\Logic\UserMessageLogic;
 
-class UserMessageController extends CommonController
+class UserMessageController extends BaseController
 {
     public function __construct()
     {

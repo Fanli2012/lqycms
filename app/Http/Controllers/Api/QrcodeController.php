@@ -5,7 +5,7 @@ use App\Common\ReturnData;
 use App\Common\Helper;
 
 //二维码,如果输出乱码就转成base64输出
-class QrcodeController extends CommonController
+class QrcodeController extends BaseController
 {
     public function __construct()
     {

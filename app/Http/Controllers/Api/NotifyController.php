@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Common\ReturnData;
 use App\Common\Helper;
 
-class NotifyController extends CommonController
+class NotifyController extends BaseController
 {
     public function __construct()
     {

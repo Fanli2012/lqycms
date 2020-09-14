@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Logic\BonusLogic;
 use App\Http\Model\Bonus;
 
-class BonusController extends CommonController
+class BonusController extends BaseController
 {
     public function __construct()
     {

@@ -9,7 +9,7 @@ use App\Common\Token;
 use App\Http\Model\Payment;
 use App\Http\Logic\PaymentLogic;
 
-class PaymentController extends CommonController
+class PaymentController extends BaseController
 {
     public function __construct()
     {

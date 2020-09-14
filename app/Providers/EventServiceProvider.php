@@ -16,6 +16,11 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\Event' => [
             'App\Listeners\EventListener',
         ],
+		// 订单发货
+		'App\Events\OrderShipped' => [
+			// 发送发货通知
+			'App\Listeners\SendShipmentNotification',
+		],
     ];
 
     /**

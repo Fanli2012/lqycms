@@ -9,7 +9,7 @@ use App\Common\Token;
 use App\Http\Model\UserAddress;
 use App\Http\Logic\UserAddressLogic;
 
-class UserAddressController extends CommonController
+class UserAddressController extends BaseController
 {
     public function __construct()
     {

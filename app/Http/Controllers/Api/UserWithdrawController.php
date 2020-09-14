@@ -9,7 +9,7 @@ use App\Common\Token;
 use App\Http\Model\UserWithdraw;
 use App\Http\Logic\UserWithdrawLogic;
 
-class UserWithdrawController extends CommonController
+class UserWithdrawController extends BaseController
 {
     public function __construct()
     {

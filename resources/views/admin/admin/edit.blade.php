@@ -9,7 +9,7 @@
 <tbody>
     <tr>
         <td align="right">用户名：</td>
-        <td><input name="username" type="text" id="username" value="<?php echo $post->username; ?>" class="required" style="width:30%" placeholder="在此输入用户名"><input style="display:none;" type="text" name="id" id="id" value="<?php echo $id; ?>"></td>
+        <td><input name="name" type="text" id="name" value="<?php echo $post->name; ?>" class="required" style="width:30%" placeholder="在此输入用户名"><input style="display:none;" type="text" name="id" id="id" value="<?php echo $id; ?>"></td>
     </tr>
     <tr>
         <td align="right">密码：</td>

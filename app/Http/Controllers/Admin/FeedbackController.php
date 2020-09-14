@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Logic\FeedbackLogic;
 use App\Http\Model\Feedback;
 
-class FeedbackController extends CommonController
+class FeedbackController extends BaseController
 {
     public function __construct()
     {

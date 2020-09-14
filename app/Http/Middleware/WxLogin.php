@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Middleware;
 
 use Closure;
@@ -10,15 +11,13 @@ class WxLogin
      */
     public function handle($request, Closure $next)
     {
-		if(isset($_SESSION['weixin_user_info']))
-		{
-            
-		}
-		else
-		{
-			header('Location: '.route('weixin_login'));exit;
-		}
-		
+        if (isset($_SESSION['weixin_user_info'])) {
+
+        } else {
+            header('Location: ' . route('weixin_login'));
+            exit;
+        }
+
         return $next($request);
     }
 }

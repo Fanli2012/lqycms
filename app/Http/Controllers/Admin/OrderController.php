@@ -10,7 +10,7 @@ use DB;
 use App\Common\ReturnData;
 use Illuminate\Http\Request;
 
-class OrderController extends CommonController
+class OrderController extends BaseController
 {
     public function __construct()
     {

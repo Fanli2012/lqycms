@@ -1,5 +1,5 @@
 <!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
-<title><?php echo sysconfig('CMS_WEBNAME'); ?></title><meta name="keywords" content="{dede:field.keywords/}" /><meta name="description" content="{dede:field.description function='html2text(@me)'/}" /><link rel="stylesheet" href="<?php echo sysconfig('CMS_BASEHOST'); ?>/css/style.css"></head><body>
+<title><?php echo sysconfig('CMS_SEOTITLE'); ?></title><meta name="keywords" content="<?php echo sysconfig('CMS_KEYWORDS'); ?>" /><meta name="description" content="<?php echo sysconfig('CMS_DESCRIPTION'); ?>" /><link rel="stylesheet" href="<?php echo sysconfig('CMS_BASEHOST'); ?>/css/style.css"></head><body>
 @include('home.common.header')
 <style>
 .main-theme .item{width: 33.3%;width: 33.3% !important;height:120px;float: left;overflow: hidden;-webkit-transition: width .3s ease;-moz-transition: width .3s ease;-o-transition: width .3s ease;transition: width .3s ease;}
@@ -7,12 +7,12 @@
 </style>
 
 <!--顶部滚动广告栏-start-->
-<?php if($slide_list){ ?>
+<?php if ($slide_list) { ?>
 <div class="box" style="margin-top:10px;margin-bottom:10px;">
     <!-- Swiper -->
     <div class="swiper-container">
         <div class="swiper-wrapper">
-        <?php foreach($slide_list as $k=>$v){ ?>
+        <?php foreach ($slide_list as $k=>$v) { ?>
             <div class="swiper-slide"><a href="<?php if($v['url']){echo $v['url'];}else{echo 'javascript:;';} ?>"><img src="<?php echo $v['pic']; ?>" alt="<?php echo $v['title']; ?>"></a></div>
         <?php } ?>
         </div>
@@ -81,13 +81,13 @@ var swiper = new Swiper('.swiper-container', {
 </style>
 <div class="box" style="margin-bottom:5px;"><ul class="brandul">
 <li>
-<a href="http://ju.taobao.com/tg/brand_items.htm?act_sign_id=28794165&amp;seller_id=880734502" target="_blank">
+<a href="" target="_blank">
 <img class="brand-pic" src="/images/3.jpg">
 <div class="brand-des"><span class="fl"></span>
 <span class="fr"><em>234100</em>件已付款 &nbsp; <em>仅剩1天</em></span></div></a>
 </li>
 <li>
-<a href="http://ju.taobao.com/tg/brand_items.htm?act_sign_id=28794165&amp;seller_id=880734502" target="_blank">
+<a href="" target="_blank">
 <img class="brand-pic" src="/images/3.jpg">
 <div class="brand-des"><span class="fl"></span>
 <span class="fr"><em>234100</em>件已付款 &nbsp; <em>仅剩1天</em></span></div></a>

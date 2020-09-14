@@ -1,10 +1,9 @@
 <?php
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Admin\CommonController;
 use DB;
 
-class GoodsBrandController extends CommonController
+class GoodsBrandController extends BaseController
 {
     public function __construct()
     {

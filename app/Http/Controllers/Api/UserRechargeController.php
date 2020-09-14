@@ -9,7 +9,7 @@ use App\Common\Token;
 use App\Http\Model\UserRecharge;
 use App\Http\Logic\UserRechargeLogic;
 
-class UserRechargeController extends CommonController
+class UserRechargeController extends BaseController
 {
     public function __construct()
     {

@@ -46,7 +46,7 @@ class Arctype extends BaseModel
      * @param int $limit 取多少条
      * @return array
      */
-    public function getList($where = array(), $order = '', $field = '*', $offset = 0, $limit = 10)
+    public function getList($where = array(), $order = '', $field = '*', $offset = 0, $limit = 15)
     {
         $model = $this->getDb();
         if($where){$model = $model->where($where);}
@@ -59,7 +59,7 @@ class Arctype extends BaseModel
             if($field){if(is_array($field)){$model = $model->select($field);}else{$model = $model->select(\DB::raw($field));}}
             if($order){$model = parent::getOrderByData($model, $order);}
             if($offset){}else{$offset = 0;}
-            if($limit){}else{$limit = 10;}
+            if($limit){}else{$limit = 15;}
             
             $res['list'] = $model->skip($offset)->take($limit)->get();
         }
@@ -76,14 +76,14 @@ class Arctype extends BaseModel
      * @param int $page 当前第几页
      * @return array
      */
-    public function getPaginate($where = array(), $order = '', $field = '*', $limit = 10)
+    public function getPaginate($where = array(), $order = '', $field = '*', $limit = 15)
     {
         $res = $this->getDb();
         
         if($where){$res = $res->where($where);}
         if($field){if(is_array($field)){$res = $res->select($field);}else{$res = $res->select(\DB::raw($field));}}
         if($order){$res = parent::getOrderByData($res, $order);}
-        if($limit){}else{$limit = 10;}
+        if($limit){}else{$limit = 15;}
         
         return $res->paginate($limit);
     }

@@ -14,13 +14,13 @@
 </style>
 <div class="box" style="margin-bottom:5px;margin-top:10px;">
 <ul class="brandul">
-<?php if($brand_list){foreach($brand_list as $k=>$v){ ?>
+<?php if ($brand_list) { foreach ($brand_list as $k=>$v) { ?>
 <li>
 <a href="<?php echo route('home_goodslist',array('brand_id'=>$v['id'])); ?>" target="_blank">
 <img class="brand-pic" src="<?php echo $v['litpic']; ?>">
 <div class="brand-des"><span class="fl"></span>
 <span class="fr"><em><?php echo $v['click']; ?></em>件已付款 &nbsp; <em>仅剩1天</em></span></div></a>
-</li><?php }} ?>
+</li><?php } } ?>
 </ul></div>
 
 @include('home.common.footer')

@@ -15,13 +15,13 @@ Route::group(['domain' => env('APP_SUBDOMAIN'), 'namespace' => 'Wap'], function 
 	Route::get('/page404', 'IndexController@page404')->name('wap_page404');     //404页面
 	Route::get('/tags', 'IndexController@tags')->name('wap_tags');
 	Route::get('/search/{id}', 'IndexController@search')->name('wap_search');   //搜索页面
-	Route::get('/p/{id}', 'IndexController@detail')->name('wap_detail');        //详情页
-	Route::get('/cat{cat}/{page}', 'IndexController@category');                 //分类页，分页
-	Route::get('/cat{cat}', 'IndexController@category')->name('wap_category');  //分类页
+	Route::get('/p/{id}', 'ArticleController@detail')->name('wap_detail');      //详情页
+	Route::get('/cat{cat}/{page}', 'ArticleController@index');                  //分类页，分页
+	Route::get('/cat{cat}', 'ArticleController@index')->name('wap_category');  //分类页
 	Route::get('/tag{tag}/{page}', 'IndexController@tag');                      //标签页，分页
 	Route::get('/tag{tag}', 'IndexController@tag')->name('wap_tag');            //标签页
-	Route::get('/page/{id}', 'IndexController@page')->name('wap_singlepage');   //单页
-	Route::get('/goods/{id}', 'IndexController@goods')->name('wap_goods');      //商品详情页
+	Route::get('/page/{id}', 'PageController@detail')->name('wap_singlepage');  //单页
+	Route::get('/goods/{id}', 'GoodsController@detail')->name('wap_goods');     //商品详情页
 	Route::get('/goodstype{cat}', 'IndexController@goodstype')->name('wap_goodstype'); //产品分类页
 	Route::get('/sitemap.xml', 'IndexController@sitemap')->name('wap_sitemap'); //sitemap
 });
@@ -33,20 +33,22 @@ Route::group(['namespace' => 'Home'], function () {
 	Route::get('/page404', 'IndexController@page404')->name('page404');         //404页面
 	Route::get('/tags', 'IndexController@tags')->name('home_tags');
 	Route::get('/search/{id}', 'IndexController@search')->name('home_search');  //搜索页面
-	Route::get('/p/{id}', 'IndexController@detail')->name('home_detail');       //详情页
+	Route::get('/p/{id}', 'ArticleController@detail')->name('home_detail');     //详情页
 	Route::get('/cat{cat}/{page}', 'IndexController@category');                 //分类页，分页
 	Route::get('/cat{cat}', 'IndexController@category')->name('home_category'); //分类页
-    Route::get('/arclist', 'IndexController@arclist')->name('home_arclist');    //文章列表
+    Route::get('/arclist', 'ArticleController@index')->name('home_arclist');    //文章列表
 	Route::get('/tag{tag}/{page}', 'IndexController@tag');                      //标签页，分页
 	Route::get('/tag{tag}', 'IndexController@tag')->name('home_tag');           //标签页
-	Route::get('/page/{id}', 'IndexController@page')->name('home_singlepage');  //单页
-	Route::get('/goods/{id}', 'IndexController@goods')->name('home_goods');     //商品详情页
-	Route::get('/goodslist', 'IndexController@goodslist')->name('home_goodslist'); //产品分类页
-    Route::get('/brandlist', 'IndexController@brandList')->name('home_brandlist'); //品牌列表
-	Route::get('/sitemap.xml', 'IndexController@sitemap')->name('home_sitemap');//sitemap
+	Route::get('/page/{id}', 'PageController@detail')->name('home_singlepage'); //单页
+	Route::get('/goods/{id}', 'GoodsController@detail')->name('home_goods');    //商品详情页
+	Route::get('/goodslist', 'GoodsController@index')->name('home_goodslist');  //产品分类页
+    Route::get('/brandlist', 'GoodsController@brand_list')->name('home_brandlist'); //品牌列表
+	Route::get('/sitemap.xml', 'IndexController@sitemap')->name('home_sitemap');    //sitemap
 	Route::get('/wx_checksignature', 'IndexController@checksignature')->name('home_wx_checksignature');
     
-	Route::get('/test', 'IndexController@test')->name('home_test');             //测试
+	Route::get('/test', 'IndexController@test')->name('home_test');                 //测试
+	Route::get('/test/queue', 'TestController@queue')->name('home_queue_test');     //队列测试
+	Route::get('/test/event', 'TestController@event')->name('home_event_test');     //事件测试
 	Route::get('/aaa', function () {
 		dd('wap');
 	});
@@ -128,14 +130,14 @@ Route::group(['prefix' => 'weixin', 'namespace' => 'Weixin', 'middleware' => ['w
 //无需token验证，全局
 Route::group(['middleware' => ['web']], function () {
     Route::get('/weixin_user_recharge_order_detail', 'Weixin\UserController@userRechargeOrderDetail')->name('weixin_user_recharge_order_detail'); //微信充值支付，为了配合公众号支付授权目录
-    Route::post('/dataapi/listarc', 'Api\IndexController@listarc')->name('api_listarc');
-    Route::post('/dataapi/customer_login', 'Api\WechatAuthController@customerLogin');
-	Route::post('/dataapi/', 'Api\UserController@signin'); //签到
+    Route::post('/api/listarc', 'Api\IndexController@listarc')->name('api_listarc');
+    Route::post('/api/customer_login', 'Api\WechatAuthController@customerLogin');
+	Route::post('/api/', 'Api\UserController@signin'); //签到
 });
 
 
 //API接口路由，无需token验证
-Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web']], function () {
+Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => ['web']], function () {
     //各种回调
     Route::any('/notify_wxpay_jsapi', 'NotifyController@wxpayJsapi')->name('notify_wxpay_jsapi'); //微信支付回调
     //轮播图
@@ -167,7 +169,7 @@ Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web
 });
 
 //API接口路由，需token验证
-Route::group(['prefix' => 'dataapi', 'namespace' => 'Api', 'middleware' => ['web','token']], function () {
+Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => ['web','token']], function () {
     Route::post('/article_add', 'ArticleController@articleAdd'); //添加文章
     Route::post('/article_update', 'ArticleController@articleUpdate'); //修改文章
     Route::post('/article_delete', 'ArticleController@articleDelete'); //删除文章
@@ -439,6 +441,8 @@ Route::group(['prefix' => 'fladmin', 'namespace' => 'Admin', 'middleware' => ['w
 	Route::post('/dologin', 'LoginController@dologin')->name('admin_dologin');
 	Route::get('/logout', 'LoginController@logout')->name('admin_logout');
 	Route::get('/recoverpwd', 'LoginController@recoverpwd')->name('admin_recoverpwd');
+	//操作日志
+	Route::get('/log', 'LogController@index')->name('admin_log');
 	//页面跳转
 	Route::get('/jump', 'LoginController@jump')->name('admin_jump');
 	//测试

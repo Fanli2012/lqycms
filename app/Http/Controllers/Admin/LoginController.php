@@ -1,12 +1,11 @@
 <?php
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Log;
 
-class LoginController extends BaseController
+class LoginController extends CommonController
 {
 	//页面跳转
     public function jump()
@@ -19,7 +18,7 @@ class LoginController extends BaseController
      */
 	public function login()
 	{
-		if(isset($_SESSION['admin_user_info']))
+		if(isset($_SESSION['admin_info']))
 		{
 			header("Location: ".route('admin'));
 			exit;
@@ -36,18 +35,18 @@ class LoginController extends BaseController
         if(!empty($_POST["username"])){$username = $_POST["username"];}else{$username='';exit;}//用户名
         if(!empty($_POST["pwd"])){$pwd = md5($_POST["pwd"]);}else{$pwd='';exit;}//密码
 		
-        $admin_user = DB::table('admin')->where(array('username' => $username, 'pwd' => $pwd))->orWhere(function ($query) use ($username, $pwd) {
+        $admin_user = DB::table('admin')->where(array('name' => $username, 'pwd' => $pwd))->orWhere(function ($query) use ($username, $pwd) {
             $query->where('email', '=', $username)->where('pwd', '=', $pwd);
         })->first();
 		
         if($admin_user)
         {
-			$admin_user_info = object_to_array($admin_user, 1);
-			$admin_user_info['rolename'] = DB::table('admin_role')->where(array('id'=>$admin_user->role_id))->value('name');
+			$admin_info = object_to_array($admin_user, 1);
+			$admin_info['rolename'] = DB::table('admin_role')->where(array('id'=>$admin_user->role_id))->value('name');
 			
-			$_SESSION['admin_user_info'] = $admin_user_info;
+			$_SESSION['admin_info'] = $admin_info;
 			
-			DB::table('admin')->where(array('id'=>$admin_user->role_id))->update(array('logintime' => time()));
+			DB::table('admin')->where(array('id'=>$admin_user->id))->update(array('login_time' => time()));
 			
 			return redirect()->route('admin');
         }
@@ -66,7 +65,7 @@ class LoginController extends BaseController
     //密码恢复
     public function recoverpwd()
     {
-        $data["username"] = "admin888";
+        $data["name"] = "admin888";
         $data["pwd"] = "21232f297a57a5a743894a0e4a801fc3";
         
         if(DB::table('admin')->where('id', 1)->update($data))
@@ -82,17 +81,17 @@ class LoginController extends BaseController
      */
     public function userexists()
     {
-		$map['username'] = "";
-        if(isset($_POST["username"]) && !empty($_POST["username"]))
+		$where['name'] = "";
+        if(isset($_POST["name"]) && !empty($_POST["name"]))
         {
-            $map['username'] = $_POST["username"];
+            $where['name'] = $_POST["name"];
         }
 		else
 		{
 			return 0;
 		}
         
-        return DB::table("admin")->where($map)->count();
+        return DB::table("admin")->where($where)->count();
     }
 	
 	//测试

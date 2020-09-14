@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Logic\AdminLogic;
 use App\Http\Model\Admin;
 
-class AdminController extends CommonController
+class AdminController extends BaseController
 {
     public function __construct()
     {
@@ -25,7 +25,7 @@ class AdminController extends CommonController
         $where = function ($query) use ($res) {
 			if(isset($_REQUEST["keyword"]))
 			{
-				$query->where('username', 'like', '%'.$_REQUEST['keyword'].'%');
+				$query->where('name', 'like', '%'.$_REQUEST['keyword'].'%');
 			}
 			
 			if(isset($_REQUEST["role_id"]))

@@ -9,7 +9,7 @@ use App\Common\Token;
 use App\Http\Model\Arctype;
 use App\Http\Logic\ArctypeLogic;
 
-class ArctypeController extends CommonController
+class ArctypeController extends BaseController
 {
     public function __construct()
     {

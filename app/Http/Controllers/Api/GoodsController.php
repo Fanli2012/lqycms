@@ -10,7 +10,7 @@ use App\Http\Model\Goods;
 use App\Http\Logic\GoodsLogic;
 use App\Http\Logic\GoodsSearchwordLogic;
 
-class GoodsController extends CommonController
+class GoodsController extends BaseController
 {
     public function __construct()
     {

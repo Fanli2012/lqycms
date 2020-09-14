@@ -2,30 +2,36 @@
 
 namespace App\Console;
 
+use DB;
+use Log;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
-    /**
-     * The Artisan commands provided by your application.
-     *
+	/**
+     * 应用提供的Artisan命令
+     * 
      * @var array
      */
     protected $commands = [
-        //
+        Commands\UnpayOrderSetInvalid::class,
+        Commands\SendEmail::class,
     ];
 
-    /**
-     * Define the application's command schedule.
+	/**
+     * 定义应用的命令调度
      *
      * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
      * @return void
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+		Log::info('----Schedule----');
+		// 使用 command 方法通过命令名或类来调度一个 Artisan 命令
+        // $schedule->command('unpay_order_set_invalid')->hourly();
+		// 使用 exec 命令可用于发送命令到操作系统
+		// $schedule->exec('node /home/forge/script.js')->daily();
     }
 
     /**

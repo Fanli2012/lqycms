@@ -9,7 +9,7 @@ use App\Common\Token;
 use App\Http\Model\Page;
 use App\Http\Logic\PageLogic;
 
-class PageController extends CommonController
+class PageController extends BaseController
 {
     public function __construct()
     {

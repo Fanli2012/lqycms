@@ -9,7 +9,7 @@ use App\Common\Token;
 use App\Http\Model\CollectGoods;
 use App\Http\Logic\CollectGoodsLogic;
 
-class CollectGoodsController extends CommonController
+class CollectGoodsController extends BaseController
 {
     public function __construct()
     {

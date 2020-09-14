@@ -9,7 +9,7 @@
 <a class="blog-nav-item" href="<?php echo route('home'); ?>" target="_blank"><span class="glyphicon glyphicon-home"></span> 网站主页</a>
 <a class="blog-nav-item" href="<?php echo route('admin'); ?>/index/upcache"><span class="glyphicon glyphicon-refresh"></span> 更新缓存</a>
 <a class="blog-nav-item" id="navexit" href="<?php echo route('admin_logout'); ?>"><span class="glyphicon glyphicon-off"></span> 注销</a>
-<a class="blog-nav-item pull-right" href="javascript:;"><small>您好：<span class="glyphicon glyphicon-user"></span> <?php if(isset($_SESSION['admin_user_info'])){echo $_SESSION['admin_user_info']['username'].' ['.$_SESSION['admin_user_info']['rolename'].']';} ?></small></a>
+<a class="blog-nav-item pull-right" href="javascript:;"><small>您好：<span class="glyphicon glyphicon-user"></span> <?php if(isset($_SESSION['admin_info'])){echo $_SESSION['admin_info']['name'].' ['.$_SESSION['admin_info']['rolename'].']';} ?></small></a>
 </nav></div>
 <div class="container-fluid">
 <div class="row">

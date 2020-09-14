@@ -8,7 +8,7 @@ use App\Http\Logic\WeixinMenuLogic;
 use App\Http\Model\WeixinMenu;
 use App\Common\Wechat\WechatMenu;
 
-class WeixinMenuController extends CommonController
+class WeixinMenuController extends BaseController
 {
     public function __construct()
     {

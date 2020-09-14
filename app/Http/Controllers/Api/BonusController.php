@@ -10,7 +10,7 @@ use App\Http\Model\Bonus;
 use App\Http\Logic\BonusLogic;
 use App\Http\Model\UserBonus;
 
-class BonusController extends CommonController
+class BonusController extends BaseController
 {
     public function __construct()
     {

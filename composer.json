@@ -6,14 +6,15 @@
     "type": "project",
     "require": {
         "php": ">=5.6.4",
-        "intervention/image": "^2.3",
-        "jpush/jpush": "v3.5.*",
         "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0",
-        "maatwebsite/excel": "~2.1.0",
-        "overtrue/laravel-wechat": "~3.1",
         "predis/predis": "^1.1",
-        "simplesoftwareio/simple-qrcode": "~1"
+        "maatwebsite/excel": "~2.1.0",
+        "simplesoftwareio/simple-qrcode": "~1",
+        "intervention/image": "^2.3",
+        "yansongda/pay": "^1.0",
+        "overtrue/laravel-wechat": "~3.1",
+        "jpush/jpush": "v3.5.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -60,7 +61,7 @@
     "repositories": {
         "packagist": {
             "type": "composer",
-            "url": "https://packagist.phpcomposer.com"
+            "url": "https://mirrors.aliyun.com/composer/"
         }
     }
 }

@@ -9,7 +9,7 @@ use App\Common\Token;
 use App\Http\Model\UserPoint;
 use App\Http\Logic\UserPointLogic;
 
-class UserPointController extends CommonController
+class UserPointController extends BaseController
 {
     public function __construct()
     {

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Common\ReturnData;
 use App\Common\ReturnCode;
 
-class CartController extends CommonController
+class CartController extends BaseController
 {
     public function __construct()
     {

@@ -9,7 +9,7 @@ use App\Common\Token;
 use App\Http\Model\VerifyCode;
 use App\Http\Logic\VerifyCodeLogic;
 
-class VerifyCodeController extends CommonController
+class VerifyCodeController extends BaseController
 {
     public function __construct()
     {

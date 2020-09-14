@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Admin\CommonController;
 use DB;
 
-class MenuController extends CommonController
+class MenuController extends BaseController
 {
     public function __construct()
     {

@@ -9,7 +9,7 @@ use App\Common\Token;
 use App\Http\Model\UserBonus;
 use App\Http\Logic\UserBonusLogic;
 
-class UserBonusController extends CommonController
+class UserBonusController extends BaseController
 {
     public function __construct()
     {

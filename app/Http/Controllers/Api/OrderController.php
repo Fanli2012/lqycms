@@ -9,7 +9,7 @@ use App\Common\Token;
 use App\Http\Model\Order;
 use App\Http\Logic\OrderLogic;
 
-class OrderController extends CommonController
+class OrderController extends BaseController
 {
     public function __construct()
     {

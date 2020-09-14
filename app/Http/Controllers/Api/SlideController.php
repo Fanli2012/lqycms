@@ -9,7 +9,7 @@ use App\Common\Token;
 use App\Http\Model\Slide;
 use App\Http\Logic\SlideLogic;
 
-class SlideController extends CommonController
+class SlideController extends BaseController
 {
     public function __construct()
     {

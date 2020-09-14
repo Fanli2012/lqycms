@@ -10,7 +10,7 @@ use App\Http\Model\UserMoney;
 use App\Http\Logic\UserMoneyLogic;
 
 //余额明细
-class UserMoneyController extends CommonController
+class UserMoneyController extends BaseController
 {
     public function __construct()
     {

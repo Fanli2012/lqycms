@@ -6,9 +6,9 @@ class AdminRequest extends BaseRequest
     //总的验证规则
     protected $rules = [
         'id' => 'required|integer',
-        'username' => 'required|max:30',
+        'name' => 'required|max:30',
         'email' => 'required|max:30',
-        'logintime' => 'integer',
+        'login_time' => 'integer',
         'pwd' => 'required|max:32',
         'role_id' => 'required|integer',
         'status' => 'integer|between:0,3',
@@ -21,11 +21,11 @@ class AdminRequest extends BaseRequest
     protected $messages = [
         'id.required' => 'ID必填',
         'id.integer' => 'ID必须为数字',
-        'username.required' => '用户名必填',
-        'username.max' => '用户名不能超过30个字符',
+        'name.required' => '用户名必填',
+        'name.max' => '用户名不能超过30个字符',
         'email.required' => '邮箱必填',
         'email.max' => '邮箱不能超过30个字符',
-        'logintime.integer' => '登录时间必须是数字',
+        'login_time.integer' => '登录时间必须是数字',
         'pwd.required' => '密码必填',
         'pwd.max' => '密码不能超过32个字符',
         'role_id.required' => '角色ID必填',
@@ -40,8 +40,8 @@ class AdminRequest extends BaseRequest
     
     //场景验证规则
     protected $scene = [
-        'add'  => ['username', 'email', 'logintime', 'pwd', 'role_id', 'status', 'mobile', 'avatar'],
-        'edit' => ['username', 'email', 'logintime', 'pwd', 'role_id', 'status', 'mobile', 'avatar'],
+        'add'  => ['name', 'email', 'login_time', 'pwd', 'role_id', 'status', 'mobile', 'avatar'],
+        'edit' => ['name', 'email', 'login_time', 'pwd', 'role_id', 'status', 'mobile', 'avatar'],
         'del'  => ['id'],
     ];
     

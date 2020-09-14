@@ -9,7 +9,7 @@ use App\Common\Token;
 use App\Http\Model\Comment;
 use App\Http\Logic\CommentLogic;
 
-class CommentController extends CommonController
+class CommentController extends BaseController
 {
     public function __construct()
     {

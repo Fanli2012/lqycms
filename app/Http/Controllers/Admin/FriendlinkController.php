@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Logic\FriendlinkLogic;
 use App\Http\Model\Friendlink;
 
-class FriendlinkController extends CommonController
+class FriendlinkController extends BaseController
 {
     public function __construct()
     {

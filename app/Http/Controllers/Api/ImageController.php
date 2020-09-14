@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 use App\Common\ReturnData;
 use App\Common\Helper;
 
-class ImageController extends CommonController
+class ImageController extends BaseController
 {
     public $path;
     

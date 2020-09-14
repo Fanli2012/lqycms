@@ -28,7 +28,7 @@ WAP端
 
 2、PHP+Mysql
 
-3、后台登录：http://www.lqycms.com/fladmin/login，账号：admin888，密码：admin
+3、后台登录：http://www.lqycms.com/fladmin/login，账号：admin888，密码：123456
 
 4、恢复后台默认账号密码：http://www.lqycms.com/fladmin/recoverpwd
 
@@ -95,7 +95,7 @@ php composer.phar install
 php artisan key:generate
 
 
-4、 登录后台：http://www.lqycms.com/fladmin/login，账号：admin888，密码：admin
+4、 登录后台：http://www.lqycms.com/fladmin/login，账号：admin888，密码：123456
 
 顶部按钮，更新缓存
 
