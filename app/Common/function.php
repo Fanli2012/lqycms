@@ -1296,3 +1296,32 @@ function isCarLicense($license)
     
     return false;
 }
+
+/**
+ * 格式化文件大小显示
+ *
+ * @param int $size
+ * @return string
+ */
+function format_bytes($size)
+{
+    $prec = 3;
+    $size = round(abs($size));
+    $units = array(
+        0 => " B ",
+        1 => " KB",
+        2 => " MB",
+        3 => " GB",
+        4 => " TB"
+    );
+    if ($size == 0)
+    {
+        return str_repeat(" ", $prec) . "0$units[0]";
+    }
+    $unit = min(4, floor(log($size) / log(2) / 10));
+    $size = $size * pow(2, -10 * $unit);
+    $digi = $prec - 1 - floor(log($size) / log(10));
+    $size = round($size * pow(10, $digi)) * pow(10, -$digi);
+ 
+    return $size . $units[$unit];
+}

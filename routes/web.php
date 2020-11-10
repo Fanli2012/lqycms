@@ -43,7 +43,8 @@ Route::group(['namespace' => 'Home'], function () {
 	Route::get('/goods/{id}', 'GoodsController@detail')->name('home_goods');    //商品详情页
 	Route::get('/goodslist', 'GoodsController@index')->name('home_goodslist');  //产品分类页
     Route::get('/brandlist', 'GoodsController@brand_list')->name('home_brandlist'); //品牌列表
-	Route::get('/sitemap.xml', 'IndexController@sitemap')->name('home_sitemap');    //sitemap
+	Route::get('/sitemap.xml', 'IndexController@sitemap')->name('home_sitemap');//sitemap
+	Route::get('/ad/{id}', 'AdController@detail')->name('home_ad_detail');      //广告详情
 	Route::get('/wx_checksignature', 'IndexController@checksignature')->name('home_wx_checksignature');
     
 	Route::get('/test', 'IndexController@test')->name('home_test');                 //测试
@@ -442,7 +443,17 @@ Route::group(['prefix' => 'fladmin', 'namespace' => 'Admin', 'middleware' => ['w
 	Route::get('/logout', 'LoginController@logout')->name('admin_logout');
 	Route::get('/recoverpwd', 'LoginController@recoverpwd')->name('admin_recoverpwd');
 	//操作日志
-	Route::get('/log', 'LogController@index')->name('admin_log');
+	Route::any('/log', 'LogController@index')->name('admin_log');
+	//数据库备份
+	Route::any('/database', 'DatabaseController@index')->name('admin_database');
+	Route::any('/database/optimize', 'DatabaseController@optimize')->name('admin_database_optimize'); //优化表
+	Route::any('/database/repair', 'DatabaseController@repair')->name('admin_database_repair'); //修复表
+	Route::any('/database/tables_backup', 'DatabaseController@tables_backup')->name('admin_database_tables_backup'); //备份数据库
+	//广告管理
+	Route::any('/ad', 'AdController@index')->name('admin_ad');
+	Route::any('/ad/add', 'AdController@add')->name('admin_ad_add');
+	Route::any('/ad/edit', 'AdController@edit')->name('admin_ad_edit');
+	Route::any('/ad/del', 'AdController@del')->name('admin_ad_del');
 	//页面跳转
 	Route::get('/jump', 'LoginController@jump')->name('admin_jump');
 	//测试

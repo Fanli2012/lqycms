@@ -42,6 +42,10 @@
         <td><input name="des" type="text" id="des" value="<?php echo $post["des"]; ?>" style="width:50%"></td>
     </tr>
     <tr>
+        <td align="right">排序：</td>
+        <td><input name="listorder" type="text" id="listorder" value="<?php echo $post["listorder"]; ?>" style="width:30%"></td>
+    </tr>
+    <tr>
         <td align="right">状态：</td>
         <td>
             <input type="radio" value='1' name="status" <?php if($post['status']==1){echo 'checked';} ?> />&nbsp;显示&nbsp;&nbsp;
@@ -49,7 +53,7 @@
         </td>
     </tr>
     <tr>
-        <td align="right">状态：</td>
+        <td align="right">类型：</td>
         <td>
             <input type="radio" value='1' name="type" <?php if($post['type']==1){echo 'checked';} ?> />&nbsp;权限认证+菜单&nbsp;&nbsp;
             <input type="radio" value='0' name="type" <?php if($post['type']==0){echo 'checked';} ?> />&nbsp;只作为菜单

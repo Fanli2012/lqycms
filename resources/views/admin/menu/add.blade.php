@@ -42,6 +42,10 @@
         <td><input name="des" type="text" id="des" value="" style="width:50%"></td>
     </tr>
     <tr>
+        <td align="right">排序：</td>
+        <td><input name="listorder" type="text" id="listorder" value="50" style="width:30%"></td>
+    </tr>
+    <tr>
         <td align="right">状态：</td>
         <td>
             <input type="radio" value='1' name="status" checked />&nbsp;显示&nbsp;&nbsp;
@@ -49,7 +53,7 @@
         </td>
     </tr>
     <tr>
-        <td align="right">状态：</td>
+        <td align="right">类型：</td>
         <td>
             <input type="radio" value='1' name="type" checked />&nbsp;权限认证+菜单&nbsp;&nbsp;
             <input type="radio" value='0' name="type" />&nbsp;只作为菜单<br><small style="color:#999">注意：“权限认证+菜单”表示加入后台权限管理，纯碎是菜单项请不要选择此项。</small>

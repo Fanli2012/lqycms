@@ -19,6 +19,9 @@
 |
 */
 
+// 禁止代理IP访问
+empty($_SERVER['HTTP_VIA']) or exit('Access Denied');
+
 session_start(); //开启session
 
 require __DIR__.'/../bootstrap/autoload.php';

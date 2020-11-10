@@ -19,10 +19,12 @@ class PageController extends BaseController
         $data = [];
 
         if (!empty($id) && preg_match('/[a-z0-9]+/', $id)) {
-            $map['filename'] = $id;
+			$where = function ($query) use ($id) {
+				$query->where('id', '=', $id)->orWhere('filename', '=', $id);
+			};
             $post = cache("pageid$id");
             if (!$post) {
-                $post = object_to_array(DB::table('page')->where($map)->first(), 1);
+                $post = object_to_array(DB::table('page')->where($where)->first(), 1);
                 //cache("pageid$id", $post, 2592000);
                 cache(["pageid$id" => $post], \Carbon\Carbon::now()->addMinutes(2592000));
             }
