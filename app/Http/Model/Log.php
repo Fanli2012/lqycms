@@ -2,7 +2,7 @@
 
 namespace App\Http\Model;
 
-use DB;
+use Illuminate\Support\Facades\DB;
 
 class Log extends BaseModel
 {

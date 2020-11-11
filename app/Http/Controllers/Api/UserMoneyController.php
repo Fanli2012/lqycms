@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers\Api;
-use Log;
-use DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Common\ReturnData;
 use App\Common\Helper;

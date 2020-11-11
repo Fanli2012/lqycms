@@ -1,6 +1,6 @@
 <?php
 namespace App\Http\Logic;
-use DB;
+use Illuminate\Support\Facades\DB;
 use App\Common\ReturnData;
 use App\Http\Model\UserMoney;
 use App\Http\Requests\UserMoneyRequest;

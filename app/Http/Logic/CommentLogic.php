@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Logic;
-use Log;
-use DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 use App\Common\ReturnData;
 use App\Http\Model\Comment;
 use App\Http\Model\Order;

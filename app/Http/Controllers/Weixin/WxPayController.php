@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Weixin;
 
 use Illuminate\Http\Request;
-use DB;
-use Log;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class WxPayController extends BaseController
 {

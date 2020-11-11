@@ -3,8 +3,8 @@ namespace App\Http\Model;
 use App\Common\Sms;
 use App\Common\Helper;
 use App\Common\ReturnData;
-use DB;
-use Log;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 //验证码
 class VerifyCode extends BaseModel

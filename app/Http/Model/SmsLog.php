@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Model;
-use DB;
-use Log;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 //短信发送记录
 class SmsLog extends BaseModel

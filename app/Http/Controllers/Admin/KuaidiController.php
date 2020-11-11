@@ -1,6 +1,6 @@
 <?php
 namespace App\Http\Controllers\Admin;
-use DB;
+use Illuminate\Support\Facades\DB;
 use App\Common\ReturnData;
 use App\Common\Helper;
 use Illuminate\Http\Request;

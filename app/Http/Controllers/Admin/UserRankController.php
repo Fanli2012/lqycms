@@ -2,7 +2,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Admin\CommonController;
-use DB;
+use Illuminate\Support\Facades\DB;
 use App\Http\Model\UserRank;
 use App\Common\Helper;
 

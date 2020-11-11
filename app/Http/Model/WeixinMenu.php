@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Model;
-use DB;
-use Log;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 /**
  * 微信自定义菜单

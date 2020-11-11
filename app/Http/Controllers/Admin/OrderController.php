@@ -6,7 +6,7 @@ use App\Http\Model\Order;
 use App\Http\Model\OrderGoods;
 use App\Http\Model\User;
 use App\Http\Model\Region;
-use DB;
+use Illuminate\Support\Facades\DB;
 use App\Common\ReturnData;
 use Illuminate\Http\Request;
 
